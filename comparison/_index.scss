@@ -1,0 +1,5 @@
+@forward 'comparison.compare-multiple.function';
+@forward 'comparison.compare.function';
+@forward 'comparison.equal.function';
+@forward 'greater' as greater-*;
+@forward 'less' as less-*;

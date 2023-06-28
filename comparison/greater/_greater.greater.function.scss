@@ -1,0 +1,15 @@
+// Functions.
+@use '../../meta/meta.of-type.function';
+
+// Status: DONE
+// The `greater.greater()` function checks whether the given value is greater than compared value.
+// @param `$greater` The value of number type to be compared against the given `$than`.
+// @param `$than` The value of number type to be less than given `$value`.
+@function greater($greater, $value) {
+  @return meta.of-type(number, $greater, $value) and $greater > $value;
+}
+
+// Examples.
+// @debug greater(11, 6); // true
+// @debug greater(6, 11); // false
+// @debug greater(6, 6); // false

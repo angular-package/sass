@@ -1,0 +1,31 @@
+@use '../comparison';
+
+// Compare.
+// @debug comparison.compare(27, '==', 27); // true
+// @debug comparison.single(27, '==', 27); // true
+
+// @debug comparison.compare(27px, '==', 27em); // false
+// @debug comparison.single(27px, '==', 27em); // false
+
+// @debug comparison.compare(27px, '===', 27em); // false
+// @debug comparison.single(27px, '===', 27em); // false
+
+// @debug comparison.compare('bold ', '!~=', 'bold'); // false
+// @debug comparison.single('bold ', '!~=', 'bold'); // false
+
+// Greater than.
+// @debug comparison.greater-than(11, 6); // true
+// @debug comparison.greater-than-any(11, 6); // true
+// @debug comparison.greater-than-every(11, 6); // true
+// @debug comparison.greater-than(11, 6, 1, 12); // false
+// @debug comparison.greater-than(11, any, 6); // true
+// @debug comparison.greater-than(11, 6, 12); // false
+
+// Less than.
+// @debug comparison.less-than(6, 6); // false
+// @debug comparison.less-than-any(6, 5, 1, 2); // false
+// @debug comparison.less-than-every(11, 10, 9, 8, 11); // false
+
+// @debug comparison.less-than(6, 11, 1000, 20px); // true
+// @debug comparison.less-than-any(6, 6, 7, 2000); // true
+// @debug comparison.less-than-every(6, 100, 200, 250); // true

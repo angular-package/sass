@@ -1,0 +1,146 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
+// Functions.
+@use 'comparison.compare.function';
+
+// Status: DONE
+// The `comparison.compare-multiple()` function.
+// @arbitrary `$comparisons...` The
+@function compare-multiple($comparisons...) {
+  $result: ();
+  @each $comparison in if(list.length($comparisons) == 3 and type-of(list.nth($comparisons, 2)) == string, ($comparisons,), $comparisons) {
+    $result: list.append(
+      $result,
+      comparison.compare(if(meta.type-of($comparison) == map, map.values($comparison), $comparison)...),
+      comma
+    );
+  }
+  @return if(list.length($result) > 1, $result, if(list.length($result) == 1, list.nth($result, 1), false));
+}
+
+// Additional function name.
+@function multiple($comparisons...) {
+  @return compare-multiple($comparisons...);
+}
+
+// Operator.
+// '===' comparable
+// '==', // equal to
+// '!=', // not equal to
+// '~=', // text contains the given string (string.index())
+// '!~=', // text does not contain the given string (string.index())
+// ':==', // type of the given value is equal to the given type
+// ':!=',  // type of the given value is not equal to the given type
+// '>',
+// '>=',
+// '<',
+// '<='
+// ':' type
+// '(:)' map keys length
+// '(,)' list length
+
+// Examples.
+// ==
+// Arbitrary.
+// @debug compare-multiple(27, '==', 27); // true
+// @debug compare-multiple(27px, '==', 27em); // false
+// @debug compare-multiple(27px, '===', 27em); // false
+// @debug compare-multiple('bold ', '!~=', 'bold'); // false
+
+// List.
+// @debug compare-multiple(27 '==' 27); // true
+// @debug compare-multiple((27, '==', 27)); // true
+
+// Map.
+// @debug compare-multiple((value: 27, operator: '==', operand: 27)); // true
+
+// @debug compare-multiple('there is a word', '==', 'there is a word'); // true
+// @debug compare-multiple(null, '==', null); // true
+// @debug compare-multiple((a: 2222), '==', ('a': 2222)); // true
+
+// Multiple comparisons as map.
+// @debug compare-multiple((value: 27, operator: '==', operand: 27), (value: 17, operator: '==', operand: 27)); // true, false
+
+// Multiple comparisons as list.
+// @debug compare-multiple(27 '==' 27, 17 '==' 27, 5 '>' 3); // true, false, true
+// @debug compare-multiple((27, '==', 27), (27, '!=', 27)); // true, false
+
+// !=
+// @debug compare-multiple(27, '!==', 27); // false
+// @debug compare-multiple('there is a word', '!=', 'there is a word'); // false
+// @debug compare-multiple(null, '!=', null); // false
+// @debug compare-multiple((a: 2222), '!=', ('a': 2222)); // false
+
+// :==
+// @debug compare-multiple('a', ':==', string); // true
+// @debug compare-multiple(3, ':!=', string); // true
+// @debug compare-multiple(null, ':==', null); // true
+// @debug compare-multiple(false, ':==', bool); // true
+
+// :!=
+// @debug compare-multiple(27, ':!=', string); // true
+// @debug compare-multiple('a', ':!=', string); // false
+// @debug compare-multiple(null, ':!=', null); // false
+// @debug compare-multiple(false, ':!=', bool); // false
+
+// ~=
+// @debug compare-multiple('bold king', '~=', 'bold'); // true
+
+// !~=
+// @debug compare-multiple('bold king', '!~=', 'word'); // true
+// @debug compare-multiple('bold king', '!~=', 'bold'); // false
+
+// >
+// @debug compare-multiple(3, '>', 1); // true
+// @debug compare-multiple(3, '>', 5); // false
+
+// >=
+// @debug compare-multiple(3, '>=', 1); // true
+// @debug compare-multiple(3, '>=', 3); // true
+
+// <
+// @debug compare-multiple(3, '<', 1); // false
+// @debug compare-multiple(3, '>', 5); // false
+
+// <=
+// @debug compare-multiple(3, '<=', 1); // false
+// @debug compare-multiple(3, '<=', 3); // true
+
+// (,)==
+// @debug compare-multiple(('a', 'b', 'c'), '(,)==', 3); // true
+// @debug compare-multiple(('a', 'b', 'c'), '(,)==', 13); // false
+
+// (,)!=
+// @debug compare-multiple(('a', 'b', 'c'), '(,)!=', 3); // false
+// @debug compare-multiple(('a', 'b', 'c'), '(,)!=', 13); // true
+
+// (,)>
+// @debug compare-multiple(('a', 'b', 'c'), '(,)>', 2); // true
+// @debug compare-multiple(('a', 'b', 'c'), '(,)>', 3); // false
+
+// (,)>=
+// @debug compare-multiple(('a', 'b', 'c'), '(,)>=', 3); // true
+// @debug compare-multiple(('a', 'b', 'c'), '(,)>=', 4); // false
+
+// (,)<
+// @debug compare-multiple(('a', 'b', 'c'), '(,)<', 4); // true
+// @debug compare-multiple(('a', 'b', 'c'), '(,)<', 3); // false
+
+// (,)<=
+// @debug compare-multiple(('a', 'b', 'c'), '(,)<=', 3); // true
+// @debug compare-multiple(('a', 'b', 'c'), '(,)<=', 2); // false
+
+// (:)==
+// @debug compare-multiple(('a': 1, 'b': 2, 'c': 3), '(:)==', 3); // true
+// @debug compare-multiple(('a': 1, 'b': 2, 'c': 3), '(:)==', 4); // false
+
+// (:)!=
+// @debug compare-multiple(('a': 1, 'b': 2, 'c': 3), '(:)!=', 3); // false
+// @debug compare-multiple(('a': 1, 'b': 2, 'c': 3), '(:)!=', 2); // true
+
+// (:)> (:)<
+// @debug compare-multiple(('a': 1, 'b': 2, 'c': 3), '(:)>', 3); // false
+// @debug compare-multiple(('a': 1, 'b': 2, 'c': 3), '(:)<', 2); // false

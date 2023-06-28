@@ -1,0 +1,20 @@
+// Functions.
+@use '../../meta/meta.of-type.function';
+
+// Status: DONE
+// The `less.than-any()` function checks whether the given `$less` is less than any of the given `$values`.
+// @param `$less` The value of number type.
+// @param `$values...` The values of number type to compare with a given `$less`.
+@function than-any($less, $values...) {
+  @each $value in $values {
+    @if meta.of-type(number, $less, $value) and $less < $value {
+      @return true;
+    }
+  }
+  @return false;
+}
+
+// Examples.
+// @debug than-any(11, 6, 3, 3, 3, 1); // true
+// @debug than-any(1, 6, 3, 12, 3, 1); // false
+// @debug than-any(11, 6, 3, 5, 3, 11px); // true

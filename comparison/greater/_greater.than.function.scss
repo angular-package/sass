@@ -20,9 +20,20 @@
   );
 }
 
+// Additional function name.
+@function greater($greater, $value, $values...) {
+  @return than($greater, $value, $values...);
+}
+
 // Examples.
 // @debug than(11, 6); // true
 // @debug than(6, 11); // false
 // @debug than(6, 6); // false
 // @debug than(7, 6, 3, 3, 3, 1); // true
 // @debug than(4, any, 6, 3, 3, 3, 1); // true
+
+// @debug greater(11, 6); // true
+// @debug greater(6, 11); // false
+// @debug greater(6, 6); // false
+// @debug greater(7, 6, 3, 3, 3, 1); // true
+// @debug greater(4, any, 6, 3, 3, 3, 1); // true

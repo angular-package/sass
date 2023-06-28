@@ -1,0 +1,43 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Status: DONE
+// The modified `map.values()` function, by added arbitrary parameter `$keys` to return values of the specified keys.
+// @param `$map` The map to return values from.
+// @arbitrary `$keys` The keys to retrieve values from the map.
+@function values($map, $keys...) {
+  @if list.length($keys) > 0 {
+    $i: 1;
+    @each $key in $keys {
+      @if map.has-key($map, $key) {
+        $keys: list.set-nth($keys, $i, map.get($map, $key));
+      }
+
+      $i: $i + 1;
+    }
+  } @else {
+    $keys: map.values($map);
+  }
+  @return $keys;
+}
+
+// Examples.
+// key string
+// @debug values((a: 1, b: 2, c: 3), 'a', 'b', 'c'); // (1, 2, 3)
+
+// different map order
+// @debug values((b: 2, a: 1, c: 3), 'a', 'b', 'c'); // (1, 2, 3)
+
+// different map order + keys
+// @debug values((b: 2, a: 1, c: 3), 'c', 'b', 'a'); // (3, 2, 1)
+// @debug values((a: 1, b: 2, c: 3), 'b', 'c'); // (2, 3)
+
+// key list
+// @debug values(((a, b): 1, b: 2, c: 3), 'a', (a, b), 'c'); // ("a", 1, 3)
+
+// key map
+// @debug values((b: 2, (a: b): 1, c: 3), 'a', (a: b), 'c'); // ("a", 1, 3)
+
+// default functionality
+// @debug values((a: 1, b: 2, c: 3)); // (1, 2, 3)

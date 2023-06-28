@@ -1,0 +1,47 @@
+{
+  "name": "@angular-package/sass",
+  "description": "Extension for sass modules and new modules.",
+  "version": "1.0.0-beta",
+  "main": "./index.scss",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/angular-package/sass/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "@angular-package",
+    "extension",
+    "color",
+    "css variables",
+    "css",
+    "dictionary",
+    "preprocessor",
+    "property",
+    "sass",
+    "sass:color",
+    "sass:list",
+    "sass:map",
+    "sass:math",
+    "sass:meta",
+    "sass:selector",
+    "sass:string",
+    "scheme",
+    "scss",
+    "string",
+    "style",
+    "translator",
+    "values",
+    "var"
+  ],
+  "bugs": {
+    "url": "https://github.com/angular-package/spectre.css/issues"
+  },
+  "devDependencies": {
+    "sass": "^1.63.6",
+    "stylelint": "^15.9.0",
+    "stylelint-config-prettier-scss": "^1.0.0",
+    "stylelint-config-standard-scss": "^9.0.0",
+    "stylelint-order": "^6.0.3",
+    "tslib": "^2.3.0"
+  }
+}

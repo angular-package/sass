@@ -1,0 +1,110 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use 'pick.key-type.function' as *;
+@use 'pick.value-type.function' as *;
+
+// Modules.
+@use '../../string';
+
+// Status: DONE
+// The `type()` function picks the properties with values and/or keys of the specified type.
+// @param `$map` A map from which properties with values and/or keys of a certain type are picked.
+// @arbitrary `$field-type...` A pattern 'field:type` where field can be `value` or `key` and type
+// bool, calculation, color, function, list, map, null, number or string, to pick properties with the value and/or key of the specified type.
+@function type($map, $field-type...) {
+  $result: ();
+  @each $pattern in $field-type {
+    @if type-of($pattern) == string {
+      @if string.index($pattern, 'value:') or string.index($pattern, 'key:') {
+        $pattern: string.split(string.unquote($pattern), ':');
+        $type: string.split(list.nth($pattern, 2), ',');
+        $result: map.deep-merge($result, if(list.nth($pattern, 1) == key, key-type($map, $type...), value-type($map, $type...)));
+      }
+    }
+  }
+  @return $result;
+}
+
+// Examples.
+// $-theme: (
+//   dark: (
+//     'dark.palette': (),
+
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
+//   ),
+//   basic: (
+//     'default.palette': (),
+
+//     'gray.palette': (
+//       'gray': 'gray' color,
+//       'gray' dark: 'gray' dark,
+//       'gray' light: 'gray' light
+//     ),
+
+//     'bg.palette': (
+//       bg: bg color,
+//       bg dark: bg dark,
+//       bg light: bg light
+//     ),
+
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
+
+//     extended small: (
+//       '': primary,
+//       dark: primary dark,
+//       light: primary light
+//     ),
+
+//     [primary]: (
+//       primary dark: primary dark,
+//     ),
+
+//     (key1, key2): (
+//       primary: primary1
+//     ),
+
+//     key1: primary,
+
+//     // calculation
+//     calc(400px + 10%): calculation,
+
+//     // bool
+//     false: bool,
+
+//     // color
+//     #fff: color,
+
+//     // function
+//     get-function(append): function,
+
+//     // map
+//     (a: 1, b: 2): map,
+
+//     // null
+//     null: null,
+
+//     // number
+//     15: number,
+
+//     // string
+//     firstname: string,
+//   )
+// );
+
+// pattern: key and/or value type
+// @debug type(map.get($-theme, basic), 'key:list', 'value:string');
+// @debug type(map.get($-theme, basic), 'value:string,list');
+// @debug type(map.get($-theme, basic), 'key:string,list');
+
+// @debug type(map.get($-theme, basic), 'key,value:list,string'); // TODO

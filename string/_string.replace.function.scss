@@ -1,0 +1,44 @@
+// Sass.
+@use 'sass:string';
+
+// Status: DONE
+// The `string.replace()` function replaces the first or all substring occurrences in the string with a replacement.
+// @param `$string` The string to replace given `$replace` by `$replacement`.
+// @param `$occurrence` First or all occurrences of the given `$replace` to replace in the given `$string`.
+// @param `$replace` The string or list of strings to replace.
+// @param `$replacement` The string to replace the substring from the given `$replace`.
+@function replace($string, $occurrence, $substring, $replacement) {
+  @each $value in $substring {
+    $index: string.index($string, $value);
+    @while not ($index == null) {
+      $string: string.insert(string.slice($string, 1, $index - 1) + string.slice(
+        $string,
+        $index + string.length($value),
+        string.length($string)
+      ), $replacement, $index);
+      @if $occurrence == first {
+        $index: null;
+      }
+      @if $occurrence == all or ($occurrence == first and not ($index == null)) {
+        $index: string.index($string, $value);
+      }
+    }
+  }
+  @return $string;
+}
+
+// Examples.
+// single replacement first occurrence
+// @debug replace('bold king is hairy', first, 'bold', 'baloon'); // baloon king is hairy
+// @debug replace('bold king is hairy', first, 'bold', ''); //  king is  hairy
+// @debug replace(':==', first, ':', '');
+
+// single replacement all occurrences
+// @debug replace('bold king is hairy', all, 'bold', 'baloon'); // baloon king is hairy
+// @debug replace('bold king is hairy', all, 'king', 'baloon'); // baloon king is hairy
+// @debug replace('bold king is bold hairy', all, 'bold', ''); //  king is  hairy
+// @debug replace('bold king is bold hairy', all, 'bold', 'test'); // test king is test hairy
+
+// multiple replacements
+// @debug replace('bold king is hairy', all, ('bold', 'king'), 'baloon'); // baloon king is hairy
+// @debug replace('bold king is hairy', first, (bold is), ''); //  king  hairy

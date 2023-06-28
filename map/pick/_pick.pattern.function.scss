@@ -1,0 +1,129 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use '../map.get.function' as *;
+@use 'pick.key-substring.function' as *;
+@use 'pick.type.function' as *;
+
+// Modules.
+@use '../../string';
+
+// Status: DONE
+// The `pick.pattern()` function.
+// @param `$map`
+// @arbitrary `$patterns...`
+@function pattern($map, $patterns...) {
+  $result: ();
+  @each $pattern in $patterns {
+    @if type-of($pattern) == string {
+      @if string.index($pattern, '*') {
+        $result: map.deep-merge($result, key-substring($map, string.replace($pattern, list.join(first '*', ''))));
+      }
+      @else if string.index($pattern, 'value:') or string.index($pattern, 'key:') {
+        $result: map.deep-merge($result, type($map, $pattern));
+      }
+    }
+  }
+  @return $result;
+}
+
+// Examples.
+// $-theme: (
+//   dark: (
+//     'dark.palette': (),
+
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
+//   ),
+//   basic: (
+//     'default.palette': (),
+
+//     'palette.gray': (
+//       'gray': 'gray' color,
+//       'gray' dark: 'gray' dark,
+//       'gray' light: 'gray' light
+//     ),
+
+//     'gray.palette': (
+//       'gray': 'gray' color,
+//       'gray' dark: 'gray' dark,
+//       'gray' light: 'gray' light
+//     ),
+
+//     'bg.palette': (
+//       bg: bg color,
+//       bg dark: bg dark,
+//       bg light: bg light
+//     ),
+
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
+
+//     extended small: (
+//       '': primary,
+//       dark: primary dark,
+//       light: primary light
+//     ),
+
+//     [primary]: (
+//       primary dark: primary dark,
+//     ),
+
+//     (key1, key2): (
+//       primary: primary1
+//     ),
+
+//     key1: primary,
+
+//     // calculation
+//     calc(400px + 10%): calculation,
+//     calculation: calc(400px + 10%),
+
+//     // bool
+//     false: bool,
+//     bool: false,
+
+//     // color
+//     #fff: color,
+//     color: #fff,
+
+//     // function
+//     get-function(append): function,
+//     function: get-function(append),
+
+//     // map
+//     (a: 1, b: 2): map,
+//     map: (a: 1, b: 2),
+
+//     // null
+//     'null': null,
+//     null: 'null',
+
+//     // number
+//     15: number,
+//     number: 15,
+
+//     // string
+//     firstname: string,
+//     string: firstname,
+//   )
+// );
+
+// pattern: any
+// @debug pattern(map.get($-theme, basic), '*palette');
+// @debug pattern(map.get($-theme, basic), '*.palette');
+// @debug pattern(map.get($-theme, basic), 'palette.*');
+
+// pattern: key and/or value type
+// @debug pattern(map.get($-theme, basic), 'key:list', 'value:string,');
+// @debug pattern(map.get($-theme, basic), 'value:string,list');
+// @debug pattern(map.get($-theme, basic), 'key:string,list');
+// @debug pattern(map.get($-theme, basic), 'key,value:list,string'); // TODO

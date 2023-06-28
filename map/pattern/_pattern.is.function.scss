@@ -1,0 +1,37 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Variables.
+@use 'pattern.variables' as *;
+
+// Modules.
+@use '../../string';
+
+// Status: DONE
+// The `pattern.is()` function.
+// @param `$value`
+// @param `$pattern`
+@function is($value, $pattern: map.values($pattern)) {
+  @if type-of($value) == string {
+    @each $pattern in $pattern {
+      @if type-of($pattern) == list {
+        @each $sub-pattern in $pattern {
+          @if string.index($value, $sub-pattern) {
+            @return true;
+          }
+        }
+      } @else {
+        @if string.index($value, $pattern) {
+          @return true;
+        }
+      }
+    }
+  }
+  @return false;
+}
+
+// Examples.
+// @debug is('*.palette');
+// @debug is('value:string');
+// @debug is('key:number');

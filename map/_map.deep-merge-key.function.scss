@@ -1,0 +1,42 @@
+// Sass.
+@use 'sass:map';
+
+// Functions.
+@use 'map.get.function' as *;
+
+// Status: DONE
+// The `map.deep-merge-key()` function to merge the given map with retrieved data from the given keys from this map.
+// @param `$map` A map to merge with retrieved data from the given `$keys` from this map.
+// @arbitrary `$keys...` The keys to get the values to merge with the given map.
+@function deep-merge-key($map, $keys...) {
+  @each $key in $keys {
+    $map: map.deep-remove(map.deep-merge($map, get($map, $key, ())), $key...);
+  }
+  @return $map;
+}
+
+// Examples.
+// $example: (
+//   "name": first name,
+//   "age": 25,
+//   "Helvetica": (
+//     "weights": (
+//       "regular": 400,
+//       "medium": 500,
+//       "bold": 700
+//     ),
+//     "size": (
+//       "regular": small,
+//       "medium": big,
+//       "high": extra big
+//     )
+//   )
+// );
+
+// @debug deep-merge-key($example, ("Helvetica", "size")); // ("name": first name, "age": 25, "Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), "regular": small, "medium": big, "high": extra big)
+// @debug deep-merge-key($example, ("Helvetica", "weights")); // ("name": first name, "age": 25, "Helvetica": ("size": ("regular": small, "medium": big, "high": extra big)), "regular": 400, "medium": 500, "bold": 700)
+
+// @debug deep-merge-key($example, ("Helvetica", "weights"), ("Helvetica", "size")); // ("name": first name, "age": 25, "Helvetica": (), "regular": small, "medium": big, "bold": 700, "high": extra big)
+// @debug deep-merge-key($example, ("Helvetica", "size"), ("Helvetica", "weights")); // ("name": first name, "age": 25, "Helvetica": (), "regular": 400, "medium": 500, "high": extra big, "bold": 700)
+
+// @debug deep-merge-key((a: 1, b: 2, key: (c: 3, d: 5)), key); // (a: 1, b: 2, c: 3, d: 5)

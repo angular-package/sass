@@ -12,7 +12,7 @@
 // @param `$value` The value of number type to be less than the given `$greater`.
 // @arbitrary `$values...` The values of number type to be less than the given `$value`.
 @function than($greater, $value, $values...) {
-  $values: if(meta.type-of($value) == number, list.join($value, $values), $values);
+  $values: list.join($value, $values, comma);
   @return if(
     if($value == any, any, every) == every,
     than-every($greater, $values...),

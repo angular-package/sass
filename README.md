@@ -7,6 +7,7 @@ Sass - extension for sass modules and new modules.
 [![Gitter][gitter-badge]][gitter-chat]
 [![Discord][discord-badge]][discord-channel]
 [![Twitter][twitter-badge]][twitter-follow]
+
 <!-- npm badge -->
 [![npm version][sass-npm-badge-svg]][sass-npm-badge]
 
@@ -15,6 +16,10 @@ Sass - extension for sass modules and new modules.
 [![GitHub forks][sass-badge-forks]][sass-forks]
 [![GitHub stars][sass-badge-stars]][sass-stars]
 [![GitHub license][sass-badge-license]][sass-license]
+
+<!-- Sponsors -->
+[![GitHub Sponsors][github-badge-sponsor]][github-sponsor-link]
+[![Patreon Sponsors][patreon-badge]][patreon-link]
 
 Extended sass modules:
 
@@ -29,6 +34,7 @@ Extended sass modules:
 New modules:
 
 * The [`@angular-package/sass/class`](https://) module.
+* The [`@angular-package/sass/comparison`](https://) module.
 * The [`@angular-package/sass/function`](https://) module .
 * The [`@angular-package/sass/property`](https://) module.
 * The [`@angular-package/sass/scheme`](https://) module.
@@ -120,16 +126,11 @@ How do I know when to release 1.0.0?
 
 MIT © angular-package ([license][sass-license])
 
-<!-- Spectre -->
-[spectre-css]: https://github.com/angular-package/sass/blob/master/dist/spectre.min.css
-[spectre-icons-css]: https://github.com/angular-package/sass/blob/master/dist/spectre-icons.min.css
-[spectre-exp-css]: https://github.com/angular-package/sass/blob/master/dist/spectre-exp.min.css
-
 <!-- Funding -->
 [github-badge-sponsor]: https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&link=https://github.com/sponsors/angular-package
 [github-sponsor-link]: https://github.com/sponsors/angular-package
-[patreon-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dsciborrudnicki%26type%3Dpatrons&style=flat
-[patreon-link]: https://patreon.com/sciborrudnicki
+[patreon-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dangularpackage%26type%3Dpatrons&style=flat
+[patreon-link]: https://patreon.com/angularpackage
 
 [angulario]: https://angular.io
 [skeleton]: https://github.com/angular-package/skeleton
@@ -143,15 +144,15 @@ MIT © angular-package ([license][sass-license])
 [demonstration]: https://img.shields.io/badge/-Demonstration-green
 
 <!-- Discord -->
-[discord-badge]: https://img.shields.io/discord/925168966098386944
-[discord-channel]: https://discord.com/channels/925168966098386944/998970323607228436
+[discord-badge]: https://img.shields.io/discord/925168966098386944?style=social&logo=discord&label=Discord
+[discord-channel]: https://discord.com/channels/925168966098386944
 
 <!-- Gitter -->
-[gitter-badge]: https://badges.gitter.im/angularpackage/Lobby.svg
-[gitter-chat]: https://gitter.im/angularpackage/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
+[gitter-badge]: https://img.shields.io/gitter/room/angular-package/ap-sass?style=social&logo=gitter
+[gitter-chat]: https://app.gitter.im/#/room/#ap-sass:gitter.im
 
 <!-- Twitter -->
-[twitter-badge]: https://img.shields.io/twitter/url?style=social&label=Follow%20%40angularpackage&url=https%3A%2F%2Ftwitter.com%2Fangularpackage
+[twitter-badge]: https://img.shields.io/twitter/follow/angularpackage?label=%40angularpackage&style=social
 [twitter-follow]: https://twitter.com/angularpackage
 
 <!-- GIT -->

@@ -1,0 +1,29 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../list.append.function' as *;
+
+// Status: DONE
+// The `remove.nth()` function returns the list without given values.
+// @param `$list` The list from which given values are being removed.
+// @param `$value` A value of the element to remove from the given `$list`.
+// @arbitrary `$values...` An optional values to remove from the given `$list`.
+// @return The return value is the list without given values.
+@function nth($list, $value, $values...) {
+  $result: ();
+  @for $i from 1 through list.length($list) {
+    @if not list.index(append((), $value, auto, $values...), list.nth($list, $i)) {
+      $result: list.append($result, list.nth($list, $i));
+    }
+  }
+  @return $result;
+}
+
+// Examples.
+// string
+// @debug nth(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', 'i', 'j', 'k'), h, g, a); // "b", "c", ("d", "e", "f"), "i", "j", "k"
+
+// list
+// @debug nth(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', 'i', 'j', 'k'), ('d', 'e', 'f')); // "a" "b" "c" "g" "h" "i" "j" "k"
+// @debug nth(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', 'i', 'j', 'k'), 'b', ('d', 'e', 'f')); // "a" "c" "g" "h" "i" "j" "k"

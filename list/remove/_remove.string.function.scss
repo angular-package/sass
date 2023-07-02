@@ -1,0 +1,16 @@
+// Functions.
+@use 'remove.type.function';
+
+// Status: DONE
+// The `remove.string()` function returns the list without the string type elements.
+// @param `$list` The list from which the string type elements are being removed.
+// @return The return value is the list without the strings.
+@function string($list) {
+  @return remove.type($list, string);
+}
+
+// Examples.
+// @debug string(('a', 'b', 'c')); // ()
+// @debug string(('a', 'b', 'c', ('d', 'e', 'f'))); // (("d", "e", "f"),)
+// @debug string(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', (1, 2, 3))); // ("d", "e", "f"), (1, 2, 3)
+// @debug string(('a', 'b', 'c', ('d', (1, 2, 3, (4, 5, 6)), 'e', 'f'))); // (("d", (1, 2, 3, (4, 5, 6)), "e", "f"),)

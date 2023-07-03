@@ -1,0 +1,59 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use 'nth.range.function';
+
+// Status: DONE
+// The `nth.limit()` function returns the list of the elements from the given offset limited by the given limit.
+// @param `$list` The list to retrieve the elements from.
+// @arbitrary `$limit...` A number of the indexes of the returned list, also with the first given offset.
+// @return The return value is the list of specified limit.
+@function limit($list, $limit...) {
+  @return nth.range($list, if(
+    list.length($limit) == 1,
+    list.join(1, $limit, comma),
+    list.join(list.nth($limit, 1), calc(list.nth($limit, 1) + list.nth($limit, 2) - 1), comma),
+  )...);
+}
+
+// Examples.
+// Limit: number;
+// @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), 1); // ("a",)
+// @debug limit(('27', '28', '29', 30), 2); // "27", "28"
+// @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), 2); // "a", "b"
+// @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), 5); // "a", "b", "c", "d", "e"
+
+// offset - limit
+// @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), 4); // "a", "b", "c", "d"
+// @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), 1 4...); // "a", "b", "c", "d"
+// @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), 2 4...); // "b", "c", "d", "e"
+// @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), (2, 5)...); // "b", "c", "d", "e", "f"
+// @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), 2, 5); // "b", "c", "d", "e", "f"
+// @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), (5, 3)...); // "e", "f", null
+
+// Limit: string; TODO: ?
+// @debug limit(('27', '28', '29', 30), first); // ("27",)
+// @debug limit(('27', '28', '29', 30), last, last); // "27", "28", "29", 30
+// @debug limit(('27', '28', '29', 30), start); // ("27",)
+// @debug limit(('27', '28', '29', 30), end); // "27", "28", "29", 30
+
+// Limit: map; TODO: ?
+// @debug limit(('27', '28', '29', 30), (limit: first)...); // ("27",)
+// @debug limit(('27', '28', '29', 30), (limit: last)...); // "27", "28", "29", 30
+// @debug limit(('27', '28', '29', 30), (offset: 2, limit: last)...); // "28", "29", 30, null
+// @debug limit(('27', '28', '29', 30), (offset: first, limit: last)...); // "27", "28", "29", 30
+
+// @debug limit(('27', '28', '29', 30), first last...); // "27", "28", "29", 30
+// @debug limit(('27', '28', '29', 30), (first, last)...); // "27", "28", "29", 30
+// @debug limit(('27', '28', '29', 30), (last, first)...); // 30
+// @debug limit(('27', '28', '29', 30), (start, end)...); // "27", "28", "29", 30
+// @debug limit(('27', '28', '29', 30), (end, start)...); // 30
+
+// Query
+// @debug limit(('27', '28', '29', 30), (first '==' '28', 2)...); // "28", "29"
+// @debug limit(('27', '28', '29', 30, 'a', true, (a: 1), (1, 2)), (first '==' '28', last ':==' bool)...); // "28", "29", 30, "a", true, (a: 1)
+
+// Query adjust index. // TODO: Consider.
+// @debug limit(('27', '28', '29', 30, 'a', true, (a: 1), (1, 2)), (first '==' '28', last ':==' bool)); // "27", "28", "29", 30, "a", true
+// @debug limit(('27', '28', '29', 30, 'a', true, (a: 1), (1, 2)), ((first '==' '28') -1, (last ':==' bool) 2)); // "27", "28", "29", 30, "a", true

@@ -1,29 +1,35 @@
 // Sass.
 @use 'sass:list';
 
-// Functions.
-@use '../list.append.function' as *;
-
 // Status: DONE
-// The `remove.nth()` function returns the list without given values.
-// @param `$list` The list from which given values are being removed.
-// @param `$value` A value of the element to remove from the given `$list`.
-// @arbitrary `$values...` An optional values to remove from the given `$list`.
-// @return The return value is the list without given values.
-@function nth($list, $value, $values...) {
+// The `remove.nth()` function returns the list with removed given indexes.
+// @param `$list` A list from which the given indexes are being removed.
+// @param `$n` Index of the given `$list` to be removed.
+// @arbitrary `$nts...` Indexes of the given `$list` to be removed.
+// @return The list without the given indexes.
+@function nth($list, $n, $nts...) {
+  $nts: list.join($n, $nts, comma);
   $result: ();
+  @for $i from 1 through list.length($nts) {
+    @if list.nth($nts, $i) < 0 {
+      $nts: list.set-nth($nts, $i, list.length($list) - (list.nth($nts, $i) * -1) + 1);
+    }
+  }
   @for $i from 1 through list.length($list) {
-    @if not list.index(append((), $value, auto, $values...), list.nth($list, $i)) {
-      $result: list.append($result, list.nth($list, $i));
+    @if not list.index($nts, $i) {
+      $result: list.append($result, list.nth($list, $i), list.separator($list));
     }
   }
   @return $result;
 }
 
 // Examples.
-// string
-// @debug nth(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', 'i', 'j', 'k'), h, g, a); // "b", "c", ("d", "e", "f"), "i", "j", "k"
+// index
+// @debug nth(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', 'i', 'j', 'k'), 4); // "a", "b", "c", "g", "h", "i", "j", "k"
 
-// list
-// @debug nth(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', 'i', 'j', 'k'), ('d', 'e', 'f')); // "a" "b" "c" "g" "h" "i" "j" "k"
-// @debug nth(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', 'i', 'j', 'k'), 'b', ('d', 'e', 'f')); // "a" "c" "g" "h" "i" "j" "k"
+// indexes
+// @debug nth(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', 'i', 'j', 'k'), 2, 4, 7); // "a", "c", "g", "h", "j", "k"
+// @debug nth(('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'), 2, 3, 4, 5); // "a", "f", "g", "h", "i"
+
+// negative indexes
+// @debug nth(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', 'i', 'j', 'k'), -1, -6); // "a", "b", "c", "g", "h", "i", "j"

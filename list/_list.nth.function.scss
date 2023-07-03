@@ -18,7 +18,7 @@
       );
     }
   }
-  @return $result;
+  @return if(list.length($nts) > 0, $result, list.nth($result, 1));
 }
 
 // Examples.
@@ -28,7 +28,7 @@
 // multiple
 // @debug nth(('a', 'b', 'c', 'd', 'e', 'f'), 4, 3, 4); // "d", "c", "d"
 
-// @debug nth(('a', 'b', 'c', 'd', 'e', 'f'), 10); // (null,)
-// @debug nth(('a', 'b', 'c', 'd', 'e', 'f'), 10); // (null,)
-// @debug nth(('a', 'b', 'c', 'd', 'e', 'f'), -10); // (null,)
-// @debug nth(('a', 'b', 'c', 'd', 'e', 'f'), -10); // (null,)
+// @debug nth(('a', 'b', 'c', 'd', 'e', 'f'), 10); // null
+// @debug nth(('a', 'b', 'c', 'd', 'e', 'f'), 10) or false; // false
+// @debug nth(('a', 'b', 'c', 'd', 'e', 'f'), -10); // null
+// @debug nth(('a', 'b', 'c', 'd', 'e', 'f'), -10) or false; // false

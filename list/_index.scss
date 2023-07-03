@@ -1,0 +1,18 @@
+// Modules.
+@forward 'remove' as remove-*;
+
+// Functions.
+@forward 'list.append.function';
+@forward 'list.from.function';
+@forward 'list.extract-map.function';
+@forward 'list.index.function';
+@forward 'list.insert-nth.function';
+@forward 'list.limit.function';
+@forward 'list.nth.function';
+@forward 'list.range.function';
+@forward 'list.to.function';
+@forward 'list.join.function';
+@forward 'list.type.function';
+
+// Sass.
+@forward 'sass:list' hide append, index, join, nth;

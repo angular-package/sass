@@ -24,3 +24,5 @@
 // @debug append((blue, red), green, auto, blue, red); // blue, red, green, blue, red
 // @debug append(10px 20px, 30px 40px, auto, 1px, 15px); // 10px 20px (30px 40px) 1px 15px
 // @debug append(10px, 20px, auto, 1em, 2rem); // 10px 20px 1em 2rem
+// @debug append(10px 20px, 30px 40px, auto, 1px, 15px, (1px 2px 3px)); // 10px 20px (30px 40px) 1px 15px (1px 2px 3px)
+// @debug append((10px, 20px), 30px 40px, auto, 1px, 15px, (1px 2px 3px), (4px, 5px)); // 10px 20px (30px 40px) 1px 15px (1px 2px 3px)

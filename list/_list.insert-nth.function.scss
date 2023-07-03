@@ -1,0 +1,24 @@
+// Sass.
+@use 'sass:list';
+
+// Status: DONE
+// @param `$list` The list to insert the value at index `$n`.
+// @param `$n` The index under which the given `$value` is inserted.
+// @param `$value` The value to insert at given index `$n`.
+// @return The return value is the list with the inserted value at the given index `$n`.
+@function insert-nth($list, $n, $value) {
+  $result: ();
+  @for $i from 1 through list.length($list) {
+    @if $n == $i {
+      $result: list.append($result, $value, list.separator($list));
+    }
+
+    $result: list.append($result, list.nth($list, $i), list.separator($list));
+  }
+  @return $result;
+}
+
+// Examples.
+// @debug insert-nth(('a', 'b', 'd', 'e', 'f', 'g'), 3 , 'c'); // "a", "b", "c", "d", "e", "f", "g"
+// @debug insert-nth('a' 'b' 'd' 'e' 'f' 'g', 3, 'c'); // "a" "b" "c" "d" "e" "f" "g"
+// @debug insert-nth(('a' 1) ('b' 2) ('d' 4) ('e' 5) ('f' 6) ('g' 7), 3, ('c' 3)); // ("a" 1) ("b" 2) ("c" 3) ("d" 4) ("e" 5) ("f" 6) ("g" 7)

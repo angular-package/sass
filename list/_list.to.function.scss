@@ -1,11 +1,11 @@
 // Functions.
-@use '../list.nth.function';
+@use 'list.nth.function';
 
 // Modules.
-@use '../../number';
+@use '../number';
 
 // Status: DONE
-// The `nth.to()` function returns the list of elements from the first to the given `$to` index.
+// The `list.to()` function returns the list of elements from the first to the given `$to` index.
 // @param `$list` The list to get the elements from 1 to given `$to`.
 // @param `$to` Index of the last element to get.
 // @return The return value is the list of the elements from 1 to given `$to` index.

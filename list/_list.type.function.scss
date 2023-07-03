@@ -2,8 +2,8 @@
 @use 'sass:list';
 @use 'sass:meta';
 
-// Status: TODO: simplify code
-// The `nth.type()` function returns the type of all or selected `$n`.
+// Status: DONE
+// The `list.type()` function returns the type of all or selected `$n`.
 // @param `$list` The list to check type of all or the given `$n`.
 // @arbitrary `$n...` Indexes of number type to check their types in the given `$list`.
 // @return The list with the types of the given `$n` indexes.

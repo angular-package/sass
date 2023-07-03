@@ -2,13 +2,13 @@
 @use 'sass:list';
 
 // Functions.
-@use '../list.nth.function' as *;
+@use 'list.nth.function' as *;
 
 // Modules.
-@use '../../number';
+@use '../number';
 
 // Status: DONE
-// The `nth.range()` function returns the list of the given range.
+// The `list.range()` function returns the list of the given range.
 // @param `$list` The list to retrieve the elements from.
 // @param `$from` Index from which retrieving elements begins.
 // @param `$to` Index where the retrieval of elements ends.

@@ -2,13 +2,13 @@
 @use 'sass:list';
 
 // Functions.
-@use '../list.nth.function' as *;
+@use 'list.nth.function' as *;
 
 // Modules.
-@use '../../number';
+@use '../number';
 
 // Status: DONE
-// The `nth.from()` function returns the list of the elements from the given `$from` index to the end of the `$list`.
+// The `list.from()` function returns the list of the elements from the given `$from` index to the end of the `$list`.
 // @param `$list` The list from which the elements are picked.
 // @param `$from` A number-type element index of the given list.
 // @return The return value is the list of the elements from the given `$from` index to the end of the `$list`.

@@ -1,0 +1,70 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Functions.
+@use '../comparison/comparison.compare.function';
+@use 'list.append.function' as *;
+@use 'list.empty.function' as *;
+@use 'list.first.function' as *;
+
+// Status: DONE
+// The `list.select()` function returns .
+// @param `$list`
+// @param `$select` (index, value, type)
+// @param `$occurrence`
+// @param `$operator`
+// @arbitrary `$values...`
+// @return
+@function select($select: first value, $from: null, $operand: value, $operator: '==', $value, $values...) {
+  $result: ();
+  $occurrence: if(list.length($select) > 1, list.nth($select, 1), first);
+  $select: if(list.length($select) > 1, list.nth($select, 2), $select);
+  @each $value in append((), $value, comma, $values...) {
+    $do: true;
+    $indexes: ();
+    $i: 1;
+    @while $do == true {
+      $selected: if($select == index, $i, if($select == value, list.nth($from, $i), if($select == type, meta.type-of($value), null)));
+      $indexes: if(
+        comparison.compare(
+          if($operand == index, $i, if($operand == value, list.nth($from, $i), if($operand == type, meta.type-of($value), null))),
+          $operator,
+          $value
+        ),
+        list.append($indexes, $selected, comma),
+        $indexes
+      );
+      $do: if($i == list.length($from) or (not empty($indexes) and list.index(any first, $occurrence)), false, $do);
+      $i: $i + 1;
+    }
+
+    $result: list.append(
+      $result,
+      if(empty($indexes), null,
+        if(
+          list.index(any end first last start, $occurrence),
+          list.nth($indexes, if(list.index(any first start, $occurrence), 1, list.length($indexes))),
+          if(list.length($indexes) == 1, first($indexes), $indexes)
+        )
+      ),
+      comma
+    );
+  }
+  @return if(list.length($result) > 0, if(list.length($result) == 1, first($result), $result), null);
+}
+
+// Examples.
+// single value
+// @debug select(first index, 1px solid red, value, '==', 1px); // 1
+// @debug select(any index, 1px solid red, value, '==', solid); // 2
+
+// multiple values
+// @debug select(first index, 1px solid red, value, '==', 1px, red); // 1, 3
+
+// select type
+// @debug select(first index, 1px solid red, value, '==', dashed); // null
+// @debug select(first value, 1px solid red, value, ':==', color); // red
+
+// last occurrence
+// @debug select(last index, 1px solid red, type, '==', string); // 3

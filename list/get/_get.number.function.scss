@@ -7,7 +7,7 @@
 @use 'get.type.function';
 
 // Status: DONE
-// The `list.number()` function returns any, first or last occurring number, or all occurred numbers, also the specified numbers, otherwise null.
+// The `get.number()` function returns any, first or last occurring number, or all occurred numbers, also the specified numbers, otherwise null.
 // @param `$list` A list from which the occurring numbers are retrieved.
 // @param `$occurrence` All, any, first or last occurrence of the retrieved numbers from the given `$list`.
 // @param `$value` The value to retrieve from the given `$list`.

@@ -1,0 +1,46 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../../comparison/comparison.compare.function';
+
+// Status: DONE
+// The `get.type()` function returns the list with elements of the given types.
+// @param `$list` The list from which elements are being taken.
+// @param `$occurrence` Occurrence of the given types in the list, any, first, last or all.
+// @param `$type` The required type to retrieve from the given `$list`.
+// @arbitrary `$types...` Additional types to retrieve from the given `$list`.
+// @return The return value is the list of the elements of the given types.
+@function type($list, $occurrence: any, $type, $types...) {
+  $result: ();
+  @each $type in list.join($type, $types, comma) {
+    $do: true;
+    $nth: ();
+    $i: 1;
+
+    @while $do == true {
+      $nth: if(
+        comparison.compare(list.nth($list, $i), ':==', $type),
+        list.append($nth, list.nth($list, $i), list.separator($list)),
+        $nth
+      );
+      $do: if($i == list.length($list) or (list.length($nth) > 0 and list.index(any first, $occurrence)), false, $do);
+      $i: $i + 1;
+    }
+
+    $result: list.append(
+      $result,
+      if(
+        list.length($nth) > 0,
+        if(
+          list.index(any end first last start, $occurrence),
+          list.nth($nth, if(list.index(any first start, $occurrence), 1, list.length($nth))),
+          $nth
+        ),
+        null
+      ),
+      list.separator($list)
+    );
+  }
+  @return $result;
+}

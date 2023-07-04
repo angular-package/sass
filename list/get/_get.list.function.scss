@@ -1,0 +1,26 @@
+// Functions.
+@use '../list.first.function';
+@use 'get.type.function';
+
+// Status: DONE
+// The `get.list()` function returns the list from the given list if exists, otherwise null.
+// @param `$list` The list from which the list is taken.
+// @param `$occurrence` All, any, first or last occurrence of the list in the given `$list` to retrieve.
+// @return The return value is the list of the retrieved lists or `null`.
+@function list($list, $occurrence: first) {
+  @return list.first(get.type($list, $occurrence, list));
+}
+
+// Examples.
+// @debug list(('a', 'b', 'c')); // `null`
+
+// fist/any
+// @debug list(('a', 'b', 'c', ('d', 'e', 'f'))); // ("d", "e", "f")
+// @debug list(('a', 'b', 'c', ('d', 'e', 'f'), 132, ('a', 'd', 'f')), any); // "d", "e", "f"
+
+// all
+// @debug list(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', (1, 2, 3)), all); // ("d", "e", "f"), (1, 2, 3)
+// @debug list(('a', 'b', 'c', ('d', (1, 2, 3, (4, 5, 6)), 'e', 'f')), all); // ("d", (1, 2, 3, (4, 5, 6)), "e", "f")
+
+// last
+// @debug list(('a', 'b', 'c', ('d', 'e', 'f'), 132, ('a', 'd', 'f')), last); // "a", "d", "f"

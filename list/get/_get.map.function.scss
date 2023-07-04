@@ -1,0 +1,28 @@
+// Functions.
+@use '../list.first.function';
+@use 'get.type.function';
+
+// Status: DONE
+// The `get.map()` returns the list maps retrieved from the given `$list`.
+// @param `$list` The list from which the map is retrieved.
+// @param `$occurrence` Occurrence of the map type in the list to get, any, first, last or all.
+// @return The return value is the list of the maps retrieved from the given `$list`.
+@function map($list, $occurrence: first) {
+  @return list.first(get.type($list, $occurrence, map));
+}
+
+// Examples.
+// none
+// @debug map(('a', 'b', 'c')); // null
+
+// first
+// @debug map(('a', 'b', 'c', ('d': 1, 'e': 2, 'f': 3))); // ("d": 1, "e": 2, "f": 3)
+// @debug map(('a', 'b', 'c', (('d': 1, 'e': 2, 'f': 3), 'g'), 'h')); // null
+// @debug map(('a', ('d': 1, 'e': 2, 'f': 3), 'b', 'c', ('d', ('g': 1, 'h': 2, 'i': 3), (1, 2, 3, (4, 5, 6)), 'e', 'f'))); // ("d": 1, "e": 2, "f": 3)
+
+// all
+// @debug map(('a', (test: 2, test3: 45), 'b', 'c', ('d': 1, 'e': 2, 'f': 3)), all); // (test: 2, test3: 45), ("d": 1, "e": 2, "f": 3)
+// @debug map(('a', 'b', 'c', ('d': 1, 'e': 2, 'f': 3), 'g', 'h', ('1': 'd', '2': 'e', '3': 'f')), all); // ("d": 1, "e": 2, "f": 3), ("1": "d", "2": "e", "3": "f")
+
+// last
+// @debug map(('a', (test: 2, test3: 45), 'b', 'c', ('d': 1, 'e': 2, 'f': 3)), last); // ("d": 1, "e": 2, "f": 3)

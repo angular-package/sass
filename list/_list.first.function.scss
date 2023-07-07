@@ -6,7 +6,7 @@
 // @param `$list` The list to get the first element from.
 // @return The return value is the first element of the given `$list`.
 @function first($list) {
-  @return list.nth($list, 1);
+  @return if(type-of($list) == list, list.nth($list, 1), $list);
 }
 
 // Examples.

@@ -1,0 +1,42 @@
+// Functions.
+@use 'has.value.function';
+@use 'has.type.function' as *;
+
+// Status: DONE
+// The `has.bool()` function returns .
+// @param `$list`
+// @param `$occurrence` all, any, only
+// @param `$operator` == !=
+// @arbitrary `$bools...`
+@function bool($list, $occurrence: any, $operator: null, $bools...) {
+  @return if(
+    type-of($operator) == string,
+    if(type($bools, only, '==', bool), has.value($list, $occurrence, $operator, $bools...), false),
+    type($list, $occurrence, $operator or '==', bool)
+  );
+}
+
+// Examples.
+// any
+// @debug bool(('a', 'b', 'c')); // false
+// @debug bool(('a', 'b', 'c', true)); // true
+// @debug bool(('a', 'b', false, 'c'), any); // true
+// @debug bool(('a', 'b', 'c'), any, '==', true); // false
+// @debug bool(('a', 'b', 'c'), any, '==', false); // false
+
+// all
+// @debug bool((true, true, false, false), all, '==', true, false); // true
+// @debug bool((true, true, true, true), all, '==', true); // true
+// @debug bool((false, false, false, false), all, '==', false); // true
+// @debug bool((true, true, true, true), all, '==', true, false); // false
+// @debug bool((false, false, false, false), all, '==', true); // false
+// @debug bool((true, true, true, true), all, '==', false); // false
+
+// only
+// @debug bool(('a', 'b', 'c'), only); // false
+// @debug bool(('a', 'b', false, 'c'), only); // false
+// @debug bool((true, true, false, false), only); // true
+// @debug bool((true, true, true, true), only, '==', true); // true
+// @debug bool((false, false, false, false), only, '==', false); // true
+// @debug bool((true, true, false, false), only, '!=', false); // false
+// @debug bool((true, true, true, true), only, '!=', false); // true

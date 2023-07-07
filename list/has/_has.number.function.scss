@@ -1,0 +1,47 @@
+// Functions.
+@use 'has.type.function' as *;
+@use 'has.value.function';
+
+// Status: DONE
+// The `has.number()` function
+// @param `$list`
+// @param `$occurrence` all, any, only
+// @param `$operator` == != > >= < <=
+// @arbitrary `$numbers...`
+@function number($list, $occurrence: any, $operator: null, $numbers...) {
+  @return if(
+    type-of($operator) == string,
+    if(type($numbers, only, '==', number), has.value($list, $occurrence, $operator, $numbers...), false),
+    type($list, $occurrence, '==', number)
+  );
+}
+
+// Examples.
+// any
+// @debug number((1, 2, '3', '5', 4)); // true
+// @debug number((1, 2, 3, 5, 4)); // true
+// @debug number(('1', 2, '3', 5, '4'), any, '==', 5, 2, 10); // true
+// @debug number((1, 2, 3), any, '==', 3); // true
+// @debug number(('1', '2', '3', '5', '4')); // false
+// @debug number((1, '2', 3, '5', '4'), any, '==', 5, 4); // false
+// @debug number((15, 15, 15), any, '!=', 15); // false
+// @debug number((4, 10, 15), any, '!=', 15); // true
+
+// any
+// @debug number((1, 2, 3), any, '>', 1); // true
+// @debug number((1, 2, 3), any, '>', 4); // false
+// @debug number((4, 10, 15), any, '<', 15); // true
+// @debug number((4, 10, 15), any, '>', 15, 20, 25); // false
+// @debug number((4, 10, 15), any, '>', 15, 14, 25); // true
+
+// all
+// @debug number((1, 1, 1), all, '==', 1); // true
+// @debug number((1, 2, 3), all, '>', 1); // true
+// @debug number((1, 2, 3), all, '>=', 1); // true
+// @debug number((4, 10, 15), all, '<=', 15); // true
+
+// only
+// @debug number((1, 2, 3, 5, 4), only); // true
+// @debug number((1, 2, '3', '5', 4), only); // false
+// @debug number((1, 11, 111), only, '==', 1); // false
+// @debug number((4, 10, 15), only, '<', 15); // false

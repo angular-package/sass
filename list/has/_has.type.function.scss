@@ -1,0 +1,56 @@
+// Functions.
+@use '../list.has.function';
+
+// Status: DONE
+// The `has.type()` function.
+// @param `$list`
+// @param `$occurrence` all, any, only
+// @param `$operator` ==, !=
+// @param `$type` arglist bool calculation color function list map null number string
+// @arbitrary `$types...`
+@function type($list, $occurrence: any, $operator: '==', $type, $types...) {
+  @return list.has($list, $occurrence, ':#{$operator}', $type, $types...);
+}
+
+// Examples.
+// any
+// @debug type(('a', 'b', 'c'), $type: string); // true
+// @debug type(('a', 'b', 'c'), any, '==', string); // true
+// @debug type(('a', 'b', 'c', 5123), any, '==', number); // true
+// @debug type(('a', null, 'b', 'c', 5123), any, '==', null); // true
+// @debug type(('a', ('b', 'c'), 5123), any, '==', list); // true
+// @debug type(('a', ('b': 'c'), 5123), any, '==', map); // true
+// @debug type(('a', 'b', 'c', 5123), any, '==', list); // false
+
+// only
+// @debug type(('a', 'b', 'c'), only, '==', string); // true
+// @debug type((332, 551, 3123, 5123), only, '==', number); // true
+// @debug type(('a', 'b', 'c', 5123), only, '==', number); // false
+// @debug type(('a', null, 'b', 'c', 5123), only, '==', null); // false
+// @debug type(('a', ('b', 'c'), 5123), only, '==', list); // false
+// @debug type(('a', ('b': 'c'), 5123), only, '==', map); // false
+
+// any null
+// @debug type(('a', ('b': 'c'), 5123, null, '27', 27), any, '==', null); // true
+// @debug type(('a', ('b': 'c'), 5123, null, '27', 27), any, '==', null); // true
+// @debug type(('a', ('b': 'c'), 5123, false, '27', 27), any, '==', null); // false
+
+// @debug 'Multiple --';
+// @debug type(('a', 'b', 1, 'c'), any, '==', number); // true
+// @debug type(('a', 'b', 'c'), any, '==', string, number, bool); // true
+// @debug type(('a', false, 'b', 'c'), any, '==', bool); // true
+// @debug type(('a', 'b', 'c', null), any, '==', null); // true
+// @debug type(('a', ('b', 'c'), null), any, '==', list); // true
+// @debug type(('a', ('b', 'c'), 4, null), any, '==', string, null, list, number); // true
+// @debug type(('a', ('b', 'c'), 4, null, ('a': 1)), any, '==', string, null, list, number, map); // true
+
+// different operator
+// @debug type((1, 2, 3, 4, 5.55), any, '!=', number); // false
+// @debug type(('a', 'b', 'c'), any, '!=', string); // false
+
+// @debug '--';
+// @debug type(('a', 'b', 'c'), any, '==', bool, null); // false
+// @debug type(('a', 'b', 1, 'c'), any, '==', list, map, bool); // false
+// @debug type(('a', false, 'b', 'c'), any, '==', number, null); // false
+// @debug type(('a', false, 'b', 'c'), any, '==', list); // false
+// @debug type(('a', ('b', 'c'), null), any, '==', string, list, null, number); // true

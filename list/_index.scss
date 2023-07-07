@@ -1,5 +1,6 @@
 // Modules.
 @forward 'get' as get-*;
+@forward 'has' as has-*;
 @forward 'remove' as remove-*;
 
 // Functions.
@@ -16,6 +17,7 @@
 @forward 'list.extract-map.function';
 @forward 'list.first.function';
 @forward 'list.from.function';
+@forward 'list.has.function';
 @forward 'list.index.function';
 @forward 'list.insert-nth.function';
 @forward 'list.join.function';

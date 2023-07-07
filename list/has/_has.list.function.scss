@@ -1,0 +1,33 @@
+// Functions.
+@use 'has.type.function' as *;
+@use 'has.value.function';
+
+// Status: DONE
+// The `has.list()` function.
+// @param `$list`
+// @param `$occurrence` all, any, only
+// @param `$operator` == !=
+// @arbitrary `$lists...`
+@function list($list, $occurrence: any, $operator: null, $lists...) {
+  @return if(
+    type-of($operator) == string,
+    if(type($lists, only, '==', list), has.value($list, $occurrence, $operator, $lists...), false),
+    type($list, $occurrence, '==', list)
+  );
+}
+
+// Examples.
+// any
+// @debug list(((1, 2, 3), ('4', '5', '6'), 7, 8, 9)); // true
+// @debug list(((1, 2, 3), ('4', '5', '6'), 7, 8, 9), any); // true
+// @debug list(((1, 2, 3), ('4', '5', '6'), 7, 8, 9), any, '==', ('4', '5', '6')); // true
+// @debug list(((4, 5, 6), (4, 5, 6), (4, 5, 6)), any, '==', (4, 5, 6)); // true
+// @debug list((1, 2, 3, '4', '5', '6', 7, 8, 9, (a: 1)), any); // false
+
+// all
+// @debug list(((1, 2, 3), ('4', '5', '6'), 7, 8, 9), all, '==', ('4', '5', '6'), (7, 8 , 9)); // false
+// @debug list((('4', '5', '6'), ('4', '5', '6'), ('4', '5', '6')), all, '==', ('4', '5', '6')); // true
+
+// only
+// @debug list(((1, 2, 3), ('4', '5', '6'), (7, 8, 9)), only); // true
+// @debug list(((1, 2, 3), ('4', '5', '6'), 7, 8, 9), only); // false

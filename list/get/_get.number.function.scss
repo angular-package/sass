@@ -1,10 +1,6 @@
-// Sass.
-@use 'sass:list';
-
 // Functions.
-@use '../list.empty.function' as *;
 @use '../list.first.function' as *;
-@use 'get.type.function';
+@use '../list.select.function';
 
 // Status: DONE
 // The `get.number()` function returns any, first or last occurring number, or all occurred numbers, also the specified numbers, otherwise null.
@@ -14,12 +10,11 @@
 // @param `$values...` The list of values to retrieve from the given `$list`.
 // @return The return value is a retrieved number, list of numbers or `null`.
 @function number($list, $occurrence: first, $value: null, $values...) {
-  $result: first(get.type($list, $occurrence, number));
-  $values-result: ();
-  @each $value in list.join($value, $values, comma) {
-    $values-result: list.append($values-result, if(list.index($result, $value), $value, null), list.separator($list));
-  }
-  @return if($value, if(empty($values-result), null, if(list.length($values-result) == 1, first($values-result), $values-result)), $result);
+  @return if(
+    $value,
+    list.select($occurrence value, $list, value, '==', $value, $values...),
+    first(list.select($occurrence value, $list, value, ':==', number))
+  );
 }
 
 // Examples.
@@ -42,11 +37,11 @@
 // occurrence: all + value
 // @debug number(('a', 3, 'b', 2, 4, 2, 7, 2, 'b', 'c', 2), all, 15); // null
 // @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all, 8); // 8
-// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), first, 8); // null
-// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), last, 8); // null
+// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), first, 8, ); // 8
+// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), last, 8); // 8
 
 // occurrence: all + values
-// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all, 8, 15, 7, 2); // 8, null, 7, 2
+// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all, 8, 15, 7, 2); // 8, null, 7, (2, 2, 2, 2)
 
 // specified value TODO: ?
 // @debug number((3, 'a', 0, 'b', 1, 'c', 2), all '>' 2...); // 3

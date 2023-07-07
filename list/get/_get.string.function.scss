@@ -1,10 +1,11 @@
-// Sass.
-@use 'sass:list';
-
 // Functions.
-@use '../list.empty.function' as *;
 @use '../list.first.function' as *;
-@use 'get.type.function';
+// @use 'get.type.function';
+
+@use '../remove/remove.nth.function' as *;
+
+@use '../list.select.function';
+
 
 // Status: DONE
 // The `get.string()` function returns any, first or last occurring string, or all occurred numbers, also the specified numbers, otherwise null.
@@ -14,12 +15,11 @@
 // @param `$values...` The list of values to retrieve from the given `$list`.
 // @return The return value is a retrieved string, list of numbers or `null`.
 @function string($list, $occurrence: first, $value: null, $values...) {
-  $result: first(get.type($list, $occurrence, string));
-  $values-result: ();
-  @each $value in list.join($value, $values, comma) {
-    $values-result: list.append($values-result, if(list.index($result, $value), $value, null), list.separator($list));
-  }
-  @return if($value, if(empty($values-result), null, if(list.length($values-result) == 1, first($values-result), $values-result)), $result);
+  @return if(
+    $value,
+    list.select($occurrence value, $list, value, '==', $value, $values...),
+    first(list.select($occurrence value, $list, value, ':==', string))
+  );
 }
 
 // Examples.
@@ -28,7 +28,7 @@
 // @debug string((1, 2, 3, 'a', 'b', 'c', 2), first); // a
 
 // occurrence: any
-// @debug string(('a', 'b', 'c', (3))); // `3`
+// @debug string(('a', 'b', 'c', (3))); // a
 // @debug string(('a', 'b', 'c', (4, ))); // `null`
 // @debug string(('a', 'b', 'c', ('5', (6,)))); // `null`
 
@@ -36,17 +36,17 @@
 // @debug string(('a', 5, 'b', 2, 'c', (4, ))); // 5
 
 // occurrence: all
-// @debug string((3, 'a', 0, 'b', 1, 'c', 2), all); // 3, 0, 1, 2
-// @debug string(('a', 5, 'b', 2, 'c', (4, )), all); // 5, 2
+// @debug string((3, 'a', 0, 'b', 1, 'c', 2), all); // "a", "b", "c"
+// @debug string(('a', 'the', 5, 'sun', 'b', 2, 'c', (4, )), all); // "a", "the", "sun", "b", "c"
 
 // occurrence: all + value
-// @debug string(('a', 3, 'b', 2, 4, 2, 7, 2, 'b', 'c', 2), all, 15); // null
-// @debug string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all, 8); // 8
-// @debug string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), first, 8); // null
-// @debug string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), last, 8); // null
+// @debug string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all, 'c'); // c
+// @debug string(('a', 3, 'b', 2, 'c', 4, 2, 7, 2, 'b', 'c', 2), all, 'b', 'c'); // ("b", "b"), ("c", "c")
+// @debug string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), first, 'f'); // null
+// @debug string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), last, 'e'); // null
 
 // occurrence: all + values
-// @debug string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all, 8, 15, 7, 2); // 8, null, 7, 2
+// @debug string(('a', 3, 'b', 2, 'c', 4, 'd', 8, 'e', 2, 7, 2, 'b', 'c', 2), all, 'a', 'e', 'f', 'd'); // 1, 9, null, 7
 
 // specified value TODO: ?
 // @debug string((3, 'a', 0, 'b', 1, 'c', 2), all '>' 2...); // 3

@@ -3,7 +3,7 @@
 
 // Functions.
 @use '../../number/number.range.function';
-@use 'remove.index.function';
+@use 'remove.nth.function';
 
 // Status: DONE
 // The `remove.range()` function removes the indexes of the given range.
@@ -12,7 +12,7 @@
 // @param `$to` The end index of the range of elements to remove.
 // @return The list without the elements of the given index range.
 @function range($list, $from: 1, $to: list.length($list)) {
-  @return remove.index($list, number.range($from, $to, 1, 0)...);
+  @return remove.nth($list, number.range($from, $to, 1, 0)...);
 }
 
 // Examples.

@@ -23,6 +23,11 @@
   @return $result;
 }
 
+// Different name.
+@function index($list, $n, $indexes...) {
+  @return nth($list, $n, $nts...);
+}
+
 // Examples.
 // index
 // @debug nth(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', 'i', 'j', 'k'), 4); // "a", "b", "c", "g", "h", "i", "j", "k"

@@ -7,6 +7,10 @@
     "type": "git",
     "url": "https://github.com/angular-package/sass/issues"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "license": "MIT",
   "keywords": [
     "@angular-package",

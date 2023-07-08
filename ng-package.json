@@ -5,6 +5,13 @@
     "entryFile": "src/public-api.ts"
   },
   "assets": [
-    "./**/**/*.scss"
+    "./comparison/**/*.scss",
+    "./list/**/*.scss",
+    "./map/**/*.scss",
+    "./math/**/*.scss",
+    "./meta/**/*.scss",
+    "./number/**/*.scss",
+    "./string/**/*.scss",
+    "*.scss"
   ]
 }

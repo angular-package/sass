@@ -2,9 +2,9 @@
 @use 'sass:list';
 
 // Status: DONE
-// The `list.empty()` function returns the bool indicating whether the list is empty.
+// The `list.empty()` function returns the `bool` indicating whether the list is empty.
 // @param `$list` The list to check against its length.
-// @return The return value is a bool indicating whether the given `$list` is empty.
+// @return The return value is a `bool` indicating whether the given `$list` is empty.
 @function empty($list) {
   @return type-of($list) == list and list.length($list) == 0;
 }

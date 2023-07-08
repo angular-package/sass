@@ -2,10 +2,11 @@
 @use 'sass:list';
 
 // Status: DONE
+// The `insert-nth()` function returns the `$list` with `$value` inserted into index `$n`.
 // @param `$list` The list to insert the value at index `$n`.
-// @param `$n` The index under which the given `$value` is inserted.
-// @param `$value` The value to insert at given index `$n`.
-// @return The return value is the list with the inserted value at the given index `$n`.
+// @param `$n` The index `$n` under which the given `$value` is inserted.
+// @param `$value` The value to insert at the given index `$n`.
+// @return The return value is the list with the inserted `$value` at the given `$n` index.
 @function insert-nth($list, $n, $value) {
   $result: ();
   @for $i from 1 through list.length($list) {

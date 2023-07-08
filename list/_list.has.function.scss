@@ -2,13 +2,13 @@
 @use 'list.select.function';
 
 // Status: DONE
-// The `has()` function returns the `bool` indicating the given `$list` contains the given values.
-// @param `$list` The list to check whether it contains the given values.
-// @param `$occurrence` all, any, only
-// @param `$operator` ==, !=
-// @param `$value`
-// @arbitrary `$values...`
-// @return The return value is the bool, indicating the `$list` has values.
+// The `list.has()` function returns the `bool` indicating the given `$list` contains the `$value` and/or given `$values`.
+// @param `$list` The list to check whether it contains the values.
+// @param `$occurrence` (all, any, only)
+// @param `$operator` The operator of a string type to compare list elements with the given values.
+// @param `$value` The value to check against its existence in the `$list`.
+// @arbitrary `$values...` Additional values to check against their existence in the `$list`.
+// @return The return value is the `bool`, indicating the `$list` has values.
 // ? types: arglist bool calculation color function list map null number string
 @function has($list, $occurrence: any, $operator: '==', $value, $values...) {
   @return list.select(has $occurrence, $list, value, $operator, $value, $values...);

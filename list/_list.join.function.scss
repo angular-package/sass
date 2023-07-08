@@ -6,10 +6,10 @@
 // Function adds `$delimiter` functionality.
 // @param `$list1` The list to join the given `$list2`.
 // @param `$list2` The list to be joined to the given `$list1`.
-// @param `$separator` Comma, space, or slash separator used between the elements of the list. Default, auto.
+// @param `$separator` Comma, space, or slash separator used between the elements of the list. Default, `auto`.
 // @param `$bracketed` If `true` then returned list is between the square brackets.
-// @param `$delimiter` Delimiter is the character added as element between each element in returned list.
-// @return The return value is two list combined into one with a given separator, and/or delimiter.
+// @param `$delimiter` The delimiter is the character added as an element between each element in the returned list.
+// @return c
 @function join($list1, $list2, $separator: auto, $bracketed: auto, $delimiter: null) {
   @if $delimiter {
     $list: ();

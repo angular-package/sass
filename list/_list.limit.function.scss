@@ -8,7 +8,7 @@
 // The `list.limit()` function returns the list of the elements from the given offset limited by the given limit.
 // @param `$list` The list to retrieve the elements from.
 // @arbitrary `$limit...` A number of the indexes of the returned list, also with the first given offset.
-// @return The return value is the list of specified limit.
+// @return The return value is the list of the specified limit.
 @function limit($list, $limit...) {
   @return range($list, if(
     list.length($limit) == 1,

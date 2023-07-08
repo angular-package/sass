@@ -2,7 +2,7 @@
 @use 'sass:list';
 
 // Status: DONE
-// The `list.first()` function returns the list element of the given `$list`.
+// The `list.first()` function returns the first list element of the given `$list`.
 // @param `$list` The list to get the first element from.
 // @return The return value is the first element of the given `$list`.
 @function first($list) {

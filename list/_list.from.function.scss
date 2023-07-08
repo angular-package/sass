@@ -10,8 +10,8 @@
 // Status: DONE
 // The `list.from()` function returns the list of the elements from the given `$from` index to the end of the `$list`.
 // @param `$list` The list from which the elements are picked.
-// @param `$from` A number-type element index of the given list.
-// @return The return value is the list of the elements from the given `$from` index to the end of the `$list`.
+// @param `$from` A number-type element index of the given `$list`.
+// @return The return value is the list of the elements from the given `$from` index to the last index of the `$list`.
 @function from($list, $from) {
   @return if($from <= list.length($list), nth($list, number.range($from, list.length($list)) or $from...), null);
 }

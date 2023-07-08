@@ -2,14 +2,13 @@
 @use 'list.select.function';
 
 // Status: DONE
-// The `list.indexes()` function returns all occurred indexes of the given values.
-// ? Check comparison.compare() function for operators.
-// @param `$list` The list from which the indexes are retrieved.
+// The `list.indexes()` function returns all occurred indexes of the given `$value` and/or optional arbitrary `$values` checked by the given `$operator`.
+// @param `$list` The list from which the indexes of the given values are retrieved.
 // @param `$occurrence` Occurrence `all`, `any`, `first` and `last` of the retrieved elements.
 // @param `$operator` The operator to compare list values with the given values.
-// @param `$value` The required value for the comparison to find index.
-// @arbitrary `$values...` Optional values for the comparison to find indexes.
-// @return The return value is index, or the list of the indexes retrieved by given comparison.
+// @param `$value` The required value of the comparison to return an index.
+// @arbitrary `$values...` Additional values to the comparison to return their indexes.
+// @return The return value is an index, or the list of the indexes retrieved by given comparison.
 @function indexes($list, $occurrence: all, $operator: '==', $value, $values...) {
   @return list.select($occurrence index, $list, value, $operator, $value, $values...);
 }

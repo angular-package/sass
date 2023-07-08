@@ -1,0 +1,40 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../../meta/meta.of-type.function';
+
+// Status: DONE
+// The `range.down()` function returns the range of numbers where `$from` is higher than `$to`.
+// @param `$from` The value of the number type indicates the beginning of the range.
+// @param `$to` The value of number type indicates the end of the range.
+// @param `$except` The value of a number or list of numbers not belonging to the range.
+// @param `$separator` A separator between the given range numbers.
+// @return The return value is the list of numbers of the given range.
+@function down($from, $to, $step: 1, $except: null, $separator: auto) {
+  @if meta.of-type(number, $from, $to, $step) and $from > $to {
+    $result: ();
+    $number: $from;
+    @if $step > 0 {
+      $step: $step * -1;
+    }
+    @while $number >= $to {
+      $result: if(not $except or ($except and not list.index($except, $number)), list.append($result, $number, $separator), $result);
+      $number: $number + $step;
+    }
+
+    @return if(list.length($result) > 0, $result, null);
+  }
+  @return null;
+}
+
+// Examples.
+// @debug down(20, 15); // 20 19 18 17 16 15
+
+// step 2
+// @debug down(15, -3, 2); // 15 13 11 9 7 5 3 1 -1 -3
+
+// except
+// @debug down(20, 35); // null
+
+

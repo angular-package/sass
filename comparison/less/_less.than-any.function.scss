@@ -3,8 +3,9 @@
 
 // Status: DONE
 // The `less.than-any()` function checks whether the given `$less` is less than any of the given `$values`.
-// @param `$less` The value of number type.
+// @param `$less` The value of number type to check if it's less than any of the given `$values`.
 // @param `$values...` The values of number type to compare with a given `$less`.
+// @returns The return value is a bool indicating the `$less` is less than any of the given `$values`.
 @function than-any($less, $values...) {
   @each $value in $values {
     @if meta.of-type(number, $less, $value) and $less < $value {

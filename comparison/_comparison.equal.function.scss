@@ -1,7 +1,7 @@
 // Status: DONE
-// The `comparison.equal()` function.
-// @param `$value1`
-// @param `$value2`
+// The `comparison.equal()` function is a helper function for the compare function and it's a simple comparison of the `$value1` with `$value2`.
+// @param `$value1` The value to be equal with the `$value2`.
+// @param `$value2` The value to be equal with the `$value1`.
 @function equal($value1, $value2) {
   @return $value1 == $value2;
 }

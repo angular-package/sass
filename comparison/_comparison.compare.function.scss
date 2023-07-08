@@ -14,7 +14,11 @@
 @use 'comparison.equal.function' as *;
 
 // Status: DONE
-// The `comparison.compare()` function.
+// The `comparison.compare()` function returns a bool indicating the result of the comparison.
+// @param `$value` The value to compare with the given `$operand`.
+// @param `$operator` Operator of string type
+// @param `$operand` The value to compare with the given `$value`.
+// @return The return value is a bool indicating the result of the comparison.
 @function compare($value, $operator, $operand) {
   $not: if(string.index($operator, '!'), true, false);
   $check-type: null;

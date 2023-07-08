@@ -3,9 +3,9 @@
 
 // Status: DONE
 // The `greater.than-every()` function checks whether the given `$greater` is greater than every of the given `$values`.
-// @param `$greater` The value of number type.
+// @param `$greater` The value of number type to check if it's greater than every of the given `$values`.
 // @param `$values...` The values of number type to compare with a given `$greater`.
-// @returns A bool indicating the `$greater` is greater than every of the given `$values`.
+// @returns The return value is a bool indicating the `$greater` is greater than every of the given `$values`.
 @function than-every($greater, $values...) {
   @each $value in $values {
     @if not meta.of-type(number, $greater, $value) or $greater <= $value {

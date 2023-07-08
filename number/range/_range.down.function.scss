@@ -5,12 +5,12 @@
 @use '../../meta/meta.of-type.function';
 
 // Status: DONE
-// The `range.down()` function returns the range of numbers where from is higher than to.
-// @param `$from` The value of number type to start the range.
-// @param `$to` The value of number type to end of the range.
+// The `range.down()` function returns the range of numbers where `$from` is higher than `$to`.
+// @param `$from` The value of the number type indicates the beginning of the range.
+// @param `$to` The value of number type indicates the end of the range.
 // @param `$except` The value of a number or list of numbers not belonging to the range.
 // @param `$separator` A separator between the given range numbers.
-// @return The return value is the list of numbers from the given range.
+// @return The return value is the list of numbers of the given range.
 @function down($from, $to, $step: 1, $except: null, $separator: auto) {
   @if meta.of-type(number, $from, $to, $step) and $from > $to {
     $result: ();

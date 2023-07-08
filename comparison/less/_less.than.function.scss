@@ -7,10 +7,11 @@
 @use 'less.than-every.function' as *;
 
 // Status: DONE
-// The `less.than()` function checks whether the given value is less than compared value.
-// @param `$less` The value of number type to be compared against the given `$value` and/or every/any `$values`.
-// @param `$value` The value of number type to be greater than the given `$less`.
-// @arbitrary `$values...` The values of number type to be greater than the given `$less`.
+// The `less.than()` function checks whether the given `$value` is less than compared `$value` and/or `$values`.
+// @param `$less` The value of number type to be compared against the given every and/or any values.
+// @param `$value` The value of number type to be less than the given `$less`.
+// @arbitrary `$values...` The values of number type to be less than the given `$value`.
+// @return The return value is a bool indicating whether the given `$less` is greater than values.
 @function than($less, $value, $values...) {
   $values: if(meta.type-of($value) == number, list.join($value, $values), $values);
   @return if(

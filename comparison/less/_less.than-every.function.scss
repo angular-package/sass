@@ -3,9 +3,9 @@
 
 // Status: DONE
 // The `less.than-every()` function checks whether the given `$less` is less than every of the given `$values`.
-// @param `$less` The value of number type.
+// @param `$less` The value of number type to check if it's less than every of the given `$values`.
 // @param `$values...` The values of number type to compare with a given `$less`.
-// @returns A bool indicating the `$less` is less than every of the given `$values`.
+// @returns The return value is a bool indicating the `$less` is less than every of the given `$values`.
 @function than-every($less, $values...) {
   @each $value in $values {
     @if not meta.of-type(number, $less, $value) or $less >= $value {

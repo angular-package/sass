@@ -7,8 +7,9 @@
 @use 'comparison.compare.function';
 
 // Status: DONE
-// The `comparison.compare-multiple()` function.
-// @arbitrary `$comparisons...` The
+// The `comparison.compare-multiple()` function handles multiple comparisons.
+// @arbitrary `$comparisons...` Comparisons of the list type where (value1, operator, value2) to compare multiple comparisons.
+// @return The return value is a `bool` indicating the given comparisons are `true` or `false`.
 @function compare-multiple($comparisons...) {
   $result: ();
   @each $comparison in if(list.length($comparisons) == 3 and type-of(list.nth($comparisons, 2)) == string, ($comparisons,), $comparisons) {

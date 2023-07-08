@@ -7,10 +7,11 @@
 @use 'greater.than-every.function' as *;
 
 // Status: DONE
-// The `greater.than()` function checks whether the given value is greater than compared value.
-// @param `$greater` The value of number type to be compared against the given every/any `$values`.
+// The `greater.than()` function checks whether the given `$value` is greater than compared `$value` and/or `$values`.
+// @param `$greater` The value of number type to be compared against the given every and/or any values.
 // @param `$value` The value of number type to be less than the given `$greater`.
 // @arbitrary `$values...` The values of number type to be less than the given `$value`.
+// @return The return value is a bool indicating whether the given `$greater` is greater than values.
 @function than($greater, $value, $values...) {
   $values: list.join($value, $values, comma);
   @return if(

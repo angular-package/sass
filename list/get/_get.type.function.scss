@@ -1,0 +1,13 @@
+// Functions.
+@use '../list.select.function';
+
+// Status: DONE
+// The `get.type()` function returns the list with elements of the given types.
+// @param `$list` The list from which elements are being taken.
+// @param `$occurrence` Occurrence of the given types in the list, any, first, last or all.
+// @param `$type` The required type to retrieve from the given `$list`.
+// @arbitrary `$types...` Additional types to retrieve from the given `$list`.
+// @return The return value is the list of the elements of the given types.
+@function type($list, $occurrence: any, $type, $types...) {
+  @return list.select($occurrence value, $list, value, ':==', $type, $types...);
+}

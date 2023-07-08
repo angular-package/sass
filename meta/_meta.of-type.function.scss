@@ -1,0 +1,14 @@
+// Status: DONE
+// The `meta.of-type()` function.
+@function of-type($type, $values...) {
+  @each $value in $values {
+    @if not (type-of($value) == $type) {
+      @return false;
+    }
+  }
+  @return true;
+}
+
+// Examples.
+// @debug of-type(string, a, b, c, d); // true
+// @debug of-type(string, a, 2, 3, 5); // false

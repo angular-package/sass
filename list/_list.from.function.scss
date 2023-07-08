@@ -1,0 +1,30 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use 'list.nth.function' as *;
+
+// Modules.
+@use '../number';
+
+// Status: DONE
+// The `list.from()` function returns the list of the elements from the given `$from` index to the end of the `$list`.
+// @param `$list` The list from which the elements are picked.
+// @param `$from` A number-type element index of the given `$list`.
+// @return The return value is the list of the elements from the given `$from` index to the last index of the `$list`.
+@function from($list, $from) {
+  @return if($from <= list.length($list), nth($list, number.range($from, list.length($list)) or $from...), null);
+}
+
+// Examples.
+// @debug from((('a', 'b', 'c'),), 1); // (('a', 'b', 'c'),)
+
+// @debug from((('a', 'b', 'c'), 'a', 'b', c, d, 2, 4, 5, (a: 1)), 0); // ("a", "b", "c"), "a", "b", c, d, 2, 4, 5, (a: 1)
+// @debug from((('a', 'b', 'c'), 'a', 'b', c, d, 2, 4, 5, (a: 1)), -1); // (a: 1), ("a", "b", "c"), "a", "b", c, d, 2, 4, 5, (a: 1)
+// @debug from((('a', 'b', 'c'), 'a', 'b', c, d, 2, 4, 5, (a: 1)), 1); // ("a", "b", "c"), "a", "b", c, d, 2, 4, 5, (a: 1)
+
+// @debug from(('a', 'b', c, d, 2, 4, 5, (a: 1)), 4); // d, 2, 4, 5, (a: 1)
+// @debug from(('a', 'b', c, d, 2, 4, 5, (a: 1)), 7); // 5, (a: 1)
+
+// negative index
+// @debug from((('a', 'b', 'c'), ), -3); // null, null, ("a", "b", "c"), ("a", "b", "c")

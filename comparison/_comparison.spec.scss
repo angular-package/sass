@@ -1,0 +1,66 @@
+@use '../comparison';
+
+// Compare.
+// @debug comparison.compare(27, '==', 27); // true
+// @debug comparison.single(27, '==', 27); // true
+
+// @debug comparison.compare(27px, '==', 27em); // false
+// @debug comparison.single(27px, '==', 27em); // false
+
+// @debug comparison.compare(27px, '===', 27em); // false
+// @debug comparison.single(27px, '===', 27em); // false
+
+// @debug comparison.compare('bold ', '!~=', 'bold'); // false
+// @debug comparison.single('bold ', '!~=', 'bold'); // false
+
+
+// Greater than.
+// every
+// @debug comparison.greater(11, 6); // true
+// @debug comparison.greater-than(11, 6); // true
+// @debug comparison.greater-than-every(11, 6); // true
+
+// @debug comparison.greater(11, 6, 1, 12); // false
+// @debug comparison.greater-than(11, 6, 12); // false
+// @debug comparison.greater-than(11, 6, 1, 12); // false
+
+// any
+// @debug comparison.greater(11, any, 6); // true
+// @debug comparison.greater-than-any(11, 6); // true
+// @debug comparison.greater-than(11, any, 6); // true
+
+
+// Less than.
+// @debug comparison.less(11, 6); // false
+// @debug comparison.less-than(6, 6); // false
+
+// @debug comparison.less(6, any, 5, 1, 2); // false
+// @debug comparison.less-than-any(6, 5, 1, 2); // false
+
+// @debug comparison.less-than(11, 10, 9, 8, 11); // false
+// @debug comparison.less-than-every(11, 10, 9, 8, 11); // false
+
+// @debug comparison.less(6, 11, 1000, 20px); // true
+// @debug comparison.less-than(6, 11, 1000, 20px); // true
+
+// @debug comparison.less(6, any, 6, 7, 2000); // true
+// @debug comparison.less-than-any(6, 6, 7, 2000); // true
+
+// @debug comparison.less(6, 100, 200, 250); // true
+// @debug comparison.less-than-every(6, 100, 200, 250); // true
+
+
+// Equal to.
+// @debug comparison.equal(6, 6); // true
+// @debug comparison.equal(11, 6); // false
+// @debug comparison.equal(11, 116); // false
+
+
+// Multiple comparisons as list.
+// @debug comparison.compare-multiple((value: 27, operator: '==', operand: 27), (value: 17, operator: '==', operand: 27)); // true, false
+
+// @debug comparison.multiple(27 '==' 27, 17 '==' 27, 5 '>' 3); // true, false, true
+// @debug comparison.multiple((27, '==', 27), (27, '!=', 27)); // true, false
+
+// @debug comparison.compare-multiple(27 '==' 27, 17 '==' 27, 5 '>' 3); // true, false, true
+// @debug comparison.compare-multiple((27, '==', 27), (27, '!=', 27)); // true, false

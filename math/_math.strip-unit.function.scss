@@ -1,0 +1,14 @@
+// Sass.
+@use 'sass:math';
+
+// Status: DONE
+// The `math.strip-unit()` function strips the unit from a given `$number`.
+// @param `$number`
+@function strip-unit($number) {
+  @return if(type-of($number) == number, math.div($number, ($number * 0 + 1)), $number);
+}
+
+// Examples.
+// @debug strip-unit(10px); // 10
+// @debug strip-unit(null); // null
+// @debug strip-unit(false); // false

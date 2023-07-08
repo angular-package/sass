@@ -1,0 +1,21 @@
+// Functions.
+@use '../../meta/meta.of-type.function';
+
+// Status: DONE
+// The `greater.than-every()` function checks whether the given `$greater` is greater than every of the given `$values`.
+// @param `$greater` The value of number type.
+// @param `$values...` The values of number type to compare with a given `$greater`.
+// @returns A bool indicating the `$greater` is greater than every of the given `$values`.
+@function than-every($greater, $values...) {
+  @each $value in $values {
+    @if not meta.of-type(number, $greater, $value) or $greater <= $value {
+      @return false;
+    }
+  }
+  @return true;
+}
+
+// Examples.
+// @debug than-every(11, 6, 3, 3, 3, 1); // true
+// @debug than-every(11, 6, 3, 12, 3, 1); // false
+// @debug than-every(11, 6, 3, 5, 3, 11); // false

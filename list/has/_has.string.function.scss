@@ -1,0 +1,46 @@
+// Functions.
+@use 'has.type.function' as *;
+@use 'has.value.function';
+
+// Status: TODO: Examples.
+// The `has.string()` function.
+// @param `$list`
+// @param `$occurrence` all, any, only
+// @param `$operator` == != ~= !~=
+// @arbitrary `$strings...`
+@function string($list, $occurrence: any, $operator: null, $strings...) {
+  @return if(
+    type-of($operator) == string,
+    if(type($strings, only, '==', string), has.value($list, $occurrence, $operator, $strings...), false),
+    type($list, $occurrence, '==', string)
+  );
+}
+
+// Examples.
+// any
+// @debug string(('a', 'b', 'c')); // true
+// @debug string(('a', 'b', 'c'), any); // true
+// @debug string(('a', 'b', 'c'), any, '==', 'a', 'b'); // true
+// @debug string(('a', 'b', 'c'), any, '==', 'a', 'b', 'c'); // true
+// @debug string(('a', 'b', 'c'), any, '==', 'a', 'b', 'c', 'd'); // true
+// @debug string(('a', 1, 'c'), any, '==', true); // false
+// @debug string(('a', 'b', 'c'), any, '==', 'd'); // false
+// @debug string(('a', 'b', 'c'), any, '==', false); // false
+// @debug string(('a', 'a2', 'a'), any, '!=', 'a'); // true
+// @debug string(('a', 'a', 'a'), any, '!=', 'a'); // false
+
+// only
+// @debug string(('a', 'b', 'c'), only); // true
+// @debug string(('a', 'b', 'c', 1), only); // false
+// @debug string(('a', 1, 'b', 'c'), only); // false
+
+// all
+// @debug string(('a', 'b', 'c', 1), all, '==', 'a'); // true
+// @debug string(('bold', 'b', 'c'), all, '==', 'a'); // false
+// @debug string(('a', 'b', 'c'), all, '==', 'a', 'b', 'c', 'd'); // false
+// @debug string(('a', 'b', 'c'), all, '==', 'a', 'b', 'c', false); // false
+// @debug string(('a', 'a', 'a'), all, '==', 'a'); // true
+// @debug string(('a', 'a', 'a'), all, '!=', 'a'); // false
+// @debug string(('a1', 'a2', 'a3'), all, '!=', 'a'); // true
+// @debug string(('bold king', 'lizard big', 'big word'), all, '~=', 'bold'); // true
+// @debug string(('bold king'), all, '!~=', 'bold'); // false

@@ -1,0 +1,35 @@
+// Sass.
+@use 'sass:list';
+
+// Status: DONE
+// The `list.nth()` function returns the element of `$list` at index `$n` or elements of given indexes `$nts`.
+// Function modify original by adding `$nts...` arbitrary parameter at the end.
+// @param `$list` A list from which the element with the given index `$n` is taken.
+// @param `$n` The index of the given `$list`.
+// @arbitrary `$nts...` Multiple indexes of the given `$list`.
+// @return The return value is retrieved element or list of retrieved elements.
+@function nth($list, $n, $nts...) {
+  $result: ();
+  @each $n in list.join($n, $nts, comma) {
+    @if $n and $n != 0 {
+      $result: list.append(
+        $result,
+        if(list.length($list) >= if($n < 0, calc($n * -1), $n), list.nth($list, $n), null),
+        list.separator($list)
+      );
+    }
+  }
+  @return if(list.length($nts) > 0, $result, list.nth($result, 1));
+}
+
+// Examples.
+// single
+// @debug nth(('a', 'b', 'c', 'd', 'e', 'f'), 4); // d
+
+// multiple
+// @debug nth(('a', 'b', 'c', 'd', 'e', 'f'), 4, 3, 4); // "d", "c", "d"
+
+// @debug nth(('a', 'b', 'c', 'd', 'e', 'f'), 10); // null
+// @debug nth(('a', 'b', 'c', 'd', 'e', 'f'), 10) or false; // false
+// @debug nth(('a', 'b', 'c', 'd', 'e', 'f'), -10); // null
+// @debug nth(('a', 'b', 'c', 'd', 'e', 'f'), -10) or false; // false

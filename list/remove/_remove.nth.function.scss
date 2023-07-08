@@ -1,0 +1,40 @@
+// Sass.
+@use 'sass:list';
+
+// Status: DONE
+// The `remove.nth()` function returns the list with removed given indexes.
+// @param `$list` A list from which the given indexes are being removed.
+// @param `$n` Index of the given `$list` to be removed.
+// @arbitrary `$nts...` Indexes of the given `$list` to be removed.
+// @return The list without the given indexes.
+@function nth($list, $n, $nts...) {
+  $nts: list.join($n, $nts, comma);
+  $result: ();
+  @for $i from 1 through list.length($nts) {
+    @if list.nth($nts, $i) < 0 {
+      $nts: list.set-nth($nts, $i, list.length($list) - (list.nth($nts, $i) * -1) + 1);
+    }
+  }
+  @for $i from 1 through list.length($list) {
+    @if not list.index($nts, $i) {
+      $result: list.append($result, list.nth($list, $i), list.separator($list));
+    }
+  }
+  @return $result;
+}
+
+// Different name.
+@function index($list, $n, $indexes...) {
+  @return nth($list, $n, $nts...);
+}
+
+// Examples.
+// index
+// @debug nth(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', 'i', 'j', 'k'), 4); // "a", "b", "c", "g", "h", "i", "j", "k"
+
+// indexes
+// @debug nth(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', 'i', 'j', 'k'), 2, 4, 7); // "a", "c", "g", "h", "j", "k"
+// @debug nth(('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'), 2, 3, 4, 5); // "a", "f", "g", "h", "i"
+
+// negative indexes
+// @debug nth(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', 'i', 'j', 'k'), -1, -6); // "a", "b", "c", "g", "h", "i", "j"

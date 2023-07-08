@@ -1,0 +1,34 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:string';
+
+// Status: DONE
+// The `string.join()` function returns the string built from the given elements separated by the given `$delimiter` in original elements order.
+// @param `$delimiter` The delimiter to add between the given `$elements`.
+// @param `$elements...` Elements to join to the string of color, list, number or string type with the delimiter.
+@function join($delimiter, $elements...) {
+  $string: '';
+  @each $element in $elements {
+    @if list.index(color list number string, type-of($element)) {
+      @each $element in $element {
+        $string: string.insert($string, #{$element}#{$delimiter or ''}, -1);
+      }
+    }
+  }
+  @return string.slice($string, 1, calc((string.length($delimiter) + 1) * -1));
+}
+
+// Examples.
+// @debug join('-');
+// @debug join('-', 'a', 'b', 'c'); // a-b-c
+// @debug join('-', '', 'a', 'b', 'c'); // -a-b-c
+// @debug join('-', 'a', 'b', 'c', ''); // a-b-c-
+// @debug join('-', '', 'a', 'b', 'c', ''); // a-b-c-
+// @debug join('-', 'a', ('b', 'c')); // a-b-c
+// @debug join('-', a, b, c); // a-b-c
+
+// Join number.
+// @debug join('-', a, 1, b, 2, c, 3); // a-1-b-2-c-3
+
+// Join color.
+// @debug join('-', silver, orange, green, red, blue, yellow); // silver-orange-green-red-blue-yellow

@@ -1,0 +1,18 @@
+// Sass.
+@use 'sass:map';
+
+// Status: DONE
+// The modified `map.deep-merge()` function to deep merge multiple maps.
+// @param `$map1` A map to deep merge with the given `$map2`.
+// @param `$map2` The map to deep merge with the given `$map1`.
+// @arbitrary `$maps...` Multiple maps to deep merge with the merged `$map1` and `$map2`.
+@function deep-merge($map1, $map2, $maps...) {
+  $map1: map.deep-merge($map1, $map2);
+  @each $map in $maps {
+    $map1: map.deep-merge($map1, $map);
+  }
+  @return $map1;
+}
+
+// Examples.
+// @debug deep-merge((prefix: spectre), (suffix: end), (affix: name)); // (prefix: spectre, suffix: end, affix: name)

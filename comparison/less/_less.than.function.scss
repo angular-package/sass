@@ -1,0 +1,39 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Functions.
+@use 'less.than-any.function' as *;
+@use 'less.than-every.function' as *;
+
+// Status: DONE
+// The `less.than()` function checks whether the given value is less than compared value.
+// @param `$less` The value of number type to be compared against the given `$value` and/or every/any `$values`.
+// @param `$value` The value of number type to be greater than the given `$less`.
+// @arbitrary `$values...` The values of number type to be greater than the given `$less`.
+@function than($less, $value, $values...) {
+  $values: if(meta.type-of($value) == number, list.join($value, $values), $values);
+  @return if(
+    if($value == any, any, every) == every,
+    than-every($less, $values...),
+    than-any($less, $values...)
+  );
+}
+
+// Additional function name.
+@function less($less, $value, $values...) {
+  @return than($less, $value, $values...);
+}
+
+// Examples.
+// @debug than(11, 6); // false
+// @debug than(6, 11); // true
+// @debug than(6, 6); // false
+// @debug than(7, 6, 3, 3, 3, 1); // false
+// @debug than(4, any, 6, 3, 3, 3, 1); // true
+
+// @debug less(11, 6); // false
+// @debug less(6, 11); // true
+// @debug less(6, 6); // false
+// @debug less(7, 6, 3, 3, 3, 1); // false
+// @debug less(4, any, 6, 3, 3, 3, 1); // true

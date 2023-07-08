@@ -1,0 +1,62 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Functions.
+@use '../has/has.type.function' as *;
+
+// Status: DONE.
+// The `remove.list()` function removes element of the list type from the given `$list`.
+// @param `$length` The length of the list to be removed.
+//        (false) An optional length of the list to remove.
+// @param `$bracketed` The value of the bool type indicates the bracketed list to remove.
+//        true (remove bracketed), false (do not remove bracketed), only (remove only bracketed)
+// @return The return value is the list without list and/or bracketed optionally of the given length.
+@function list($list, $length: false, $bracketed: true) {
+  @if has-type($list, any, '==', list) {
+    $result: ();
+    @each $element in $list {
+      $append: true;
+      @if type-of($element) == list {
+        $append: false;
+        @if not $bracketed and list.is-bracketed($element) {
+          $append: true;
+        } @else {
+          @if meta.type-of($length) == number {
+            $append: not (list.length($element) == $length);
+          }
+          @if $bracketed == only and not list.is-bracketed($element) {
+            $append: true;
+          }
+        }
+      }
+      @if $append {
+        $result: list.append($result, $element, list.separator($list));
+      }
+    }
+    @return $result;
+  }
+  @return $list;
+}
+
+// Examples.
+// @debug list(('a', 'b', 'c')); // "a", "b", "c"
+// @debug list(('a', 'b', 'c', ('d', 'e', 'f'))); // "a", "b", "c"
+// @debug list(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', (1, 2, 3))); // "a", "b", "c", "g", "h"
+// @debug list(('a', 'b', 'c', ('d', (1, 2, 3, (4, 5, 6)), 'e', 'f'))); // "a", "b", "c"
+
+// length
+// @debug list((a, (4, 5), b, [d, e, f], c, [1, 2], g, (6, 7, 8), h, i), 2); // a, b, [d, e, f], c, g, (6, 7, 8), h, i
+// @debug list((a, (), (4, 5), b, (), [d, e, f], (), c, [1, 2], (), g, (6, 7, 8), h, i), 0); // a, (4, 5), b, [d, e, f], c, [1, 2], g, (6, 7, 8), h, i
+
+// bracketed
+// @debug list((a, (4, 5), b, c, [d, e, f], [1, 2], g, (6, 7, 8), h, i), $bracketed: true); // a, b, c, g, h, i
+// @debug list((a, (4, 5), b, [d, e, f], c, [1, 2], g, (6, 7, 8), h, i), $bracketed: false); // a, b, [d, e, f], c, [1, 2], g, h, i
+// @debug list((a, (4, 5), b, [d, e, f], c, [1, 2], g, (6, 7, 8), h, i), $bracketed: only); // a, (4, 5), b, c, g, (6, 7, 8), h, i
+
+// length + bracketed
+// @debug list((a, (4, 5), b, [d, e, f], c, [1, 2], g, (6, 7, 8), h, i), 2, false); // a, b, [d, e, f], c, [1, 2], g, (6, 7, 8), h, i
+// @debug list((a, (4, 5), b, [d, e, f], c, [1, 2], g, (6, 7, 8), h, i), 2, only); // a, (4, 5), b, [d, e, f], c, g, (6, 7, 8), h, i
+// @debug list((a, (4, 5), b, [d, e, f], c, [1, 2], g, (6, 7, 8), h, i), 2, false); // a, b, [d, e, f], c, [1, 2], g, h, i
+// @debug list((a, (4, 5), b, c, [d, e, f], [1, 2], g, (6, 7, 8), h, i), $bracketed: true); // a, b, c, g, h, i
+

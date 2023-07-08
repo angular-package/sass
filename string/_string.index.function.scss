@@ -1,0 +1,36 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+@use 'sass:string';
+
+// Status: DONE
+// The `string.index()` function returns index or list of indexes of the given substrings.
+// @param `$string` The value to check whether it contains given substrings.
+// @param `$substring` A substring to find in the given `$string`.
+// @arbitrary `$substrings...` The list of substrings to find in the given `$string`.
+// @return The return value is the index or list of indexes of the given found substrings.
+@function index($string, $substring, $substrings...) {
+  @if type-of($string) == string {
+    $result: ();
+    @each $substring in list.join($substring, $substrings, comma) {
+      $result: list.append($result, if(meta.type-of($substring) == string, string.index($string, $substring), null), comma);
+    }
+    @if list.length($result) > 0 {
+      @return if(list.length($result) == 1, list.nth($result, 1), $result);
+    }
+  }
+  @return null;
+}
+
+// Examples.
+// Single
+// @debug index("Helvetica Neue", "Helvetica"); // 1
+// @debug index("Helvetica Neue", "Neue"); // 11
+
+// Multiple
+// @debug index("Helvetica Neue", "Helvetica", "Neue"); // 1, 11
+// @debug index("Helvetica Neue", "Helvetica", "Neue", "Wrong"); // 1, 11, null
+// @debug index("Helvetica Neue", "Helvetica", "Neue", "Wrong", true); // 1, 11, null, null
+
+// Different type of the `$string`
+// @debug index(true, "Helvetica"); // null

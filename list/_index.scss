@@ -1,0 +1,32 @@
+// Modules.
+@forward 'get' as get-*;
+@forward 'has' as has-*;
+@forward 'remove' as remove-*;
+
+// Functions.
+// Alias to the get.
+@forward 'get/get.bool.function';
+@forward 'get/get.list.function';
+@forward 'get/get.map.function';
+@forward 'get/get.number.function';
+@forward 'get/get.string.function';
+
+// Other.
+@forward 'list.append.function';
+@forward 'list.empty.function';
+@forward 'list.extract-map.function';
+@forward 'list.first.function';
+@forward 'list.from.function';
+@forward 'list.has.function';
+@forward 'list.index.function';
+@forward 'list.insert-nth.function';
+@forward 'list.join.function';
+@forward 'list.last.function';
+@forward 'list.limit.function';
+@forward 'list.nth.function';
+@forward 'list.range.function';
+@forward 'list.to.function';
+@forward 'list.type.function';
+
+// Sass.
+@forward 'sass:list' hide append, index, join, nth;

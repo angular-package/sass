@@ -1,0 +1,30 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../../number/number.range.function';
+@use 'remove.nth.function';
+
+// Status: DONE
+// The `remove.range()` function removes the indexes of the given range.
+// @param `$list` A list from which the given indexes are being removed.
+// @param `$from` The index from which the range of elements to remove begins.
+// @param `$to` The end index of the range of elements to remove.
+// @return The list without the elements of the given index range.
+@function range($list, $from: 1, $to: list.length($list)) {
+  @return remove.nth($list, number.range($from, $to, 1, 0)...);
+}
+
+// Examples.
+// @debug range(('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'), 2, 5); // "a", "f", "g", "h", "i"
+// @debug range(('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'), 3, 4); // "a", "b", "e", "f", "g", "h", "i"
+
+// From 3 to length.
+// @debug range(('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'), 3); // "a", "b"
+
+// From 1 to 3.
+// @debug range(('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'), $to: 3); // "d", "e", "f", "g", "h", "i"
+
+// Negative index
+// @debug range(('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'), 3, -2); // "d", "e", "f", "g"
+// @debug range(('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'), -1, -6); // "a", "b", "c"

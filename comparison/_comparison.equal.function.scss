@@ -1,0 +1,7 @@
+// Status: DONE
+// The `comparison.equal()` function.
+// @param `$value1`
+// @param `$value2`
+@function equal($value1, $value2) {
+  @return $value1 == $value2;
+}

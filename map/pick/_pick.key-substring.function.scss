@@ -1,0 +1,108 @@
+// Sass.
+@use 'sass:map';
+
+// Modules.
+@use '../../string';
+
+// Status: DONE
+// The `pick.key-substring()` function.
+// @param `$map`
+// @arbitrary `$substrings...`
+@function key-substring($map, $substrings...) {
+  $result: ();
+  @each $substring in $substrings {
+    @if type-of($substring) == string {
+      @each $key in map.keys($map) {
+        @if type-of($key) == string and string.index($key, $substring) {
+          $result: map.deep-merge($result, ($key: map.get($map, $key)));
+        }
+      }
+    }
+  }
+  @return $result;
+}
+
+// Examples.
+// $-theme: (
+//   dark: (
+//     'dark.palette': (),
+
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
+//   ),
+//   basic: (
+//     'default.palette': (),
+
+//     'gray.palette': (
+//       'gray': 'gray' color,
+//       'gray' dark: 'gray' dark,
+//       'gray' light: 'gray' light
+//     ),
+
+//     'bg.palette': (
+//       bg: bg color,
+//       bg dark: bg dark,
+//       bg light: bg light
+//     ),
+
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
+
+//     extended small: (
+//       '': primary,
+//       dark: primary dark,
+//       light: primary light
+//     ),
+
+//     [primary]: (
+//       primary dark: primary dark,
+//     ),
+
+//     (key1, key2): (
+//       primary: primary1
+//     ),
+
+//     key1: primary,
+
+//     // calculation
+//     calc(400px + 10%): calculation,
+//     calculation: calc(400px + 10%),
+
+//     // bool
+//     false: bool,
+//     bool: false,
+
+//     // color
+//     #fff: color,
+//     color: #fff,
+
+//     // function
+//     get-function(append): function,
+//     function: get-function(append),
+
+//     // map
+//     (a: 1, b: 2): map,
+//     map: (a: 1, b: 2),
+
+//     // null
+//     'null': null,
+//     null: 'null',
+
+//     // number
+//     15: number,
+//     number: 15,
+
+//     // string
+//     firstname: string,
+//     string: firstname,
+//   )
+// );
+
+// @debug key-substring(map.get($-theme, basic), '.palette');
+// @debug key-substring(map.get($-theme, basic), 'key1');

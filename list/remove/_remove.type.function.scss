@@ -1,0 +1,38 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Functions.
+@use '../has/has.type.function';
+
+// Status: DONE
+// The `remove.type()` function returns the list without the elements of the given types.
+// @param `$list` The list from which the specified type elements are being removed.
+// @arbitrary `$types...` An additional types that are being removed from the given `$list`.
+// @return The return value is the list without any of the specified types.
+@function type($list, $type, $types...) {
+  $types: list.join($type, $types, comma);
+  @if has.type($list, any, '==', $types...) {
+    $result: ();
+    @each $element in $list {
+      $result: if(not list.index($types, meta.type-of($element)), list.append($result, $element, list.separator($list)), $result);
+    }
+    @return $result;
+  }
+  @return $list;
+}
+
+// Examples.
+// all strings
+// @debug type(('a', 'b', 'c'), string); // ()
+// @debug type(('a', 1, 'b', 2, 'c', 3), string); // 1, 2, 3
+// @debug type(('a', 'b', 'c', ('d', 'e', 'f')), string); // (("d", "e", "f"),)
+// @debug type(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', (1, 2, 3)), string); // ("d", "e", "f"), (1, 2, 3)
+// @debug type(('a', 'b', 'c', ('d', (1, 2, 3, (4, 5, 6)), 'e', 'f')), string); // (("d", (1, 2, 3, (4, 5, 6)), "e", "f"),)
+// @debug type(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', (1, 2, 3)), string); // ("d", "e", "f"), (1, 2, 3)
+
+// all numbers
+// @debug type(('a', 1, 'b', 2, 'c', 3), number); // "a", "b", "c"
+
+// all strings + numbers
+// @debug type(('a', 1, 'b', 2, 'c', 3, (a: 1)), number, string); // ((a: 1),)

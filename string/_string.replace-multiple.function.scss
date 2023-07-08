@@ -1,0 +1,33 @@
+// Modules.
+@use 'string.replace.function';
+
+// Status: DONE
+// The `string.replace-multiple()` function.
+// @param `$string` The string to make replace.
+// @arbitrary `$replace...`
+@function replace-multiple($string, $replace...) {
+  @each $occurrence, $substring, $replacement in $replace {
+    $string: string.replace($string, $occurrence, $substring, $replacement);
+  }
+  @return $string;
+}
+
+// Examples.
+// single replacement first occurrence
+// @debug replace-multiple('bold king is hairy', first 'bold' 'baloon'); // baloon king is hairy
+// @debug replace-multiple('bold king is hairy', first 'bold' ''); //  king is  hairy
+// @debug replace-multiple(':==', first ':' '');
+
+// single replacement all occurrences
+// @debug replace-multiple('bold king is bold hairy', all 'bold' ''); //  king is  hairy
+// @debug replace-multiple('bold king is bold hairy', all 'bold' 'test'); // test king is test hairy
+
+// multiple replacements
+// @debug replace-multiple('bold king is hairy', first (bold is) ''); //  king  hairy
+// @debug replace-multiple('bold king is hairy', first bold baloon, first king baloon); // baloon baloon is hairy
+// @debug replace-multiple('bold king is hairy', first (bold king) baloon, first (is hairy) bold); // baloon baloon bold bold
+// @debug replace-multiple('atmosphere bold bold bold king is hairy', first (king bold) baloon); // atmosphere baloon bold bold baloon is hairy
+// @debug replace-multiple('atmosphere bold bold bold king is hairy', all (king bold) baloon); // atmosphere baloon baloon baloon baloon is hairy
+
+// multiple replacements different occurrences
+// @debug replace-multiple('atmosphere bold bold bold king is hairy', first bold clean, all (king bold) baloon); // atmosphere clean baloon baloon baloon is hairy

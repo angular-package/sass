@@ -1,0 +1,117 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Status: DONE
+// The `value-type()` function picks the properties with values of the specified type.
+// @param `$map` A map from which properties with values of a certain type are picked.
+// @arbitrary `$types...` The bool, calculation, color, function, list, map, null, number or string types
+// of the property values to pick from the given `$map`.
+@function value-type($map, $types...) {
+  $result: ();
+  @each $type in $types {
+    @if list.index(bool calculation color function list map null number string, $type) {
+      @each $key, $value in $map {
+        @if type-of($value) == $type or (not $type and type-of($type) == type-of($value)) {
+          $result: map.deep-merge($result, ($key: $value));
+        }
+      }
+    }
+  }
+  @return $result;
+}
+
+// Examples.
+// $-theme: (
+//   dark: (
+//     'dark.palette': (),
+
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
+//   ),
+//   basic: (
+//     'default.palette': (),
+
+//     'gray.palette': (
+//       'gray': 'gray' color,
+//       'gray' dark: 'gray' dark,
+//       'gray' light: 'gray' light
+//     ),
+
+//     'bg.palette': (
+//       bg: bg color,
+//       bg dark: bg dark,
+//       bg light: bg light
+//     ),
+
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
+
+//     extended small: (
+//       '': primary,
+//       dark: primary dark,
+//       light: primary light
+//     ),
+
+//     [primary]: (
+//       primary dark: primary dark,
+//     ),
+
+//     (key1, key2): (
+//       primary: primary1
+//     ),
+
+//     key1: primary,
+
+//     // calculation
+//     calc(400px + 10%): calculation,
+//     calculation: calc(400px + 10%),
+
+//     // bool
+//     false: bool,
+//     bool: false,
+
+//     // color
+//     #fff: color,
+//     color: #fff,
+
+//     // function
+//     get-function(append): function,
+//     function: get-function(append),
+
+//     // map
+//     (a: 1, b: 2): map,
+//     map: (a: 1, b: 2),
+
+//     // null
+//     'null': null,
+//     null: 'null',
+
+//     // number
+//     15: number,
+//     number: 15,
+
+//     // string
+//     firstname: string,
+//     string: firstname,
+//   )
+// );
+
+// @debug value-type(map.get($-theme, basic), bool);
+// @debug value-type(map.get($-theme, basic), calculation);
+// @debug value-type(map.get($-theme, basic), color);
+// @debug value-type(map.get($-theme, basic), function);
+// @debug value-type(map.get($-theme, basic), list);
+// @debug value-type(map.get($-theme, basic), map);
+// @debug value-type(map.get($-theme, basic), null);
+// @debug value-type(map.get($-theme, basic), number);
+// @debug value-type(map.get($-theme, basic), string);
+
+// multiple
+// @debug value-type(map.get($-theme, basic), list, string);

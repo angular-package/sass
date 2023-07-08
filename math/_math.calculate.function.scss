@@ -1,0 +1,30 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Status: DONE
+// The `math.calculate()` function.
+// @arbitrary `$operations...`
+@function calculate($operations...) {
+  @each $value, $operator, $operand in if(list.length($operations) == 3, ($operations,), $operations){
+    @if $value and $operand {
+      @if $operator == '+' {
+        @return calc($value + $operand);
+      } @else if $operator == '-' {
+        @return calc($value - $operand);
+      } @else if $operator == '*' {
+        @return calc($value * $operand);
+      } @else if $operator == '/' {
+        @return calc($value / $operand);
+      }
+    }
+  }
+  @return null;
+}
+
+// Examples.
+// @debug calculate(15 '+' 13); // 28
+// @debug calculate(15 '-' 12); // 3
+// @debug calculate(55 '*' 17); // 935
+// @debug calculate(42 '/' 14); // 3
+// @debug calculate(15, '+', 13); // 28

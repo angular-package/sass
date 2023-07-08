@@ -1,0 +1,27 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../list.first.function' as *;
+@use 'get.type.function';
+
+// Status: DONE
+// The `get.bool()` function returns any, first or last occurring bool value, or the specified.
+// @param `$list` The list from which the occurring value is retrieved.
+// @param `$occurrence` Any, first or last occurrence of the bool value in the given `$list`.
+// @param `$value` A bool value to retrieve.
+// @return The return value is a `bool`.
+@function bool($list, $occurrence: first, $value: null) {
+  $result: first(get.type($list, $occurrence, bool));
+  @return if(type-of($value) == bool, if(list.index($result, $value), $value, null), $result);
+}
+
+// Examples.
+// @debug bool(('a', 'b', false, 'c', 2)); // `false`
+// @debug bool(('a', 'b', true, 'c', 2)); // `true`
+// @debug bool(('a', 'b', 'c', (true, '5', (6,)))); // `null`
+// @debug bool(('a', 'b', true, 'c', 2), any, false); // `null`
+// @debug bool(('a', 'b', true, 'c', 2), first, true); // `true`
+// @debug bool(('a', 'b', false, 'c', 2, true), any, false); // `false`
+// @debug bool(('a', 'b', false, 'c', 2, true), last); // `true`
+// @debug bool(('a', 'b', false, 'c', 2, true), first); // `false`

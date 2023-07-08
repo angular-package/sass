@@ -1,0 +1,55 @@
+// Functions.
+@use 'list.indexes.function' as *;
+
+// Examples.
+// string
+$-string: ('a', 'b', 'd', 'c', 'l', 'd', 'e', 'f g h', 'i', 'j', 'k', 'l', 'm', 'n');
+
+// @debug '';
+@debug '--- string ';
+@debug indexes($-string, any, '==', 'e', 'l'); // 7, 5
+@debug indexes($-string, any '==' 'e' 'l' 'c'...); // 7, 5, 4
+@debug indexes($-string, all, '==', 'e', 'l'); // 7, (5, 12)
+@debug indexes($-string, any, '~=', 'f g', 'l'); // 8, 5
+@debug indexes(('Whether or not', 'b', 'c', true, 'a', false, null, 'a', 1, 2), all, '~=', 'or not', 'b', 'cccc'); // 1, 2, null
+@debug indexes(('Whether or not', 'b', 'c', 'a', 1, 2), all, '!~=', 'or not', 'b', 'c'); // (2, 3, 4, 5, 6), (1, 3, 4, 5, 6), (1, 2, 4, 5, 6)
+
+// list
+$-list: (1, (4, 10), 2 200, 1000 33, (45, 2), 56, 2 200, 'a', 'b', 'c' 451, 66);
+@debug '';
+@debug '--- list ';
+@debug indexes($-list, any, '==', (4, 10), 4 10); // 2, null
+@debug indexes($-list, any, '==', 2 200, 1000 33); // 3, 4
+@debug indexes($-list, all, '==', 2 200, 1000 33); // (3, 7), 4
+@debug indexes($-list, any, '==', 1000 33, 2 200); // 4, 3
+@debug indexes($-list, all, '==', 1000 33, 2 200); // 4, (3, 7)
+@debug indexes($-list, last, '==', 2 200); // 7
+
+// number
+$-number: (1, 4, 10, 2, 200, 1000, 33, 45, 2, 56, 451, 66);
+@debug '';
+@debug '--- number ';
+@debug indexes($-number, any, '==', 1000); // 6
+@debug indexes($-number, any, '==', 3, 6); // null, null
+@debug indexes($-number, any, '>', 3, 6); // 2, 3
+@debug indexes($-number, all, '>', 450, 6); // (6, 11), (3, 5, 6, 7, 8, 10, 11, 12)
+@debug indexes($-number, first, '==', 2, 3, 6); // 4, null, null
+@debug indexes($-number, last, '==', 2, 3, 6); // 9, null, null
+
+// Different data types.
+$-data: ('a', 'b', 'c', true, 'a', false, null, 'a', 1, 2);
+@debug '';
+@debug indexes($-data); // null
+@debug indexes($-data, all); // null
+@debug indexes($-data, any); // null
+@debug indexes($-data, any, '==', 'a'); // 1
+@debug indexes($-data, any, '==', 1); // 9
+@debug indexes($-data, all, '==', 'a'); // 1, 5, 8
+@debug indexes($-data, all, '==', 1); // 9
+@debug indexes($-data, all, '==', 'a', 'b'); // (1, 5, 8), 2
+@debug indexes($-data, all, '==', 1, false); // 9, 6
+@debug indexes($-data, all, '==', 2, 'a', 'b', null); // 10, (1, 5, 8), 2, 7
+@debug indexes(('a', 'b', 'c', true, 'a', false, null, false, 'a', 1, 2), any, '==', 'a', false); // 1, 6
+@debug indexes(('a', 'b', 'c', true, 'a', false, null, false, 'a', 1, 2), all, '==', 'a', false); // (1, 5, 9), (6, 8)
+@debug indexes((('a', 'b', 'c'), true, ('a': false), null, 'a', 1, 2), all, '==', 'a', 'b'); // 5, null
+@debug indexes((('a', 'b', 'c'), #fff, true, ('a': false), null, red, 'a', 1, 2), all, '==', ('a', 'b', 'c'), #fff); // 1, 2

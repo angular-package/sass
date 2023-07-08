@@ -1,0 +1,216 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
+// Functions.
+@use '../comparison/comparison.compare.function';
+@use 'list.append.function' as *;
+@use 'list.empty.function' as *;
+@use 'list.first.function' as *;
+@use 'list.index.function' as *;
+@use 'list.nth.function' as *;
+@use 'remove/remove.duplicate.function' as *;
+
+// Status: DONE
+// The `list.select()` function returns the list with elements selected by comparison.
+// @param `$from` The list to retrieve elements from, by the given comparison.
+// @param `$operand` The value of string type can take (index, type, value) and indicates an operand from the list used in the comparison.
+// @param `$select` The value of list or string type indicates what to retrieve from the given `$from` list.
+//        The value of list type consists of occurrence and selection, in order (occurrence, selection). It's changed to (selection, occurrence)
+//        when selection has is used, and there are (has only), (has any), (has all).
+//        Occurrence (all, any, end, first, last, only) indicates how often compared elements occur in the given `$from` list.
+//        Selection can take the values has, index, type, value and indicates what to retrieve from the list.
+// @param `$operator` The operator used to compare given values with the given `$operand` of the list. TODO: operators.
+// @param `$value` The required value to select from the given `$from`.
+// @arbitrary `$values...` Additional values to select from the given `$from` list.
+// @return The return value is the list with the elements selected by the given comparison.
+@function select($select: index, $from: null, $operand: value, $operator: '==', $value, $values...) {
+  $result: ();
+  $select: if(list.length($select) == 1, any $select, $select);
+  $occurrence: list.nth($select, index($select, all, any, end, first, last, only, start));
+  $select: list.nth($select, index($select, has, index, type, value));
+  @each $value in append((), $value, comma, $values...) {
+    $do: true;
+    $compared-result: ();
+    $index: 1;
+    @while $do == true {
+      $comparison-result: comparison.compare(
+        map.get((index: $index, type: meta.type-of(list.nth($from, $index)), value: list.nth($from, $index),), $operand),
+        $operator,
+        $value
+      );
+
+      @if $comparison-result or ($select == has and $occurrence == only) {
+        $compared-result: list.append(
+          $compared-result,
+          map.get((has: $comparison-result, index: $index, type: meta.type-of(list.nth($from, $index)), value: list.nth($from, $index)), $select),
+          comma
+        );
+      }
+
+      // Break the while.
+      $do: if($index == list.length($from) or (not empty($compared-result) and list.index(first start, $occurrence)), false, $do);
+      $index: $index + 1;
+    }
+
+    $compared-result: if(empty($compared-result), null, $compared-result);
+
+    @if $compared-result {
+      @if $select == has and list.index(all only, $occurrence) {
+        $compared-result: duplicate($compared-result);
+        $compared-result: if(list.index($compared-result, null) or list.index($compared-result, false), false, true);
+      }
+
+      $compared-result: if(
+        list.index(any first start end last, $occurrence),
+        list.nth($compared-result, if(list.index(any first start, $occurrence), 1, list.length($compared-result))),
+        if(list.length($compared-result) == 1, first($compared-result), $compared-result)
+      );
+    }
+
+    $result: list.append($result, $compared-result, comma);
+  }
+
+  // has
+  @if $select == has {
+    $result: if(
+      list.index(all, $occurrence),
+      if(list.index($result, null) or list.index($result, false), false, true),
+      if(list.index(any, $occurrence), if(list.index($result, true), true, false), if($occurrence == only, $result, false))
+    );
+  }
+
+  @return if(
+    list.length($result) > 0,
+    if(list.length($result) == 1 and not (type-of(nth($result, 1)) == list), first($result), $result),
+    null
+  );
+}
+
+// Examples.
+$-example-list: 300px 'a' 10px 'b' 2px 'c' 15px 'd' 1px 'e' 300px 'f' 500px 'g' 3px 'h' 150px 'i' 2px;
+
+// single value
+// @debug select(index, 1px solid red, value, '==', 1px); // 1
+// @debug select(first index, 1px solid red, value, '==', 1px); // 1
+// @debug select(any index, 1px solid red, value, '==', solid); // 2
+
+// map
+// @debug select(first value, (border: 1px solid red) (background: #fff), value, ':==', map); // (border: 1px solid red)
+// @debug select(value, (border: 1px solid red) (background: #fff), value, ':==', map); // (border: 1px solid red)
+
+// multiple values
+// @debug select(index, 1px solid red, value, '==', 1px, red); // 1, 3
+// @debug select(first index, 1px solid red, value, '==', 1px, red); // 1, 3
+
+// select type
+// @debug select(index, 1px solid red, value, '==', dashed); // null
+// @debug select(first index, 1px solid red, value, '==', dashed); // null
+// @debug select(first value, 1px solid red, value, ':==', color); // red
+
+// last occurrence
+// @debug select(index, 1px solid red, type, '==', string); // 2
+// @debug select(last index, 1px solid red, type, '==', string); // 2
+
+// all occurrences
+// @debug select(all index, 1px solid red, type, '==', string); // 2
+// @debug select(all index, 1px solid red, type, '==', string, number); // 2, 1
+
+
+
+
+// DONE: all/first/last index index
+// DONE: all/first/last index type
+// DONE: all/first/last index value
+
+// @debug select(all index, $-example-list, index, '==', 2, 5, 10); // 2, 5, 10
+// @debug select(all index, $-example-list, type, '==', number, string, bool); // (1, 3, 5, 7, 9, 11, 13, 15, 17, 19), (2, 4, 6, 8, 10, 12, 14, 16, 18), null
+// @debug select(all index, $-example-list, value, '==', 1px, 2px, 3px); // 9, (5, 19), 15
+
+// @debug select(index, $-example-list, index, '==', 2, 5, 10); // 2, 5, 10
+// @debug select(first index, $-example-list, type, '==', number, string); // 1, 2
+// @debug select(first index, $-example-list, value, '==', 1px, 2px, 3px); // 9, 5, 15
+
+// @debug select(index, $-example-list, index, '==', 2, 5, 10); // 2, 5, 10
+// @debug select(last index, $-example-list, type, '==', number, string); // 19, 18
+// @debug select(last index, $-example-list, value, '==', 1px, 2px, 3px); // 9, 19, 15
+
+
+
+
+// DONE: all/first/last value index
+// DONE: all/first/last value type
+// DONE: all/first/last value value
+
+// @debug select(all value, $-example-list, index, '==', 2, 5, 10); // "a", "2px", "e"
+// @debug select(all value, $-example-list, type, '==', number, string); // (300px, 10px, 2px, 15px, 1px, 300px, 500px, 3px, 150px, 2px), ("a", "b", "c", "d", "e", "f", "g", "h", "i")
+// @debug select(all value, $-example-list, value, '==', 1px, 2px, 3px); // 1px, (2px, 2px), 3px
+
+// @debug select(first value, $-example-list, index, '==', 2, 5, 10); // "a", "2px", "e"
+// @debug select(first value, $-example-list, type, '==', number, string); // 300px, "a"
+// @debug select(first value, $-example-list, value, '==', 1px, 2px, 3px); // 1px, (2px, 2px), 3px
+
+// @debug select(value, $-example-list, index, '==', 2, 5, 10); // "a", "2px", "e"
+// @debug select(last value, $-example-list, type, '==', number, string); // 2px, "i"
+// @debug select(value, $-example-list, value, '==', 1px, 2px, 3px); // 1px, 2px, 3px
+
+
+
+
+// DONE: all/first/last type index
+// DONE: all/first/last type type
+// DONE: all/first/last type value
+
+// @debug select(type, $-example-list, index, '==', 2, 5, 10); // string, number, string
+// @debug select(all type, $-example-list, type, '==', number, string, calculation); // (number, number, number, number, number, number, number, number, number, number), (string, string, string, string, string, string, string, string, string), null
+// @debug select(all type, $-example-list, value, '==', 1px, 2px, 3px, 'e', 'the'); // number, (number, number), number, string, null
+
+// @debug select(first type, $-example-list, index, '==', 2, 5, 10, 100); // string, number, string, null
+// @debug select(first type, $-example-list, type, '==', number, string, bool); // number, string, null
+// @debug select(first type, $-example-list, value, ':==', number, string, bool); // number, string, null
+// @debug select(first type, $-example-list, value, '==', 1px, 2px, 157px, 3px, 'e', 'the'); // number, number, null, number, string, null
+
+// @debug select(type, $-example-list, index, '==', 2, 5, 10, 100); // string, number, string, null
+// @debug select(last type, $-example-list, type, '==', number, string, bool); // number, string, null
+// @debug select(last type, $-example-list, value, ':==', number, string, bool); // number, string, null
+// @debug select(type, $-example-list, value, '==', 1px, 2px, 157px, 3px, 'e', 'the'); // number, number, null, number, string, null
+
+
+
+
+// DONE: all/first/last index index
+// DONE: all/first/last index type
+// DONE: all/first/last index value
+
+// @debug select(has, $-example-list, type, '==', bool, number); // true
+// @debug select(has any, $-example-list, value, '==', 2px, 'f', 'the'); // true
+// @debug select(has all, $-example-list, value, '==', 2px, 'f', 'the', 3px); // false
+// @debug select(has only, 2px 2px 2px 2px, value, '==', 2px, 'f', 'the', 3px, 10px); // true, false, false, false, false
+// @debug select(has all, 1 'a' 2 'b' 3 'c' 4 'd' 5 'e' 6 'f' 7 'g' 8 'h' 9 'i' 10 'j', value, '==', 'e', 'f'); // true
+// @debug select(has all, 1 'a' 2 'b' 3 'c' 4 'd' 5 'e' 6 'f' 7 'g' 8 'h' 9 'i' 10 'j', value, '==', 'e', 'f', 6, 10, 112); // false
+
+// @debug select(has all, ('a', 'b', 'c'), value, '==', 'a', 'b', 'c', false);
+// @debug select(has any, ('a', 'b', 1, 2, 3, (a, b, c), 'c', 5123), value, ':==', list, number, string, bool);
+// @debug select(has any, ('a', 'b', 1, 2, 3, (a, b, c), 'c', 5123), value, ':==', list, number, string, bool);
+
+
+
+// different operator
+// @debug select(value, $-example-list, value, '>', 2, 5, 10); // 300px, 300px, 300px
+// @debug select(all value, $-example-list, value, '>', 2, 5, 10); // (300px, 10px, 15px, 300px, 500px, 3px, 150px), (300px, 10px, 15px, 300px, 500px, 150px), (300px, 15px, 300px, 500px, 150px)
+// @debug select(value, $-example-list, value, '<', 2, 5, 10); // 1px, 2px, 2px
+// @debug select(all value, $-example-list, value, '<', 2, 5, 10); // 1px, (2px, 1px, 3px, 2px), (2px, 1px, 3px, 2px)
+
+// @debug select(first index, $-example-list, value, '>', 2, 5, 10); // 1, 1, 1
+// @debug select(first index, $-example-list, value, '<', 2, 5, 10); // 9, 5, 5
+
+// @debug select(last index, $-example-list, value, '>', 2, 5, 10); // 17, 17, 17
+// @debug select(last index, $-example-list, value, '<', 2, 5, 10); // 9, 19, 19
+
+// @debug select(all index, $-example-list, value, '>', 2, 5, 10); // (1, 3, 7, 11, 13, 15, 17), (1, 3, 7, 11, 13, 17), (1, 7, 11, 13, 17
+// @debug select(all index, $-example-list, value, '>=', 2, 5, 10); // 9, (5, 9, 15, 19), (5, 9, 15, 19)
+
+// @debug select(all index, $-example-list, value, '<', 2, 5, 10); // 9, (5, 9, 15, 19), (5, 9, 15, 19)
+// @debug select(all index, $-example-list, value, '<=', 2, 5, 10); // 9, (5, 9, 15, 19), (5, 9, 15, 19)
+

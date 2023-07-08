@@ -1,0 +1,28 @@
+// Sass.
+@use 'sass:list';
+
+// Status: DONE
+// The modified `list.append()` function returns a copy of `$list` with `$val` added to the end, and/or with added multiple `$values`.
+// Additional values are added to the end of the parameters to preserve the original functionality.
+// @param `$list` The list to append the `$value` and/or `$values` into.
+// @param `$val` The value to append.
+// @param `$separator` The separator `comma`, `space` or `slash` of the list. Default `auto`.
+// @arbitrary `$values...` Additional values to append into the given `$list`.
+// @return Returns a copy of `$list` with `$val` and/or `$values` added to the end.
+@function append($list, $val, $separator: auto, $values...) {
+  @each $value in list.join(($val,), $values, comma) {
+    $list: list.append($list, $value, $separator);
+  }
+  @return $list;
+}
+
+// Examples.
+// @debug append(10px 20px, 30px); // 10px 20px 30px
+// @debug append((red, green), blue, space); // red green blue
+
+// additional values
+// @debug append((blue, red), green, auto, blue, red); // blue, red, green, blue, red
+// @debug append(10px 20px, 30px 40px, auto, 1px, 15px); // 10px 20px (30px 40px) 1px 15px
+// @debug append(10px, 20px, auto, 1em, 2rem); // 10px 20px 1em 2rem
+// @debug append(10px 20px, 30px 40px, auto, 1px, 15px, (1px 2px 3px)); // 10px 20px (30px 40px) 1px 15px (1px 2px 3px)
+// @debug append((10px, 20px), 30px 40px, auto, 1px, 15px, (1px 2px 3px), (4px, 5px)); // 10px, 20px, 30px 40px, 1px, 15px, 1px 2px 3px, (4px, 5px)

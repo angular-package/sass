@@ -1,0 +1,31 @@
+// Sass.
+@use 'sass:list';
+
+// Status: DONE
+// The `list.join()` returns a new list containing the elements of `$list1` followed by the elements of `$list2`.
+// Function adds `$delimiter` functionality.
+// @param `$list1` The list to join the given `$list2`.
+// @param `$list2` The list to be joined to the given `$list1`.
+// @param `$separator` Comma, space, or slash separator used between the elements of the list. Default, `auto`.
+// @param `$bracketed` If `true` then returned list is between the square brackets.
+// @param `$delimiter` The delimiter is the character added as an element between each element in the returned list.
+// @return c
+@function join($list1, $list2, $separator: auto, $bracketed: auto, $delimiter: null) {
+  @if $delimiter {
+    $list: ();
+    $i: 1;
+    @each $value in list.join($list1, $list2, $separator, $bracketed) {
+      $list: list.append($list, $value, $separator);
+      @if not (calc(list.length($list1) + list.length($list2)) == $i) {
+        $list: list.append($list, $delimiter, $separator);
+      }
+
+      $i: $i + 1;
+    }
+    @return $list;
+  }
+  @return list.join($list1, $list2, $separator, $bracketed);
+}
+
+// Examples.
+// @debug join(a b c, d e f, $delimiter: '-'); // a "-" b "-" c "-" d "-" e "-" f

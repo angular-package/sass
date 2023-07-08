@@ -33,26 +33,28 @@ Sass - extension for sass modules and new modules.
 
 Extended sass modules:
 
-* The [`sass:color`](https://sass-lang.com/documentation/modules/color/) is extended by [`@angular-package/sass/color`](https://) - module generates new colors based on existing ones, making it easy to build color themes.
-* The [`sass:list`](https://sass-lang.com/documentation/modules/list/) is extended by [`@angular-package/sass/list`](https://) - module lets you access and modify values in lists.
-* The [`sass:map`](https://sass-lang.com/documentation/modules/map/) is extended by [`@angular-package/sass/map`](https://) - module makes it possible to look up the value associated with a key in a map, and much more.
-* The [`sass:math`](https://sass-lang.com/documentation/modules/math/) is extended by [`@angular-package/sass/math`](https://) - module provides functions that operate on numbers.
-* The [`sass:meta`](https://sass-lang.com/documentation/modules/meta/) is extended by [`@angular-package/sass/meta`](https://) - module exposes the details of Sass’s inner workings..
-* The [`sass:selector`](https://sass-lang.com/documentation/modules/selector/) is extended by [`@angular-package/sass/selector`](https://) - module provides access to Sass’s powerful selector engine.
-* The [`sass:string`](https://sass-lang.com/documentation/modules/string/) is extended by [`@angular-package/sass/string`](https://) - module makes it easy to combine, search, or split apart strings.
+<!-- * The [`sass:color`](https://sass-lang.com/documentation/modules/color/) is extended by [`@angular-package/sass/color`](https://) - module generates new colors based on existing ones, making it easy to build color themes. -->
+* The [`sass:list`](https://sass-lang.com/documentation/modules/list/) is extended by [`@angular-package/sass/list`](https://docs.angular-package.dev/v/sass/list/overview) - module lets you access and modify values in lists.
+* The [`sass:map`](https://sass-lang.com/documentation/modules/map/) is extended by [`@angular-package/sass/map`](https://docs.angular-package.dev/v/sass/map/overview) - module makes it possible to look up the value associated with a key in a map, and much more.
+* The [`sass:math`](https://sass-lang.com/documentation/modules/math/) is extended by [`@angular-package/sass/math`](https://docs.angular-package.dev/v/sass/math/overview) - module provides functions that operate on numbers.
+* The [`sass:meta`](https://sass-lang.com/documentation/modules/meta/) is extended by [`@angular-package/sass/meta`](https://docs.angular-package.dev/v/sass/meta/overview) - module exposes the details of Sass’s inner workings..
+<!--  * The [`sass:selector`](https://sass-lang.com/documentation/modules/selector/) is extended by [`@angular-package/sass/selector`](https://) - module provides access to Sass’s powerful selector engine. -->
+* The [`sass:string`](https://sass-lang.com/documentation/modules/string/) is extended by [`@angular-package/sass/string`](https://docs.angular-package.dev/v/sass/string/overview) - module makes it easy to combine, search, or split apart strings.
 
 New modules:
 
-* The [`@angular-package/sass/class`](https://) module.
-* The [`@angular-package/sass/comparison`](https://) module.
-* The [`@angular-package/sass/function`](https://) module .
-* The [`@angular-package/sass/property`](https://) module.
-* The [`@angular-package/sass/scheme`](https://) module.
-* The [`@angular-package/sass/translator`](https://) module.
-* The [`@angular-package/sass/values`](https://) module.
-* The [`@angular-package/sass/var`](https://) module .
+<!-- * The [`@angular-package/sass/class`](https://) module. -->
+* The [`@angular-package/sass/comparison`](https://docs.angular-package.dev/v/sass/comparison/overview) module to compare single or multiple values. 
+* The [`@angular-package/sass/number`](https://docs.angular-package.dev/v/sass/number/overview) to work on the numbers.
 
-Sass extension is free to use. If you enjoy it, please consider donating via [`fiat`](https://spectrecss.angular-package.dev/donate/usd-fiat) or [`cryptocurrency`](https://spectrecss.angular-package.dev/donate/thb-cryptocurrency) the [`@angular-package`](https://github.com/sponsors/angular-package) for further development. ♥  
+<!-- * The [`@angular-package/sass/function`](https://) module . -->
+<!-- * The [`@angular-package/sass/property`](https://) module. -->
+<!-- * The [`@angular-package/sass/scheme`](https://) module. -->
+<!-- * The [`@angular-package/sass/translator`](https://) module. -->
+<!-- * The [`@angular-package/sass/values`](https://) module. -->
+<!-- * The [`@angular-package/sass/var`](https://) module . -->
+
+Sass extension is free to use. If you enjoy it, please consider donating via [`fiat`](https://docs.angular-package.dev/donate/usd-fiat) or [`cryptocurrency`](https://spectrecss.angular-package.dev/donate/thb-cryptocurrency) the [`@angular-package`](https://github.com/sponsors/angular-package) for further development. ♥  
 
 > Feel free to submit a pull request. Help is always appreciated.
 
@@ -62,6 +64,7 @@ Sass extension is free to use. If you enjoy it, please consider donating via [`f
 
 * [Skeleton](#skeleton)
 * [Code scaffolding](#code-scaffolding)
+* [Documentation](#documentation)
 * [Changelog](#changelog)
 * [Git](#git)
   * [Commit](#commit)
@@ -94,6 +97,12 @@ After building your library with `ng build sass`, go to the dist folder `cd dist
 ### Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+<br>
+
+## Documentation
+
+The documentation is in construction and it's available at [https://docs.angular-package.dev/v/sass](https://docs.angular-package.dev/v/sass/)
 
 <br>
 

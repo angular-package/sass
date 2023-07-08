@@ -1,0 +1,6 @@
+@use '../math';
+
+// Range.
+// @debug math.range(15, 20); // 15 16 17 18 19 20
+// @debug math.range-down(20, 15); // 20 19 18 17 16 15
+

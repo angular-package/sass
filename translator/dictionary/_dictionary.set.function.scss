@@ -1,0 +1,26 @@
+// Functions.
+@use '../../map/map.set.function';
+@use 'dictionary.is-global.function' as *;
+@use 'dictionary.merge.function' as *;
+
+// Variables.
+@forward 'dictionary.variables';
+@use 'dictionary.variables' as variables;
+
+// Status: DONE
+// The `dictionary.set()` function returns the.
+// @param `$key`
+// @param `$value`
+// @param `$dictionary`
+// @param `$global`
+// @return The return value is
+@function set($key, $value, $dictionary: (), $global: null) {
+  $dictionary: map.set(merge(null, $dictionary, $global), $key, $value);
+  @if is-global($global) {
+    variables.$dictionary: $dictionary;
+  }
+  @return $dictionary;
+}
+
+// Examples.
+@debug set('dictionary name', (word: translation));

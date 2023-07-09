@@ -1,0 +1,17 @@
+// Sass.
+@use 'sass:meta';
+
+// Variables.
+@use 'dictionary.variables' as variables;
+
+// Status: REVIEW: Check
+// The `dictionary.is-global()` function.
+// @param `$global` Whether use the global dictionary.
+@function is-global($global: null) {
+  @if if(meta.type-of($global) == bool, $global, variables.$dictionary-global) {
+    @return true;
+  }
+  @return $global;
+}
+
+// Examples.

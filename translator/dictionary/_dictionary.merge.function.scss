@@ -1,0 +1,65 @@
+// Sass.
+@use 'sass:list';
+
+// Variables.
+@forward 'dictionary.variables';
+@use 'dictionary.variables' as variables;
+
+// Functions.
+@use 'dictionary.get.function' as *;
+@use 'dictionary.is-global.function' as *;
+
+// Modules.
+@use '../../map';
+
+// Status: DONE
+// The `dictionary.merge()` function.
+// @param `$key`
+// @param `$dictionary`
+// @param `$global`
+@function merge($key: null, $dictionary, $global: null) {
+  @if type-of($dictionary) == list {
+    $fetched-dictionary: ();
+    @each $dictionary in if(list.separator($dictionary) == comma, $dictionary, ($dictionary,)) {
+      $fetched-dictionary: map.deep-merge($fetched-dictionary, map.retrieve(pick, $dictionary, ()));
+    }
+
+    $dictionary: $fetched-dictionary;
+  }
+
+  $dictionary: if(
+    $key,
+    map.merge(get($global: $global), list.append($key, $dictionary)...),
+    map.deep-merge(get($global: $global), $dictionary)
+  );
+  @if is-global($global) {
+    variables.$dictionary: $dictionary;
+  }
+  @return $dictionary;
+}
+
+// Examples.
+// merge an empty map
+// @debug merge(null, (), true); // (size: size, small: sm, class: (prefix: null, separator: "-", suffix: null), var: (prefix: s, hue: h, saturation: s, lightness: l, alpha: a, separator: "-", suffix: null), null: (size: size, small: sm, class: (prefix: null, separator: "-", suffix: null), var: (prefix: s, hue: h, saturation: s, lightness: l, alpha: a, separator: "-", suffix: null)))
+
+// get `class` key and merge with an empty map
+// @debug merge(class, ()); // (size: size, small: sm, class: (prefix: null, separator: "-", suffix: null), var: (prefix: s, hue: h, saturation: s, lightness: l, alpha: a, separator: "-", suffix: null))
+
+// get `class` key and merge with a map
+// @debug merge(class, (test: 1)); // (size: size, small: sm, class: (prefix: null, separator: "-", suffix: null, test: 1), var: (prefix: s, hue: h, saturation: s, lightness: l, alpha: a, separator: "-", suffix: null))
+// @debug merge(class, (class: (prefix: spectre1, suffix: big))); // (size: size, small: sm, class: (prefix: null, separator: "-", suffix: null, class: (prefix: spectre1, suffix: big)), var: (prefix: s, hue: h, saturation: s, lightness: l, alpha: a, separator: "-", suffix: null))
+// @debug merge(class, ((prefix: second, suffix: big), (prefix: first, suffix: big)));
+// @debug merge(class, (prefix: spectre)); // (size: size, small: sm, class: (prefix: spectre, separator: "-", suffix: null), var: (prefix: s, hue: h, saturation: s, lightness: l, alpha: a, separator: "-", suffix: null))
+// @debug merge(class, (prefix: spectre, suffix: big)); // (size: size, small: sm, class: (prefix: spectre, separator: "-", suffix: big), var: (prefix: s, hue: h, saturation: s, lightness: l, alpha: a, separator: "-", suffix: null))
+
+// get `var` key and merge with a map
+// @debug merge(var, (test: 1)); // (size: size, small: sm, class: (prefix: null, separator: "-", suffix: null), var: (prefix: s, hue: h, saturation: s, lightness: l, alpha: a, separator: "-", suffix: null, test: 1))
+
+// multiple
+// @debug merge(class, ((test: 1), (test-5: 5, test-4: 4, test-3: 3), (test-3: test, test-4: test))); // (delimiter: "-", (extra large, "extra large", extra-large): xl, (extra small, "extra small", extra-small): xs, large: lg, medium: md, small: sm, size: size, class: (delimiter: "-", prefix: spectre, separator: "-", suffix: end, test: 1, test-5: 5, test-4: test, test-3: test), var: (delimiter: "-", prefix: s, separator: "-", suffix: null, alpha: a, hue: h, lightness: l, saturation: s))
+// @debug merge(class, ((test-1: (test-2: (test-3: (1: 1, 2: 2))))));
+
+// pick multiple dictionaries with the keys
+// @debug merge(null, variables.$dictionary-example general);
+// @debug merge(null, variables.$dictionary-example ((general, (wrapper, wrap)), (class, calendars),));
+// @debug merge(class, (variables.$dictionary-example (general, (class, calendars))));

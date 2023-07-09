@@ -1,0 +1,5 @@
+// Dictionary map.
+$dictionary: () !default;
+
+// Each module uses a dictionary from the `dictionary.var` file.
+$dictionary-global: true;

@@ -1,0 +1,24 @@
+// Sass.
+@use 'sass:list';
+
+// Status: TODO: Check return null or $string for an errors.
+// The `dictionary.translation()` function.
+@function translation($search, $dictionaries...) {
+  @each $dictionary in $dictionaries {
+    @each $phrase, $translation in $dictionary {
+      @if list.index($phrase, $search) and $translation {
+        @return $translation;
+      }
+    }
+  }
+  @return null;
+}
+
+// Examples.
+// @debug translation(prefix, $dictionary); // null
+// @debug translation(extra large, $dictionary); // xl
+// @debug translation(prefix, $dictionary-example, $dictionary); // spectre
+// @debug translation(outline, $dictionary, $dictionary-example); // o
+// @debug translation(delimiter, $dictionary, $dictionary-example); // -
+// @debug translation('extra small', $dictionary, $dictionary-example); // xs
+// @debug translation(extra-large, $dictionary, $dictionary-example); // xl

@@ -1,0 +1,68 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Variables.
+@forward 'dictionary.variables';
+@use 'dictionary.variables' as variables;
+
+// Functions.
+@use '../../meta/meta.of-type.function' as *;
+
+// Modules.
+@use '../../map';
+
+// Status: REVIEW: Check
+// The `dictionary.get()` function returns the .
+// @param `$key` Dictionary key.
+// @param `$dictionary` Dictionary of list or map type to get.
+// @param `$default` The default returned value if the dictionary is null.
+// @param `$global` Whether use the global dictionary.
+// @return The return value is the dictionary
+@function get($key: null, $dictionary: (), $default: null, $global: null) {
+  $dictionary: if(meta.type-of($dictionary) == list and list.length($dictionary) > 0, map.retrieve(get, $dictionary...), $dictionary);
+  @if if(meta.type-of($global) == bool, $global, variables.$dictionary-global) {
+    @if $key {
+      $dictionary: if(
+        of-type(map, map.get(variables.$dictionary, $key, ()), map.get($dictionary, $key, $default)),
+        map.deep-merge(map.get(variables.$dictionary, $key), map.get($dictionary, $key, $default)),
+        map.get($dictionary, $key, $default) or map.get(variables.$dictionary, $key, $default)
+      );
+    } @else {
+      $dictionary: map.deep-merge(variables.$dictionary, $dictionary);
+    }
+  } @else if $key {
+    $dictionary: map.get($dictionary, $key, $default);
+  }
+  @return $dictionary;
+}
+
+// Examples.
+// Get the global dictionary.
+// @debug get(); //
+
+// Deactivate picking from the global dictionary.
+// @debug get($global: false); // ()
+
+// Get the dictionary from the `$dictionary-example` variable.
+// @debug get(null, variables.$dictionary-example); //
+// @debug get(null, variables.$dictionary-example, $global: false); //
+
+// Get the dictionary from the `$dictionary-example` variable by using string key.
+// @debug get(general, variables.$dictionary-example); //
+// @debug get(class, variables.$dictionary-example); //
+
+// Get the dictionary from the `$dictionary-example` variable by using deep key.
+// @debug get((class, calendars), variables.$dictionary-example); //
+
+// Get dictionary from the `$dictionary-example` variable.
+// @debug get(general, variables.$dictionary-example, $global: false); //
+
+// Get the default value on `null`.
+// @debug get(no-field, variables.$dictionary-example, (prefix: spectre)); //
+
+// Get dictionary from the `$dictionary-example` variable with a deep key.
+// @debug get(null, variables.$dictionary-example (class, calendars), $global: false); //
+
+// Get single translation.
+// @debug get((class, separator)); //

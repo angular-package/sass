@@ -5,30 +5,44 @@
 @use '../string';
 
 // Status: DONE
-// The `map.key-replace()` function.
-// @param `$map`
-// @param `$replace`
-// @param `$replacement`
+// The `map.key-replace()` function returns the map with key `$replace` replaced by `$replacement`.
+// @param `$map` A map in which replace key with a `$replacement`.
+// @param `$replace` A key to replace with a `$replacement`.
+// @param `$replacement` The value to replace `$replace`.
+// @return The return value is a map with replaced key `$replace` with a `$replacement`.
 @function key-replace($map, $replace, $replacement) {
   @if type-of($map) == map {
-    $result: ();
     @each $key, $value in $map {
+      $map: map.remove($map, $key);
       @if type-of($key) == string and type-of($replace) == string and type-of($replacement) == string {
         @if string.index($key, $replace) {
-          $key: string.replace($key, first $replace $replacement);
+          $key: string.replace($key, first, $replace, $replacement);
         }
       } @else if $key == $replace {
         $key: $replacement;
       }
 
-      $result: map.merge($result, ($key: $value));
+      $map: map.merge($map, ($key: $value));
     }
-    @return $result;
   }
   @return $map;
 }
 
 // Examples.
-// @debug key-replace((a: 1, b: 2, c: 3), 'a', 'd'); // (d: 1, b: 2, c: 3)
+// $-map: (
+//   key replace: (map: 1),
+//   key-replace: (map: 2),
+// );
+
+// replace string key
+// @debug key-replace($-map, key-replace, new-key); // (key replace: (map: 1), new-key: (map: 2))
 // @debug key-replace(('bold king': 1, b: 2, c: 3), 'bold', 'hairy'); // ("hairy king": 1, b: 2, c: 3)
 // @debug key-replace(('bold king': 1, b: 2, c: 3), 'o', 'ooo'); // ("booold king": 1, b: 2, c: 3)
+// @debug key-replace((a: 1, b: 2, c: 3), 'a', 'd'); // (d: 1, b: 2, c: 3)
+
+// replace string key with a list key
+// @debug key-replace($-map, key-replace, new key); // (key replace: (map: 1), new key: (map: 2))
+
+// replace list key
+// @debug key-replace($-map, key replace, 'd'); // (d: 1, b: 2, c: 3)
+

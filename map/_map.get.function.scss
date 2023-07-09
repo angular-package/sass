@@ -4,21 +4,21 @@
 @use 'sass:meta';
 
 // Status: DONE
-// The `map.get()` function to get the value from the map, modified by added additional fallback value if returned is null.
-// @param `$map` A map to get the value by using the specified key.
-// @param `$key` The key used to get the value from the given map.
-// @param `$fallback` The fallback value if the returned is null.
+// The modified `map.get()` function returns the value in `$map`, and returns fallback value if returned is `null`.
+// @param `$map` A map to get the value by using the specified `$key`.
+// @param `$key` The key used to get the value from the given `$map`.
+// @param `$fallback` The fallback value if the returned is `null`.
+// @return The return value is the value from the `$map`, if `null` returns `$fallback`.
 @function get($map, $key, $fallback: null) {
-  $result: if(
+  @return if(
     meta.type-of($map) == map and list.length($key) > 0,
     if(list.separator($key) == comma, map.get($map, $key...), map.get($map, $key)),
     $fallback
-  );
-  @return if($result == null, $fallback, $result);
+  ) or $fallback;
 }
 
 // Examples.
-// @debug get((
+// $-map: (
 //   light theme: (
 //     primary palette: (
 //       primary: primary color,
@@ -29,4 +29,16 @@
 //     silver: #f1f1f1,
 //     red: #d72000,
 //   )
-// ), (light theme, primary palette));
+// );
+
+// simple key
+// @debug get($-map, light theme); // (primary palette: (primary: primary color, primary dark: primary color dark))
+
+// nested key
+// @debug get($-map, (light theme, primary palette)); // (primary: primary color, primary dark: primary color dark)
+
+// null
+// @debug get($-map, wrong key); // null
+
+// fallback
+// @debug get($-map, wrong key, (must be: this value)); // (must be: this value)

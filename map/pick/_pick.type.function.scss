@@ -10,7 +10,7 @@
 @use '../../string';
 
 // Status: DONE
-// The `type()` function picks the properties with values and/or keys of the specified type.
+// The `pick.type()` function picks the properties with values and/or keys of the specified type.
 // @param `$map` A map from which properties with values and/or keys of a certain type are picked.
 // @arbitrary `$field-type...` A pattern 'field:type` where field can be `value` or `key` and type
 // bool, calculation, color, function, list, map, null, number or string, to pick properties with the value and/or key of the specified type.

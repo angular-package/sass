@@ -4,11 +4,12 @@
 @use 'sass:meta';
 
 // Status: DONE
-// The `map.set()` function sets the allowed value under the given `$key`.
-// @param `$map`
-// @param `$key`
-// @param `$value`
-// @arbitrary `$allowed...`
+// The `map.set()` function sets the `$allowed` `$value` under the given `$key`.
+// @param `$map` A map to set the `$value` in the specified `$key`.
+// @param `$key` A key under which the `$value` is set.
+// @param `$value` The `$value` to set in the `$map` under the `key`.
+// @arbitrary `$allowed...` Allowed value types and/or values to set in the `$map`.
+// @return The return value is a copy of `$map` with updated value at `$key`.
 @function set($map, $key, $value, $allowed...) {
   @return if(
     if(

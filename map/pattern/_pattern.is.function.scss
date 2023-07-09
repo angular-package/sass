@@ -9,9 +9,10 @@
 @use '../../string';
 
 // Status: DONE
-// The `pattern.is()` function.
-// @param `$value`
-// @param `$pattern`
+// The `pattern.is()` function checks whether the `$value` is a map pattern.
+// @param `$value` A value to check against it's a pattern.
+// @param `$pattern` A list of patterns to check.
+// @return The return value is a `bool` indicating the `$value` is a pattern of `$pattern`.
 @function is($value, $pattern: map.values($pattern)) {
   @if type-of($value) == string {
     @each $pattern in $pattern {
@@ -32,6 +33,6 @@
 }
 
 // Examples.
-// @debug is('*.palette');
-// @debug is('value:string');
-// @debug is('key:number');
+// @debug is('*.palette'); // true
+// @debug is('value:string'); // true
+// @debug is('key:number'); // true

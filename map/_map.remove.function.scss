@@ -4,9 +4,10 @@
 @use 'sass:meta';
 
 // Status: DONE
-// The `map.remove()` function with unified `map.remove()` and `deep-remove()`.
-// @param `$map` The map to remove the specified keys.
-// @arbitrary `$keys...` The list of strings or the list of list of strings to remove from the map.
+// The `map.remove()` function with unified `map.remove()` and `deep-remove()` returns `$map` without `$keys`.
+// @param `$map` The map to remove the specified `$keys`.
+// @arbitrary `$keys...` The keys to remove from the `$map`.
+// @return The return value is a copy of `$map` without any values associated with `$keys`.
 @function remove($map, $keys...) {
   @each $key in $keys {
     $map: if(

@@ -6,10 +6,11 @@
 @use 'map.set.function' as *;
 
 // Status: DONE
-// The `map.update()` function.
-// @param `$map`
-// @param `$key-value`
-// @arbitrary `$allowed...`
+// The `map.update()` function allows to set multiple key-value sets in a `$map`.
+// @param `$map` A map to update with multiple sets.
+// @param `$key-value` Map of (key: value) to update the `$map`.
+// @arbitrary `$allowed...` Allowed value types and/or values to update the `$map`.
+// @return The return value is a copy of `$map` with updated multiple sets.
 @function update($map, $key-value, $allowed...) {
   @each $key, $value in $key-value {
     $map: set($map, $key, $value, $allowed...);
@@ -18,27 +19,30 @@
 }
 
 // Examples.
-// Differences.
-// @debug update((), (((test, 1, 2, 3), ): 2222));
-// @debug map.merge((), (((test, 1), 2, 3): 2222));
+// $-fonts: (
+//   "Helvetica": (
+//     "weights": (
+//       "regular": 400,
+//       "medium": 500,
+//       "bold": 700
+//     )
+//   )
+// );
 
-// Equivalents.
-// @debug map.set((), (test, 1), 2222); // ((test, 1): 2222)
-// @debug set((), ((test, 1),), 2222); // ((test, 1): 2222)
+// update single nested key-value
+// @debug update($-fonts, ((("Helvetica", "style"), ): (italic: italic, normal: normal, inherit: inherit))); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), ("Helvetica", "style"): (italic: italic, normal: normal, inherit: inherit))
 
-// @debug map.set((), test 1, (test, 2), 2222); // (test 1: ((test, 2): 2222))
-// @debug set((), (test 1, (test, 2)), 2222); // (test 1: ((test, 2): 2222))
+// update multiple keys
+// @debug update($-fonts, (arial: (size: large), georgia: (size: small), verdana: (size: medium))); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), arial: (size: large), georgia: (size: small), verdana: (size: medium))
 
-// single type
-// @debug set((a: 1, b: 2), test string, 27, string ); // (a: 1, b: 2)
-// @debug set((a: 1, b: 2), test number, 27, number); // (a: 1, b: 2, test: (number: 27))
-// @debug set((a: 1, b: 2), test map, (map: 22,), map); // (a: 1, b: 2, test: (map: (map: 22)))
-// @debug set((a: 1, b: 2), test list, (22, 44), list); // (a: 1, b: 2, test: (list: (22, 44)))
-// @debug set((a: 1, b: 2), test color, #ffffff, color); // (a: 1, b: 2, test: (color: #ffffff))
-// @debug set((a: 1, b: 2), test null, null, null); // (a: 1, b: 2, test: (null: null))
+// update multiple list keys
+// @debug update($-fonts, ((arial large,): (size: large), (georgia small,): (size: small), (verdana medium,): (size: medium))); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), arial large: (size: large), georgia small: (size: small), verdana medium: (size: medium))
 
-// multiple types
-// @debug set((a: 1, b: 2), test number, 27, number, string, bool, list, map); // (a: 1, b: 2, test: (number: 27))
-// @debug set((a: 1, b: 2), test string, twenty seven, number, string, bool, list, map); // (a: 1, b: 2, test: (string: twenty seven))
-// @debug set((a: 1, b: 2), test bool, false, number, string, bool, list, map); // (a: 1, b: 2, test: (bool: false))
-// @debug set((a: 1, b: 2), test null, null, number, null, string, bool, list, map); // (a: 1, b: 2, test: (null: null))
+// update only string type
+// @debug update($-fonts, (small: 2px, medium: md, large: 3px), string); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), medium: md)
+
+// update only string type
+// @debug update($-fonts, (small: 2px, medium: md, large: 3px), string, number); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), small: 2px, medium: md, large: 3px)
+
+// update specified value
+// @debug update($-fonts, (small: 2px, medium: md, large: 3px), 3px); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), large: 3px)

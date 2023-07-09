@@ -5,9 +5,11 @@
 @use 'map.get.function' as *;
 
 // Status: DONE
-// The `map.deep-merge-key()` function to merge the given map with retrieved data from the given keys from this map.
-// @param `$map` A map to merge with retrieved data from the given `$keys` from this map.
-// @arbitrary `$keys...` The keys to get the values to merge with the given map.
+// The `map.deep-merge-key()` function merges the given map with retrieved value from the given keys of this map.
+// The values under `$keys` are removed.
+// @param `$map` A map to merge with retrieved value from the given `$keys` of this map.
+// @arbitrary `$keys...` The keys to get the values to merge with the `$map`.
+// @return The return value is a map merged with the values retrieved from `$keys`.
 @function deep-merge-key($map, $keys...) {
   @each $key in $keys {
     $map: map.deep-remove(map.deep-merge($map, get($map, $key, ())), $key...);

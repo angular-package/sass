@@ -3,7 +3,7 @@
 @use 'sass:map';
 @use 'sass:meta';
 
-// Status: DONE
+// Status: TODO: Do not check map and key.
 // The modified `map.get()` function returns the value in `$map`, and returns fallback value if returned is `null`.
 // @param `$map` A map to get the value by using the specified `$key`.
 // @param `$key` The key used to get the value from the given `$map`.
@@ -15,6 +15,8 @@
     if(list.separator($key) == comma, map.get($map, $key...), map.get($map, $key)),
     $fallback
   ) or $fallback;
+
+  // @return if(list.separator($key) == comma, map.get($map, $key...), map.get($map, $key)) or $fallback;
 }
 
 // Examples.

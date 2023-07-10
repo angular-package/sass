@@ -35,10 +35,20 @@
 //   )
 // );
 
+// key of string
+// @debug deep-merge-key((a: 1, b: 2, key: (c: 3, d: 5)), key); // (a: 1, b: 2, c: 3, d: 5)
+
+// nested key
 // @debug deep-merge-key($example, ("Helvetica", "size")); // ("name": first name, "age": 25, "Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), "regular": small, "medium": big, "high": extra big)
 // @debug deep-merge-key($example, ("Helvetica", "weights")); // ("name": first name, "age": 25, "Helvetica": ("size": ("regular": small, "medium": big, "high": extra big)), "regular": 400, "medium": 500, "bold": 700)
-
 // @debug deep-merge-key($example, ("Helvetica", "weights"), ("Helvetica", "size")); // ("name": first name, "age": 25, "Helvetica": (), "regular": small, "medium": big, "bold": 700, "high": extra big)
 // @debug deep-merge-key($example, ("Helvetica", "size"), ("Helvetica", "weights")); // ("name": first name, "age": 25, "Helvetica": (), "regular": 400, "medium": 500, "high": extra big, "bold": 700)
 
-// @debug deep-merge-key((a: 1, b: 2, key: (c: 3, d: 5)), key); // (a: 1, b: 2, c: 3, d: 5)
+// key of comma separated list
+// @debug deep-merge-key((a: 1, b: 2, (key, key1): (c: 3, d: 5)), ((key, key1), )); // (a: 1, b: 2, c: 3, d: 5)
+
+// key of space separated list
+// @debug deep-merge-key((a: 1, b: 2, key key1: (c: 3, d: 5)), (key key1, )); // (a: 1, b: 2, c: 3, d: 5)
+
+// key
+// @debug deep-merge-key((a: 1, b: 2, key key1: (c: 3, d: 5)), (key key1, )); // (a: 1, b: 2, c: 3, d: 5)

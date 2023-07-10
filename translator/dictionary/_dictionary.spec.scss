@@ -4,7 +4,11 @@
 // Modules.
 @use '../dictionary';
 
-dictionary.$dictionary: (a: 2);
+// Global dictionary defaults.
+dictionary.$dictionary: (
+  prefix: spectre,
+  suffix: end
+);
 
 // Variables.
 $dictionary-example: (
@@ -19,14 +23,12 @@ $dictionary-example: (
   var: (prefix: var-prefix, suffix: var-suffix)
 );
 
-
-// @debug dictionary.merge('example', $dictionary-example);
-@debug dictionary.set('example', $dictionary-example);
-
-@debug dictionary.$dictionary;
-
+// Set the dictionary.
+$-test: dictionary.set('example', $dictionary-example);
 
 // get.
+@debug dictionary.get((example, general)); // (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c)
+
 // @debug dictionary.get(get, $dictionary-example, general); // (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c)
 // @debug dictionary.retrieve(get, $dictionary-example, (class, calendars)); // (calendar: cal)
 

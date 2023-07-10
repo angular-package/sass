@@ -8,12 +8,12 @@
 @use 'dictionary.variables' as variables;
 
 // Status: DONE
-// The `dictionary.set()` function returns the.
-// @param `$key`
-// @param `$value`
-// @param `$dictionary`
-// @param `$global`
-// @return The return value is
+// The `dictionary.set()` function sets global dictionary and/or given `$dictionary` under the `$key` with `$value`.
+// @param `$key` A key under which set `$value`.
+// @param `$value` A value to set under the `$key`.
+// @param `$dictionary` Additional dictionary to set the `$value` under the `$key`.
+// @param `$global` A `bool` value indicating whether to use global dictionary. Default, `null`.
+// @return The return value is dictionary with updated `$value` in the `$key`.
 @function set($key, $value, $dictionary: (), $global: null) {
   $dictionary: map.set(merge(null, $dictionary, $global), $key, $value);
   @if is-global($global) {
@@ -23,4 +23,4 @@
 }
 
 // Examples.
-@debug set('dictionary name', (word: translation));
+// @debug set('dictionary name', (word: translation));

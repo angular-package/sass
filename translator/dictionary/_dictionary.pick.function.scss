@@ -8,13 +8,14 @@
 // Modules.
 @use '../../map';
 
-// Status: REVIEW: Check.
-// The `dictionary.pick()` function returns the dictionary .
+// Status: DONE
+// The `dictionary.pick()` function returns the dictionary from global dictionary(if in use) and given `$dictionary` from associated `$key`.
+// @param `$key` A key to pick the dictionary from global dictionary(if in use) and given `$dictionary`.
+// @param `$dictionary` Additional dictionary to pick along with a global dictionary(if in use).
+// @param `$global` A `bool` value indicating whether to use global dictionary. Default, `null`.
+// @return The return value is a dictionary consists of global dictionary(if in use) and given `$dictionary` from associated `$key`.
 @function pick($key, $dictionary: (), $global: null) {
-  // Retrieve dictionary from the list
   $dictionary: if(meta.type-of($dictionary) == list and list.length($dictionary) > 0, map.retrieve(pick, $dictionary...), $dictionary);
-
-  // If global dictionary is activated then merge it with the `$dictionary`.
   @if if(meta.type-of($global) == bool, $global, variables.$dictionary-global) {
     $dictionary: if(
       $key,

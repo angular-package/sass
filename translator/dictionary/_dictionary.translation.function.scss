@@ -1,8 +1,11 @@
 // Sass.
 @use 'sass:list';
 
-// Status: TODO: Check return null or $string for an errors.
-// The `dictionary.translation()` function.
+// Status: DONE
+// The `dictionary.translation()` function returns a translation of `$search` from `$dictionaries`.
+// @param `$search` A word or phrase to search for translation.
+// @arbitrary `$dictionaries...` Dictionaries to look for `$search` translation.
+// @return The return value is a translation of the `$search`.
 @function translation($search, $dictionaries...) {
   @each $dictionary in $dictionaries {
     @each $phrase, $translation in $dictionary {

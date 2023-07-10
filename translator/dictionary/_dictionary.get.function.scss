@@ -8,20 +8,22 @@
 
 // Functions.
 @use '../../meta/meta.of-type.function' as *;
+@use 'dictionary.is-global.function' as *;
 
 // Modules.
 @use '../../map';
 
-// Status: REVIEW: Check
-// The `dictionary.get()` function returns the .
-// @param `$key` Dictionary key.
-// @param `$dictionary` Dictionary of list or map type to get.
-// @param `$default` The default returned value if the dictionary is null.
-// @param `$global` Whether use the global dictionary.
-// @return The return value is the dictionary
+// Status: DONE
+// The `dictionary.get()` function returns global dictionary(if in use) along with a given `$dictionary` and/or `$key`.
+// @param `$key` A key to retrieve dictionary from global dictionary with an optional `$dictionary`.
+// @param `$dictionary` Dictionary of list(dictionary key, dictionary key) or map type to get along with the global dictionary.
+// @param `$default` The default returned value if the dictionary is `null`.
+// @param `$global` A `bool` value indicating whether to use global dictionary. Default, `null`, and if it's not set function checks
+// variable `$dictionary-global` of `dictionary.variables.scss`.
+// @return The return value is a global dictionary(if in use) with a given `$dictionary` from a given `$key`.
 @function get($key: null, $dictionary: (), $default: null, $global: null) {
   $dictionary: if(meta.type-of($dictionary) == list and list.length($dictionary) > 0, map.retrieve(get, $dictionary...), $dictionary);
-  @if if(meta.type-of($global) == bool, $global, variables.$dictionary-global) {
+  @if is-global($global) {
     @if $key {
       $dictionary: if(
         of-type(map, map.get(variables.$dictionary, $key, ()), map.get($dictionary, $key, $default)),

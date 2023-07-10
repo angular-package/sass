@@ -1,5 +1,6 @@
 // Sass.
 @use 'sass:list';
+@use 'sass:meta';
 
 // Variables.
 @forward 'dictionary.variables';
@@ -13,7 +14,7 @@
 @use '../../map';
 
 // Status: DONE
-// The `dictionary.merge()` function merges global dictionary(if in use) with multiple dictionaries from given `$dictionary` in the `$key`.
+// The `dictionary.merge()` function merges the global dictionary(if in use) with multiple dictionaries from the given `$dictionary` in the `$key`.
 // @param `$key` A key under which multiple dictionaries from a given `$dictionary` are being merged.
 // @param `$dictionary` Dictionary or multiple dictionaries of map or list type(dictionary key, dictionary key) to merge with a global dictionary(if in use).
 // @param `$global` A `bool` value indicating whether to use global dictionary. Default, `null`.
@@ -22,7 +23,11 @@
   @if type-of($dictionary) == list {
     $retrieved-dictionary: ();
     @each $dictionary in if(list.separator($dictionary) == comma, $dictionary, ($dictionary,)) {
-      $retrieved-dictionary: map.deep-merge($retrieved-dictionary, map.retrieve(pick, $dictionary, ()));
+      @if type-of($dictionary) == list and list.length($dictionary) > 1 {
+        $dictionary: map.retrieve(pick, list.nth($dictionary, 1), list.nth($dictionary, 2));
+      }
+
+      $retrieved-dictionary: map.deep-merge($retrieved-dictionary, $dictionary);
     }
 
     $dictionary: $retrieved-dictionary;

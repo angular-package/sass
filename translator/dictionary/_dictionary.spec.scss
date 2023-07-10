@@ -12,15 +12,15 @@ dictionary.$dictionary: (
 
 // Variables.
 $dictionary-example: (
-  general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
-  class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
-  prefix: spectre,
   border: b,
+  class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
   color: c,
+  general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+  outline: o,
+  prefix: spectre,
   separator: '-',
   suffix: end,
-  outline: o,
-  var: (prefix: var-prefix, suffix: var-suffix)
+  var: (prefix: var-prefix, suffix: var-suffix),
 );
 
 // Set the dictionary.

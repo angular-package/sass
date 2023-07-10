@@ -1,5 +1,7 @@
 // Global dictionary.
-$dictionary: () !default;
+$dictionary: (
+  word: translation
+) !default;
 
 // Each module uses a dictionary from the `dictionary.var` file.
 $dictionary-global: true;

@@ -8,6 +8,9 @@
 // Modules.
 @use '../../map';
 
+// Functions.
+@use 'dictionary.is-global.function';
+
 // Status: DONE
 // The `dictionary.pick()` function returns the dictionary from a global dictionary(if in use) and a given `$dictionary` from the associated `$key`.
 // @param `$key` A key to pick the dictionary from the global dictionary(if in use) and given `$dictionary`.
@@ -16,14 +19,14 @@
 // @return The return value is a dictionary consisting of the global dictionary(if in use) and given `$dictionary` from the associated `$key`.
 @function pick($key, $dictionary: (), $global: null) {
   $dictionary: if(meta.type-of($dictionary) == list and list.length($dictionary) > 0, map.retrieve(pick, $dictionary...), $dictionary);
-  @if if(meta.type-of($global) == bool, $global, variables.$dictionary-global) {
+  @if dictionary.is-global($global) {
     $dictionary: if(
       $key,
-      map.deep-merge(map.pick(variables.$dictionary, $key...), map.pick($dictionary, $key...) or $default),
+      map.deep-merge(map.pick(variables.$dictionary, $key...), if(meta.type-of($dictionary) == map, map.pick($dictionary, $key...), ())),
       map.deep-merge(variables.$dictionary, $dictionary)
     );
   } @else if $key {
-    $dictionary: map.pick($dictionary, $key...) or $default;
+    $dictionary: map.pick($dictionary, $key...);
   }
   @return $dictionary;
 }

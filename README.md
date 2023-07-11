@@ -44,13 +44,12 @@ Extended sass modules:
 New modules:
 
 <!-- * The [`@angular-package/sass/class`](https://) module. -->
-* The [`@angular-package/sass/comparison`](https://docs.angular-package.dev/v/sass/comparison/overview) module to compare single or multiple values. 
-
+* The [`@angular-package/sass/comparison`](https://docs.angular-package.dev/v/sass/comparison/overview) module to compare single or multiple values.
 <!-- * The [`@angular-package/sass/function`](https://) module . -->
 <!-- * The [`@angular-package/sass/property`](https://) module. -->
 <!-- * The [`@angular-package/sass/scheme`](https://) module. -->
-<!-- * The [`@angular-package/sass/translator`](https://) module. -->
-<!-- * The [`@angular-package/sass/values`](https://) module. -->
+* The [`@angular-package/sass/translator`](https://docs.angular-package.dev/v/sass/translator/overview) module handles global dictionary to translate words.
+* The [`@angular-package/sass/values`](https://docs.angular-package.dev/v/sass/values/overview) module to modify arbitrary values.
 <!-- * The [`@angular-package/sass/var`](https://) module . -->
 
 Sass extension is free to use. If you enjoy it, please consider donating via [`fiat`](https://docs.angular-package.dev/donate/usd-fiat) or [`cryptocurrency`](https://spectrecss.angular-package.dev/donate/thb-cryptocurrency) the [`@angular-package`](https://github.com/sponsors/angular-package) for further development. ♥  

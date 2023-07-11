@@ -3,9 +3,10 @@
 @use 'sass:map';
 
 // Status: DONE
-// The`map.remove-type()` function removes the keys of the given value type.
-// @param `$map`
-// @arbitrary `$types...`
+// The`map.remove-type()` function removes the keys of the given value `$types`.
+// @param `$map` A map from which the `$types` are removed.
+// @arbitrary `$types...` The value types of the map to remove from the `$map`.
+// @return The return value is a copy of `$map` without the values associated with the given `$types`.
 @function remove-type($map, $types...) {
   @each $type in $types {
     @if list.index(number string color list map calculation bool null function, $type) {

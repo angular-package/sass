@@ -1,0 +1,112 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Functions.
+@use '../list/list.join.function' as *;
+
+// Modules.
+@use '../map';
+
+// Status: DONE
+// The `values.combine()` function combines multiple `$values` into the list. By default, the function use append method
+// to combine the given `$values`. The parameters of the list (bracketed, delimiter, method, null, separator) can be changed by
+// providing map value eg. (method: join).
+// @return The return value is the list combined by the specified method, with a separator, and/or delimiter.
+@function combine($values...) {
+  $parameters: (
+    bracketed: map.get(list.nth($values, 1), bracketed, auto),
+    delimiter: null,
+    method: append,
+    null: false,
+    separator: map.get(list.nth($values, 1), separator, auto)
+  );
+  $result: list.join((), (), map.pick($parameters, separator, bracketed)...);
+  @each $value in $values {
+    $allow: true;
+    $method: map.get($parameters, method);
+    @if type-of($value) == map and map.has-keys($value, any, append, join, map.keys($parameters)...) {
+      $parameters: map.merge($parameters, map.remove($value, append, join));
+      @if map.has-keys($value, any, append, join) {
+        @each $use-method, $use-value in $value {
+          $method: $use-method;
+          $value: $use-value;
+        }
+      } @else {
+        $allow: false;
+      }
+    }
+    @if not map.get($parameters, null) and not $value {
+      $allow: false;
+    }
+    @if $allow {
+      $result: meta.call(
+        meta.get-function($method),
+        $result,
+        $value,
+        map.pick($parameters, if($method == join, (separator, bracketed), separator)...)...
+      );
+    }
+  }
+  @if map.get($parameters, delimiter) {
+    $result: join((), $result, map.pick($parameters, separator, delimiter)...);
+  }
+  @return $result;
+}
+
+// Examples.
+// The default append method + separator auto.
+// @debug combine('&', layout sidebar, primary dark, extra small); // "&" (layout sidebar) (primary dark) (extra small)
+// @debug combine(('&', dark), layout sidebar, primary dark, extra small); // ("&", dark) (layout sidebar) (primary dark) (extra small)
+
+// Join method + separator auto.
+// @debug combine((method: join), '&', layout sidebar, primary dark, extra small); // "&" layout sidebar primary dark extra small
+// @debug combine((method: join), ('&', dark), layout sidebar, primary dark, extra small); // "&", dark, layout, sidebar, primary, dark, extra, small
+// @debug combine((method: join), '&' dark, layout sidebar, primary dark, extra small); // "&" dark layout sidebar primary dark extra small
+
+// Append method + separator space and comma.
+// @debug combine((separator: space), '&', layout sidebar, primary dark, extra small); // "&" (layout sidebar) (primary dark) (extra small)
+// @debug combine((separator: comma), '&', layout sidebar, primary dark, extra small); // "&", layout sidebar, primary dark, extra small
+
+// Join method + separator space and comma.
+// @debug combine((separator: space, method: join), '&', layout sidebar, primary dark, extra small); // "&" layout sidebar primary dark extra small
+// @debug combine((separator: comma, method: join), '&', layout sidebar, primary dark, extra small); //  "&", layout, sidebar, primary, dark, extra, small
+
+// Combine with `append` or `join` key.
+// @debug combine((append: first append), '&', layout sidebar, primary dark, extra small); // (first append) "&" (layout sidebar) (primary dark) (extra small)
+// @debug combine((append: (first, append)), '&', layout sidebar, primary dark, extra small); // (first, append) "&" (layout sidebar) (primary dark) (extra small)
+
+// @debug combine((join: first append), '&', layout sidebar, primary dark, extra small); // first append "&" layout sidebar primary dark extra small
+// @debug combine((join: (first, append)), '&', layout sidebar, primary dark, extra small); // first, append, "&", layout, sidebar, primary, dark, extra, small
+
+// @debug combine((method: join), '&', layout sidebar, (append: first append), primary dark, extra small); // "&" layout sidebar (first append) primary dark extra small
+// @debug combine('&', layout sidebar, (join: first join), primary dark, extra small); // "&" (layout sidebar) first join (primary dark) (extra small)
+
+// @debug combine((method: join, separator: comma), '&', layout sidebar, (append: first append), primary dark, extra small); // "&", layout, sidebar, first append, primary, dark, extra, small
+// @debug combine((separator: comma), '&', layout sidebar, (join: first join), primary dark, extra small); // "&", layout sidebar, first, join, primary dark, extra small
+
+// Bracketed.
+// @debug combine((bracketed: true), '&', layout sidebar, primary dark, extra small); // ["&" (layout sidebar) (primary dark) (extra small)]
+
+// Bracketed + separator.
+// @debug combine((bracketed: true, separator: comma), '&', layout sidebar, primary dark, extra small); // ["&", layout sidebar, primary dark, extra small]
+
+// Bracketed + join method.
+// @debug combine((bracketed: true, method: join), '&', layout sidebar, primary dark, extra small); // ["&" layout sidebar primary dark extra small]
+
+// Bracketed + separator + join method
+// @debug combine((method: join, separator: comma, bracketed: true), '&', layout sidebar, primary dark, extra small); // ["&", layout, sidebar, primary, dark, extra, small]
+
+// Change method.
+// @debug combine((one, two), three, (four, five), (six seven), primary dark, extra small); // (one, two) three (four, five) (six seven) (primary dark) (extra small)
+// @debug combine((one, two), three, (method: join), (four, five), (six seven), primary dark, extra small); // (one, two) three four five six seven primary dark extra small
+// @debug combine((one, two), three, (method: join), (four, five), (six seven), (method: append), primary dark, extra small); // (one, two) three four five six seven (primary dark) (extra small)
+
+// method (join: value) (append: value)
+// @debug combine((join: (one, two)), (join: three), (four, five), (six seven), primary dark, extra small); // one two three (four, five) (six seven) (primary dark) (extra small)
+// @debug combine((join: one two), three, (four, five), (six seven), (append: (primary dark extra small))); // one two three (four, five) (six seven) (primary dark extra small)
+
+// Add delimiter + add null values.
+// @debug combine(['a' 1], 'b' 2, ['c' 3], null, (separator: comma, null: true, delimiter: '-'), null, null, (append: 1 2 3), age 32, first name ); // ["a" 1], "-", "b" 2, "-", ["c" 3], "-", null, "-", null, "-", 1 2 3, "-", age 32, "-", first name
+// @debug combine((method: join, delimiter: separator), 'a' 1 , 'b' 2, 'c' 3); // "a" separator 1 separator "b" separator 2 separator "c" separator 3
+// @debug combine((method: join, separator: comma, delimiter: separator basic), 'a' 1 , 'b' 2, 'c' 3); // "a", separator basic, 1, separator basic, "b", separator basic, 2, separator basic, "c", separator basic, 3

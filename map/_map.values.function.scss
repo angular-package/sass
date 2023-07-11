@@ -4,17 +4,13 @@
 
 // Status: DONE
 // The modified `map.values()` function, by added arbitrary parameter `$keys` to return values of the specified keys.
-// @param `$map` The map to return values from.
-// @arbitrary `$keys` The keys to retrieve values from the map.
+// @param `$map` A map to return values from.
+// @arbitrary `$keys...` The keys to retrieve values from the `$map`.
+// @return The return value is a list of values retrieved from the `$map`.
 @function values($map, $keys...) {
   @if list.length($keys) > 0 {
-    $i: 1;
-    @each $key in $keys {
-      @if map.has-key($map, $key) {
-        $keys: list.set-nth($keys, $i, map.get($map, $key));
-      }
-
-      $i: $i + 1;
+    @for $i from 1 through list.length($keys) {
+      $keys: if(map.has-key($map, list.nth($keys, $i)), list.set-nth($keys, $i, map.get($map, list.nth($keys, $i))), $keys);
     }
   } @else {
     $keys: map.values($map);

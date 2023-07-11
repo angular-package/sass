@@ -1,7 +1,6 @@
 // Sass.
 @use 'sass:list';
 @use 'sass:map';
-@use 'sass:string';
 
 // Functions.
 @use 'map.deep-merge.function' as *;
@@ -13,26 +12,25 @@
 @use 'pick';
 
 // Status: DONE
-// The `map.pick()` function returns map with the specified keys.
-// @param `$map`
-// @arbitrary `$picks...`
-@function pick($map, $picks...) {
+// The `map.pick()` function returns a map with the specified `$keys`.
+// @param `$map` A map from which values of the given `$keys` are taken.
+// @arbitrary `$keys...` List of keys to get the values from `$map`.
+// @return The return value is a map built of the given `$keys`.
+@function pick($map, $keys...) {
   $result: ();
-  @each $pick in $picks {
-    @if type-of($pick) == list {
+  @each $key in $keys {
+    @if type-of($key) == list {
       $result: set(
         $result,
-        if(list.separator($pick) == space, ($pick,), if(list.length($pick) > 1, list.nth($pick, list.length($pick)), $pick)),
-        get($map, $pick)
+        if(list.separator($key) == space, ($key,), if(list.length($key) > 1, list.nth($key, list.length($key)), $key)),
+        get($map, $key)
       );
-    } @else if pattern.is($pick) {
-      $result: deep-merge($result, pick.pattern($map, $pick...));
+    } @else if pattern.is($key) {
+      $result: deep-merge($result, pick.pattern($map, $key...));
     } @else {
-      $result: deep-merge($result, ($pick: get($map, $pick)));
+      $result: deep-merge($result, ($key: get($map, $key)));
     }
   }
-
-  // Return.
   @return $result;
 }
 
@@ -44,55 +42,55 @@
 // @debug pick((a: 1, b: 2, c: 3, d: 4, a b: 5, c d: 6), a b, c d); // (a b: 5, c d: 6)
 // @debug pick((a: 1, b: 2, c: 3, d: 4, e: 5), e); // (e: 5)
 
-$-theme: (
-  dark: (
-    'dark.palette': (),
+// $-theme: (
+//   dark: (
+//     'dark.palette': (),
 
-    basic large: (
-      '': border,
-      dark: border dark,
-      light: border light
-    ),
-  ),
-  basic: (
-    'default.palette': (),
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
+//   ),
+//   basic: (
+//     'default.palette': (),
 
-    'gray.palette': (
-      'gray': 'gray' color,
-      'gray' dark: 'gray' dark,
-      'gray' light: 'gray' light
-    ),
+//     'gray.palette': (
+//       'gray': 'gray' color,
+//       'gray' dark: 'gray' dark,
+//       'gray' light: 'gray' light
+//     ),
 
-    'bg.palette': (
-      bg: bg color,
-      bg dark: bg dark,
-      bg light: bg light
-    ),
+//     'bg.palette': (
+//       bg: bg color,
+//       bg dark: bg dark,
+//       bg light: bg light
+//     ),
 
-    basic large: (
-      '': border,
-      dark: border dark,
-      light: border light
-    ),
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
 
-    extended small: (
-      '': primary,
-      dark: primary dark,
-      light: primary light
-    ),
+//     extended small: (
+//       '': primary,
+//       dark: primary dark,
+//       light: primary light
+//     ),
 
-    [primary]: (
-      primary dark: primary dark,
-    ),
+//     [primary]: (
+//       primary dark: primary dark,
+//     ),
 
-    (key1, key2): (
-      primary: primary1
-    ),
+//     (key1, key2): (
+//       primary: primary1
+//     ),
 
-    key1: primary
+//     key1: primary
 
-  )
-);
+//   )
+// );
 
 // Pattern.
 // @debug pick(map.get($-theme, basic), '*.palette');

@@ -1,0 +1,78 @@
+// Sass.
+@use 'sass:map';
+
+// Modules.
+@use '../dictionary';
+
+// Global dictionary defaults.
+dictionary.$dictionary: (
+  prefix: spectre,
+  suffix: end
+);
+
+// Variables.
+$dictionary-example: (
+  border: b,
+  class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+  color: c,
+  general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+  outline: o,
+  prefix: spectre,
+  separator: '-',
+  suffix: end,
+  var: (prefix: var-prefix, suffix: var-suffix),
+);
+
+// Set the dictionary.
+$-test: dictionary.set('example', $dictionary-example);
+
+// get.
+@debug dictionary.get((example, general)); // (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c)
+
+// @debug dictionary.get(get, $dictionary-example, general); // (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c)
+// @debug dictionary.retrieve(get, $dictionary-example, (class, calendars)); // (calendar: cal)
+
+// pick
+// @debug dictionary.retrieve(pick, $dictionary-example, general); // (general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c))
+// @debug dictionary.retrieve(pick, $dictionary-example, (general, var)); // (general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c), var: (prefix: var-prefix, suffix: var-suffix))
+
+// --- List
+// @debug dictionary.translate-list((wrapper, technology), $dictionary: $dictionary-example general); // owijka, tech
+// @debug dictionary.translate-list((wrapper, technology) color, $dictionary: $dictionary-example general); // (owijka, tech) c
+// @debug dictionary.translate-list((wrapper,), general, $dictionary-example); // (owijka,)
+
+// Different dictionary.
+// @debug dictionary.translate-list((calendar, label), $dictionary: ($dictionary-example, (class, calendars))); // cal, label
+
+// --- Map
+// String.
+// @debug dictionary.translate-map((word: wrapper), $dictionary: $dictionary-example general); // (word: owijka)
+// @debug dictionary.translate-map((limit: first), $dictionary: ((first, start): 1, (last, length, end): 50)); // (limit: 1)
+
+// List.
+// @debug dictionary.translate-map((word: (wrapper, wrap)), $dictionary: $dictionary-example general); // (word: (owijka, owijka))
+
+// Different dictionary.
+// @debug dictionary.translate-map((calendar: calendar), $dictionary: ($dictionary-example, (class, calendars))); // (calendar: cal)
+
+
+// --- String
+// @debug dictionary.translate-string(word, $dictionary: map.get($dictionary-example, general)); // słowo
+// @debug dictionary.translate-string(wrapper, general, $dictionary-example); // owijka
+// @debug dictionary.translate-string(calendar, $dictionary: map.get($dictionary-example, class, calendars)); // cal
+
+
+// --- Any
+// List.
+// @debug dictionary.translate((wrapper, technology), $dictionary: ($dictionary-example, 'general')); // owijka, tech
+// @debug dictionary.translate((wrapper, technology) color, $dictionary: $dictionary-example general); // (owijka, tech) c
+
+// Map.
+// @debug dictionary.translate((word: wrapper), $dictionary: $dictionary-example general); // (word: owijka)
+// @debug dictionary.translate((limit: first), $dictionary: ((first, start): 1, (last, length, end): 50)); // (limit: 1)
+
+// String.
+// @debug dictionary.translate(wrapper, $dictionary: $dictionary-example general); // owijka
+
+// Different dictionary.
+// @debug dictionary.translate(calendar, $dictionary: $dictionary-example (class, calendars)); // cal

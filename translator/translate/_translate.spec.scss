@@ -1,0 +1,71 @@
+// Sass.
+@use 'sass:map';
+
+// Modules.
+@use '../dictionary';
+@use '../translate';
+
+// Global dictionary defaults.
+dictionary.$dictionary: (
+  prefix: spectre,
+  suffix: end
+);
+
+// Variables.
+$-dictionary-example: (
+  general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+  class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+  prefix: spectre,
+  border: b,
+  color: c,
+  separator: '-',
+  suffix: end,
+  outline: o,
+  var: (prefix: var-prefix, suffix: var-suffix),
+
+  // Sizes.
+  (extra large, 'extra large', extra-large): xl,
+  (extra small, 'extra small', extra-small): xs,
+
+  large: lg,
+  medium: md,
+  small: sm,
+
+  size: size,
+
+);
+
+// Set the dictionary.
+// $-test: dictionary.set('example', $-dictionary-example, ());
+
+// Merge the dictionary.
+$-test: dictionary.merge(null, $-dictionary-example);
+
+// get.
+// @debug dictionary.get(null);
+
+// translate list.
+// @debug translate.list();
+
+// translate map.
+// @debug translate.map();
+
+// translate nth.
+// @debug translate.nth();
+
+// translate string.
+// @debug translate.string(prefix); // spectre
+
+// translate nth.
+// @debug translate.nth(prefix suffix, 1); // spectre suffix
+// @debug translate.nth(prefix suffix, 2); // prefix end
+// @debug translate.nth(prefix suffix, 1, null, (prefix: test-prefix)); // test-prefix suffix
+// @debug translate.nth(prefix suffix, 2, null, (suffix: test-suffix)); // prefix test-suffix
+
+// translate nth global false
+// @debug translate.nth(prefix suffix, 1, null, $-dictionary-example, false); // spectre suffix
+// @debug translate.nth(prefix suffix, 2, null, $-dictionary-example, false); // prefix end
+
+// translate nth global false class key
+// @debug translate.nth(prefix suffix, 1, class, $-dictionary-example, false); // class-prefix suffix
+// @debug translate.nth(prefix suffix, 2, class, $-dictionary-example, false); // prefix class-suffix

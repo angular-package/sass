@@ -1,0 +1,38 @@
+// Functions.
+@use 'map.get.function' as *;
+@use 'map.pick.function' as *;
+
+// Status: DONE
+// The `map.retrieve()` function retrieves a value from the `$map` by a `$method` get or pick with a `$key`.
+// @param `$method` The method get(`map.get()`)  or pick(`map.pick()`) used to retrieve the value.
+// @param `$map` A map to get the value by using the specified `$method` and `$key`.
+// @param `$key` A key to get or pick the value from the `$map`.
+// @param `$fallback` The fallback value if the returned value is `null`.
+// @return The return value is a retrieved value from the `$map` or `$fallback`.
+@function retrieve($method, $map, $key, $fallback: null) {
+  @return if($method == get, get($map, $key, $fallback), if($method == pick, pick($map, $key...), $map or $fallback));
+}
+
+// Examples.
+// $-dictionary-example: (
+//   general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+//   class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+//   prefix: spectre,
+//   border: b,
+//   color: c,
+//   separator: '-',
+//   suffix: end,
+//   outline: o,
+//   var: (prefix: var-prefix, suffix: var-suffix)
+// );
+
+// @debug retrieve(get, $-dictionary-example, general); // (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c)
+// @debug retrieve(pick, $-dictionary-example, ((class, calendars),)); // (calendars: (calendar: cal))
+// @debug retrieve(pick, $-dictionary-example, (general, (class, calendars))); // (general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c), calendars: (calendar: cal))
+
+// input list
+// @debug retrieve(pick $-dictionary-example ((class, calendars),)...); // (calendars: (calendar: cal))
+
+// null
+// @debug retrieve(get, $-dictionary-example, test); // null
+// @debug retrieve(pick, $-dictionary-example, test); // (test: null)

@@ -11,9 +11,10 @@
 @use '../../string';
 
 // Status: DONE
-// The `pick.pattern()` function.
-// @param `$map`
-// @arbitrary `$patterns...`
+// The `pick.pattern()` function returns a map filtered by using pattern.
+// @param `$map` A map from which properties are picked.
+// @arbitrary `$patterns...` A patterns to pick properties from a `$map`.
+// @return The return value is a copy of `$map` with properties associated with patterns.
 @function pattern($map, $patterns...) {
   $result: ();
   @each $pattern in $patterns {

@@ -16,7 +16,11 @@
     $result: ();
     $number: $from;
     @while $number <= $to {
-      $result: if(not $except or ($except and not list.index($except, $number)), list.append($result, $number, $separator), $result);
+      $result: if(
+        not $except or ($except and not list.index($except, $number)),
+        list.append($result, $number, $separator),
+        $result
+      );
       $number: $number + $step;
     }
 
@@ -27,11 +31,18 @@
 
 // Examples.
 // @debug up(15, 20); // 15 16 17 18 19 20
+
+// step 0.1
 // @debug up(0.1, 1, 0.1); // 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1
 
 // step 2
 // @debug up(15, 30, 2); // 15 17 19 21 23 25 27 29
 
 // except
+// @debug up(20, 35, 1, 20 35); // 21 22 23 24 25 26 27 28 29 30 31 32 33 34
 
 // separator
+// @debug up(20, 25, $separator: comma); // 20, 21, 22, 23, 24, 25
+
+// null
+// @debug up(20, 35); // null

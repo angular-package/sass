@@ -1,5 +1,6 @@
 // Sass.
 @use 'sass:map';
+@use 'sass:meta';
 
 // Modules.
 @use '../dictionary';
@@ -18,11 +19,11 @@
 @function map($map, $key: null, $dictionary: (), $global: null) {
   @if type-of($map) == map {
     @each $map-key, $value in $map {
-      @if type-of($value) == string {
-        $map: map.set($map, $map-key, string($value, $key, $dictionary, $global));
-      } @else if type-of($value) == list {
-        $map: map.set($map, $map-key, list($value, $key, $dictionary, $global));
-      }
+      $map: if(
+        meta.type-of($value) == string,
+        map.set($map, $map-key, string($value, $key, $dictionary, $global)),
+        if(meta.type-of($value) == list, map.set($map, $map-key, list($value, $key, $dictionary, $global)), $map)
+      );
     }
   }
   @return $map;

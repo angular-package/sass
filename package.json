@@ -1,7 +1,7 @@
 {
   "name": "@angular-package/sass",
   "description": "Extension for sass modules and new modules.",
-  "version": "0.2.0-beta",
+  "version": "0.3.0-beta",
   "main": "./index.scss",
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
-#### @angular-package/sass changelog
+# @angular-package/sass changelog
 
-##### v0.3.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.3.0-beta)
+### v0.3.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.3.0-beta)
 
 - Add values module with a `combine()` function. [985370f]
 - Add `map.retrieve()` function to unify get and pick. [2e72bd0]

@@ -3,10 +3,11 @@
 @use 'sass:map';
 
 // Status: DONE
-// The modified `map.values()` function, by added arbitrary parameter `$keys` to return values of the specified keys.
-// @param `$map` A map to return values from.
-// @arbitrary `$keys...` The keys to retrieve values from the `$map`.
-// @return The return value is a list of values retrieved from the `$map`.
+// The modified `map.values()` function returns all values or values of `$keys` from `$map`.
+// ? The modified map.values() function, by adding arbitrary parameter $keys... to return values of the specified keys.
+// @param `$map` A map from which all values or values of `$keys` are returned.
+// @arbitrary `$keys...` The keys to retrieve values from `$map`.
+// @return The return value is a comma-separated list of values retrieved from `$map`.
 @function values($map, $keys...) {
   @if list.length($keys) > 0 {
     @for $i from 1 through list.length($keys) {

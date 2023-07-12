@@ -5,8 +5,8 @@
 // Status: DONE
 // The `pick.value-type()` function picks the properties with values of the specified `$types`.
 // @param `$map` A map from which properties with values of a certain `$types` are picked.
-// @arbitrary `$types...` The bool, calculation, color, function, list, map, null, number or string types
-// of the property values to pick from the `$map`.
+// @arbitrary `$types...` The `bool`, `calculation`, `color`, `function`, `list`, `map`, `null`, `number` or `string` types
+// of the property values to pick from `$map`.
 // @return The return value is a copy of `$map` with values associated with `$types`.
 @function value-type($map, $types...) {
   $result: ();

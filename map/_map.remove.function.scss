@@ -4,9 +4,10 @@
 @use 'sass:meta';
 
 // Status: DONE
-// The `map.remove()` function with unified `map.remove()` and `deep-remove()` returns `$map` without `$keys`.
-// @param `$map` The map to remove the specified `$keys`.
-// @arbitrary `$keys...` The keys to remove from the `$map`.
+// The `map.remove()` function with unified `map.remove()` and `deep-remove()` returns a copy `$map` without `$keys`.
+// ? Modified by adding deep remove on key as comma-separated list. This way of providing key is consistent with a `map.set()` and `map.get()` functions.
+// @param `$map` A map to remove `$keys` from.
+// @arbitrary `$keys...` Multiple keys to remove from `$map`. If key is a comma-separated list then `map.deep-remove()` function is used, otherwise `map.remove()`.
 // @return The return value is a copy of `$map` without any values associated with `$keys`.
 @function remove($map, $keys...) {
   @each $key in $keys {
@@ -20,7 +21,7 @@
 }
 
 // Examples.
-// $fonts: (
+// $-fonts: (
 //   "Helvetica": (
 //     "weights": (
 //       "regular": 400,
@@ -34,4 +35,4 @@
 // );
 
 // key - default feature `map.remove()` and `deep-remove()`.
-// @debug remove($fonts, regular, (Helvetica, weights, medium)); // ("Helvetica": ("weights": ("regular": 400, "bold": 700)), "medium": 500, "bold": 700)
+// @debug remove($-fonts, regular, (Helvetica, weights, medium)); // ("Helvetica": ("weights": ("regular": 400, "bold": 700)), "medium": 500, "bold": 700)

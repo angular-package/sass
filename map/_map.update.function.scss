@@ -1,19 +1,15 @@
-// Sass.
-@use 'sass:list';
-@use 'sass:map';
-
 // Functions.
-@use 'map.set.function' as *;
+@use 'map.set.function';
 
 // Status: DONE
 // The `map.update()` function allows to set multiple key-value sets in a `$map`.
-// @param `$map` A map to update with multiple sets.
-// @param `$key-value` Map of (key: value) to update the `$map`.
+// @param `$map` A map to update by multiple sets `$key-value`.
+// @param `$key-value` A map of (key: value) to update `$map`.
 // @arbitrary `$allowed...` Allowed value types and/or values to update the `$map`.
-// @return The return value is a copy of `$map` with updated multiple sets.
+// @return The return value is `$map` with updated multiple sets.
 @function update($map, $key-value, $allowed...) {
   @each $key, $value in $key-value {
-    $map: set($map, $key, $value, $allowed...);
+    $map: map.set($map, $key, $value, $allowed...);
   }
   @return $map;
 }

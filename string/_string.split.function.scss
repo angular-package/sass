@@ -3,14 +3,15 @@
 @use 'sass:string';
 
 // Status: DONE
-// The `string.split()` function returns comma-separated list of substrings of $string that are separated by the given `$separator`.
-// The $separators aren’t included in these substrings..
-// If `$limit` is a number 1 or higher, this splits on at most that many $separators (and so returns at most $limit + 1 strings).
+// The `string.split()` function returns comma-separated list of substrings of `$string` that are separated by `$separator`.
+// The separators aren’t included in these substrings..
+// If `$limit` is a number `1` or higher, this splits on at most that many $separators (and so returns at most $limit + 1 strings).
 // The last substring contains the rest of the string, including any remaining separators.
-// @param `$string` The string to split.
-// @param `$separator` The separator that splits the string into the list.
-// @param `$limit` Limit split of string.
+// @param `$string` The `string` that is split by `$separator`.
+// @param `$separator` The separator that splits the `$string` into the returned list.
+// @param `$limit` Limit split of `$string`.
 // @param `$bracketed` Returns bracketed list.
+// @return The return value is a list separated by `$separator` limited by `$limit` times, and/or is `$bracketed`.
 @function split($string, $separator, $limit: null, $bracketed: false) {
   $result: list.join((), (), comma, $bracketed);
   $index: 0;

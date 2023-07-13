@@ -1,0 +1,45 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
+// Variables.
+@use 'function.variables';
+
+// Status: DONE
+// The `function.get()` function.
+@function get($name, $default: get, $function: variables.$function) {
+  @if type-of($name) == function {
+    @return $name;
+  } @else if type-of($name) == string {
+    @if map.get($function, $name) {
+      @return map.get($function, $name);
+    }
+  } @else if type-of($name) == map {
+    @each $module, $function in $name {
+      @if meta.get-function($function, false, $module) {
+        @return meta.get-function($function, false, $module);
+      }
+    }
+  }
+  @return map.get($function, $default) or $default;
+}
+
+// Examples.
+// String.
+// @debug get(color); // get-function("color")
+// @debug get(combine); // get-function("combine")
+// @debug get(get); // get-function("get")
+// @debug get(nest); // get-function("nest")
+
+// Map.
+// @debug get((map: get)); // get-function("get")
+// @debug get((list: set-nth)); // get-function("set-nth")
+
+// Function.
+// @debug get(meta.get-function(append)); // get-function("append")
+
+// default
+// @debug get(wrong); // get-function("get")
+// @debug get(wrong, combine); // get-function("combine")
+// @debug get(wrong, meta.get-function(append)); // get-function("append")

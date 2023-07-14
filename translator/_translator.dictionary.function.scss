@@ -7,10 +7,10 @@
 @use 'dictionary';
 
 // Status: DONE
-// The `translator.dictionary()` function returns(flattened map) the global and/or given `$dictionary`, merging it with the dictionary
-// retrieved by the provided `$key` from this dictionary.
-// @param `$key` A key to deep merge the dictionary under this key with a global dictionary and/or with a given `$dictionary`.
-// @param `$dictionary` Dictionary of (flatten) map or list(dictionary key) type to retrieve.
+// The `translator.dictionary()` function returns(flattened map) the global and/or given `$dictionary`, optionally merged with the dictionary
+// retrieved from `$key` of this dictionary.
+// @param `$key` A key to deep merge the dictionary under this key with a global dictionary and/or with `$dictionary`.
+// @param `$dictionary` Dictionary of (flatten) map or list(dictionary keys) type to retrieve.
 // @param `$global` A `bool` value indicates whether to use a global dictionary. Default, `null`.
 // @return The return value is a flattened map dictionary consisting of (word:translation).
 @function dictionary($key: null, $dictionary: (), $global: null) {

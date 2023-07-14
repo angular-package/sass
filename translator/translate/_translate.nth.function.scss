@@ -13,8 +13,9 @@
 // @param `$list` A list in which element at given `$n` index is translated.
 // @param `$n` An index of `$list` to translate.
 // @param `$key` A key of the dictionary retrieved from a global and/or given `$dictionary`.
-// @param `$dictionary` The dictionary that is used to translate the `$n` element in `$list`.
-// @param `$global` A `bool` value indicates whether to use a global dictionary. Default, `null`.
+// @param `$dictionary` The dictionary that is used to translate `$n` element in `$list`.
+// @param `$global` A `bool` value indicates whether to use a global dictionary(if in use). Default, `null`, and if it's not set function checks
+// variable `$dictionary-global` of `dictionary.variables.scss`.
 // @return The return value is the list with a translated `$n` element of `$list`.
 @function nth($list, $n, $key: null, $dictionary: (), $global: null) {
   @if type-of($list) == list {

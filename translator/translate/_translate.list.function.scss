@@ -11,11 +11,12 @@
 
 // Status: DONE
 // The `translate.list()` function translates `$list` with a global dictionary and/or given `$dictionary`.
-// @param `$list` The list with a few nested lists to translate.
-// @param `$key` A Key of the dictionary retrieved from a global(if in use) and/or `$dictionary` for translation.
-// @param `$dictionary` The dictionary that is used to translate element`s `$list`.
-// @param `$global` A `bool` value indicates whether to use a global dictionary. Default, `null`.
-// @return The return value is the translated `$list`.
+// @param `$list` A list with a few nested lists to translate.
+// @param `$key` A key of dictionary retrieved from a global(if in use) and/or `$dictionary` for translation.
+// @param `$dictionary` The dictionary that is used to translate elements of `$list`.
+// @param `$global` A `bool` value indicates whether to use a global dictionary(if in use). Default, `null`, and if it's not set function checks
+// variable `$dictionary-global` of `dictionary.variables.scss`.
+// @return The return value is translated `$list`.
 @function list($list, $key: null, $dictionary: (), $global: null) {
   @if type-of($list) == list {
     $translation: dictionary.translation($list, translator.dictionary($key, $dictionary, $global));

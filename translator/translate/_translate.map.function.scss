@@ -14,7 +14,8 @@
 // @param `$map` A map in which values of `string` or `list` type are translated.
 // @param `$key` A key of the dictionary retrieved from a global and/or given `$dictionary` for translation.
 // @param `$dictionary` The dictionary that is used to translate `$map` values.
-// @param `$global` A `bool` value indicates whether to use a global dictionary. Default, `null`.
+// @param `$global` A `bool` value indicates whether to use a global dictionary(if in use). Default, `null`, and if it's not set function checks
+// variable `$dictionary-global` of `dictionary.variables.scss`.
 // @return The return value is translated flatten `$map`.
 @function map($map, $key: null, $dictionary: (), $global: null) {
   @if type-of($map) == map {

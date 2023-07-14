@@ -3,5 +3,6 @@ $dictionary: (
   word: translation
 ) !default;
 
-// Each module uses a dictionary from the `dictionary.var` file.
-$dictionary-global: true;
+// If `true` then each function of translator
+// uses global `$dictionary`.
+$dictionary-global: true !default;

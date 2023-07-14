@@ -14,11 +14,11 @@
 @use '../../map';
 
 // Status: DONE
-// The `dictionary.merge()` function merges the global dictionary(if in use) with multiple dictionaries from the given `$dictionary` in the `$key`.
-// @param `$key` A key under which multiple dictionaries from a given `$dictionary` are being merged.
+// The `dictionary.merge()` function returns a global dictionary(if in use) merged with multiple dictionaries from `$dictionary` optionally merged in `$key`.
+// @param `$key` The optional key under which multiple dictionaries from `$dictionary` are being merged.
 // @param `$dictionary` Dictionary or multiple dictionaries of map or list type(dictionary key, dictionary key) to merge with a global dictionary(if in use).
-// @param `$global` A `bool` value indicating whether to use global dictionary. Default, `null`.
-// @return The return value is a dictionary consists of global dictionary(if in use) with multiple dictionaries from the given `$dictionary` of the given `$key`.
+// @param `$global` A `bool` value indicates whether to use a global dictionary. Default, `null`, then `$dictionary-global` is checked.
+// @return The return value is a dictionary consisting of global dictionary(if in use) and multiple dictionaries from `$dictionary` optionally merged in `$key`.
 @function merge($key: null, $dictionary, $global: null) {
   @if type-of($dictionary) == list {
     $retrieved-dictionary: ();
@@ -45,27 +45,27 @@
 }
 
 // Examples.
-// merge an empty map
-// @debug merge(null, (), true); //
+// $-dictionary: (
+//   (extra large, 'extra large', extra-large): xl,
+//   (extra small, 'extra small', extra-small): xs,
+//   class: (prefix: class-prefix, suffix: class-suffix),
+//   large: lg,
+//   medium: md,
+//   prefix: spectre,
+//   size: s,
+//   small: sm,
+//   suffix: end,
+//   var: (prefix: var-prefix, suffix: var-suffix),
+// );
 
-// get `class` key and merge with an empty map
-// @debug merge(class, ()); //
+// @debug variables.$dictionary; // (word: translation)
 
-// get `class` key and merge with a map
-// @debug merge(class, (test: 1)); //
-// @debug merge(class, (class: (prefix: spectre1, suffix: big))); //
-// @debug merge(class, ((prefix: second, suffix: big), (prefix: first, suffix: big)));
-// @debug merge(class, (prefix: spectre)); //
-// @debug merge(class, (prefix: spectre, suffix: big)); //
+// merge in `class` key
+// @debug merge(class, (prefix: spectre, suffix: end)); // (word: translation, class: (prefix: spectre, suffix: end))
 
-// get `var` key and merge with a map
-// @debug merge(var, (test: 1)); //
+// merge in nested (accordion, class) key
+// @debug merge((accordion, class), (prefix: spectre, suffix: end)); // (word: translation, accordion: (class: (prefix: spectre, suffix: end)))
 
-// multiple
-// @debug merge(class, ((test: 1), (test-5: 5, test-4: 4, test-3: 3), (test-3: test, test-4: test))); //
-// @debug merge(class, ((test-1: (test-2: (test-3: (1: 1, 2: 2))))));
-
-// pick multiple dictionaries with the keys
-// @debug merge(null, variables.$dictionary-example general);
-// @debug merge(null, variables.$dictionary-example ((general, (wrapper, wrap)), (class, calendars),));
-// @debug merge(class, (variables.$dictionary-example (general, (class, calendars))));
+// merge in nested (accordion, class) key + pick key
+// @debug merge(accordion, ($-dictionary class, $-dictionary var)); // (word: translation, accordion: (class: (prefix: class-prefix, suffix: class-suffix), var: (prefix: var-prefix, suffix: var-suffix)))
+// @debug merge(accordion, $-dictionary (class, var)); // (word: translation, accordion: (class: (prefix: class-prefix, suffix: class-suffix), var: (prefix: var-prefix, suffix: var-suffix)))

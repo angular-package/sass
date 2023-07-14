@@ -11,11 +11,11 @@
 @use 'translate';
 
 // Status: DONE
-// The `translator.translate()` function translates `string`, `map`, or `list` with a global dictionary and/or given `$dictionary`,
-// optionally with a dictionary retrieved by the given `$key`.
+// The `translator.translate()` function translates `string`, `map`, or `list` with a global dictionary and/or `$dictionary`,
+// optionally with a dictionary retrieved by `$key`.
 // @param `$words` The words in `string`, `list`, or `map` to translate.
-// @param `$key` A key of the dictionary that is used to translate given `$words`.
-// @param `$dictionary` The dictionary of map or list type(dictionary key) used to translate given `$words`.
+// @param `$key` A key of the dictionary that is used to translate `$words`.
+// @param `$dictionary` The dictionary of map or list type(dictionary key) used to translate `$words`.
 // @param `$global` A `bool` value indicates whether to use a global dictionary. Default, `null`.
 // @return The return value is the translated `string`, `map`, or `list` depending on the given `$words`.
 @function translate($words, $key: null, $dictionary: (), $global: null) {

@@ -3,6 +3,7 @@
 @use 'sass:meta';
 
 // Functions.
+@use '../list/list.has.function' as *;
 @use '../list/list.join.function' as *;
 
 // Modules.
@@ -10,8 +11,9 @@
 
 // Status: DONE
 // The `values.combine()` function combines multiple `$values` into the list. By default, the function use append method
-// to combine the given `$values`. The parameters of the list (bracketed, delimiter, method, null, separator) can be changed by
+// to combine `$values`. The parameters of the list (bracketed, delimiter, method, null, separator) can be changed by
 // providing map value eg. (method: join).
+// @arbitrary `$values...` Arbitrary values to combine into the returned list.
 // @return The return value is the list combined by the specified method, with a separator, and/or delimiter.
 @function combine($values...) {
   $parameters: (
@@ -25,12 +27,14 @@
   @each $value in $values {
     $allow: true;
     $method: map.get($parameters, method);
-    @if type-of($value) == map and map.has-keys($value, any, append, join, map.keys($parameters)...) {
+    @if type-of($value) == map and has(map.keys($value), any, '==', append, join, map.keys($parameters)...) {
       $parameters: map.merge($parameters, map.remove($value, append, join));
-      @if map.has-keys($value, any, append, join) {
-        @each $use-method, $use-value in $value {
-          $method: $use-method;
-          $value: $use-value;
+      @if has(map.keys($value), any, '==', append, join) { // Append/Join the value.
+        @each $use-method, $use-value in map.pick($value, append, join) {
+          @if $use-value {
+            $method: $use-method;
+            $value: $use-value;
+          }
         }
       } @else {
         $allow: false;

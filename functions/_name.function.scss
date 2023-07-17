@@ -1,0 +1,114 @@
+// Variables.
+@use '../variables';
+
+// Functions.
+@use '../string/string.join.function';
+@use '../values/values.combine.function';
+
+// Modules.
+@use '../list';
+@use '../map';
+
+// Status:
+// The `name()` function defines name from the given list and `$dictionary`, separated by `$delimiter`.
+// @param `$dictionary`
+// @param `$delimiter`
+// @param `$prefix`
+// @param `$suffix`
+// @param `$config`
+// @return
+@function name(
+  $name,
+  $dictionary: (),
+  $delimiter: null,
+  $prefix: null,
+  $suffix: null,
+  $config: variables.$name-configuration,
+) {
+  $delimiter: if(list.length($delimiter) == 0, null, $delimiter);
+
+  // Get dictionary extracted from the list.
+  $extracted-map: map.get(list.extract-map($name), map, ());
+
+  // Remove the map from the `$name`.
+  $name: list.remove-map($name);
+
+  // Merge extracted map dictionary with the `$dictionary`.
+  $dictionary: map.deep-merge($dictionary, map.get($extracted-map, dictionary, $extracted-map));
+
+  // Add `$delimiter`, `$prefix` and `$suffix` to the `$dictionary`.
+  $dictionary: map.deep-merge((
+      map.get($config, prefix, prefix): $prefix,
+      map.get($config, delimiter, delimiter): $delimiter,
+      map.get($config, suffix, suffix): $suffix
+    ),
+    $dictionary
+  );
+
+  // Name structure.
+  $name: map.values(
+    map.pick($dictionary, prefix, suffix),
+    values.combine((method: join), map.get($config, prefix, prefix), $name, map.get($config, suffix, suffix))...
+  );
+
+  // Translate + add delimiter.
+  $name: values.combine(
+    (method: join, delimiter: map.get($config, delimiter, delimiter)),
+    map.values(map.remove($dictionary, prefix, suffix), $name...)...
+  );
+
+  // Translate delimiter.
+  $name: map.values(map.pick($dictionary, delimiter), $name...);
+
+  // Join list elements to the string.
+  @return string.join('', $name...);
+}
+
+// Examples.
+// Default
+// @debug name(border width); // borderwidth
+
+// Size extra large.
+// @debug name(border width (extra large)); // borderwidthextralarge
+
+// Translated size extra large to xl by `$dictionary` argument.
+// @debug name(border width (extra large), (extra large: xl)); // borderwidthxl
+
+// Translated size extra large to xl by the map in the `$name` argument.
+// @debug name(border width (extra large) (extra large: xl)); // borderwidthxl
+
+// Delimiter.
+// @debug name(border width, $delimiter: '-'); // border-width
+// @debug name(border width '', $delimiter: '-'); // border-width-
+// @debug name('' border width, $delimiter: '-'); // -border-width
+// @debug name('' border width '', $delimiter: '-'); // -border-width-
+
+// Delimiter + dictionary.
+// @debug name(border width (extra large), (extra large: xl), '-'); // border-width-xl
+
+// Delimiter + `$prefix` + `$suffix`.
+// @debug name(border width, $delimiter: '-', $prefix: spectre, $suffix: large); // spectre-border-width-large
+// @debug name(border width, $delimiter: '-', $prefix: spectre basic, $suffix: extra large); // spectre-basic-border-width-extra-large
+
+// Dictionary + delimiter + prefix and suffix of the `$dictionary`.
+// @debug name(border width, (prefix: spectre basic, extra large: xl), $delimiter: '-', $prefix: spectre, $suffix: extra large); // spectre-basic-border-width-xl
+// @debug name(border width, (prefix: spectre basic, suffix: extra large), $delimiter: '-', $prefix: spectre, $suffix: large); // spectre-basic-border-width-extra-large
+
+// Dictionary in the name as map.
+// @debug name(border (prefix: spectre) width large, (), '-'); // spectre-border-width-large
+// @debug name(border width, (prefix: s, suffix: lg), '-'); // s-border-width-lg
+// @debug name(border width lg, (prefix: s), '-'); // s-border-width-lg
+// @debug name(border (dictionary: ('prefix': 'spectre')) width lg, (), '-'); // spectre-border-width-lg
+// @debug name(border width (extra large), (prefix: a, border: b, b: 1, delimiter: '-', suffix: b, extra large: xl)); // a-b-width-xl-1
+
+// Change the prefix and suffix in the structure name.
+// @debug name(border width 20, $delimiter: '-', $prefix: prefix-modified, $suffix: suffix-modified, $config: (prefix: prx)); // prefix-modified-border-width-20-suffix-modified
+// @debug name(border width 20, (prx: prx), $delimiter: '-', $prefix: prefix-modified, $suffix: suffix-modified, $config: (prefix: prx)); // prx-border-width-20-suffix-modified
+
+// @debug name(
+//   (extra small) border width,
+//   (border: b, b: test, prefix: spectre basic, suffix: extra large, extra large: xl, extra small: xs),
+//   '-',
+//   spectre,
+//   large
+// ); // spectre-basic-xs-b-width-xl

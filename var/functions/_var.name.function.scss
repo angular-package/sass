@@ -1,0 +1,42 @@
+// Sass.
+@use 'sass:map';
+
+// Variables.
+@use '../var.variables';
+
+// Functions.
+@use '../../functions';
+@use '../../list/get/get.map.function';
+
+// Status: DONE
+// The `var.name()` function .
+// @param `$name`
+// @param `$dictionary`
+// @param `$prefix`
+// @param `$suffix`
+// @return
+@function name(
+  $name,
+  $dictionary: (),
+  $delimiter: map.get(var.$var, delimiter),
+  $prefix: map.get(var.$var, prefix),
+  $suffix: map.get(var.$var, suffix)
+) {
+  @return --#{functions.name($name, $dictionary, $delimiter, $prefix, $suffix)};
+}
+
+// Examples.
+// @debug name(layout spacing, (), '-', s); // --s-layout-spacing
+
+// dictionary
+// @debug name(primary, (primary: pp), '-', s); // --s-pp
+// @debug name(layout spacing, (layout: lay, spacing: spa), '-', 's'); // --s-lay-spa
+// @debug name(layout spacing, (layout: l, spacing: s), '-', 's'); // --s-l-s
+// @debug name(layout spacing, (prefix: spectre, suffix: end), '-'); // --spectre-layout-spacing-end
+
+// dictionary passed in the name
+// @debug name(layout spacing (layout: lay, spacing: spa), (), '-', s); // --s-lay-spa
+// @debug name(layout spacing (layout: lay, spacing: spa), (prefix: spectre), '-'); // --spectre-lay-spa
+
+// dictionary with the var key
+// @debug name(layout spacing, (prefix: spectre, suffix: end), '-'); // --spectre-layout-spacing-end

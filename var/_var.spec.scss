@@ -1,0 +1,20 @@
+// Sass.
+@use 'sass:map';
+
+// Modules.
+@use '../var';
+
+// Update to the spectre settings.
+var.$var: map.merge(var.$var, (
+  prefix: s,
+  delimiter: '-'
+));
+
+// var
+// @debug var.adjust(var(--s-layout-spacing)); // var(--s-layout-spacing)
+// @debug var.css(layout spacing); // var(--s-layout-spacing)
+// @debug var.get(primary); // var(--s-primary)
+// @debug var.is(var(--s-layout-spacing)); // true
+// @debug var.name(layout spacing); // --s-layout-spacing
+// @debug var.negative(var(--s-layout-spacing)); // calc(var(--s-layout-spacing) * -1)
+// @debug var.unit(var(--s-layout-spacing), rem); // calc(var(--s-layout-spacing) * 1rem)

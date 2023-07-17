@@ -1,0 +1,107 @@
+// Sass.
+@use 'sass:map';
+
+// Variables.
+@use '../var.variables';
+
+// Modules.
+@use '../../list';
+
+// Functions.
+@use '../../functions/important.function' as *;
+@use 'var.adjust.function' as *;
+@use 'var.css.function' as *;
+@use 'var.negative.function' as *;
+@use 'var.unit.function' as *;
+
+// Status: DONE
+// The `var.get()` function returns CSS variable .
+// @param `$name`
+// @param `$adjust`
+// @param `$unit`
+// @param `$fallback`
+// @param `$dictionary`
+// @param `$prefix`
+// @param `$suffix`
+// @return
+@function get(
+  $name,
+  $adjust: null,
+  $unit: false,
+  $fallback: null,
+  $dictionary: (),
+  $delimiter: map.get(var.$var, delimiter),
+  $prefix: map.get(var.$var, prefix),
+  $suffix: map.get(var.$var, suffix),
+) {
+  @if type-of($name) == list and list.length($name) == 0 {
+    @return (); // REVIEW: consider changing the solution
+  }
+  @if $name == auto or type-of($name) == number {
+    @return $name;
+  }
+
+  $modifiers: list.get-map($name) or ();
+  $important: if(list.index($name, any, '==', '!important'), true, false);
+  $adjust: list.get-list($name) or map.get($modifiers, adjust) or $adjust;
+  $fallback: map.get($modifiers, fallback) or $fallback;
+  $negative: not (list.index($name, any, '==', '!') == null) or map.get($modifiers, negative);
+  $unit: list.get-bool($name) or map.get($modifiers, unit) or $unit;
+  $name: list.remove-type(list.remove-value($name, '!', '!important'), list, bool);
+
+  // adjust
+  $name: adjust(unit(css(
+    $name,
+    $fallback,
+    $dictionary,
+    $delimiter,
+    $prefix,
+    $suffix
+  ), $unit), $adjust);
+
+  // name
+  @return if($negative, negative($name), $name) + important($important);
+}
+
+// Examples.
+// Update to the spectre settings.
+// var.$var: map.merge(var.$var, (
+//   prefix: s,
+//   delimiter: '-'
+// ));
+
+// @debug get(layout spacing); // var(--s-layout-spacing)
+// @debug get(layout spacing 1); // var(--s-layout-spacing-1)
+
+// adjust by parameter
+// @debug get(layout spacing, 1); // calc(var(--s-layout-spacing) + 1)
+// @debug get(layout spacing, -51); // calc(var(--s-layout-spacing) - 51)
+// @debug get(layout spacing, '+' 51); // calc(var(--s-layout-spacing) + 51)
+// @debug get(layout spacing, '-' 51); // calc(var(--s-layout-spacing) - 51)
+// @debug get(layout spacing, '*' 51); // calc(var(--s-layout-spacing) * 51)
+// @debug get(layout spacing, '/' 51); // calc(var(--s-layout-spacing) / 51)
+
+// with rem unit
+// @debug get(layout spacing true); // calc(var(--s-layout-spacing) * 1rem)
+
+// negative + unit + adjust + fallback
+// @debug get('!' layout spacing true, 5, $fallback: 250px); // calc((var(--s-layout-spacing, 250px) * 1rem + 5) * -1)
+// @debug get('!' layout spacing true ('+' 5), $fallback: 250px); // calc((var(--s-layout-spacing, 250px) * 1rem + 5) * -1)
+
+// modifier in te $name
+// adjust
+// @debug get(layout spacing (-51,)); // calc(var(--s-layout-spacing) - 51)
+// @debug get(layout spacing (51,)); // calc(var(--s-layout-spacing) + 51)
+// @debug get(layout spacing ('+' 51)); // calc(var(--s-layout-spacing) + 51)
+// @debug get(layout spacing ('-' 51)); // calc(var(--s-layout-spacing) - 51)
+// @debug get(layout spacing ('*' 51)); // calc(var(--s-layout-spacing) * 51)
+// @debug get(layout spacing ('/' 51)); // calc(var(--s-layout-spacing) / 51)
+// @debug get(layout spacing (adjust: '-' 51)); // calc(var(--s-layout-spacing) -51)
+
+// negative
+// @debug get('!' layout spacing); // calc(var(--s-layout-spacing) * -1)
+// @debug get(layout spacing (negative: true)); // calc(var(--s-layout-spacing) * -1)
+// @debug get(layout spacing ('*' -1)); // calc(var(--s-layout-spacing) * -1)
+
+// fallback + dictionary
+// @debug get(layout spacing (fallback: 15rem, dictionary: (layout: lay,))); // var(--s-lay-spacing, 15rem)

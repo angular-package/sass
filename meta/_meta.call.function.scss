@@ -1,0 +1,21 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Functions.
+@use '../function/function.get.function';
+
+// Status: DONE
+// The `meta.call()` function.
+@function call($function, $arguments...) {
+  @if type-of($function) == map and list.length($arguments) == 0 {
+    @each $function, $arguments in $function {
+      @return meta.call(function.get($function), $arguments...);
+    }
+  }
+  @return meta.call(function.get($function), $arguments...);
+}
+
+// Examples.
+// @debug call(('selector:nest': basic (xs, md, lg)));
+// @debug call(((selector:nest): basic (xs, md, lg)));

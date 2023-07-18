@@ -3,20 +3,29 @@
 @use 'sass:meta';
 
 // Status: DONE
-// The `list.type()` function returns the type of all or selected `$n` indexes of the `$list`.
-// @param `$list` The list to check type of all or the given `$n`.
-// @arbitrary `$n...` Indexes of number type to check their types in the given `$list`.
+// The `list.type()` function returns the type of all or selected `$n` indexes of `$list`.
+// @param `$list` The list to check type of all or given `$n`.
+// @arbitrary `$n...` Indexes of number type to check their types in `$list`.
 // @return The list with the types of the given `$n` indexes.
 @function type($list, $n...) {
   $result: if(list.length($n) > 0, $n, $list);
   @for $i from 1 through list.length($result) {
     $result: list.set-nth($result, $i, meta.type-of(list.nth($list, if(list.length($n) > 0, list.nth($result, $i), $i))));
   }
-  @return if(list.length($result) > 0, $result, null);
+  @return if(list.length($result) > 0, if(list.length($n) == 1, list.nth($result, 1), $result), null);
+}
+
+// Alias function name.
+@function nth-type($list, $n...) {
+  @return type($list, $n...);
 }
 
 // Examples.
-// @debug type(('a', 2, (a: 231), 'b', 7, null, 'c', 5, 'd', 231), 4, 1, 3, 6); // string, string, map, null
-// @debug type(('a', 2, (a: 231), 'b', 7, null, 'c', 5, 'd', 231), 4, 1, 3, 6, 9); // string, string, map, null, string
-// @debug type(('a', 2, (a: 231), 'b', 7, null, 'c', 5, 'd', 231), 4, 1, 3, 6, 11); // ! Error not in range
-// @debug type(('a', 2, (a: 231), true, 'b', 7, null, 'c', 5, 'd', 231)); // string, number, map, bool, string, number, null, string, number, string, number
+// $-list: ('a', 2, (a: 231), 'b', 7, null, 'c', 5, 'd', 231);
+
+// @debug type($-list); // string, number, map, bool, string, number, null, string, number, string, number
+// @debug type($-list, 4, 1, 3, 6); // string, string, map, null
+// @debug type($-list, 4, 1, 3, 6, 9); // string, string, map, null, string
+
+// not in range.
+// @debug type($-list, 4, 1, 3, 6, 11); // ! Error not in range

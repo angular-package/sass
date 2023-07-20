@@ -1,5 +1,8 @@
 // Status: DONE
-// The `meta.of-type()` function.
+// The `meta.of-type()` function checks whether `$values` are of `$type`.
+// @param `$type` The type to check against `$values`.
+// @param `$values...` Values to check against `$type`.
+// @returns The return value is `bool` indicating all `$values` are of `$type`.
 @function of-type($type, $values...) {
   @each $value in $values {
     @if not (type-of($value) == $type) {

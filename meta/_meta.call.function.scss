@@ -3,19 +3,32 @@
 @use 'sass:meta';
 
 // Functions.
-@use '../function/function.get.function';
+@use 'meta.get-function.function' as _meta;
 
 // Status: DONE
-// The `meta.call()` function.
-@function call($function, $arguments...) {
-  @if type-of($function) == map and list.length($arguments) == 0 {
+// The `meta.call()` function invokes `$function` with `$arguments` and returns the result.
+// @param `$function` The function of `list`, `string`, or `map` to invoke, where string can be 'function' or 'module:function',
+// list must be passed (module, function), and map can be passed (module:function).
+// @arbitrary `args...` Arguments to pass into invoked `$function`.
+// @returns The return value is the result of invoked `$function`.
+@function call($function, $args...) {
+  @if type-of($function) == map and list.length($args) == 0 {
     @each $function, $arguments in $function {
-      @return meta.call(function.get($function), $arguments...);
+      @return meta.call(_meta.get-function($function), $arguments...);
     }
   }
-  @return meta.call(function.get($function), $arguments...);
+  @return meta.call(_meta.get-function($function), $args...);
 }
 
 // Examples.
-// @debug call(('selector:nest': basic (xs, md, lg)));
+// `$function` passed with `meta.get-function()`
+// @debug call((_meta.get-function('selector:nest'): basic (xs, md, lg)));
+
+// list
+// @debug call(((selector, nest): basic (xs, md, lg)));
+
+// map
 // @debug call(((selector:nest): basic (xs, md, lg)));
+
+// string
+// @debug call(('selector:nest': basic (xs, md, lg)));

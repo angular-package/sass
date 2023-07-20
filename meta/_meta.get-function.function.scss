@@ -1,0 +1,62 @@
+// Sass.
+@use 'sass:color';
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:meta';
+@use 'sass:selector';
+@use 'sass:string';
+
+// Variables.
+@use 'meta.variables' as variables;
+
+// Functions.
+@use '../string/string.split.function' as *;
+
+// Status: DONE
+// The `function.get()` function returns a retrieved Sass function or from `$function`.
+// @param `$name` Function name of list(module, function), map(module: function), or string('module:function') type
+// to retrieve from Sass functions or `$function`.
+// @param `$css` Returns a plain CSS function.
+// @param `$module` The module of `$name` function.
+// @param `$function` Additional map of functions to retrieve.
+// @returns The return value is a retrieved Sass function or from `$function`.
+@function get-function($name, $css: false, $module: null, $functions: variables.$module-functions) {
+  // Default functionality.
+  @if $module and $name {
+    $name: ($module, $name);
+  }
+
+  // Returns function.
+  @if type-of($name) == function {
+    @return $name;
+
+  // Map.
+  } @else if type-of($name) == map {
+    @each $-module, $-name in $name {
+      $name: ($-module, $-name);
+    }
+
+  // String.
+  } @else if type-of($name) == string and string.index($name, ':') {
+    $name: split($name, ':');
+  }
+
+  // First check `$function`.
+  @if type-of($name) == list {
+    @if map.get($functions, $name...) {
+      @return map.get($functions, $name...);
+    }
+  }
+
+  // Return with default.
+  @return if(
+    type-of(list.nth($name, 1)) == string,
+    if(
+      list.length($name) > 1,
+      meta.get-function(list.nth($name, 2), $css, list.nth($name, 1)),
+      meta.get-function(list.nth($name, 1))
+    ),
+    null
+  );
+}

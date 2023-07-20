@@ -1,0 +1,41 @@
+// Sass.
+@use 'sass:map';
+
+// Variables.
+@use 'meta.variables' as variables;
+
+// Modules.
+@use '../meta';
+@use '../var';
+
+// Custom functions.
+variables.$module-functions: () !default;
+
+// Merge `var` module functions.
+variables.$module-functions: map.merge(variables.$module-functions, var, meta.module-functions(var));
+
+// Examples.
+// String.
+// @debug meta.get-function('var:css'); // get-function("css")
+// @debug meta.get-function('var:get'); // get-function("call")
+// @debug meta.get-function('selector:nest'); // get-function("nest")
+
+// Map.
+// @debug meta.get-function((color: alpha)); // get-function("alpha")
+// @debug meta.get-function((list: set-nth)); // get-function("set-nth")
+// @debug meta.get-function((map: get)); // get-function("get")
+// @debug meta.get-function((meta: call)); // get-function("call")
+
+// Nested key.
+// @debug meta.get-function((meta, call)); // get-function("call")
+
+// `$name`
+// @debug meta.get-function(append);
+// @debug meta.get-function(nth);
+// @debug meta.get-function(join);
+
+// `$name` and `$module`
+// @debug meta.get-function(append, false, selector);
+
+// Function.
+// @debug meta.get-function(meta.get-function(append)); // get-function("append")

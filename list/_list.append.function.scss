@@ -10,7 +10,7 @@
 // @arbitrary `$values...` Additional values to append into `$list`.
 // @return Returns a copy of `$list` with `$val` and/or `$values` added to the end.
 @function append($list, $val, $separator: auto, $values...) {
-  @each $value in list.join(($val), $values, comma) {
+  @each $value in list.join(($val,), $values, comma) {
     $list: list.append($list, $value, $separator);
   }
   @return $list;

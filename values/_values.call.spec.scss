@@ -1,0 +1,90 @@
+// Sass.
+@use 'sass:map';
+
+// Variables.
+@forward '../function/function.variables';
+@use '../function/function.variables' as variables;
+
+// Functions.
+@use '../var';
+@use 'values.call.function';
+
+// Modules.
+@use '../meta';
+
+meta.$module-functions: map.set(meta.$module-functions, var, meta.module-functions(var));
+
+// Possibilities.
+// 5px (unit 1) 10px (unit 2)
+// 5px (get: unit 1) 10px (get: unit 2)
+// 5px solid (color: primary dark)
+// (--get unit 2) 5px (--color primary dark)
+
+// Examples.
+// list
+// @debug values.call((primary dark)); // primary dark
+// @debug values.call((function: --var-get), (primary dark)); // var(--s-primary-dark)
+// @debug values.call(--var-get (primary dark)); // var(--s-primary-dark)
+
+// @debug values.call(--selector-nest (primary dark) (xl, xs), ('gray' light)); // var(--s-primary-dark) var(--s-gray-light)
+// @debug values.call((top, left) color, (bottom, right) color); // (top color, left color), (bottom color, right color)
+
+// list false
+// @debug values.call((primary dark) ('gray' light)); // (primary dark) (gray light)
+
+// list with --color, --get, --nest
+// @debug values.call(--var-get (unit 2)); // (var(--s-unit-2),)
+// @debug values.call(--var-get (unit 2), --var-get (unit 3), --var-get (unit 4)); // var(--s-unit-2), var(--s-unit-3), var(--s-unit-4)
+
+// @debug values.call((function: --var-get), (unit 2), (unit 3), (unit 4)); // var(--s-unit-2) var(--s-unit-3) var(--s-unit-4)
+// @debug values.call((function: (--var: get)), (unit 2), (unit 3), (unit 4)); // var(--s-unit-2) var(--s-unit-3) var(--s-unit-4) // TODO: map
+
+// @debug values.call(--var-get (unit 2), --var-get (unit 1)); // var(--s-unit-2) var(--s-unit-1)
+// @debug values.call(--var-get (unit 2), --selector-nest (padding, margin) top); // var(--s-unit-2) (padding top, margin top)
+
+// @debug values.call(--color primary dark); // var(--s-primary-color-dark)
+
+
+// map
+// @debug values.call((--var-get: unit 5)); // (var(--s-unit-5),)
+// @debug values.call((--color: primary dark)); // (var(--s-primary-color-dark),)
+// @debug values.call((--var-get: unit 2), (--var-get: unit 3), (--var-get: unit 4)); // var(--s-unit-2) var(--s-unit-3) var(--s-unit-4)
+// @debug values.call((--var-get: unit 2), (--color: primary dark)); // var(--s-unit-2) var(--s-primary-color-dark)
+// @debug values.call((--var-get: unit 2)); // (var(--s-unit-2),)
+// @debug values.call(1px (--var-get: unit 2) 10px (--get: border width sm)); // 1px var(--s-unit-2) 10px var(--s-border-width-sm)
+
+// important
+// @debug values.call(1px !important); // 1px !important
+// @debug values.call((unit 2) (--color: primary dark) !important); // var(--s-unit-2) var(--s-primary-color-dark) !important
+
+// adjust
+// @debug values.call(1px (unit 2) 10px (border width sm ('*' 2))); // 1px var(--s-unit-2) 10px calc(var(--s-border-width-sm) * 2)
+// @debug values.call(1px (unit 2 ('+' 15)) 10px (border width sm)); // 1px calc(var(--s-unit-2) + 15) 10px var(--s-border-width-sm)
+// @debug values.call((unit 1 ('+' 15)) (unit 2)); // calc(var(--s-unit-1) + 15) var(--s-unit-2)
+// @debug values.call(1px (--color (primary dark) 15deg)); // 1px hsla(var(--s-primary-color-dark-h), var(--s-primary-color-dark-s), calc(var(--s-primary-color-dark-l) + 15deg), var(--s-primary-color-dark-a))
+
+// specific name
+// @debug values.call(--nest (top, left) color, nest); // top color, left color
+// @debug values.call((--nest (top, left) color) (--get unit 2), nest); // (top color, left color) (--get unit 2)
+// @debug values.call((--nest (top, left) color) (--get unit 2), nest get); // (top color, left color) var(--s-unit-2)
+
+// prefix empty
+// $empty-prefix: '';
+// @debug values.call((get: unit 5), $prefix: $empty-prefix); // (var(--s-unit-5),)
+// @debug values.call((color: primary dark), $prefix: $empty-prefix); // (var(--s-primary-color-dark),)
+// @debug values.call((color: primary dark) (color: gray light), $prefix: $empty-prefix); // var(--s-primary-color-dark) var(--s-gray-color-light)
+// @debug values.call((get: unit 2) (get: unit 3) (get: unit 4), $prefix: $empty-prefix); // var(--s-unit-2) var(--s-unit-3) var(--s-unit-4)
+// @debug values.call(10px (get: unit 3) 5px (get: unit 2), $prefix: $empty-prefix); // 10px var(--s-unit-3) 5px var(--s-unit-2)
+// @debug values.call(1px (primary color dark) 10px (border width small), $prefix: $empty-prefix); // 1px var(--s-primary-color-dark) 10px var(--s-border-width-small)
+
+// prefix __
+// @debug values.call(__nest (top, left) color, $prefix: __); // top color, left color
+
+// prefix + dictionary
+// @debug values.call(__get unit 2, $prefix: __, $dictionary: (unit: u)); // var(--s-u-2)
+
+// @debug values.call((3px 3px (primary dark), 3px 4px (dark color)), $list: false); // 3px 3px (primary dark), 3px 4px (dark color)
+// @debug values.call(3px 3px --var-get red); // var(--s-3px-3px-red)
+// @debug values.call(3px 3px (--var-get red)); // 3px 3px var(--s-red)
+// @debug values.call(3px 3px (--var-get: red)); // 3px 3px var(--s-red)
+// @debug values.call((3px 3px (--var-get red), -1em 0 0.4em (--color: olive)), $list: false); // 3px 3px var(--s-red), -1em 0 0.4em var(--s-olive-color)

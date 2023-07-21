@@ -1,0 +1,37 @@
+// Variables.
+@use 'values.variables' as variables;
+
+// Modules.
+@use '../function';
+@use '../list';
+@use '../map';
+
+// Status: DONE
+// The `values.call()` function returns values on which specified functions are called.
+// @arbitrary `$values...` Arbitrary values to call function.
+// @return The return value is a list with updated elements by specified functions.
+@function call($values...) {
+  $parameters: (
+    function: map.get(list.nth($values, 1), function, variables.$function-default),
+    list: variables.$function-list,
+    prefix: variables.$function-prefix,
+    separator: map.get(list.nth($values, 1), separator, comma),
+  );
+  $result: list.join((), (), map.get($parameters, separator));
+  @for $i from 1 through list.length($values) {
+    $value: list.nth($values, $i);
+    @if type-of($value) == map and list.has(map.keys($value), any, '==', function, list, prefix, separator) {
+      $parameters: map.merge($parameters, $value);
+    } @else {
+      $result: list.append(
+        $result,
+        function.call(
+          function.pick($value, true, map.get($parameters, prefix)) or map.get($parameters, function),
+          function.remove($value, map.get($parameters, prefix)),
+          map.get($parameters, prefix)
+        )
+      );
+    }
+  }
+  @return if(list.length($result) == 1, list.nth($result, 1), $result);
+}

@@ -1,24 +1,38 @@
-// Sass.
-@use 'sass:list';
-@use 'sass:map';
-
 // Variables.
-@use 'function.variables';
+@use 'function.variables' as variables;
+
+// Modules.
+@use '../meta';
+@use '../string';
 
 // Status: DONE
-// The `function.is()` function.
-@function is($name, $prefix: variables.$prefix, $function: variables.$function) {
-  @each $function-name in map.keys($function) {
-    @if $prefix + $function-name == $name or $prefix + $function-name == $prefix + $name {
-      @return true;
-    }
+// The `function.is()` function checks whether `$name` in a form `--module-function` is existing `function` or from `$functions`.
+// @param `$name` Function name in a form `--module-function` to check.
+// @param `$prefix` Prefix for the function in `$value`. By default, '--'.
+// @param `$functions` Additional functions of `map` type to check in `$value`.
+// @returns The return value is a `bool` indicating `$name` is an existing function or from `$functions` function.
+@function is($name, $prefix: variables.$prefix, $functions: meta.$module-functions) {
+  @if type-of($name) == string and string.index($name, $prefix) == 1 {
+    $name: string.replace($name, first, $prefix, '');
+    @return if(
+      meta.get-function(if(string.index($name, '-'), string.replace($name, first, '-', ':'), $name), false, null, $functions),
+      true,
+      false
+    );
   }
   @return false;
 }
 
 // Examples.
-// @debug is(--get); // true
-// @debug is(--color); // true
+// true
+// @debug is(--nth); // true
+// @debug is(--selector-nest); // true
+// @debug is(--var-get); // true
+// @debug is(--color); // true // TODO:  color
 
-// @debug is(--no-function); // false
-// @debug is(--any); // false
+// false
+// @debug is(--nth list); // false
+
+// Error
+// @debug is(--no-function); // Error
+// @debug is(--any); // Error

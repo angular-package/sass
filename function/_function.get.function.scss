@@ -1,45 +1,39 @@
-// Sass.
-@use 'sass:list';
-@use 'sass:map';
-@use 'sass:meta';
-
 // Variables.
-@use 'function.variables';
+@use 'function.variables' as variables;
+
+// Functions.
+@use 'function.is.function';
+
+// Modules.
+@use '../meta';
+@use '../string';
 
 // Status: DONE
-// The `function.get()` function.
-@function get($name, $default: get, $function: variables.$function) {
-  @if type-of($name) == function {
-    @return $name;
-  } @else if type-of($name) == string {
-    @if map.get($function, $name) {
-      @return map.get($function, $name);
-    }
-  } @else if type-of($name) == map {
-    @each $module, $function in $name {
-      @if meta.get-function($function, false, $module) {
-        @return meta.get-function($function, false, $module);
-      }
+// The `function.get()` function returns `function` named `$name`. The `$name` must be in a form `#{$prefix}module-function`.
+// @param `$name` Function name in a form `--module-function` to retrieve.
+// @param `$prefix` Prefix to get function from `$name`. By default, '--'.
+// @param `$functions` Additional functions of `map` type to get by using `$name`.
+// @returns The returned value is an existing `function` or from `$functions` retrieved by using `$name` with `$prefix`.
+@function get($name, $prefix: variables.$prefix, $functions: meta.$module-functions) {
+  @if meta.type-of($name) == string {
+    @if function.is($name, $prefix, $functions) {
+      $name: string.replace($name, first, $prefix, '');
+      @return meta.get-function(if(string.index($name, '-'), string.replace($name, first, '-', ':'), $name), false, null, $functions);
     }
   }
-  @return map.get($function, $default) or $default;
+  @return null;
 }
 
 // Examples.
-// String.
-// @debug get(color); // get-function("color")
-// @debug get(combine); // get-function("combine")
-// @debug get(get); // get-function("get")
-// @debug get(nest); // get-function("nest")
+// string
+// @debug get(--nth); // get-function("nth")
+// @debug get(--list-nth); // get-function("nth")
+// @debug get(--selector-nest); // get-function("nest")
 
-// Map.
-// @debug get((map: get)); // get-function("get")
-// @debug get((list: set-nth)); // get-function("set-nth")
+// prefix
+// @debug get('@nth', '@'); // get-function("nth")
+// @debug get('/nth', '/'); // get-function("nth")
+// @debug get('+nth', '+'); // get-function("nth")
 
-// Function.
-// @debug get(meta.get-function(append)); // get-function("append")
-
-// default
-// @debug get(wrong); // get-function("get")
-// @debug get(wrong, combine); // get-function("combine")
-// @debug get(wrong, meta.get-function(append)); // get-function("append")
+// null
+// @debug get(__list-nth); // null

@@ -3,65 +3,54 @@
 @use 'sass:map';
 
 // Variables.
-@use 'function.variables';
+@use 'function.variables' as variables;
 
 // Functions.
 @use 'function.get.function' as *;
+@use 'function.is.function' as *;
+
+// Modules.
+@use '../meta';
+@use '../string';
 
 // Status: DONE
-// The `function.pick()` function.
-@function pick($value, $name: null, $prefix: variables.$prefix, $default: get, $function: variables.$function) {
-  @if type-of($value) == list or type-of($value) == string or type-of($value) == map {
-    @if type-of($value) == map { $value: map.keys($value); }
-    @if $name {
-      @each $name in $name {
-        @if list.index($value, $prefix + $name) {
-          @return get($name, $default);
-        }
-      }
-      @return null;
-    } @else {
-      @each $name, $function in $function {
-        @if list.index($value, $prefix + $name) {
-          @return $function;
-        }
-      }
-      @if list.length($value) > 0 {
-        @if get(nth($value, 1)) {
-          @return get(nth($value, 1));
-        }
+// The `function.pick()` function returns retrieved existing function or its name(in a form `--module-function`) from `$name`.
+// @param `$value` Value from which existing function in a form `--module-function` is retrieved.
+// @param `$name` A `bool` value indicates whether to return existing `function` or its name.
+// @param `$prefix` Prefix to pick function from `$value`. By default, '--'.
+// @param `$functions` Additional functions of `map` type to pick from `$value`.
+// @returns The return value is an existing `function` or its name of `$name`, if function is not found then an error occurs.
+@function pick($value, $name: false, $prefix: variables.$prefix, $functions: meta.$module-functions) {
+  @if type-of($value) == list or type-of($value) == map or type-of($value) == string {
+    @if type-of($value) == map {
+      $value: map.keys($value);
+    }
+    @for $i from 1 through list.length($value) {
+      @if is(list.nth($value, $i), $prefix, $functions) {
+        @return if($name == true, list.nth($value, $i), get(list.nth($value, $i), $prefix, $functions));
       }
     }
   }
-  @return get($default);
+  @return null;
 }
 
 // Examples.
-// @debug pick(--get unit 2); // get-function("get")
-// @debug pick(--color unit 1); // get-function("color")
-// @debug pick(--nest (padding, margin) top); // get-function("nest")
-// @debug pick(unit 2 --get red); // get-function("get")
-// @debug pick(primary (--get: dark) color); // get-function("get")
+// string
+// @debug pick(--list-nth); // get-function("nth")
+// @debug pick(--selector-nest); // get-function("nest")
+
+// list
+// @debug pick(--selector-nest (padding, margin) top); // get-function("nest")
+// @debug pick(--list-nth (padding, margin) 1); // get-function("nth")
+// @debug pick((padding, margin) top --selector-nest); // get-function("nest")
 
 // from map
-// @debug pick((--class: unit 2)); // get-function("class")
-// @debug pick((--get: unit 2)); // get-function("get")
-// @debug pick((--color: unit 2)); // get-function("color")
-// @debug pick((--wrong: unit 2)); // get-function("get")
-// @debug pick(((list: set-nth): unit 2)); // get-function("set-nth")
-
-// specific name
-// @debug pick(--get unit 2, get); // get-function("get")
-// @debug pick(--color unit 2, color); // get-function("color")
-// @debug pick(--nest (padding, margin) top); // get-function("nest")
-// @debug pick(--color unit 2, get color); // get-function("color")
-// @debug pick(--nest (padding, margin) top, color nest); // get-function("nest")
-
-// @debug pick(--get unit 2, color); // null
-// @debug pick(--get unit 2, color combine); // null
-// @debug pick(--color unit 2, get); // null
-// @debug pick(--nest (padding, margin) top, color); // null
+// @debug pick((--selector-nest: unit 2)); // get-function("nest")
+// @debug pick((--list-nth: unit 2)); // get-function("nth")
 
 // default
-// @debug pick(--wrong unit 2, wrong); // get-function("get")
-// @debug pick(--wrong unit 2, wrong, $default: color); // get-function("color")
+// @debug pick(--wrong-function unit 2);
+
+// error
+// @debug pick(--list-wrong);
+

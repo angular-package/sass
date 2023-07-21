@@ -13,9 +13,9 @@
 @use '../string';
 
 // Status: DONE
-// The `function.has()` function checks whether `$value` contains existing function or from `$functions` in a form `--module-function args...`.
-// @param `$value` Value to check against existence function in a form `--module-function args...`.
-// @param `$prefix` Prefix of the function in `$value`. By default, '--'.
+// The `function.has()` function checks whether `$value` contains existing function or from `$functions` in a form `module-function args...`.
+// @param `$value` Value to check against existence function in a form `module-function args...`.
+// @param `$prefix` Prefix of the function in `$value`. By default, ''.
 // @param `$functions` Additional functions of `map` type to check in `$value`.
 // @returns The return value is a `bool` indicating whether `$value` contains existing function.
 @function has($value, $prefix: variables.$prefix, $functions: meta.$module-functions) {
@@ -34,11 +34,11 @@
 
 // Examples.
 // list
-// @debug has(--selector-nest (unit 2)); // true
-// @debug has((unit 2) --selector-nest); // true
+// @debug has(selector-nest (unit 2)); // true
+// @debug has((unit 2) selector-nest); // true
 
 // map
-// @debug has((--selector-nest: (unit 2))); // true
+// @debug has((selector-nest: (unit 2))); // true
 
 // prefix
 // @debug has(__selector-nest (unit 2), __); // true

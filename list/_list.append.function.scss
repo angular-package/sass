@@ -2,15 +2,15 @@
 @use 'sass:list';
 
 // Status: DONE
-// The modified `list.append()` function returns a copy of `$list` with `$val` added to the end, and/or with added multiple `$values`.
-// Additional values are added to the end of the parameters to preserve the original functionality.
-// @param `$list` The list to append the `$value` and/or `$values` into.
-// @param `$val` The value to append.
+// The modified `list.append()` function returns a copy of `$list` with `$val` and/or with added multiple `$values`.
+// The function is modified by adding arbitrary values to the end of the parameters to preserve the original functionality.
+// @param `$list` The list to append the `$val` and/or `$values` into.
+// @param `$val` The value to append to the end of `$list`.
 // @param `$separator` The separator `comma`, `space` or `slash` of the list. Default `auto`.
-// @arbitrary `$values...` Additional values to append into the given `$list`.
+// @arbitrary `$values...` Additional values to append into `$list`.
 // @return Returns a copy of `$list` with `$val` and/or `$values` added to the end.
 @function append($list, $val, $separator: auto, $values...) {
-  @each $value in list.join(($val,), $values, comma) {
+  @each $value in list.join(($val), $values, comma) {
     $list: list.append($list, $value, $separator);
   }
   @return $list;

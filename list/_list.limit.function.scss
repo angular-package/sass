@@ -5,10 +5,10 @@
 @use 'list.range.function' as *;
 
 // Status: DONE
-// The `list.limit()` function returns the list of the elements from the given offset limited by the given limit.
+// The `list.limit()` function returns the list from the first to `$limit` index, or from the offset to the limit index.
 // @param `$list` The list to retrieve the elements from.
-// @arbitrary `$limit...` A number of the indexes of the returned list, also with the first given offset.
-// @return The return value is the list of the specified limit.
+// @arbitrary `$limit...` A number of the indexes of the returned list from first, or given offset.
+// @return The return value is `$list` of elements specified in `$limit...`.
 @function limit($list, $limit...) {
   @return range($list, if(
     list.length($limit) == 1,
@@ -23,13 +23,13 @@
 // @debug limit(('27', '28', '29', 30), 2); // "27", "28"
 // @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), 2); // "a", "b"
 // @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), 5); // "a", "b", "c", "d", "e"
+// @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), 4); // "a", "b", "c", "d"
 
 // offset - limit
-// @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), 4); // "a", "b", "c", "d"
+// @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), 2, 5); // "b", "c", "d", "e", "f"
 // @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), 1 4...); // "a", "b", "c", "d"
 // @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), 2 4...); // "b", "c", "d", "e"
 // @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), (2, 5)...); // "b", "c", "d", "e", "f"
-// @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), 2, 5); // "b", "c", "d", "e", "f"
 // @debug limit(('a', 'b', 'c', 'd', 'e', 'f'), (5, 3)...); // "e", "f", null
 
 // Limit: string; TODO: ?

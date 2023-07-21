@@ -9,9 +9,9 @@
 @use '../string';
 
 // Status: DONE
-// The `function.get()` function returns `function` named `$name`. The `$name` must be in a form `#{$prefix}module-function`.
-// @param `$name` Function name in a form `--module-function` to retrieve.
-// @param `$prefix` Prefix to get function from `$name`. By default, '--'.
+// The `function.get()` function returns `function` named `$name`. The `$name` must be in a form `module-function`.
+// @param `$name` Function name in a form `module-function` to retrieve.
+// @param `$prefix` Prefix to get function from `$name`. By default, ''.
 // @param `$functions` Additional functions of `map` type to get by using `$name`.
 // @returns The returned value is an existing `function` or from `$functions` retrieved by using `$name` with `$prefix`.
 @function get($name, $prefix: variables.$prefix, $functions: meta.$module-functions) {
@@ -26,9 +26,9 @@
 
 // Examples.
 // string
-// @debug get(--nth); // get-function("nth")
-// @debug get(--list-nth); // get-function("nth")
-// @debug get(--selector-nest); // get-function("nest")
+// @debug get(nth); // get-function("nth")
+// @debug get(list-nth); // get-function("nth")
+// @debug get(selector-nest); // get-function("nest")
 
 // prefix
 // @debug get('@nth', '@'); // get-function("nth")
@@ -36,4 +36,4 @@
 // @debug get('+nth', '+'); // get-function("nth")
 
 // null
-// @debug get(__list-nth); // null
+// @debug get(__list-nth, __); // null

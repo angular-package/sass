@@ -2,26 +2,27 @@
 @use 'list.nth.function';
 
 // Modules.
-@use '../number';
+@use '../math';
 
 // Status: DONE
-// The `list.to()` function returns the `$list` elements from the first index to the given `$to` index.
-// @param `$list` The list to get the elements from 1 to given `$to`.
-// @param `$to` Index of the last element to get.
-// @return The return value is the list of the elements from 1 to given `$to` index.
+// The `list.to()` function returns `$list` with elements from the first index to the given `$to` index.
+// @param `$list` The list to get the elements from `1` to given `$to`.
+// @param `$to` Index of the last element to retrieve from `$list`.
+// @return The return value is the list of the elements from `1` to given `$to` index.
 @function to($list, $to) {
-  @return list.nth($list, number.range(0, $to) or $to...);
+  @return list.nth($list, math.range(0, $to) or $to...);
 }
 
 // Examples.
+// $-list: ('a', 'b', c, d, 2, 4, 5, (a: 1));
+
 // @debug to(('a',), 1); // ("a",)
-// @debug to(('a',), 0); // ()
 // @debug to(('a',), -1); // ("a",)
 
-// @debug to(('a', 'b', c, d, 2, 4, 5, (a: 1)), 0); // ()
-// @debug to(('a', 'b', c, d, 2, 4, 5, (a: 1)), 1); // ("a",)
-// @debug to(('a', 'b', c, d, 2, 4, 5, (a: 1)), -1); // ((a: 1),)
+// @debug to($-list, 1); // ("a",)
+// @debug to($-list, -1); // ((a: 1),)
 
-// @debug to(('a', 'b', c, d, 2, 4, 5, (a: 1)), 4); // "a", "b", c, d
-// @debug to(('a', 'b', c, d, 2, 4, 5, (a: 1)), 7); // "a", "b", c, d, 2, 4, 5
+// @debug to($-list, 4); // "a", "b", c, d
+// @debug to($-list, 7); // "a", "b", c, d, 2, 4, 5
+
 // @debug to('&' '.' 'a' 'b' 'c', 2); // "&" "."

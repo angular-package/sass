@@ -14,10 +14,10 @@
 @use '../string';
 
 // Status: DONE
-// The `function.pick()` function returns retrieved existing function or its name(in a form `--module-function`) from `$name`.
-// @param `$value` Value from which existing function in a form `--module-function` is retrieved.
+// The `function.pick()` function returns retrieved existing function or its name(in a form `module-function`) from `$name`.
+// @param `$value` Value from which existing function in a form `module-function` is retrieved.
 // @param `$name` A `bool` value indicates whether to return existing `function` or its name.
-// @param `$prefix` Prefix to pick function from `$value`. By default, '--'.
+// @param `$prefix` Prefix to pick function from `$value`. By default, ''.
 // @param `$functions` Additional functions of `map` type to pick from `$value`.
 // @returns The return value is an existing `function` or its name of `$name`, if function is not found then an error occurs.
 @function pick($value, $name: false, $prefix: variables.$prefix, $functions: meta.$module-functions) {
@@ -36,21 +36,21 @@
 
 // Examples.
 // string
-// @debug pick(--list-nth); // get-function("nth")
-// @debug pick(--selector-nest); // get-function("nest")
+// @debug pick(list-nth); // get-function("nth")
+// @debug pick(selector-nest); // get-function("nest")
 
 // list
-// @debug pick(--selector-nest (padding, margin) top); // get-function("nest")
-// @debug pick(--list-nth (padding, margin) 1); // get-function("nth")
-// @debug pick((padding, margin) top --selector-nest); // get-function("nest")
+// @debug pick(selector-nest (padding, margin) top); // get-function("nest")
+// @debug pick(list-nth (padding, margin) 1); // get-function("nth")
+// @debug pick((padding, margin) top --selector-nest, false, --); // get-function("nest")
 
 // from map
-// @debug pick((--selector-nest: unit 2)); // get-function("nest")
-// @debug pick((--list-nth: unit 2)); // get-function("nth")
+// @debug pick((selector-nest: unit 2)); // get-function("nest")
+// @debug pick((list-nth: unit 2)); // get-function("nth")
 
 // default
-// @debug pick(--wrong-function unit 2);
+// @debug pick(wrong-function unit 2);
 
 // error
-// @debug pick(--list-wrong);
+// @debug pick(list-wrong);
 

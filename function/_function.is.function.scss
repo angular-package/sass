@@ -6,9 +6,9 @@
 @use '../string';
 
 // Status: DONE
-// The `function.is()` function checks whether `$name` in a form `--module-function` is existing `function` or from `$functions`.
-// @param `$name` Function name in a form `--module-function` to check.
-// @param `$prefix` Prefix for the function in `$value`. By default, '--'.
+// The `function.is()` function checks whether `$name` in a form `module-function` is existing `function` or from `$functions`.
+// @param `$name` Function name in a form `module-function` to check.
+// @param `$prefix` Prefix for the function in `$value`. By default, ''.
 // @param `$functions` Additional functions of `map` type to check in `$value`.
 // @returns The return value is a `bool` indicating `$name` is an existing function or from `$functions` function.
 @function is($name, $prefix: variables.$prefix, $functions: meta.$module-functions) {
@@ -25,14 +25,14 @@
 
 // Examples.
 // true
-// @debug is(--nth); // true
-// @debug is(--selector-nest); // true
-// @debug is(--var-get); // true
-// @debug is(--color); // true // TODO:  color
+// @debug is(nth); // true
+// @debug is(selector-nest); // true
+// @debug is(var-get); // true
+// @debug is(color); // true // TODO:  color
 
 // false
-// @debug is(--nth list); // false
+// @debug is(nth list); // false
 
 // Error
-// @debug is(--no-function); // Error
-// @debug is(--any); // Error
+// @debug is(no-function); // Error
+// @debug is(any); // Error

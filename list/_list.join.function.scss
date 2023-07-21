@@ -3,13 +3,13 @@
 
 // Status: DONE
 // The `list.join()` returns a new list containing the elements of `$list1` followed by the elements of `$list2`.
-// Function adds `$delimiter` functionality.
-// @param `$list1` The list to join the given `$list2`.
-// @param `$list2` The list to be joined to the given `$list1`.
+// Function handles `$delimiter` functionality.
+// @param `$list1` The list to join elements of `$list2`.
+// @param `$list2` The list to be joined into `$list1`.
 // @param `$separator` Comma, space, or slash separator used between the elements of the list. Default, `auto`.
 // @param `$bracketed` If `true` then returned list is between the square brackets.
 // @param `$delimiter` The delimiter is the character added as an element between each element in the returned list.
-// @return c
+// @return The return value is a new list containing the elements of `$list1` followed by the elements of `$list2`.
 @function join($list1, $list2, $separator: auto, $bracketed: auto, $delimiter: null) {
   @if $delimiter {
     $list: ();

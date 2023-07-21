@@ -27,14 +27,14 @@ meta.$module-functions: map.deep-merge(meta.$module-functions, (
 
 // Examples `function.call()`
 // List
-// @debug function.call(--selector-nest, (top, bottom) color); // top color, bottom color
+// @debug function.call(selector-nest, (top, bottom) color); // top color, bottom color
 
 // name
-// @debug function.call(--var-get, (unit 2)); // var(--s-unit-2)
-// @debug function.call(--var-get, (unit 5)); // var(--s-unit-5)
-// @debug function.call(--selector-nest, (padding, margin) (top, bottom)); // padding top, padding bottom, margin top, margin bottom
-// @debug function.call(--values-combine, (padding, margin top, bottom)); // padding (margin top) bottom
-// @debug function.call(--color primary dark); // var(--s-primary-color-dark)
+// @debug function.call(var-get, (unit 2)); // var(--s-unit-2)
+// @debug function.call(var-get, (unit 5)); // var(--s-unit-5)
+// @debug function.call(selector-nest, (padding, margin) (top, bottom)); // padding top, padding bottom, margin top, margin bottom
+// @debug function.call(values-combine, (padding, margin top, bottom)); // padding (margin top) bottom
+// @debug function.call(--color primary dark); // var(--s-primary-color-dark) // TODO: color module
 
 // prefix
 // @debug function.call(---var-get, (unit 2), ---); // var(--s-unit-2)
@@ -43,9 +43,9 @@ meta.$module-functions: map.deep-merge(meta.$module-functions, (
 // @debug function.call('&var-get', unit 2, '&'); // var(--s-unit-2)
 
 // adjust
-// @debug function.call(--var-get, (unit 5) ('+' 15%)); // calc(var(--s-unit-5) + 15%)
-// @debug function.call(--var-get, (unit 5) ('/' 15%)); // calc(var(--s-unit-5) / 15%)
-// @debug function.call(--var-get, (unit 5) ('*' 15%)); // calc(var(--s-unit-5) * 15%)
+// @debug function.call(--var-get, (unit 5) ('+' 15%), '--'); // calc(var(--s-unit-5) + 15%)
+// @debug function.call(--var-get, (unit 5) ('/' 15%), '--'); // calc(var(--s-unit-5) / 15%)
+// @debug function.call(--var-get, (unit 5) ('*' 15%), '--'); // calc(var(--s-unit-5) * 15%)
 
 // TODO: color
 // @debug function.call(--color (primary dark) 15%); // hsla(var(--s-primary-color-dark-h), var(--s-primary-color-dark-s), calc(var(--s-primary-color-dark-l) + 15%), var(--s-primary-color-dark-a))

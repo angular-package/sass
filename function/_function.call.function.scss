@@ -13,12 +13,12 @@
 
 // Status: DONE
 // The `function.call()` function invokes function of `$name` with `$arguments`.
-// Function with the default prefix '--' must be defined as follows `--module-function`, e.g. `--selector-nest`.
-// @param `$name` Function name in a form `[prefix]module-function`.
-// @param `$arguments` Arguments to pass into invoked `$function`.
-// @param `$prefix` Prefix for the function name in `$name`. By default, '--'.
+// Function with the default prefix '' must be defined as follows `module-function`, e.g. `selector-nest`.
+// @param `$name` Function name in a form `module-function`.
+// @param `$arguments` Arguments to pass into invoked function named `$name`.
+// @param `$prefix` Prefix for the function name in `$name`. By default, ''.
 // @param `$functions` Additional functions of `map` type to call.
-// @returns The returned value is result of invoked function of `$name` with `$arguments`.
+// @returns The returned value is result of invoked function named `$name` with `$arguments`.
 @function call($name, $arguments, $prefix: variables.$prefix, $functions: meta.$module-functions) {
   @if list.separator($arguments) == space and not has.list($arguments) {
     @return meta.call(get($name, $prefix, $functions), $arguments);

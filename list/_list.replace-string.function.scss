@@ -11,7 +11,7 @@
 // @param `$replacement` The string to replace `$replace` in the `string` type elements of `$list`.
 // @return The return value is `$list` where substring `$replace` of `string` type elements are replaced with `$replacement`.
 @function replace-string($list, $replace, $replacement) {
-  @if type-of($list) == list and list.length($list) > 0 {
+  @if (type-of($list) == list or type-of($list) == arglist) and list.length($list) > 0 {
     @for $i from 1 through list.length($list) {
       @if type-of(list.nth($list, $i)) == string {
         $list: list.set-nth($list, $i, string.replace(list.nth($list, $i), all, $replace, $replacement));

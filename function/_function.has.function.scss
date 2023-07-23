@@ -23,9 +23,9 @@
     @if type-of($value) == map {
       $value: map.keys($value);
     }
-    @each $value in $value {
-      @if is($value, $prefix, $functions) {
-        @return true;
+    @for $i from 1 through list.length($value) {
+      @if is(list.nth($value, $i), $prefix, $functions) {
+        @return $i;
       }
     }
   }
@@ -34,12 +34,13 @@
 
 // Examples.
 // list
-// @debug has(selector-nest (unit 2)); // true
-// @debug has((unit 2) selector-nest); // true
+// @debug has(selector-nest (unit 2)); // 1
+// @debug has((unit 2) selector-nest); // 2
+// @debug has(3px solid --selector-nest (primary dark), '--'); // 3
 
 // map
-// @debug has((selector-nest: (unit 2))); // true
+// @debug has((selector-nest: (unit 2))); // 1
 
 // prefix
-// @debug has(__selector-nest (unit 2), __); // true
-// @debug has(-_-selector-nest (unit 2), -_-); // true
+// @debug has(__selector-nest (unit 2), __); // 1
+// @debug has(-_-selector-nest (unit 2), -_-); // 1

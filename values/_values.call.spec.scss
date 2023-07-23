@@ -11,6 +11,7 @@
 
 // Modules.
 @use '../meta';
+@use '../string';
 
 meta.$module-functions: map.set(meta.$module-functions, var, meta.module-functions(var));
 
@@ -21,13 +22,38 @@ meta.$module-functions: map.set(meta.$module-functions, var, meta.module-functio
 // (--get unit 2) 5px (--color primary dark)
 
 // Examples.
+// @debug values.call(
+//   (function: --var-get, list: false, separator: space),
+//   1px, solid, 'red' color,
+//   2px, solid, 'green' color,
+// );
+
+// @debug values.call((function: --var-get, list: false, invoke: true), 1px, solid, --var-get (unit 1));
+// @debug values.call(
+//   (function: --var-get, invoke: true),
+//   1px,
+//   (solid,),
+//   color,
+//   --selector-nest (unit a),
+
+//   (unit 5),
+//   border (top left) color,
+//   1px solid (unit 1)
+// );
+
+// default
+// @debug values.call((function: --var-get), primary, ((dark black,),)); // primary, var(--s-dark-black)
+// @debug values.call((function: --var-get), 1px, solid, ((primary dark, 1, false, null, (primary: p)),)); //  1px, solid, var(--s-primary-dark)
+// @debug values.call((function: --var-get), 1px solid (primary dark,)); // 1px solid var(--s-primary-dark)
+// @debug values.call((function: --var-get), 3px solid (primary dark, 5), 2px solid (red color,)); // 3px solid calc(var(--s-primary-dark) + 5), 2px solid var(--s-red-color)
+
 // list
 // @debug values.call((primary dark)); // primary dark
 // @debug values.call((function: --var-get), (primary dark)); // var(--s-primary-dark)
 // @debug values.call(--var-get (primary dark)); // var(--s-primary-dark)
-
 // @debug values.call(--selector-nest (primary dark) (xl, xs), ('gray' light)); // var(--s-primary-dark) var(--s-gray-light)
 // @debug values.call((top, left) color, (bottom, right) color); // (top color, left color), (bottom color, right color)
+// @debug values.call((function: --var-get, list: only, separator: space), 1px, solid, red color);
 
 // list false
 // @debug values.call((primary dark) ('gray' light)); // (primary dark) (gray light)

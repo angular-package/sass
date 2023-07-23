@@ -2,4 +2,4 @@
 // Example: --get, --nest
 $function-list: true !default;
 $function-prefix: -- !default;
-$function-default: #{$function-prefix} + selector-nest !default;
+$function-default: null !default;

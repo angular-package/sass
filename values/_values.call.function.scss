@@ -12,6 +12,7 @@
 // @return The return value is a list with updated elements by specified functions.
 @function call($values...) {
   $parameters: (
+    invoke: true,
     function: map.get(list.nth($values, 1), function, variables.$function-default),
     list: variables.$function-list,
     prefix: variables.$function-prefix,
@@ -19,18 +20,45 @@
   );
   $result: list.join((), (), map.get($parameters, separator));
   @for $i from 1 through list.length($values) {
+    $append: false;
     $value: list.nth($values, $i);
-    @if type-of($value) == map and list.has(map.keys($value), any, '==', function, list, prefix, separator) {
-      $parameters: map.merge($parameters, $value);
+    @if type-of($value) == map and list.has(map.keys($value), any, '==', map.keys($parameters)...) {
+      $parameters: map.deep-merge($parameters, $value);
     } @else {
-      $result: list.append(
-        $result,
-        function.call(
-          function.pick($value, true, map.get($parameters, prefix)) or map.get($parameters, function),
-          function.remove($value, map.get($parameters, prefix)),
-          map.get($parameters, prefix)
-        )
-      );
+      $function: function.pick($value, true, map.get($parameters, prefix)) or map.get($parameters, function);
+      @if function.has($value, map.get($parameters, prefix)) or
+      (map.get($parameters, list) and type-of($value) == list and not list.has-list($value)) {
+        $result: list.append(
+          $result,
+          if(
+            $function and map.get($parameters, invoke),
+            function.call(
+              $function,
+              function.remove($value, map.get($parameters, prefix)),
+              map.get($parameters, prefix)
+            ),
+            $value
+          )
+        );
+      } @else {
+        @if list.has-list($value) {
+          @for $j from 1 through list.length($value) {
+            @if type-of(list.nth($value, $j)) == list {
+              $value: list.set-nth(
+                $value,
+                $j,
+                if(
+                  $function and map.get($parameters, invoke) and list.length(list.nth($value, $j)) > 0,
+                  function.call($function, function.remove(list.nth($value, $j), map.get($parameters, prefix)), map.get($parameters, prefix)),
+                  list.nth($value, $j)
+                )
+              );
+            }
+          }
+        }
+
+        $result: list.append($result, $value);
+      }
     }
   }
   @return if(list.length($result) == 1, list.nth($result, 1), $result);

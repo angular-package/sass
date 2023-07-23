@@ -1,15 +1,12 @@
-// Sass.
-@use 'sass:selector';
-
 // Modules.
 @use '../list';
+@use '../selector';
 @use '../string';
 
-// Functions.
-@use '../selector/selector.nest.function' as *;
-
 // Status: DONE
-// The `property.name()` function.
+// The `property.name()` function returns property name or names built from arbitrary `$name`.
+// @param `$name` The name for property or multiple properties.
+// @returns The return value is a property name or names built from `$name`.
 @function name($name...) {
   // Map.
   @if list.length($name) == 1 and type-of(list.nth($name, 1)) == map {
@@ -19,7 +16,7 @@
       @if $value {
         @if type-of($value) == map {
           @each $key, $value in $value {
-            $-name: list.append($-name, $key, $value);
+            $-name: list.append($-name, $key, auto, $value);
           }
         } @else {
           $-name: list.append($-name, $value);
@@ -34,9 +31,9 @@
   @if list.length($name) > 1 {
     $-name: ();
     @each $value in $name {
-      $value: if(list.has-list($value) and not (list.separator($value) == comma), nest($value), $value);
+      $value: if(list.has-list($value) and not (list.separator($value) == comma), selector.nest($value...), $value);
       @if $value {
-        $-name: list.append($-name, $value, (separator: space));
+        $-name: list.append($-name, $value, space);
       }
     }
 
@@ -45,11 +42,9 @@
     $name: list.nth($name, 1);
   }
 
-  $property: if(list.separator($name) == comma, selector.nest($name), nest($name));
-  $i: 1;
-  @each $value in $property {
-    $property: list.set-nth($property, $i, string.unquote(string.join('-', $value)));
-    $i: $i + 1;
+  $property: if(list.has-list($name) and list.separator($name) == space, selector.nest($name...), selector.nest($name));
+  @for $i from 1 through list.length($property) {
+    $property: list.set-nth($property, $i, string.unquote(string.join('-', list.nth($property, $i))));
   }
   @return if(list.length($property) == 1, list.nth($property, 1), $property);
 }

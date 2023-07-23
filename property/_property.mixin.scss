@@ -1,22 +1,28 @@
 // Sass.
 @use 'sass:list';
-@use 'sass:meta';
 
 // Variables.
-@use '../function/variables';
+@use 'property.variables' as variables;
 
 // Modules.
+@use '../meta';
 @use '../values';
+@use '../var';
 
 // Functions.
-@use '../list/has/list.has-list.function' as *;
+@use '../list/has/has.list.function' as *;
 
 // Mixins.
 @use 'property.set.mixin' as *;
 
 // Status: DONE
-// The `property()` mixin.
-@mixin property($property, $important: false, $dictionary: (), $function: variables.$function, $list: false) {
+// The `property()` mixin sets property or properties specified in `$property`.
+// @param `$property` The property of map type to set.
+// @param `$important` Indicates property is important.
+// @param `$dictionary` Dictionary of map type to pass into `$function`.
+// @param `$function` The function to invoke on arguments.
+// @param `$list` Indicates to call list.
+@mixin property($property, $important: false, $dictionary: (), $function: variables.$default-function, $list: false) {
   @each $name, $attribute-value in $property {
     @if type-of($attribute-value) == map {
       @each $attribute, $value in $attribute-value {

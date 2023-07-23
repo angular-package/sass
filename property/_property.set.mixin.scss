@@ -2,28 +2,40 @@
 @use 'sass:list';
 @use 'sass:map';
 
-// Variables.
-@use '../function/variables';
-
 // Modules.
+@use '../meta';
+@use '../string';
 @use '../values';
+@use '../var';
 
 // Functions.
 @use '../functions/important.function' as *;
-@use '../list/remove/list.remove-string.function' as *;
+
+// @use '../list/remove/list.remove-string.function' as *;
+@use '../list/remove/remove.value.function';
 @use 'property.name.function' as property;
 
 // Status: DONE
-// The `property.set()` mixin.
-@mixin set($property-value, $important: false, $dictionary: (), $function: variables.$function, $list: false) {
+// The `property.set()` mixin sets property or properties.
+// @param `$property-value` The property of map type to set.
+// @param `$important` Indicates property is important.
+// @param `$dictionary` Dictionary of map type to pass into `$function`.
+// @param `$function` The function to invoke on arguments.
+// @param `$list` Indicates to call list.
+@mixin set($property-value, $important: false, $dictionary: (), $function: variables.$default-function, $list: false) {
   @if type-of($property-value) == map {
+    $values: ();
     @each $property, $value in $property-value {
-      $important: if($value and (list.index($value, '!important') or $important), true, false);
+      $important: if($value and (list.index($value, !important) or $important), true, false);
       @if $important and type-of($value) == list {
-        $value: remove-string($value, '!important');
+        $value: remove.value($value, !important);
       }
       @each $name in property.name($property) {
-        #{$name}: values.call($value, $dictionary: $dictionary, $function: $function, $list: $list) + important($important);
+        @if list.separator($value) == comma {
+          #{$name}: values.call((function: $function, list: $list), $value...) + important($important);
+        } @else {
+          #{$name}: values.call((function: $function, list: $list), $value) + important($important);
+        }
       }
     }
   }
@@ -49,7 +61,7 @@
   // margin: 5px 10px !important;
 
   // functions
-  // @include set(((padding, margin): --get unit 5)); // get()
+  // @include set(((padding, margin): --var-get (unit 5))); // get()
   // padding: var(--s-unit-5);
   // margin: var(--s-unit-5);
 
@@ -58,7 +70,7 @@
   // background-color: var(--s-primary-color-dark);
 
   // functions + dictionary
-  // @include set(((padding, margin): (unit 5) ()), false, (unit: u), $list: true);
+  // @include set(((padding, margin): (unit 5)), false, (unit: u), $list: true);
   // padding: var(--s-u-5);
   // margin: var(--s-u-5);
 

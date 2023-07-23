@@ -1,8 +1,15 @@
+// Modules.
+@use '../map';
+@use '../meta';
+@use '../var';
 
+// Mixins.
 @use 'property.mixin' as *;
 
+meta.$module-functions: map.set(meta.$module-functions, var, meta.module-functions(var));
+
 // Examples.
-// div {
+div {
   // FEATURE: (property: value)
   // @include property((padding: 1px)); // padding: 1px;
   // @include property((padding-top: 1px)); // padding-top: 1px;
@@ -49,9 +56,9 @@
   // padding-bottom: 3px 4px;
 
   // @include property((padding: (unit 2) ()), $list: true); // padding: var(--s-unit-2);
-  // @include property((padding: --get unit 2)); // padding: var(--s-unit-2);
-  // @include property((padding: (--get unit 2) (--get unit 3))); // padding: var(--s-unit-2) var(--s-unit-3);
-  // @include property((padding: 2px (--get unit 2) 10px (--get unit 3))); // padding: 2px var(--s-unit-2) 10px var(--s-unit-3);
+  // @include property((padding: --var-get unit 2)); // padding: var(--s-unit-2);
+  // @include property((padding: (--var-get unit 2) (--var-get unit 3))); // padding: var(--s-unit-2) var(--s-unit-3);
+  // @include property((padding: 2px (--var-get unit 2) 10px (--var-get unit 3))); // padding: 2px var(--s-unit-2) 10px var(--s-unit-3);
 
   // @include property((padding: (top: (unit 2) ())), $list: true);
   // padding-top: var(--s-unit-2);
@@ -67,7 +74,6 @@
   // @include property((padding: ((top, bottom): (unit 2) (unit 2))));
   // padding-top: var(--s-unit-2) var(--s-unit-2);
   // padding-bottom: var(--s-unit-2) var(--s-unit-2);
-  // background-color: var(--s-primary-color-dark);
 
   // @include property(((padding, margin): (((unit 1),), (unit 2) (unit 3))));
   // padding: var(--s-unit-1);
@@ -107,4 +113,4 @@
 
   // @include property(((margin, padding): ((top: 1px), 2px, (left: 4px), unit 1)));
   // @include property(((border, margin): ((top, right): (unit 1, unit 2))));
-// }
+}

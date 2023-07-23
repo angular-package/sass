@@ -1,0 +1,27 @@
+// Sass.
+@use 'sass:list';
+
+// Modules.
+@use '../function';
+@use '../map';
+@use '../meta';
+@use '../values';
+@use '../var';
+
+meta.$module-functions: map.set(meta.$module-functions, var, meta.module-functions(var));
+
+// Examples.
+// single
+// @debug values.variant(left); // (left: left)
+// @debug values.variant(--var-get left); // (left: --var-get left)
+// @debug values.variant(--var-get text align); // (text align: --var-get text align)
+
+// multiple
+// @debug values.variant(right, left); // (right: right, left: left)
+// @debug values.variant(border xs, button large); // (border xs: border xs, button large: button large)
+
+// multiple + important
+// @debug values.variant(left !important, right); // (left: left !important, right: right)
+
+// multiple + adjust + important
+// @debug values.variant(left ('+' 15px) !important, right ('+' 10)); // (left: left ("+" 15px) !important, right: right ("+" 10))

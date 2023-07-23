@@ -1,0 +1,41 @@
+// Sass.
+@use 'sass:list';
+
+// Variables.
+@use 'values.variables' as variables;
+
+// Functions.
+@use '../list/remove';
+
+// Modules.
+@use '../function';
+@use '../map';
+
+// Status: REVIEW:
+// The `values.variant()` function returns variant or multiple variants.
+// @arbitrary `$values...` The values to transform into variant where (class: value).
+// @returns The return value is variant or multiple variants.
+@function variant($values...) {
+  $parameters: (
+    prefix: map.get(list.nth($values, 1), prefix, variables.$function-prefix),
+  );
+  $variant: ();
+  @for $i from 1 through list.length($values) {
+    $value: list.nth($values, $i);
+    @if not (type-of($value) == map) {
+      $name: $value;
+      @if type-of($value) == list {
+        @if function.has($value, map.get($parameters, prefix)) {
+          $name: remove.value(function.remove(remove.list($value), map.get($parameters, prefix)), !important);
+        } @else {
+          $name: remove.value(remove.list($value), !important);
+        }
+      }
+
+      $variant: map.merge($variant, ($name: $value));
+    } @else {
+      $variant: map.merge($variant, $value);
+    }
+  }
+  @return $variant;
+}

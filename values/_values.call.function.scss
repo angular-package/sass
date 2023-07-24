@@ -8,8 +8,10 @@
 
 // Status: DONE
 // The `values.call()` function returns values on which specified functions are called.
-// @arbitrary `$values...` Arbitrary values to call function.
-// @return The return value is a list with updated elements by specified functions.
+// @arbitrary `$values...` Arbitrary values to call function. There are 5 parameters to change
+// `invoke` - whether to invoke function, `function` - default function to invoke, `list` - whether to invoke list,
+// `prefix` - prefix for function name e.g. --var-get, `separator` - separator between called `$values`.
+// @returns The return value is a list with updated elements by specified functions.
 @function call($values...) {
   $parameters: (
     invoke: true,

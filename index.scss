@@ -17,6 +17,5 @@
 
 // @forward 'translator' as translator-*;
 @forward 'values' as values-*;
-
-// @forward 'var' as var-*;
+@forward 'var' as var-*;
 @forward 'variables';

@@ -1,0 +1,57 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../../values/values.combine.function' as *;
+
+// @use '../functions/var.get.function' as *;
+@use '../functions/var.name.function' as *;
+
+// Mixins.
+@use '../../selector';
+
+// Modules.
+@use '../../meta';
+
+// Status: DONE
+// The `var.set()` mixin defines the CSS variables based on the given `$values`.
+// @param `$values` The values to set CSS variables.
+// @param `$selector` Selector in which CSS variables are placed.
+// @param `$dictionary` Dictionary to pass into the name.
+@mixin set($values, $selector: ((':root', ':host'),), $dictionary: (), $function: meta.get-function('var:get')) {
+  @if type-of($values) == map {
+    @include selector.content($selector...) {
+      @each $name, $variant in $values {
+        @if type-of($variant) == map {
+          @each $variant-name, $value in $variant {
+            @each $name in if(list.separator($name) == comma, $name, ($name,)) {
+              @if type-of($value) == map {
+                @each $value-name, $value in $value {
+                  @if type-of($value) == list and $function {
+                    $value: #{meta.call($function, $value, $dictionary: $dictionary)};
+                  }
+
+                  #{name(combine((method: join), $name, $variant-name, $value-name), $dictionary)}: #{$value};
+                }
+              } @else {
+                @if type-of($value) == list and $function {
+                  $value: #{meta.call($function, $value, $dictionary: $dictionary)};
+                }
+
+                #{name(combine((method: join), $name, $variant-name), $dictionary)}: #{$value};
+              }
+            }
+          }
+        } @else {
+          $value: $variant;
+          @if type-of($value) == list and $function {
+            $value: #{meta.call($function, $value, $dictionary: $dictionary)};
+          }
+          @each $name in if(list.separator($name) == comma, $name, ($name,)) {
+            #{name($name, $dictionary)}: #{$value};
+          }
+        }
+      }
+    }
+  }
+}

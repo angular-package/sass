@@ -14,7 +14,7 @@
 // @param `$values` The values to set CSS variables.
 // @param `$selector` Selector in which CSS variables are placed.
 // @param `$dictionary` Dictionary to pass into the name.
-@mixin set($values, $selector: ((':root', ':host'),), $dictionary: (), $function: meta.get-function('var:get')) {
+@mixin set($values, $selector: (), $dictionary: (), $function: meta.get-function('var:get')) {
   @if type-of($values) == map {
     @include selector.content($selector...) {
       @each $name, $variant in $values {

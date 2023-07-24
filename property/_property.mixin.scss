@@ -18,10 +18,10 @@
 // Status: DONE
 // The `property()` mixin sets property or properties specified in `$property`.
 // @param `$property` The property of map type to set.
-// @param `$important` Indicates property is important.
+// @param `$important` Indicates property as important.
 // @param `$dictionary` Dictionary of map type to pass into `$function`.
 // @param `$function` The function to invoke on arguments.
-// @param `$list` Indicates to call list.
+// @param `$list` Indicates to `call` list type.
 @mixin property($property, $important: false, $dictionary: (), $function: variables.$default-function, $list: false) {
   @each $name, $attribute-value in $property {
     @if type-of($attribute-value) == map {

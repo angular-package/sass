@@ -6,12 +6,18 @@
   },
   "assets": [
     "./comparison/**/*.scss",
+    "./function/**/*.scss",
+    "./functions/**/*.scss",
     "./list/**/*.scss",
     "./map/**/*.scss",
     "./math/**/*.scss",
     "./meta/**/*.scss",
     "./number/**/*.scss",
+    "./property/**/*.scss",
     "./string/**/*.scss",
+    "./values/**/*.scss",
+    "./var/**/*.scss",
+    "./variables/**/*.scss",
     "*.scss"
   ]
 }

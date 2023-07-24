@@ -1,0 +1,37 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Functions.
+@use 'selector.nest.function' as *;
+
+// Modules.
+@use '../function';
+
+// Status: DONE
+// The `selector.content()` mixin sets the selector by using `selector.nest()` with `$arguments`.
+// @param `$arguments...` The arguments to pass into `selector.nest()` function.
+@mixin content($arguments...) {
+  @if not (list.length($arguments) == 0) {
+    #{meta.call(meta.get-function(nest, false), $arguments...)} {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+// Examples.
+// @include content(button, '&-large') {
+//   width: auto;
+// }
+// button-large {
+//   width: auto;
+// }
+
+// @include content(button, (small, large), class) {
+//   width: auto;
+// }
+// .button-sm, .button-large {
+//   width: auto;
+// }

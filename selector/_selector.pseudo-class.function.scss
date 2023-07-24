@@ -1,0 +1,32 @@
+// Sass.
+@use 'sass:selector';
+
+// Functions.
+@use 'selector.replace-parent.function' as *;
+
+// Modules.
+@use '../list';
+
+// Status: DONE
+// The `selector.pseudo-class()` function returns `$selector` with added `$pseudo-class`.
+// @param `$selector` The selectors to add pseudo-class.
+// @param `$pseudo-class` Pseudo class to add to `$selector`.
+// @param `$parent-placeholder` Parent placeholder to replace.
+// @return The return value is selector with pseudo class.
+@function pseudo-class($selector, $pseudo-class, $placeholder: __PARENT__) {
+  @if not (list.length($pseudo-class) == 0) {
+    $i: 1;
+    @each $value in $selector {
+      $selector: list.set-nth($selector, $i, replace-parent($value, selector, $placeholder));
+      $i: $i + 1;
+    }
+    @return replace-parent(selector.append($selector, $pseudo-class), placeholder, $placeholder);
+  }
+  @return $selector;
+}
+
+// Examples.
+// @debug pseudo-class('.border-width', (':hover', ':visited')); // .border-width:hover, .border-width:visited
+
+// $-selector: ('&.spectre-basic-header-small-silver-end', '&.spectre-basic-body-medium-silver-end', '&.spectre-basic-footer-high-silver-end');
+// @debug pseudo-class($-selector, (':hover', ':visited')); // &.spectre-basic-header-small-silver-end:hover, &.spectre-basic-header-small-silver-end:visited, &.spectre-basic-body-medium-silver-end:hover, &.spectre-basic-body-medium-silver-end:visited, &.spectre-basic-footer-high-silver-end:hover, &.spectre-basic-footer-high-silver-end:visited

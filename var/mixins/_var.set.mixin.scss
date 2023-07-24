@@ -3,15 +3,11 @@
 
 // Functions.
 @use '../../values/values.combine.function' as *;
-
-// @use '../functions/var.get.function' as *;
 @use '../functions/var.name.function' as *;
-
-// Mixins.
-@use '../../selector';
 
 // Modules.
 @use '../../meta';
+@use '../../selector';
 
 // Status: DONE
 // The `var.set()` mixin defines the CSS variables based on the given `$values`.

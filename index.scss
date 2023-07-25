@@ -1,4 +1,5 @@
-// @forward 'class' as class-*;
+@forward 'class' as class-*;
+
 // @forward 'color' as color-*;
 
 @forward 'comparison' as comparison-*;
@@ -12,10 +13,9 @@
 @forward 'property' as property-*;
 
 // @forward 'scheme' as scheme-*;
-// @forward 'selector' as selector-*;
+@forward 'selector' as selector-*;
 @forward 'string' as string-*;
-
-// @forward 'translator' as translator-*;
+@forward 'translator' as translator-*;
 @forward 'values' as values-*;
 @forward 'var' as var-*;
 @forward 'variables';

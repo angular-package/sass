@@ -5,6 +5,7 @@
     "entryFile": "src/public-api.ts"
   },
   "assets": [
+    "./class/**/*.scss",
     "./comparison/**/*.scss",
     "./function/**/*.scss",
     "./functions/**/*.scss",
@@ -14,7 +15,9 @@
     "./meta/**/*.scss",
     "./number/**/*.scss",
     "./property/**/*.scss",
+    "./selector/**/*.scss",
     "./string/**/*.scss",
+    "./translator/**/*.scss",
     "./values/**/*.scss",
     "./var/**/*.scss",
     "./variables/**/*.scss",

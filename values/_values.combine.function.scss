@@ -16,19 +16,29 @@
 // @arbitrary `$values...` Arbitrary values to combine into the returned list.
 // @return The return value is the list combined by the specified method, with a separator, and/or delimiter.
 @function combine($values...) {
-  $parameters: (
-    bracketed: map.get(list.nth($values, 1), bracketed, auto),
-    delimiter: null,
-    method: append,
-    null: false,
-    separator: map.get(list.nth($values, 1), separator, auto)
+  $allowed-parameters: (
+    bracketed: (auto, bool),
+    delimiter: (string, number),
+    method: (append, join),
+    null: bool,
+    separator: (auto, comma, space, slash)
+  );
+  $parameters: map.merge-allowed((
+      bracketed: auto,
+      delimiter: null,
+      method: append,
+      null: false,
+      separator: auto
+    ),
+    list.nth($values, 1),
+    $allowed-parameters
   );
   $result: list.join((), (), map.pick($parameters, separator, bracketed)...);
   @each $value in $values {
     $allow: true;
     $method: map.get($parameters, method);
-    @if type-of($value) == map and has(map.keys($value), any, '==', append, join, map.keys($parameters)...) {
-      $parameters: map.merge($parameters, map.remove($value, append, join));
+    @if type-of($value) == map and list.length(map.keys(map.remove($value, append, join, map.keys($parameters)...))) == 0 {
+      $parameters: map.merge-allowed($parameters, map.remove($value, append, join), $allowed-parameters);
       @if has(map.keys($value), any, '==', append, join) { // Append/Join the value.
         @each $use-method, $use-value in map.pick($value, append, join) {
           @if $use-value {
@@ -114,3 +124,7 @@
 // @debug combine(['a' 1], 'b' 2, ['c' 3], null, (separator: comma, null: true, delimiter: '-'), null, null, (append: 1 2 3), age 32, first name ); // ["a" 1], "-", "b" 2, "-", ["c" 3], "-", null, "-", null, "-", 1 2 3, "-", age 32, "-", first name
 // @debug combine((method: join, delimiter: separator), 'a' 1 , 'b' 2, 'c' 3); // "a" separator 1 separator "b" separator 2 separator "c" separator 3
 // @debug combine((method: join, separator: comma, delimiter: separator basic), 'a' 1 , 'b' 2, 'c' 3); // "a", separator basic, 1, separator basic, "b", separator basic, 2, separator basic, "c", separator basic, 3
+
+// Provide separator
+// @debug combine(1, 2, (delimiter: '-', separator: space), 3, 4);
+// @debug combine(1, 2, (separator: comma), (prefix: spectre, separator: '-', suffix: end), 4, 5);

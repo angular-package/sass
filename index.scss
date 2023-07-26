@@ -10,7 +10,8 @@
 @forward 'math' as math-*;
 @forward 'meta' as meta-*;
 @forward 'number' as number-*;
-@forward 'property' as property-*;
+@forward 'property' as property-* hide property;
+@forward 'property/property.mixin';
 
 // @forward 'scheme' as scheme-*;
 @forward 'selector' as selector-*;

@@ -8,12 +8,17 @@
 @use '../number';
 
 // Status: DONE
-// The `list.from()` function returns the list of the elements from the given `$from` index to the end of the `$list`.
+// The `list.from()` function returns the list of elements from index `$from` to the end of `$list`.
 // @param `$list` The list from which the elements are picked.
-// @param `$from` A number-type element index of the given `$list`.
-// @return The return value is the list of the elements from the given `$from` index to the last index of the `$list`.
+// @param `$from` A number-type element index of `$list`.
+// @return The return value is the list of elements from index `$from` to the last index of `$list`.
 @function from($list, $from) {
-  @return if($from <= list.length($list), nth($list, number.range($from, list.length($list)) or $from...), null);
+  $result: nth($list, number.range($from, list.length($list)) or $from...);
+  @return if(
+    $from <= list.length($list),
+    if(list.length($list) == $from, ($result,), $result),
+    null
+  );
 }
 
 // Examples.

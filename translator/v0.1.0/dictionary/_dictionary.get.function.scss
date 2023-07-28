@@ -7,11 +7,11 @@
 @use 'dictionary.variables' as variables;
 
 // Functions.
-@use '../../meta/meta.of-type.function' as *;
+@use '../../../meta/meta.of-type.function' as *;
 @use 'dictionary.is-global.function' as *;
 
 // Modules.
-@use '../../map';
+@use '../../../map';
 
 // Status: DONE
 // The `dictionary.get()` function returns the global dictionary(if in use) along with `$dictionary` and/or from `$key`.

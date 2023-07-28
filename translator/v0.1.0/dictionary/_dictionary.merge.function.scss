@@ -11,7 +11,7 @@
 @use 'dictionary.is-global.function' as *;
 
 // Modules.
-@use '../../map';
+@use '../../../map';
 
 // Status: DONE
 // The `dictionary.merge()` function returns a global dictionary(if in use) merged with multiple dictionaries from `$dictionary` optionally merged in `$key`.

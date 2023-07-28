@@ -1,0 +1,61 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
+// Functions.
+@use 'translator.dictionary.function';
+
+// Modules.
+@use 'dictionary';
+@use 'translate';
+
+// Status: DONE
+// The `translator.translate()` function translates `list`, `map`, or `string` with a global dictionary, optionally with a dictionary of `$keys`.
+// @param `$words` The words in `list`, `map`, or `string` to translate.
+// @arbitrary `$keys...` Keys of the dictionaries that are used to translate `$words`.
+// @returns The return value is the translated `list`, `map`, or `string` depending on the given `$words`.
+@function translate($words, $keys...) {
+  @return meta.call(map.get((
+      list: meta.get-function(list, false, translate),
+      map: meta.get-function(map, false, translate),
+      string: meta.get-function(string, false, translate),
+    ),
+    meta.type-of($words)),
+    $words,
+    $keys...
+  );
+}
+
+// Examples.
+// $-dictionary-example: dictionary.merge(null, (
+//   (extra large, 'extra large', extra-large): xl,
+//   (extra small, 'extra small', extra-small): xs,
+//   class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+//   general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, border: b, outline: o, color: c),
+//   large: lg,
+//   medium: md,
+//   prefix: spectre,
+//   small: sm,
+//   suffix: end,
+// ));
+
+// String.
+// @debug translate(wrapper, general); // owijka
+// @debug translate(technology, general); // tech
+
+// List
+// @debug translate(prefix (border, outline) color); // spectre (border, outline) color
+
+// Map
+// @debug translate((word: prefix (border, outline) color)); // (word: spectre (border, outline) color)
+// @debug translate((word: wrapper), general); // (word: owijka)
+
+// Use dictionaries from keys
+// @debug translate(prefix (border, outline) color, general); // spectre (b, o) c
+// @debug translate((wrapper, technology, prefix)); // wrapper, technology, spectre
+// @debug translate((wrapper, technology), general); // owijka, tech
+// @debug translate((wrapper, technology) color, general); // (owijka, tech) c
+
+// Nested dictionary calendars
+// @debug translate(calendar, (class, calendars)); // cal

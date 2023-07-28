@@ -1,0 +1,65 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Variables.
+@use 'dictionary.variables' as variables;
+
+// Modules.
+@use '../../../map';
+@use '../../../values';
+
+// Status: DONE
+// The `dictionary.translation()` function returns a translation of `$search` from a global dictionary, `$dictionary`, and `$dictionaries`.
+// @param `$search` A word(string) or phrase(list space separated) to search for translation.
+// @param `$dictionary` Additional dictionary to look for `$search` translation.
+// @arbitrary `$dictionaries...` Dictionaries to look for `$search` translation.
+// @returns The return value is a translation of the `$search`.
+@function translation($search, $dictionary: (), $dictionaries...) {
+  @each $dictionary in values.combine($dictionary, $dictionaries...) {
+    @each $phrase, $translation in if(
+      meta.type-of($dictionary) == list,
+      map.get(list.nth($dictionary, 1), list.nth($dictionary, 2)),
+      $dictionary
+    ) {
+      @if list.index($phrase, $search) and $translation {
+        @return $translation;
+      }
+    }
+  }
+  @return null;
+}
+
+// Examples.
+$-nested-dictionary: (
+  general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+  class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+  var: (prefix: var-prefix, suffix: var-suffix),
+);
+$-flatten-dictionary: (
+  'extra small': xs,
+  (extra large, extra-large): xl,
+  border: b,
+  color: c,
+  delimiter: '-',
+  outline: o,
+  prefix: spectre,
+  separator: '-',
+  suffix: end,
+);
+
+
+// single dictionary
+// @debug translation(prefix, $-flatten-dictionary); // spectre
+// @debug translation(extra large, $-flatten-dictionary); // xl
+// @debug translation((extra large), $-flatten-dictionary); // xl
+
+// multiple dictionaries
+// @debug translation(extra-large, $-nested-dictionary, $-flatten-dictionary); // xl
+// @debug translation('extra small', $-nested-dictionary, $-flatten-dictionary); // xs
+
+// @debug translation(prefix, $-nested-dictionary, $-flatten-dictionary); // spectre
+// @debug translation(outline, $-nested-dictionary, $-flatten-dictionary); // o
+// @debug translation(delimiter, $-nested-dictionary, $-flatten-dictionary); // -
+
+// @debug translation(word, $-nested-dictionary general, $-flatten-dictionary); // słowo

@@ -1,0 +1,57 @@
+// Sass.
+@use 'sass:map';
+@use 'sass:meta';
+
+// Modules.
+@use '../dictionary';
+
+// Functions.
+@use 'translate.list.function' as *;
+@use 'translate.string.function' as *;
+
+// Status: DONE
+// The `translate.map()` function translates flatten `$map` with a global dictionary and/or dictionary from `$keys`.
+// @param `$map` A map in which values of `string` or `list` type are translated.
+// @param `$keys...` Keys of the dictionaries retrieved from a global dictionary.
+// @returns The returned value is translated flatten `$map`.
+@function map($map, $keys...) {
+  @if type-of($map) == map {
+    @each $map-key, $value in $map {
+      $map: if(
+        meta.type-of($value) == string,
+        map.set($map, $map-key, string($value, $keys...)),
+        if(meta.type-of($value) == list, map.set($map, $map-key, list($value, $keys...)), $map)
+      );
+    }
+  }
+  @return $map;
+}
+
+// Examples.
+// $-dictionary-example: dictionary.merge(null, (
+//   (extra large, 'extra large', extra-large): xl,
+//   (extra small, 'extra small', extra-small): xs,
+//   border: b,
+//   class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+//   color: c,
+//   general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+//   large: lg,
+//   medium: md,
+//   outline: o,
+//   prefix: spectre,
+//   small: sm,
+//   suffix: end,
+// ));
+
+// String.
+// @debug map((word: wrapper), general, $-dictionary-example); // (word: owijka)
+// @debug map((word: wrapper), null, $-dictionary-example general); // (word: owijka)
+// @debug map((limit: first), null, ((first, start): 1, (last, length, end): 50)); // (limit: 1)
+
+// List.
+// @debug map((word: basic (wrapper, wrap) color), null, $-dictionary-example general); // (word: basic (owijka, owijka) c)
+// @debug map((word: basic (wrapper, wrap) color), general, $-dictionary-example); // (word: basic (owijka, owijka) c)
+
+// Different dictionary.
+// @debug map((calendar: calendar), $dictionary: ($-dictionary-example, (class, calendars))); // (calendar: cal)
+// @debug map((calendar: calendar), (class, calendars), $-dictionary-example); // (calendar: cal)

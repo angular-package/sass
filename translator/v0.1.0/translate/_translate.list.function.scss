@@ -2,7 +2,7 @@
 @use 'sass:list';
 
 // Functions.
-@use '../../list/has/has.list.function' as *;
+@use '../../../list/has/has.list.function' as *;
 @use '../translator.dictionary.function';
 @use 'translate.nth.function';
 

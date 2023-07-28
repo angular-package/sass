@@ -1,0 +1,43 @@
+// Variables.
+@forward 'dictionary.variables';
+@use 'dictionary.variables' as variables;
+
+// Modules.
+@use '../../../map';
+
+// Status: DONE
+// The `dictionary.set()` function sets the `$value` under the `$key` in a global dictionary.
+// @param `$key` A key under which `$value` is set in a global dictionary.
+// @param `$value` A value to set under the `$key` of global dictionary.
+// @returns The return value is a global dictionary with updated `$value` in the `$key`.
+@function set($key, $value) {
+  variables.$dictionary: map.set(variables.$dictionary, $key, $value, list, map, string);
+  @return variables.$dictionary;
+}
+
+// Variables.
+$-dictionary: (
+  general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+  class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+  prefix: spectre,
+  border: b,
+  color: c,
+  separator: '-',
+  suffix: end,
+  outline: o,
+  var: (prefix: var-prefix, suffix: var-suffix),
+);
+
+// Examples.
+// Sets translation of `small` as `sm`
+// @debug set(small, sm); // (word: translation, small: sm)
+// @debug set((small x,), small x); // (word: translation, small x: small x)
+
+// set `var` dictionary
+// @debug set((var, prefix), spectre); // (word: translation, small x: small x, var: (prefix: spectre))
+
+// number not working
+// @debug set(small, 5); // (word: translation)
+
+// Sets the `class` dictionary
+// @debug set(class, map.get($-dictionary, class)); // (word: translation, small: sm, class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)))

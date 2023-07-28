@@ -20,8 +20,5 @@
 // @param `$functions` Additional functions of `map` type to call.
 // @returns The returned value is result of invoked function named `$name` with `$arguments`.
 @function call($name, $arguments, $prefix: variables.$prefix, $functions: meta.$module-functions) {
-  @if list.separator($arguments) == space and not has.list($arguments) {
-    @return meta.call(get($name, $prefix, $functions), $arguments);
-  }
   @return meta.call(get($name, $prefix, $functions), $arguments...);
 }

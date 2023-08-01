@@ -1,0 +1,61 @@
+// Variables.
+@use '../../variables';
+
+// Modules.
+@use '../../map';
+@use '../../var';
+
+// Functions.
+@use 'color.name.function' as *;
+
+// Status: DONE
+// The `color.saturation-var()` function returns color name of CSS variable saturation.
+// @param `$name` Color name of `string` or `list` type.
+// @param `$adjust` Adjustment for saturation value.
+// @param `$fallback` Fallback value of returned saturation variable.
+// @param `$dictionary` Dictionary for `$name` translation.
+// @param `$delimiter` Separator between each element in name of returned CSS variable.
+// @param `$prefix` Prefix in `$name`. By default, it uses `prefix` of `$var` sass variable.
+// @param `$suffix` Suffix in `$name`. By default, it uses `suffix` of `$var` sass variable.
+// @returns The returned value is CSS variable that indicates saturation of color.
+@function saturation-var(
+  $name,
+  $adjust: null,
+  $fallback: null,
+  $dictionary: (),
+  $delimiter: null,
+  $prefix: null,
+  $suffix: null,
+) {
+  @return var.get(
+    name(
+      $name,
+      saturation,
+      map.get($dictionary, map.get(variables.$name-configuration, delimiter)) or $delimiter
+    ),
+    $adjust,
+    null,
+    $fallback,
+    $dictionary,
+    $delimiter,
+    $prefix,
+    $suffix,
+  );
+}
+
+// Examples.
+// @debug saturation-var(primary); // var(--s-primary-color-saturation)
+
+// adjusted
+// @debug saturation-var(primary, 5%); // calc(var(--s-primary-color-saturation) + 5%)
+// @debug saturation-var(primary, '-' 5%); // calc(var(--s-primary-color-saturation) - 5%)
+// @debug saturation-var(primary, '*' 5%); // calc(var(--s-primary-color-saturation) * 5%)
+
+// adjusted + backup
+// @debug saturation-var(primary, 5%, 50%); // calc(var(--s-primary-color-saturation, 50%) + 5%)
+// @debug saturation-var(primary, '-' 5%, 50%); // calc(var(--s-primary-color-saturation, 50%) - 5%)
+
+// adjusted + backup + dictionary
+// @debug saturation-var(primary, 5%, 50%, (color: c, prefix: s, primary: p)); // calc(var(--s-p-c-s, 50%) + 5%)
+// @debug saturation-var(primary, 5%, 50%, (color: c, primary: p)); // calc(var(--s-p-c-s, 50%) + 5%)
+// @debug saturation-var(primary, 5%, 50%, (prefix: spectre, suffix: basic)); // calc(var(--spectre-primary-color-saturation-basic, 50%) + 5%)

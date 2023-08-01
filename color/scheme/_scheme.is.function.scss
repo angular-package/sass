@@ -1,0 +1,31 @@
+// Variables.
+@use 'scheme.variables';
+
+// Modules.
+@use 'is';
+
+// Status: DONE
+// https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme
+// The `scheme.is()` function checks whether `$color-scheme` is equal to `$color-scheme` of module scheme. (normal / dark / light / light dark)
+// @param `$color-scheme` A value to check against `$color-scheme` of scheme module.
+// @returns The returned value is a bool indicating whether `$color-scheme` is equal to the `$color-scheme` of scheme module.
+@function is($color-scheme) {
+  @if type-of($color-scheme) == string {
+    @if $color-scheme == normal {
+      @return is.normal();
+    } @else if $color-scheme == dark {
+      @return is.dark();
+    } @else if $color-scheme == light {
+      @return is.light();
+    } @else if $color-scheme == 'light dark' {
+      @return is.dark() and is.light();
+    }
+  }
+  @return scheme.$color-scheme == $color-scheme;
+}
+
+// Examples.
+// @debug is(normal); // true
+// @debug is(light); // false
+// @debug is(dark); // false
+// @debug is('light dark'); // false

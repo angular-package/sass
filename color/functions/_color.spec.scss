@@ -1,0 +1,91 @@
+// Variables.
+@use '../../var';
+
+// Modules.
+@use '../../color';
+@use '../../map';
+
+var.$var: map.deep-merge(var.$var, (
+  delimiter: '-',
+  prefix: s
+));
+
+// Examples.
+// @debug color.alpha-var(primary); // var(--s-primary-color-alpha)
+
+// delimiter in dictionary
+// @debug color.alpha-var(primary-dark); // var(--s-primary-color-dark-alpha)
+// @debug color.alpha-var(primary-dark, $dictionary: (delimiter: '-')); // var(--s-primary-color-dark-alpha)
+
+// adjusted
+// @debug color.alpha-var(primary, 0.1); // calc(var(--s-primary-color-alpha) + 0.1)
+// @debug color.alpha-var(primary, -0.1); // calc(var(--s-primary-color-alpha) + -0.1)
+// @debug color.alpha-var(primary, '+' 0.9); // calc(var(--s-primary-color-alpha) + 0.9)
+// @debug color.alpha-var(primary, '-' 0.9); // calc(var(--s-primary-color-alpha) - 0.9)
+
+// adjusted + fallback
+// @debug color.alpha-var(primary, 0.1, 0.5); // calc(var(--s-primary-color-alpha, 0.5) + 0.1)
+// @debug color.alpha-var(primary, 0.9, 0.5); // calc(var(--s-primary-color-alpha, 0.5) + 0.9)
+// @debug color.alpha-var(primary (adjust: 0.9, fallback: 0.5)); // calc(var(--s-primary-color-alpha, 0.5) + 0.9)
+
+// adjusted + fallback + dictionary
+// @debug color.alpha-var(primary, 0.9, 0.5, (primary: p)); // calc(var(--s-p-color-alpha, 0.5) + 0.9)
+// @debug color.alpha-var(primary, 0.9, 0.5, (primary: spectre, suffix: basic)); // calc(var(--spectre-primary-color-alpha-basic, 0.5) + 0.9)
+
+
+
+// Examples.
+// @debug saturation-var(primary); // var(--s-primary-color-saturation)
+
+// adjusted
+// @debug saturation-var(primary, 5%); // calc(var(--s-primary-color-saturation) + 5%)
+// @debug saturation-var(primary, '-' 5%); // calc(var(--s-primary-color-saturation) - 5%)
+// @debug saturation-var(primary, '*' 5%); // calc(var(--s-primary-color-saturation) * 5%)
+
+// adjusted + backup
+// @debug saturation-var(primary, 5%, 50%); // calc(var(--s-primary-color-saturation, 50%) + 5%)
+// @debug saturation-var(primary, '-' 5%, 50%); // calc(var(--s-primary-color-saturation, 50%) - 5%)
+
+// adjusted + backup + dictionary
+// @debug saturation-var(primary, 5%, 50%, (color: c, prefix: s, primary: p)); // calc(var(--s-p-c-s, 50%) + 5%)
+// @debug saturation-var(primary, 5%, 50%, (color: c, primary: p)); // calc(var(--s-p-c-s, 50%) + 5%)
+// @debug saturation-var(primary, 5%, 50%, (prefix: spectre, suffix: basic)); // calc(var(--spectre-primary-color-saturation-basic, 50%) + 5%)
+
+
+
+// Examples.
+// hsla-color()
+
+// string color name
+// @debug color.hsla-color(light); // hsla(var(--s-light-color-hue), var(--s-light-color-saturation), var(--s-light-color-lightness), var(--s-light-color-alpha))
+// @debug color.hsla-color(primary light); // hsla(var(--s-primary-color-light-hue), var(--s-primary-color-light-saturation), var(--s-primary-color-light-lightness), var(--s-primary-color-light-alpha))
+
+// list color name
+// @debug color.hsla-color((light,)); // hsla(var(--s-light-color-hue), var(--s-light-color-saturation), var(--s-light-color-lightness), var(--s-light-color-alpha))
+// @debug color.hsla-color((light color,)); // hsla(var(--s-light-color-hue), var(--s-light-color-saturation), var(--s-light-color-lightness), var(--s-light-color-alpha))
+
+// adjusted hue
+// @debug color.hsla-color(dark, 3deg); // hsla(calc(var(--s-dark-color-hue) + 3deg), var(--s-dark-color-saturation), var(--s-dark-color-lightness), var(--s-dark-color-alpha))
+
+// adjusted hue + saturation
+// @debug color.hsla-color(dark, 3deg, 5%); // hsla(calc(var(--s-dark-color-hue) + 3deg), calc(var(--s-dark-color-saturation) + 5%), var(--s-dark-color-lightness), var(--s-dark-color-alpha))
+
+// adjusted hue + saturation + lightness
+// @debug color.hsla-color(dark, 3deg, 5%, 50%); // hsla(calc(var(--s-dark-color-hue) + 3deg), calc(var(--s-dark-color-saturation) + 5%), calc(var(--s-dark-color-lightness) + 50%), var(--s-dark-color-alpha))
+
+// adjusted hue + saturation + lightness + alpha
+// @debug color.hsla-color(dark, 3deg, 5%, 50%, 0.1); // hsla(calc(var(--s-dark-color-hue) + 3deg), calc(var(--s-dark-color-saturation) + 5%), calc(var(--s-dark-color-lightness) + 50%), calc(var(--s-dark-color-alpha) + 0.1))
+
+// list modifiers
+// @debug color.hsla-color((primary light) 20deg 15% 1% 0.5); // hsla(calc(var(--s-primary-color-light-hue) + 20deg), calc(var(--s-primary-color-light-saturation) + 15%), calc(var(--s-primary-color-light-lightness) + 1%), calc(var(--s-primary-color-light-alpha) + 0.5))
+// @debug color.hsla-color((primary light, 20deg, 15%, 1%, 0.5)); // hsla(calc(var(--s-primary-color-light-hue) + 20deg), calc(var(--s-primary-color-light-saturation) + 15%), calc(var(--s-primary-color-light-lightness) + 1%), calc(var(--s-primary-color-light-alpha) + 0.5))
+// @debug color.hsla-color((primary light) ('*' 5deg) ('/' 15%) ('*' 3%) ('*' 0.5)); // hsla(calc(var(--s-primary-color-light-hue) * 5deg), calc(var(--s-primary-color-light-saturation) / 15%), calc(var(--s-primary-color-light-lightness) * 3%), calc(var(--s-primary-color-light-alpha) * 0.5))
+
+// list modifiers + parameter lightness
+// @debug color.hsla-color((primary light) 1%, $lightness: 3%); // hsla(var(--s-primary-color-light-hue), var(--s-primary-color-light-saturation), calc(var(--s-primary-color-light-lightness) + 4%), var(--s-primary-color-light-alpha))
+// @debug color.hsla-color((primary light, 1%), $lightness: 3%); // hsla(var(--s-primary-color-light-hue), var(--s-primary-color-light-saturation), calc(var(--s-primary-color-light-lightness) + 4%), var(--s-primary-color-light-alpha))
+// @debug color.hsla-color((primary light) 1% 0.95, $lightness: 3%); // hsla(var(--s-primary-color-light-hue), var(--s-primary-color-light-saturation), calc(var(--s-primary-color-light-lightness) + 4%), calc(var(--s-primary-color-light-alpha) + 0.95))
+// @debug color.hsla-color((primary light, 15deg, 30%, 15%, 0.5)); // hsla(calc(var(--s-primary-color-light-hue) + 15deg), calc(var(--s-primary-color-light-saturation) + 30%), calc(var(--s-primary-color-light-lightness) + 15%), calc(var(--s-primary-color-light-alpha) + 0.5))
+
+// map modifiers
+// @debug color.hsla-color((primary light) (lightness: 1%, alpha: 0.95, hue: 20deg), $lightness: 3%); // hsla(calc(var(--s-primary-color-light-hue) + 20deg), var(--s-primary-color-light-saturation), calc(var(--s-primary-color-light-lightness) + 4%), calc(var(--s-primary-color-light-alpha) + 0.95))

@@ -1,5 +1,2 @@
-@forward 'meta.call.function';
-@forward 'meta.get-function.function';
 @forward 'meta.of-type.function';
-@forward 'meta.variables';
-@forward 'sass:meta' hide call, get-function;
+@forward 'sass:meta';

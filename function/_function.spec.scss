@@ -1,0 +1,54 @@
+// Variables.
+@use 'function.variables' as variables;
+
+// Modules.
+@use '../function';
+@use '../list';
+@use '../map';
+@use '../meta';
+@use '../var';
+
+// Custom functions.
+// variables.$functions: (
+//   // string
+//   'meta:call': meta.get-function(call, $module: meta),
+
+//   // map
+//   (meta: call): meta.get-function(call, $module: meta),
+
+//   // list
+//   meta: (call: meta.get-function(call, $module: meta))
+// );
+
+// variables.$functions: map.merge(variables.$functions, var, meta.module-functions(var));
+
+// $-prefix: '--';
+
+// `call()`
+// @debug function.call(--selector-nest, (a, b, c), $-prefix);
+
+// `is()`
+// @debug function.is(--list-set-nth, $-prefix); // true
+// @debug function.is(--selector-nest, $-prefix); // true
+// @debug function.is(--var-get, $-prefix); // true
+
+// `get()`
+// @debug function.get(list-set-nth); // get-function("set-nth")
+// @debug function.get(selector-nest); // get-function("selector-nest")
+// @debug function.get(var-get); // get-function("get")
+
+// @debug function.get(--list-set-nth, $-prefix); // get-function("set-nth")
+// @debug function.get(--selector-nest, $-prefix); // get-function("selector-nest")
+// @debug function.get(--var-get, $-prefix); // get-function("get")
+
+// `has()`
+// @debug function.has(selector-nest (unit 2)); // 1
+// @debug function.has((unit 2) selector-nest, ''); // 2
+// @debug function.has(3px solid --selector-nest (primary dark), '--'); // 3
+
+// `has()` map
+// @debug function.has((selector-nest: (unit 2))); // 1
+
+// `has()` selector prefix
+// @debug function.has(__selector-nest (unit 2), __); // 1
+// @debug function.has(-_-selector-nest (unit 2), -_-); // 1

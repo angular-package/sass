@@ -1,38 +1,76 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
 // Variables.
 @use 'function.variables' as variables;
 
 // Modules.
-@use '../meta';
 @use '../string';
 
 // Status: DONE
-// The `function.is()` function checks whether `$name` in a form `module-function` is existing `function` or from `$functions`.
-// @param `$name` Function name in a form `module-function` to check.
-// @param `$prefix` Prefix for the function in `$value`. By default, ''.
-// @param `$functions` Additional functions of `map` type to check in `$value`.
+// The `function.is()` function checks whether `$name` in a form `module-function` or `module.function` is existing `function` or from `$functions`.
+// @param `$name` Function name to check.
+// @param `$prefix` Prefix for the function in `$name`.
+// @param `$functions` Additional functions of `map` type to check.
 // @returns The return value is a `bool` indicating `$name` is an existing function or from `$functions` function.
-@function is($name, $prefix: variables.$prefix, $functions: meta.$module-functions) {
-  @if type-of($name) == string and string.index($name, $prefix) == 1 {
-    $name: string.replace($name, first, $prefix, '');
-    @return if(
-      meta.get-function(if(string.index($name, '-'), string.replace($name, first, '-', ':'), $name), false, null, $functions),
-      true,
-      false
-    );
+@function is($name, $prefix: variables.$prefix, $functions: variables.$functions) {
+  @if type-of($name) == map or type-of($name) == string {
+    // Map.
+    @if type-of($name) == map {
+      @each $-module, $-name in $name {
+        $name: (string.replace($-module, first, $prefix, ''), $-name);
+      }
+
+    // String.
+    } @else if type-of($name) == string  {
+      $name: string.replace($name, first, $prefix, '');
+      @if meta.function-exists($name) {
+        @return true;
+      }
+
+      $name: if(string.index($name, '.'), string.split($name, '.', 1), string.split($name, '-', 1));
+    }
+
+    // First check `$functions`.
+    @if type-of($name) == list {
+      @if map.get($functions, $name...) {
+        @return true;
+      }
+      @if list.length($name) == 2 {
+        @return meta.function-exists(list.nth($name, 2), list.nth($name, 1));
+      }
+    }
   }
   @return false;
 }
 
 // Examples.
-// true
+// string
 // @debug is(nth); // true
+// @debug is(color); // false // TODO:  color
+
+// string + delimiter
 // @debug is(selector-nest); // true
 // @debug is(var-get); // true
-// @debug is(color); // true // TODO:  color
 
-// false
-// @debug is(nth list); // false
+// string + dot
+// @debug is('selector.nest'); // true
+
+// string false
+// @debug is(any); // false
+
+// prefixed --
+// @debug is(--selector-nest, '--'); // true
+// @debug is('--selector.nest', '--'); // true
+
+// list
+// @debug is(list nth); // true
+
+// map
+// @debug is((list: nth)); // true
 
 // Error
 // @debug is(no-function); // Error
-// @debug is(any); // Error
+// @debug is(nth list); // Error

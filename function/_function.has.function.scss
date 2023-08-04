@@ -6,25 +6,21 @@
 @use 'function.variables' as variables;
 
 // Functions.
-@use 'function.is.function' as *;
-
-// Modules.
-@use '../meta';
-@use '../string';
+@use 'function.is.function';
 
 // Status: DONE
 // The `function.has()` function checks whether `$value` contains existing function or from `$functions` in a form `module-function args...`.
 // @param `$value` Value to check against existence function in a form `module-function args...`.
-// @param `$prefix` Prefix of the function in `$value`. By default, ''.
+// @param `$prefix` Prefix of the function in `$value`.
 // @param `$functions` Additional functions of `map` type to check in `$value`.
 // @returns The return value is a `bool` indicating whether `$value` contains existing function.
-@function has($value, $prefix: variables.$prefix, $functions: meta.$module-functions) {
+@function has($value, $prefix: variables.$prefix, $functions: variables.$functions) {
   @if type-of($value) == list or type-of($value) == map {
     @if type-of($value) == map {
       $value: map.keys($value);
     }
     @for $i from 1 through list.length($value) {
-      @if is(list.nth($value, $i), $prefix, $functions) {
+      @if function.is(list.nth($value, $i), $prefix, $functions) {
         @return $i;
       }
     }
@@ -36,7 +32,7 @@
 // list
 // @debug has(selector-nest (unit 2)); // 1
 // @debug has((unit 2) selector-nest); // 2
-// @debug has(3px solid --selector-nest (primary dark), '--'); // 3
+// @debug has(3px solid --selector-nest (primary dark)); // 3
 
 // map
 // @debug has((selector-nest: (unit 2))); // 1

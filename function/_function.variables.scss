@@ -1,2 +1,5 @@
-// Functions.
-$prefix: '' !default;
+// Available prefixes.
+$prefix: ('---', '___', '--', '__', '-_-', '@', '&', '+', '/') !default;
+
+// Available custom functions.
+$functions: () !default;

@@ -1,6 +1,5 @@
 // Sass.
 @use 'sass:list';
-@use 'sass:map';
 
 // Variables.
 @use 'function.variables' as variables;
@@ -9,17 +8,13 @@
 @use '../list/remove/remove.nth.function';
 @use 'function.is.function';
 
-// Modules.
-@use '../meta';
-@use '../string';
-
 // Status: DONE
-// The `function.remove()` function removes function(existing) name in a form, by default `module-function` from `$value`.
+// The `function.remove()` function removes function(existing) name from `$value`.
 // @param `$value` Value from which function(existing) name is removed.
-// @param `$prefix` Prefix for the function name in `$value`. By default, ''.
+// @param `$prefix` Prefix for the function name in `$value`.
 // @param `$functions` Additional functions of `map` type to remove from `$value`.
 // @returns The return value is `$value` without function name.
-@function remove($value, $prefix: variables.$prefix, $functions: meta.$module-functions) {
+@function remove($value, $prefix: variables.$prefix, $functions: variables.$functions) {
   @if type-of($value) == map {
     @each $function, $value in $value {
       @if function.is($function, $prefix, $functions) {

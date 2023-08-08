@@ -10,24 +10,33 @@
 @use 'function.is.function' as *;
 
 // Status: DONE
-// The `function.pick()` function returns retrieved existing function or its name from `$value`.
+// The `function.pick()` function returns retrieved existing `function`, its name, or `index` from `$value`.
 // @param `$value` Value from which existing function is retrieved.
-// @param `$name` A `bool` value indicates whether to return existing `function` or its name.
+// @param `$pick` A `string` value indicates whether to return existing `function`, its `name`, or `index`.
 // @param `$prefix` Prefix to pick function from `$value`.
 // @param `$functions` Additional functions of `map` type to pick from `$value`.
-// @returns The return value is an existing `function` or its name, if function is not found then an error occurs.
-@function pick($value, $name: false, $prefix: variables.$prefix, $functions: variables.$functions) {
+// @returns The return value is an existing `function`, its name, or `index`, if function is not found then an error occurs.
+@function pick($value, $pick: function, $prefix: variables.$prefix, $functions: variables.$functions) {
   @if type-of($value) == list or type-of($value) == map or type-of($value) == string {
     @if type-of($value) == map {
       $value: map.keys($value);
     }
     @for $i from 1 through list.length($value) {
       @if is(list.nth($value, $i), $prefix, $functions) {
-        @return if($name == true, list.nth($value, $i), get(list.nth($value, $i), $prefix, $functions));
+        @return map.get((
+          function: get(list.nth($value, $i), $prefix, $functions),
+          index: $i,
+          name: list.nth($value, $i),
+        ), $pick);
       }
     }
   }
   @return null;
+}
+
+// Alias name.
+@function pick-from-value($value, $pick: function, $prefix: variables.$prefix, $functions: variables.$functions) {
+  @return pick($value, $pick, $prefix, $functions);
 }
 
 // Examples.
@@ -38,7 +47,10 @@
 // list
 // @debug pick(selector-nest (padding, margin) top); // get-function("nest")
 // @debug pick(list-nth (padding, margin) 1); // get-function("nth")
-// @debug pick((padding, margin) top --selector-nest, false, --); // get-function("nest")
+
+// @debug pick((padding, margin) top selector-nest, function); // get-function("selector-nest")
+// @debug pick((padding, margin) top selector-nest, index, '--'); // get-function("selector-nest")
+// @debug pick((padding, margin) top --selector-nest, function, --); // get-function("selector-nest")
 
 // from map
 // @debug pick((selector-nest: unit 2)); // get-function("nest")

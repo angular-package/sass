@@ -1,0 +1,35 @@
+// Sass.
+@use 'sass:list';
+
+// Variables.
+@use '../function.variables' as variables;
+
+// Functions.
+@use '../../list/remove/remove.nth.function';
+@use '../function.call.function' as *;
+@use '../function.pick.function' as *;
+
+// Status: DONE
+// The `call.list()` function calls `$function` on `$list` with a separator comma where elements are arguments or space where the whole list is an argument.
+// List can contain function name in the first element, then it's used instead of `$function` argument to call following list.
+// @param `$list` List on which to call `$function` or function from `$list`.
+// @param `$prefix` Prefix to pick function name from `$list`.
+// @param `$function` Function name, with prefix of `$prefix` to call `$list` as arguments or argument.
+// @returns The returned value is the result of invoked function.
+@function list($list, $prefix: variables.$prefix, $function: null) {
+  @if type-of($list) == list {
+    @if pick($list, index, $prefix) {
+      $function: pick($list, name, $prefix);
+      $list: list.nth(remove.nth($list, 1), 1);
+    }
+
+    @if $function {
+      $list: if(
+        list.separator($list) == comma,
+        call($function, $list...),
+        call($function, $list)
+      );
+    }
+  }
+  @return $list;
+}

@@ -28,6 +28,11 @@
   @return false;
 }
 
+// Alias name.
+@function value-has($value, $prefix: variables.$prefix, $functions: variables.$functions) {
+  @return has($value, $prefix, $functions);
+}
+
 // Examples.
 // list
 // @debug has(selector-nest (unit 2)); // 1

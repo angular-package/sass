@@ -10,9 +10,6 @@
 // Variables.
 @use 'function.variables' as variables;
 
-// Functions.
-@use 'function.is.function';
-
 // Modules.
 @use '../map';
 @use '../meta';
@@ -22,7 +19,7 @@
 // The `function.get()` function returns `function` named `$name`. The `$name` can be a string `module-function` or `module.function` or
 // map `(module: function)`.
 // @param `$name` Function name to retrieve.
-// @param `$prefix` Function prefix to search in `$name`.
+// @param `$prefix` Function prefixes to search in `$name`.
 // @param `$functions` Additional functions of `map` type to get by using `$name`.
 // @returns The returned value is an existing `function` or from `$functions` retrieved by using `$name` with `$prefix`.
 @function get($name, $prefix: variables.$prefix, $functions: variables.$functions) {
@@ -30,14 +27,22 @@
     // Map.
     @if type-of($name) == map {
       @each $-module, $-name in $name {
-        $name: (string.replace($-module, first, $prefix, ''), $-name);
+        @if list.index(string.index($-module, $prefix...), 1) {
+          $name: (string.replace($-module, first, $prefix, ''), $-name);
+        } @else {
+          @return null;
+        }
       }
 
     // String.
     } @else if type-of($name) == string  {
-      $name: string.replace($name, first, $prefix, '');
-      @if meta.function-exists($name) {
-        @return meta.get-function($name);
+      @if list.index(string.index($name, $prefix...), 1) {
+        $name: string.replace($name, first, $prefix, '');
+        @if meta.function-exists($name) {
+          @return meta.get-function($name);
+        }
+      } @else {
+        @return null;
       }
 
       $name: if(string.index($name, '.'), string.split($name, '.', 1), string.split($name, '-', 1));
@@ -59,6 +64,11 @@
     }
   }
   @return null;
+}
+
+// Alias name.
+@function get-function($name, $prefix: variables.$prefix, $functions: variables.$functions) {
+  @return get($name, $prefix, $functions);
 }
 
 // Examples.

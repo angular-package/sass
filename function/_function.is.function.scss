@@ -12,7 +12,7 @@
 // Status: DONE
 // The `function.is()` function checks whether `$name` in a form `module-function` or `module.function` is existing `function` or from `$functions`.
 // @param `$name` Function name to check.
-// @param `$prefix` Prefix for the function in `$name`.
+// @param `$prefix` Prefixes for the function in `$name`.
 // @param `$functions` Additional functions of `map` type to check.
 // @returns The return value is a `bool` indicating `$name` is an existing function or from `$functions` function.
 @function is($name, $prefix: variables.$prefix, $functions: variables.$functions) {
@@ -20,14 +20,22 @@
     // Map.
     @if type-of($name) == map {
       @each $-module, $-name in $name {
-        $name: (string.replace($-module, first, $prefix, ''), $-name);
+        @if list.index(string.index($-module, $prefix...), 1) {
+          $name: (string.replace($-module, first, $prefix, ''), $-name);
+        } @else {
+          @return false;
+        }
       }
 
     // String.
     } @else if type-of($name) == string  {
-      $name: string.replace($name, first, $prefix, '');
-      @if meta.function-exists($name) {
-        @return true;
+      @if list.index(string.index($name, $prefix...), 1) {
+        $name: string.replace($name, first, $prefix, '');
+        @if meta.function-exists($name) {
+          @return true;
+        }
+      } @else {
+        @return false;
       }
 
       $name: if(string.index($name, '.'), string.split($name, '.', 1), string.split($name, '-', 1));
@@ -36,7 +44,7 @@
     // First check `$functions`.
     @if type-of($name) == list {
       @if map.get($functions, $name...) {
-        @return true;
+        @return if(meta.type-of(map.get($functions, $name...)) == function, true, false);
       }
       @if list.length($name) == 2 {
         @return meta.function-exists(list.nth($name, 2), list.nth($name, 1));

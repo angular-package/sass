@@ -12,7 +12,7 @@
 // @return Returns a copy of `$list` with `$val` and/or `$values` added to the end.
 @function append($list, $val, $separator: auto, $values...) {
   @each $value in list.join(($val,), $values, comma) {
-    $list: list.append(if(meta.type-of($list) == map, ($list,), $list), $value, $separator);
+    $list: list.append($list, $value, $separator);
   }
   @return $list;
 }
@@ -28,9 +28,8 @@
 // @debug append(10px 20px, 30px 40px, auto, 1px, 15px, (1px 2px 3px)); // 10px 20px (30px 40px) 1px 15px (1px 2px 3px)
 // @debug append((10px, 20px), 30px 40px, auto, 1px, 15px, (1px 2px 3px), (4px, 5px)); // 10px, 20px, 30px 40px, 1px, 15px, 1px 2px 3px, (4px, 5px)
 
-// INFO: There are differences between original and modified `append()` in adding a map.
-// original append
-// @debug list.append((a: 1, b: 2), (c: 3, d: 4)); // a 1, b 2, (c: 3, d: 4)
-
 // append map
-// @debug append((a: 1, b: 2), (c: 3, d: 4), auto, (e: 5, f: 6)); // (a: 1, b: 2), (c: 3, d: 4), (e: 5, f: 6)
+// @debug append(1 2 3, (a: 1, b: 2, c: 3), auto, (d: 4, e: 5)); // 1 2 3 (a: 1, b: 2, c: 3) (d: 4, e: 5)
+// @debug append((a: 1, b: 2), (c: 3, d: 4), auto, (e: 5, f: 6)); // a 1, b 2, (c: 3, d: 4), (e: 5, f: 6)
+// @debug append(1 2 3, (a: 1, b: 2, c: 3), auto, (d: 4, e: 5), (4, 5, 6), (7, 8, 9)); // 1 2 3 (a: 1, b: 2, c: 3) (d: 4, e: 5) (4, 5, 6) (7, 8, 9)
+// @debug append(1 2 3, (a: 1, b: 2, c: 3), auto, (d: 4, e: 5), 4, 5, 6, 7, 8, 9); // 1 2 3 (a: 1, b: 2, c: 3) (d: 4, e: 5) 4 5 6 7 8 9

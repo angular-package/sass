@@ -28,4 +28,10 @@
 }
 
 // Examples.
+// modified join
+// @debug join((a: a b c), d e f); // a (a b c), d, e, f
+// @debug join(d e f, (a: a b c)); // d e f (a (a b c))
+// @debug join((a: a b c), (a: a b c)); // a (a b c), a (a b c)
+
 // @debug join(a b c, d e f, $delimiter: '-'); // a "-" b "-" c "-" d "-" e "-" f
+// @debug join((a: a b c), d e f, $delimiter: '-'); // (a (a b c)) "-" d "-" e "-" f

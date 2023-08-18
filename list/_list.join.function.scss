@@ -10,19 +10,24 @@
 // @param `$bracketed` If `true` then returned list is between the square brackets.
 // @param `$delimiter` The delimiter is the character added as an element between each element in the returned list.
 // @return The return value is a new list containing the elements of `$list1` followed by the elements of `$list2`.
-@function join($list1, $list2, $separator: auto, $bracketed: auto, $delimiter: null) {
+@function join(
+  $list1,
+  $list2,
+  $separator: auto,
+  $bracketed: auto,
+  $delimiter: null
+) {
   @if $delimiter {
-    $list: ();
-    $i: 1;
-    @each $value in list.join($list1, $list2, $separator, $bracketed) {
-      $list: list.append($list, $value, $separator);
-      @if not (calc(list.length($list1) + list.length($list2)) == $i) {
-        $list: list.append($list, $delimiter, $separator);
-      }
-
-      $i: $i + 1;
+    $result: list.join((), (), $separator, $bracketed);
+    @each $value in list.join($list1, $list2, $separator) {
+      $result: if(
+        list.length($result) > 0,
+        list.append($result, $delimiter, $separator),
+        $result
+      );
+      $result: list.append($result, $value, $separator);
     }
-    @return $list;
+    @return $result;
   }
   @return list.join($list1, $list2, $separator, $bracketed);
 }
@@ -35,3 +40,5 @@
 
 // @debug join(a b c, d e f, $delimiter: '-'); // a "-" b "-" c "-" d "-" e "-" f
 // @debug join((a: a b c), d e f, $delimiter: '-'); // (a (a b c)) "-" d "-" e "-" f
+
+// @debug join((a: a b c), d e f, comma, true, '-'); // [a (a b c), "-", d, "-", e, "-", f]

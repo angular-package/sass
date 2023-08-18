@@ -1,0 +1,18 @@
+// Sass.
+@use 'sass:list';
+
+// Status: DONE
+// The `list.swap()` function swaps element at index `$n` with an element at index `$to` in `$list`.
+// @param `$list` The list to swap element `$n` with `$to`.
+// @param `$n` Index of the element to swap with `$to`.
+// @param `$to` Index of the element to swap with `$n`.
+// @returns The returned value is `$list` with element at index `$n` swapped with an element at index `$to`.
+@function swap($list, $n, $to, $nth: list.nth($list, $n)) {
+  @return list.set-nth(list.set-nth($list, $n, list.nth($list, $to)), $to, $nth);
+}
+
+// Examples.
+// $-list: ('a', 'b', c, d, 2, 4, 5, (a: 1));
+
+// @debug swap($-list, 2, 8); // "a", (a: 1), c, d, 2, 4, 5, "b"
+// @debug swap($-list, 3, 6); // "a", "b", 4, d, 2, c, 5, (a: 1)

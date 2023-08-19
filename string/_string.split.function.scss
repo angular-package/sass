@@ -2,7 +2,12 @@
 @use 'sass:list';
 @use 'sass:string';
 
+// Modules.
+@use '../math';
+
 // Functions.
+@use '../list/remove/remove.value.function';
+@use 'string.index.function' as *;
 @use 'string.unquote.function' as *;
 
 // Status: DONE
@@ -21,14 +26,20 @@
   $index: 0;
   $i: 1;
   @while $index != null {
-    $index: string.index($string, $separator);
-    @if $index {
+    $index: null;
+    $separators: index($string, $separator...);
+    $separator-index: null;
+    @if list.length(remove.value($separators, null)) > 0 {
+      $index: math.min(remove.value($separators, null)...);
+      $separator-index: list.index($separators, $index);
+    }
+    @if $index and $separator-index {
       $result: list.append($result, unquote(string.slice($string, 1, $index - 1), $unquote));
       @if $limit and $limit == $i {
-        $result: list.append($result, unquote(string.slice($string, $index + string.length($separator), -1), $unquote));
+        $result: list.append($result, unquote(string.slice($string, $index + string.length(list.nth($separator, $separator-index)), -1), $unquote));
         $index: null;
       } @else {
-        $string: string.slice($string, $index + string.length($separator));
+        $string: string.slice($string, $index + string.length(list.nth($separator, $separator-index)));
       }
     } @else {
       $result: list.append($result, unquote($string, $unquote));
@@ -52,3 +63,6 @@
 // word `$separator`
 // @debug split('aaa_DELIMITER_bbb_DELIMITER_ccc', '_DELIMITER_'); // "aaa", "bbb", "ccc"
 // @debug split('aaa[separator]bbb[separator]ccc', '[separator]'); // "aaa", "bbb", "ccc"
+
+// multiple separators
+// @debug split('aaa_SEPARATOR_bbb_DELIMITER_ccc_ADD_eee_SEPARATOR_ddd', ('_DELIMITER_', '_SEPARATOR_', '_ADD_')); // "aaa", "bbb", "ccc", "eee", "ddd"

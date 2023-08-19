@@ -2,6 +2,9 @@
 @use 'sass:list';
 @use 'sass:string';
 
+// Functions.
+@use 'string.unquote.function' as *;
+
 // Status: DONE
 // The `string.split()` function returns comma-separated list of substrings of `$string` that are separated by `$separator`.
 // The separators aren’t included in these substrings..
@@ -11,23 +14,24 @@
 // @param `$separator` The separator that splits the `$string` into the returned list.
 // @param `$limit` Limit split of `$string`.
 // @param `$bracketed` Returns bracketed list.
+// @param `$unquote` Whether to unquote returned elements of list.
 // @return The return value is a list separated by `$separator` limited by `$limit` times, and/or is `$bracketed`.
-@function split($string, $separator, $limit: null, $bracketed: false) {
+@function split($string, $separator, $limit: null, $bracketed: false, $unquote: false) {
   $result: list.join((), (), comma, $bracketed);
   $index: 0;
   $i: 1;
   @while $index != null {
     $index: string.index($string, $separator);
     @if $index {
-      $result: list.append($result, string.slice($string, 1, $index - 1));
+      $result: list.append($result, unquote(string.slice($string, 1, $index - 1), $unquote));
       @if $limit and $limit == $i {
-        $result: list.append($result, string.slice($string, $index + 1, -1));
+        $result: list.append($result, unquote(string.slice($string, $index + 1, -1), $unquote));
         $index: null;
       } @else {
-        $string: string.slice($string, $index + 1);
+        $string: string.slice($string, $index + string.length($separator));
       }
     } @else {
-      $result: list.append($result, $string);
+      $result: list.append($result, unquote($string, $unquote));
     }
 
     $i: $i + 1;
@@ -36,6 +40,7 @@
 }
 
 // Examples.
+// single character
 // @debug split('aaa bbb ccc', ' '); // "aaa", "bbb", "ccc"
 // @debug split('aaa-bbb-ccc', '-'); // "aaa", "bbb", "ccc"
 // @debug split('aaa/bbb/ccc', '/'); // "aaa", "bbb", "ccc"
@@ -43,3 +48,7 @@
 // @debug split("Segoe UI Emoji", " ", $limit: 1); // "Segoe", "UI Emoji"
 // @debug split("Segoe UI Emoji", " ", $limit: 1, $bracketed: true); // ["Segoe", "UI Emoji"]
 // @debug split("SF Mono Segoe UI Mono Roboto Mono", " ", $limit: 2, $bracketed: true); // ["SF", "Mono", "Segoe UI Mono Roboto Mono"]
+
+// word `$separator`
+// @debug split('aaa_DELIMITER_bbb_DELIMITER_ccc', '_DELIMITER_'); // "aaa", "bbb", "ccc"
+// @debug split('aaa[separator]bbb[separator]ccc', '[separator]'); // "aaa", "bbb", "ccc"

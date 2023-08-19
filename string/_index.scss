@@ -4,4 +4,5 @@
 @forward 'string.replace.function';
 @forward 'string.split.function';
 @forward 'string.to-map.function';
-@forward 'sass:string' hide index;
+@forward 'string.unquote.function';
+@forward 'sass:string' hide index, unquote;

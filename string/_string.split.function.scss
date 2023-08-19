@@ -25,7 +25,7 @@
     @if $index {
       $result: list.append($result, unquote(string.slice($string, 1, $index - 1), $unquote));
       @if $limit and $limit == $i {
-        $result: list.append($result, unquote(string.slice($string, $index + 1, -1), $unquote));
+        $result: list.append($result, unquote(string.slice($string, $index + string.length($separator), -1), $unquote));
         $index: null;
       } @else {
         $string: string.slice($string, $index + string.length($separator));

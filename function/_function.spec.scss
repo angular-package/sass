@@ -10,30 +10,34 @@
 @use '../var';
 
 // Custom functions.
-// variables.$functions: (
-//   // string
-//   'meta:call': meta.get-function(call, $module: meta),
+variables.$functions: (
+  // string
+  'meta:call': meta.get-function(call, $module: meta),
 
-//   // map
-//   (meta: call): meta.get-function(call, $module: meta),
+  // map
+  (meta: call): meta.get-function(call, $module: meta),
 
-//   // list
-//   meta: (call: meta.get-function(call, $module: meta))
-// );
+  // list
+  meta: (call: meta.get-function(call, $module: meta))
+);
 
-// variables.$functions: map.merge(variables.$functions, var, meta.module-functions(var));
+variables.$functions: map.merge(variables.$functions, var, meta.module-functions(var));
+var.$var: map.merge(var.$var, (prefix: s, delimiter: '-'));
 
 // $-prefix: '--';
 
-// `call()`
+
+// `function.call()`
 // @debug function.call(--selector-nest, (a, b, c), $-prefix);
 
-// `is()`
+
+// `function.is()`
 // @debug function.is(--list-set-nth, $-prefix); // true
 // @debug function.is(--selector-nest, $-prefix); // true
 // @debug function.is(--var-get, $-prefix); // true
 
-// `get()`
+
+// `function.get()`
 // @debug function.get(list-set-nth); // get-function("set-nth")
 // @debug function.get(selector-nest); // get-function("selector-nest")
 // @debug function.get(var-get); // get-function("get")
@@ -42,28 +46,83 @@
 // @debug function.get(--selector-nest, $-prefix); // get-function("selector-nest")
 // @debug function.get(--var-get, $-prefix); // get-function("get")
 
-// `has()`
+
+// `function.has()`
 // @debug function.has(selector-nest (unit 2)); // 1
 // @debug function.has((unit 2) selector-nest, ''); // 2
 // @debug function.has(3px solid --selector-nest (primary dark), '--'); // 3
 
-// `has()` map
+// `function.has()` map
 // @debug function.has((selector-nest: (unit 2))); // 1
 
-// `has()` selector prefix
+
+// `function.has()` selector prefix
 // @debug function.has(__selector-nest (unit 2), __); // 1
 // @debug function.has(-_-selector-nest (unit 2), -_-); // 1
 
-// `call-list()`
-// @debug function.call-list(--var-get (unit 5, 15, rem), $function: selector-nest);
-// @debug function.call-list((px, solid, (primary dark)), $function: selector-nest);
-// @debug function.call-list(((top, left), color), $function: selector-nest);
-// @debug function.call-list((border, (bottom, right)), $function: selector-nest);
 
-// @debug function.call-list(selector-nest (px, solid, (primary dark)));
-// @debug function.call-list(--selector-nest (px, solid, (primary dark)));
+// `function.pick()`
+// function
+// @debug function.pick(selector-nest (padding, margin) top); // get-function("selector-nest")
 
-// `call-nested-list()`
+// arguments
+// @debug function.pick(selector-nest (padding, margin) top, arguments); // (padding, margin)
+
+// from map
+// @debug function.pick((selector-nest: (padding, margin) top), arguments); // (padding, margin)
+// @debug function.pick((--var-get: (unit 1))); // get-function("var-get")
+
+// from value in line as padding/margin
+// @debug function.pick(5px --var-get (unit 1) 10px --var-get (unit 5)); // get-function("get")
+
+// from value in list as padding/margin
+// @debug function.pick(5px (var-get (unit 1)) 10px (var-get (unit 5))); // get-function("get")
+
+// from value in map as padding/margin
+// @debug function.pick(5px (var-get: (unit 1)) 10px (var-get (unit 5))); // get-function("get")
+
+
+// `function.remove()`
+// @debug function.remove(5px --var-get (unit 1) 10px --var-get (unit 5)); // 5px (unit 1) 10px --var-get (unit 5)
+// @debug function.remove((--var-get: (unit 1))); // unit 1
+
+
+// `function.call-arglist()`
+// list
+// @debug function.call-arglist(var-get, (unit 5, 15, rem)); //  calc(var(--s-unit-5) * 1rem + 15)
+// @debug function.call-arglist(selector-nest, (px, solid, (primary dark))); // (px solid primary dark,)
+// @debug function.call-arglist(selector-nest, ((top, left), color)); // top color, left color
+// @debug function.call-arglist(selector-nest, (border, (bottom, right))); // border bottom, border right
+
+
+// `function.call-by-list()`
+// function name + arguments
+// @debug function.call-by-list(--var-get (unit 5, 15, rem));
+// @debug function.call-by-list(selector-nest (px, solid, (primary dark)));
+// @debug function.call-by-list(--selector-nest (px, solid, (primary dark)));
+// @debug function.call-by-list((--selector-nest ((bottom, right), border)));
+
+// function name + arguments
+// @debug function.call-by-list(5px --var-get (unit 1) 10px --var-get (unit 5));
+// @debug function.call-by-list(5px (primary dark) 10px (secondary light));
+
+// (function name + arguments)
+// @debug function.call-by-list(5px (unit 1) 10px (unit 5));
+// @debug function.call-by-list(5px (var-get primary) 10px (var-get secondary));
+// @debug function.call-by-list(5px (--var-get (unit 1)) 10px (--var-get (unit 5)) 1px 2px);
+// @debug function.call-by-list(((--var-get: (unit 5, 15, rem)) 15px));
+
+
+// `function.insert()`
+// @debug function.call-by-list(function.insert((padding, (top, bottom)) (), $type-function: (list: selector-nest)));
+// @debug function.call-by-list(function.insert((ut 1) (), $type-function: (list: var-get)));
+// @debug function.call-by-list(function.insert(((ut 1),), $type-function: (list: var-get)));
+
+
+
+
+
+// `function.call-nested-list()`
 // @debug function.call-nested-list((px solid (primary dark)), $function: var-get);
 // @debug function.call-nested-list((ut 5) 5px (ut 1) 10px, $function: var-get);
 // @debug function.call-nested-list((unit,) 5px (unit,) 10px, --, var-get);
@@ -78,3 +137,31 @@
 // @debug function.call-nested-list(--selector-nest ((top, left), color) --selector-nest ((bottom, right), border));
 // @debug function.call-nested-list((--selector-nest ((top, left), color)) (--selector-nest ((bottom, right), border)));
 // @debug function.call-nested-list(((--selector-nest ((top, left), color)), (--selector-nest ((bottom, right), border))));
+
+// @debug function.call-nested-list(border (--selector-nest (bottom, right)));
+// @debug function.call-nested-list((inset 0 (--var-get (unit 3)), ));
+// @debug function.call-nested-list((inset 0 (--var-get (unit 3)), ));
+
+
+
+
+
+
+
+// `function.call-value()`
+// @debug function.call-value((border: ((top, right), radius)));
+// @debug function.call-value((--selector-nest: (border, (top, right), radius)));
+// @debug function.call-value((--selector-nest: (border, (top, right), radius)));
+
+// @debug inset 0 (selector.nest(border, (bottom, right)));
+// @debug inset 0 (var.get(unit 3));
+// @debug inset 0 (inset 0 -3em 3em rgba(0, 0, 0, 0.1));
+// @debug function.call-nested-list(inset 0 -3em 3em rgba(0, 0, 0, 0.1));
+
+// Differences between var.get() and --var-get()
+// @function test($value) {
+//   @debug list.nth($value, 3);
+//   @return true;
+// }
+
+// @debug test(1px solid (--var-get (unit 5)) );

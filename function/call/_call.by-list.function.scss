@@ -1,0 +1,51 @@
+// Sass.
+@use 'sass:list';
+
+// Modules.
+@use '../../meta';
+
+// Functions.
+@use '../../list/list.nth.function' as *;
+@use '../function.pick.function' as *;
+@use '../function.remove.function' as *;
+@use 'call.arglist.function';
+
+// Status: DONE
+// The `call.by-list()` function calls `$function` on nested lists or function from each nested list of `$list` with a separator comma where
+// elements are arguments or space where the whole list is an argument.
+// Nested list can contain function name in the first element, then it's used instead of `$function` argument to call following list.
+// @param `$list` List with nested lists on which to call `$function` or function from nested lists.
+// @param `$prefix` Prefix to pick function name from nested lists of `$list`.
+// @param `$function` Function name, with prefix of `$prefix` to call nested list in `$list` as arguments or argument.
+// @returns The returned value is `$list` with nested lists invoked by function.
+@function by-list($list, $prefix: null, $separator: null, $functions: null) {
+  @if type-of($list) == list {
+    $result: ();
+    $do: true;
+    $index: 1;
+    @while $do == true {
+      $function-arguments: null;
+      @if meta.of-type(list map string, list.nth($list, $index)) {
+        $function-arguments: pick(
+          nth($list, $index, if(meta.type-of(list.nth($list, $index)) == string, $index + 1, 0)),
+          name arguments,
+          $prefix,
+          $separator,
+          $functions
+        );
+      }
+      @if $function-arguments {
+        $result: list.append($result, call.arglist($function-arguments...), list.separator($list));
+        $list: remove($list, $prefix, $functions);
+      } @else {
+        $result: list.append($result, list.nth($list, $index), list.separator($list));
+        $index: $index + 1;
+      }
+      @if $index > list.length($list) {
+        $do: false;
+      }
+    }
+    @return $result;
+  }
+  @return $list;
+}

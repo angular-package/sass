@@ -1,0 +1,66 @@
+// Sass.
+@use 'sass:list';
+
+// Modules.
+@use '../list/has';
+@use '../list/remove';
+
+// Functions.
+@use 'function.has.function' as *;
+@use 'function.is.function' as *;
+
+// Status: DONE
+// The `function.insert()` function adds function(existing) name to specified type in `$value`.
+// @param `$value` Value to insert function names on specified types.
+// @param `$prefix` Prefixes that can be used for function name.
+// @param `$type-function` Map type value indicates which functions are inserted on specified types in `$value`.
+// @param `$functions` Additional functions available to insert into `$value`.
+// @returns The returned value is `$value` with inserted function names in specified types.
+@function insert($value, $prefix: null, $separator: null, $type-function, $functions: null) {
+  @if $type-function {
+    $index: 1;
+    @each $val in $value {
+      @each $type, $function in $type-function {
+        @if list.index($type, type-of($val)) {
+          @if list.length($val) > 0 and if(list.separator($val) == space, not has($val, $prefix, $separator, $functions), true) {
+            @if is($function, $prefix, $functions) {
+              @if list.length($val) > 0 {
+                $value: list.set-nth($value, $index, list.append($function, $val));
+              }
+            }
+          }
+        }
+      }
+
+      $index: $index + 1;
+    }
+    @if list.separator($value) == comma and list.length($value) == 1 {
+      $value: list.join((), $value, space);
+    }
+
+    $value: remove.list($value, 0);
+  }
+  @return $value;
+}
+
+// Examples.
+// string
+// @debug insert(primary-color-dark, $type-function: ((list, string): selector-nest));
+
+// number
+// @debug insert(5px, $type-function: (number: selector-nest));
+
+// list
+// @debug insert((ut 1,), $type-function: (list: selector-nest)); // (selector-nest (ut 1))
+// @debug insert((padding, (top, bottom)) (), $type-function: (list: selector-nest)); // (selector-nest (ut 1))
+
+// @debug insert(((primary-color-dark, 15%),), $type-function: (list: selector-nest)); // ()
+// @debug insert((primary-color-dark, 15%) (), $type-function: (list: selector-nest)); // (selector-nest (primary-color-dark, 15%))
+// @debug insert((primary color dark, 15%), $type-function: (list: selector-nest)); //
+// @debug insert((margin (ut 4), color (ut 1)), $type-function: (list: selector-nest)); //
+
+// @debug insert((unit 1) 10px (ut 20) 15px, $type-function: (list: selector-nest));
+// @debug insert(5px (ut 1) 10px (ut 20, 5) 15px, $type-function: (list: selector-nest));
+
+// has function
+// @debug insert(5px (ut 1) 10px (list-nth (ut 20, 5)) 15px, $type-function: (list: selector-nest));

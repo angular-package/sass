@@ -1,9 +1,6 @@
 // Sass.
 @use 'sass:meta';
 
-// Variables.
-@use 'function.variables' as variables;
-
 // Functions.
 @use 'function.get.function';
 
@@ -17,5 +14,5 @@
 // @arbitrary `$arguments...` Arguments to pass into invoked function named `$name`.
 // @returns The returned value is result of invoked function named `$name`.
 @function call($name, $arguments...) {
-  @return meta.call(function.get($name, variables.$prefix, variables.$functions), $arguments...);
+  @return meta.call(function.get($name), $arguments...);
 }

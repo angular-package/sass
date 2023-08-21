@@ -6,7 +6,9 @@
 
 // Functions.
 @use '../../list/list.nth.function' as *;
+@use '../function.is.function' as *;
 @use '../function.pick.function' as *;
+@use '../function.prefix.function' as *;
 @use '../function.remove.function' as *;
 @use 'call.arglist.function';
 
@@ -18,16 +20,22 @@
 // @param `$prefix` Prefix to pick function name from nested lists of `$list`.
 // @param `$function` Function name, with prefix of `$prefix` to call nested list in `$list` as arguments or argument.
 // @returns The returned value is `$list` with nested lists invoked by function.
-@function by-list($list, $prefix: null, $separator: null, $functions: null) {
+@function by-list($list, $prefix: null, $separator: null, $functions: null, $execute: true) {
   @if type-of($list) == list {
     $result: ();
-    $do: true;
     $index: 1;
-    @while $do == true {
+    @while $execute == true {
       $function-arguments: null;
       @if meta.of-type(list map string, list.nth($list, $index)) {
+        $element: list.nth($list, $index);
+        @if type-of(list.nth($list, $index)) == string {
+          @if is(list.nth($list, $index), $prefix, $separator, $functions) {
+            $element: nth($list, $index, $index + 1, 0);
+          }
+        }
+
         $function-arguments: pick(
-          nth($list, $index, if(meta.type-of(list.nth($list, $index)) == string, $index + 1, 0)),
+          $element,
           name arguments,
           $prefix,
           $separator,
@@ -42,7 +50,7 @@
         $index: $index + 1;
       }
       @if $index > list.length($list) {
-        $do: false;
+        $execute: false;
       }
     }
     @return $result;

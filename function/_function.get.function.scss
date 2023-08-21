@@ -48,24 +48,48 @@
 }
 
 // Examples.
+// $prefix: ('--', '__', '@', '&', '+', '/')
+// $separator: ('-', '_', '.')
+
 // string
 // @debug get(nth); // get-function("nth")
 // @debug get(list-nth); // get-function("nth")
 // @debug get(selector-nest); // get-function("nest")
 // @debug get('selector.nest'); // get-function("nest")
 
-// map
-// @debug get((selector: nest)); // get-function("nest")
-
-// string + prefix
+// prefix + string + dot separator
 // @debug get('--selector.nest'); // get-function("nest")
-// @debug get('---selector.nest'); // get-function("nest")
+// @debug get('__selector.nest'); // get-function("nest")
+// @debug get('@selector.nest'); // get-function("nest")
+// @debug get('&selector.nest'); // get-function("nest")
+// @debug get('+selector.nest'); // get-function("nest")
+// @debug get('/selector.nest'); // get-function("nest")
+
+// prefix + string + dash separator
+// @debug get('--selector-nest'); // get-function("nest")
+// @debug get(--selector-nest); // get-function("nest")
+// @debug get(__selector-nest); // get-function("nest")
+// @debug get(+selector-nest); // get-function("nest")
+// @debug get(&selector-nest); // get-function("nest")
+// @debug get(/selector-nest); // get-function("nest")
+
+// prefix + string + underscore separator
+// @debug get('--selector_nest'); // get-function("nest")
+// @debug get(--selector_nest); // get-function("nest")
+// @debug get(__selector_nest); // get-function("nest")
+// @debug get(+selector_nest); // get-function("nest")
+// @debug get(&selector_nest); // get-function("nest")
+// @debug get(/selector_nest); // get-function("nest")
+// @debug get(__list-nth); // get-function("nth")
+
+// prefix + function name
 // @debug get('@nth'); // get-function("nth")
 // @debug get('/nth'); // get-function("nth")
 // @debug get('+nth'); // get-function("nth")
 
-// prefix + map
-// @debug get((--selector: nest), '--'); // get-function("nest")
+// map
+// @debug get((selector: nest)); // get-function("nest")
 
-// null
-// @debug get(__list-nth, __); // null
+// map + prefix
+// @debug get((--selector: nest)); // get-function("nest")
+// @debug get((+selector: nest)); // get-function("nest")

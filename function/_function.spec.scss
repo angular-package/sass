@@ -26,16 +26,14 @@ var.$var: map.merge(var.$var, (prefix: s, delimiter: '-'));
 
 // $-prefix: '--';
 
-
+// Examples.
 // `function.call()`
 // @debug function.call(--selector-nest, (a, b, c), $-prefix);
-
 
 // `function.is()`
 // @debug function.is(--list-set-nth, $-prefix); // true
 // @debug function.is(--selector-nest, $-prefix); // true
 // @debug function.is(--var-get, $-prefix); // true
-
 
 // `function.get()`
 // @debug function.get(list-set-nth); // get-function("set-nth")
@@ -46,7 +44,6 @@ var.$var: map.merge(var.$var, (prefix: s, delimiter: '-'));
 // @debug function.get(--selector-nest, $-prefix); // get-function("selector-nest")
 // @debug function.get(--var-get, $-prefix); // get-function("get")
 
-
 // `function.has()`
 // @debug function.has(selector-nest (unit 2)); // 1
 // @debug function.has((unit 2) selector-nest, ''); // 2
@@ -55,11 +52,9 @@ var.$var: map.merge(var.$var, (prefix: s, delimiter: '-'));
 // `function.has()` map
 // @debug function.has((selector-nest: (unit 2))); // 1
 
-
 // `function.has()` selector prefix
 // @debug function.has(__selector-nest (unit 2), __); // 1
 // @debug function.has(-_-selector-nest (unit 2), -_-); // 1
-
 
 // `function.pick()`
 // function
@@ -81,11 +76,9 @@ var.$var: map.merge(var.$var, (prefix: s, delimiter: '-'));
 // from value in map as padding/margin
 // @debug function.pick(5px (var-get: (unit 1)) 10px (var-get (unit 5))); // get-function("get")
 
-
 // `function.remove()`
 // @debug function.remove(5px --var-get (unit 1) 10px --var-get (unit 5)); // 5px (unit 1) 10px --var-get (unit 5)
 // @debug function.remove((--var-get: (unit 1))); // unit 1
-
 
 // `function.call-arglist()`
 // list
@@ -93,7 +86,6 @@ var.$var: map.merge(var.$var, (prefix: s, delimiter: '-'));
 // @debug function.call-arglist(selector-nest, (px, solid, (primary dark))); // (px solid primary dark,)
 // @debug function.call-arglist(selector-nest, ((top, left), color)); // top color, left color
 // @debug function.call-arglist(selector-nest, (border, (bottom, right))); // border bottom, border right
-
 
 // `function.call-by-list()`
 // function name + arguments
@@ -112,15 +104,10 @@ var.$var: map.merge(var.$var, (prefix: s, delimiter: '-'));
 // @debug function.call-by-list(5px (--var-get (unit 1)) 10px (--var-get (unit 5)) 1px 2px);
 // @debug function.call-by-list(((--var-get: (unit 5, 15, rem)) 15px));
 
-
 // `function.insert()`
 // @debug function.call-by-list(function.insert((padding, (top, bottom)) (), $type-function: (list: selector-nest)));
 // @debug function.call-by-list(function.insert((ut 1) (), $type-function: (list: var-get)));
 // @debug function.call-by-list(function.insert(((ut 1),), $type-function: (list: var-get)));
-
-
-
-
 
 // `function.call-nested-list()`
 // @debug function.call-nested-list((px solid (primary dark)), $function: var-get);

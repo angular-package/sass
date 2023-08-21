@@ -1,6 +1,6 @@
 // Available prefixes.
 // It's used to verify `string` is function name.
-$prefix: ('---', '___', '--', '__', '-_-', '@', '&', '+', '/', '') !default;
+$prefix: ('--', '__', '@', '&', '+', '/') !default;
 
 // Available separator between module and function.
 // It's used to verify `string` is function name.

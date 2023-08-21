@@ -2,41 +2,45 @@
 @use 'sass:list';
 @use 'sass:map';
 
+// Variables.
+@use 'property.variables' as variables;
+
 // Modules.
-@use '../meta';
-@use '../string';
+@use '../function';
 @use '../values';
-@use '../var';
 
 // Functions.
 @use '../functions/important.function' as *;
-
-// @use '../list/remove/list.remove-string.function' as *;
 @use '../list/remove/remove.value.function';
-@use 'property.name.function' as property;
+@use 'property.name.function' as *;
+@use 'property.value.function' as *;
 
 // Status: DONE
-// The `property.set()` mixin sets property or properties.
+// The `property.set()` mixin sets property or properties by using .
 // @param `$property-value` The property of map type to set.
 // @param `$important` Indicates property is important.
-// @param `$dictionary` Dictionary of map type to pass into `$function`.
 // @param `$function` The function to invoke on arguments.
 // @param `$list` Indicates to call list.
-@mixin set($property-value, $important: false, $dictionary: (), $function: variables.$default-function, $list: false) {
-  @if type-of($property-value) == map {
-    $values: ();
-    @each $property, $value in $property-value {
-      $important: if($value and (list.index($value, !important) or $important), true, false);
-      @if $important and type-of($value) == list {
-        $value: remove.value($value, !important);
-      }
-      @each $name in property.name($property) {
-        @if list.separator($value) == comma {
-          #{$name}: values.call((function: $function, list: $list), $value...) + important($important);
-        } @else {
-          #{$name}: values.call((function: $function, list: $list), $value) + important($important);
-        }
-      }
+// @param `$invoke` A bool value indicates whether to invoke `$function`.
+@mixin set(
+  $name-value,
+  $important: false,
+  $prefix: null,
+  $separator: null,
+  $type-function: null,
+  $functions: null,
+  $execute: true
+) {
+  $type-function: if($type-function, $type-function, variables.$type-function);
+  @each $name, $value in $name-value {
+    $important: if($value and (list.index($value, !important) or $important), true, false);
+    @if $important and type-of($value) == list {
+      $value: remove.value($value, !important);
+    }
+
+    // Set property.
+    @each $name in name($name) {
+      #{$name}: value($value, $important, $prefix, $separator, $type-function, $functions, $execute);
     }
   }
 }

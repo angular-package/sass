@@ -50,28 +50,30 @@
 }
 
 // Examples.
-// property
+// property name
 // @debug name(padding); // padding
 
-// property + attribute
+// property name + attribute
 // @debug name(padding top); // padding-top
 
-// (property, property)
+// (property name, property name)
 // @debug name((padding, margin)); // padding, margin
 
 // (property + attribute, property + attribute)
 // @debug name((padding top, border radius)); // (padding-top, border-radius)
 
-// (property, property) attribute
+// (property name, property name) attribute
 // @debug name((padding, margin) top); // padding-top, margin-top
 
 // @debug name(border block (start, end) color); // border-block-start-color, border-block-ends-color
 // @debug name((padding top, margin bottom)); // padding-top, margin-bottom
 
+// (property name, property name) (attribute, attribute)
 // @debug name((padding, margin) (top, bottom)); // padding-top, padding-bottom, margin-top, margin-bottom
-// @debug name((padding, margin), (top, bottom)); // padding-top, padding-bottom, margin-top, margin-bottom
-
 // @debug name((padding, margin) (top left, bottom right)); // padding-top-left, padding-bottom-right, margin-top-left, margin-bottom-right
+
+// (property name, property name), (attribute, attribute)
+// @debug name((padding, margin), (top, bottom)); // padding-top, padding-bottom, margin-top, margin-bottom
 // @debug name((padding, margin), (top left, bottom right)); // padding-top-left, padding-bottom-right, margin-top-left, margin-bottom-right
 
 // @debug name(a (padding, margin) b a (top, bottom) c); // a-padding-b-a-top-c, a-padding-b-a-bottom-c, a-margin-b-a-top-c, a-margin-b-a-bottom-c

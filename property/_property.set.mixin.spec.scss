@@ -3,38 +3,42 @@
 @use 'sass:map';
 
 // Modules.
+@use '../function';
 @use '../meta';
 @use '../property';
 @use '../var';
 
-meta.$module-functions: map.set(meta.$module-functions, var, meta.module-functions(var));
+function.$functions: map.set(function.$functions, var, meta.module-functions(var));
+property.$type-function: map.merge(property.$type-function, (list: --var-get));
+var.$var: map.merge(var.$var, (prefix: s, delimiter: '-'));
 
 // Examples.
-div {
-  // @include property.set((padding: 10px));
-  // @include property.set((padding: (10px, 10px, 15px)));
-  // @include property.set((padding: unit 1));
-  // @include property.set((padding: (unit 1) ()));
-  // @include property.set((padding: (unit 1) (unit 2)));
+// div {
+  // @include property.set((padding: (unit 1) ())); // padding: var(--s-unit-1);
+  // @include property.set((padding: 5px (unit 1) 10px (unit 2)), $type-function: (list: --var-get)); // padding: 5px var(--s-unit-1) 10px var(--s-unit-2);
 
-  // @include property.set((border: 1px solid (unit 1)));
-  // @include property.set((border: 1px solid (--var-get (unit 1))));
-  // @include property.set((border: (1px solid (unit 1), 2px solid (unit 2))));
+  // @include property.set((border: 1px solid (unit 1))); // border: 1px solid var(--s-unit-1);
+  // @include property.set((border: 1px solid (--var-get (unit 1)))); // border: 1px solid var(--s-unit-1);
+  // @include property.set((transition: (margin-right (second 4), color (second 2))));
 
-  // @include property.set(((padding, margin): (unit 1) (unit 2)));
-  // @include property.set((border: (1px solid (unit 1), 2px solid (unit 3))));
+  // @include property.set(((padding, margin): (unit 1) (unit 2))); // padding: var(--s-unit-1) var(--s-unit-2);
+  // @include property.set((border: (1px solid (unit 1), 2px solid (unit 3)))); // margin: var(--s-unit-1) var(--s-unit-2);
+
+  // @include property.set((border: 1px solid (--var-get: (unit 1)))); // border: 1px solid var(--s-unit-1);
 
   // FEATURE: (property: value)
   // @include property.set((padding: 10px)); // padding: 10px;
+  // @include property.set((padding: 5px 10px 14px)); // padding: 5px 10px, 14px;
 
   // FEATURE: (property: value, value)
-  // @include property.set((padding: (5px 10px, 14px))); // padding: 5px 10px, 14px;
+  // @include property.set((transition: (margin-right 2s, color 1s))); // transition: margin-right 2s, color 1s;
 
   // FEATURE: (property: value + important, property: value + important)
   // @include property.set((padding: 5px '!important', margin: 15px !important)); // padding: 5px !important; margin: 15px !important;
+  // @include property.set((padding: 5px, margin: 15px), true); // padding: 5px !important; margin: 15px !important;
 
   // FEATURE: ((property, property): value)
-  // @include property.set(((padding, margin): 5px 10px)); // padding: 5px 10px;
+  // @include property.set(((padding, margin): 5px 10px)); // padding: 5px 10px; margin: 5px 10px;
 
   // FEATURE: ((property, property): value) + important
   // @include property.set(((padding, margin): 5px 10px), true);
@@ -42,25 +46,20 @@ div {
   // margin: 5px 10px !important;
 
   // functions
-  // @include property.set(((padding, margin): --var-get (unit 5))); // get()
+  // @include property.set(((padding, margin): (--var-get (unit 5)))); // get()
   // padding: var(--s-unit-5);
   // margin: var(--s-unit-5);
 
   // @include property.set(((padding, margin): (--var-get (unit 5), --var-get (unit 2)))); // get()
-  // @include property.set(((padding, margin): ((unit 5), unit 2))); // get()
+  // @include property.set(((padding, margin): (unit 5) (unit 2))); // padding: var(--s-unit-5) var(--s-unit-2); margin: var(--s-unit-5) var(--s-unit-2);
 
-  // @include property.set(((border, background) color: --color primary dark)); // color()
+  // @include property.set(((border, background) color: --color (primary dark))); // color()
   // border-color: var(--s-primary-color-dark);
   // background-color: var(--s-primary-color-dark);
 
-  // functions + dictionary
-  // @include property.set(((padding, margin): (unit 5) (unit 2)), false, (unit: u), $list: false);
-  // padding: var(--s-u-5);
-  // margin: var(--s-u-5);
-
   // FEATURE: ((property, property): value, value)
   // @include property.set(((padding, margin): (5px 10px, (unit 1) (unit 2)))); // padding: 5px 10px, var(--s-unit-1) var(--s-unit-2);
-  // @include property.set((padding: ((unit 1, '+' 15)) (unit 2))); // padding: calc(var(--s-unit-1) + 15) var(--s-unit-2);
+  // @include property.set((padding: (unit 1, '+' 15) (unit 2))); // padding: calc(var(--s-unit-1) + 15) var(--s-unit-2);
   // @include property.set((background: (--color: primary dark) '!important')); // background: var(--s-primary-color-dark) !important;
   // @include property.set((background: (--color: primary dark) (--color: primary dark) '!important')); // background: var(--s-primary-color-dark) var(--s-primary-color-dark);
   // @include property.set((background: (--color: primary dark)), true); // background: var(--s-primary-color-dark) !important;
@@ -113,6 +112,6 @@ div {
   // property2-side2-attribute: var(--s-primary-color-dark);
 
   // FEATURE: (property: value, value)
-  // @include property.set((box shadow: (3px 3px (--get red), -1em 0 0.4em olive)));
+  // @include property.set((box shadow: (3px 3px (--var-get red), -1em 0 0.4em olive)));
   // box-shadow: 3px 3px var(--s-red), -1em 0 0.4em olive;
-}
+// }

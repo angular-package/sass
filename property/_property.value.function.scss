@@ -1,0 +1,48 @@
+// Sass.
+@use 'sass:list';
+
+// Variables.
+@use 'property.variables' as variables;
+
+// Modules.
+@use '../function';
+
+// Functions.
+@use '../functions/important.function' as *;
+
+// Status: DONE
+// The `property.value()` function creates property value with some types called by function defined in `$type-function`.
+// @param `$value` Property value that some types in it can be called by functions defined in `$type-function`.
+// @param `$important` Indicates whether value is important.
+// @param `$prefix` Prefixes of the function defined in `$type-function` that are used to call types.
+// @param `$separator` Separators of the function defined  in `$type-function`.
+// @param `$type-function` The function to invoke on arguments.
+// @param `$functions` Additional functions to call types in `$value`.
+// @returns The returned value is property value with some types called by functions defined in `$type-function`.
+@function value(
+  $value,
+  $important: false,
+  $prefix: null,
+  $separator: null,
+  $type-function: null,
+  $functions: null,
+  $execute: true
+) {
+  $type-function: if($type-function, $type-function, variables.$type-function);
+  @if $type-function {
+    $i: 1;
+    @each $-value in if(list.separator($value) == comma, $value, ($value,)) {
+      $-value: function.call-by-list(
+        function.insert($-value, $prefix, $separator, $type-function, $functions),
+        $prefix, $separator, $functions, $execute
+      );
+      @if list.separator($value) == comma {
+        $value: list.set-nth($value, $i, $-value);
+        $i: $i + 1;
+      } @else {
+        $value: $-value;
+      }
+    }
+  }
+  @return $value + important($important);
+}

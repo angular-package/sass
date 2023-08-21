@@ -16,26 +16,62 @@
 @use 'property.set.mixin' as *;
 
 // Status: DONE
-// The `property()` mixin sets property or properties specified in `$property`.
+// The `property.property()` mixin sets property or properties specified in `$property`.
 // @param `$property` The property of map type to set.
 // @param `$important` Indicates property as important.
-// @param `$dictionary` Dictionary of map type to pass into `$function`.
-// @param `$function` The function to invoke on arguments.
-// @param `$list` Indicates to `call` list type.
-@mixin property($property, $important: false, $dictionary: (), $function: variables.$default-function, $list: false) {
+// @param `$prefix` Prefixes used in `$type-function` to recognize functions to call.
+// @param `$separator` Separators used in `$type-function` to call functions.
+// @param `$type-function` The map of (type: function) to invoke on arguments of property value.
+// @param `$functions` Additional functions to call on value properties.
+// @param `$execute` A bool value indicates whether to invoke function from `$type-function`.
+// @returns The returned value is a list of properties.
+@mixin property(
+  $property,
+  $important: false,
+  $prefix: null,
+  $separator: null,
+  $type-function: null,
+  $functions: null,
+  $execute: true
+) {
+  $type-function: if($type-function, $type-function, variables.$type-function);
   @each $name, $attribute-value in $property {
     @if type-of($attribute-value) == map {
       @each $attribute, $value in $attribute-value {
         @if type-of($value) == map {
           @each $-attribute, $value in $value {
-            @include set((($name: ($attribute: $-attribute)): $value), $important, $dictionary, $function, $list);
+            @include set(
+              (($name: ($attribute: $-attribute)): $value),
+              $important,
+              $prefix,
+              $separator,
+              $type-function,
+              $functions,
+              $execute
+            );
           }
         } @else {
-          @include set((($name: $attribute): $value), $important, $dictionary, $function, $list);
+          @include set(
+            (($name: $attribute): $value),
+            $important,
+            $prefix,
+            $separator,
+            $type-function,
+            $functions,
+            $execute
+          );
         }
       }
     } @else {
-      @include set(($name: $attribute-value), $important, $dictionary, $function, $list);
+      @include set(
+        ($name: $attribute-value),
+        $important,
+        $prefix,
+        $separator,
+        $type-function,
+        $functions,
+        $execute
+      );
     }
   }
 }

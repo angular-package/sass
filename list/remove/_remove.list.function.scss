@@ -3,7 +3,7 @@
 @use 'sass:meta';
 
 // Functions.
-@use '../has/has.type.function' as *;
+@use '../has/has.type.function';
 
 // Status: DONE.
 // The `remove.list()` function removes element of the list type from the given `$list`.
@@ -13,7 +13,7 @@
 //        true (remove bracketed), false (do not remove bracketed), only (remove only bracketed)
 // @return The return value is the list without list and/or bracketed optionally of the given length.
 @function list($list, $length: false, $bracketed: true) {
-  @if has-type($list, any, '==', list) {
+  @if has.type($list, any, '==', list) {
     $result: ();
     @each $element in $list {
       $append: true;

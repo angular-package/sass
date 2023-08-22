@@ -2,7 +2,7 @@
 @use 'sass:list';
 
 // Functions.
-@use 'selector.nest.function' as *;
+// @use 'selector.nest.function' as *;
 
 // Modules.
 @use '../function/function.call.function';
@@ -11,8 +11,8 @@
 // The `selector.nest-content()` mixin sets the selector by using `selector.nest()` with `$arguments`.
 // @param `$arguments...` The arguments to pass into `selector.nest()` function.
 @mixin nest-content($arguments...) {
-  @if not (list.length($arguments) == 0) {
-    #{function.call(selector-nest, $arguments...)} {
+  @if list.length($arguments) > 0 {
+    #{function.call(--selector-nest, $arguments...)} {
       @content;
     }
   } @else {

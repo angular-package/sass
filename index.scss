@@ -1,7 +1,5 @@
 @forward 'class' as class-*;
-
 // @forward 'color' as color-*;
-
 @forward 'comparison' as comparison-*;
 @forward 'function' as function-*;
 @forward 'functions';
@@ -12,8 +10,6 @@
 @forward 'number' as number-*;
 @forward 'property' as property-* hide property;
 @forward 'property/property.mixin';
-
-// @forward 'scheme' as scheme-*;
 @forward 'selector' as selector-*;
 @forward 'string' as string-*;
 @forward 'translator' as translator-*;

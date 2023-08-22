@@ -3,31 +3,64 @@
 @use 'sass:map';
 
 // Variables.
-@use '../function/variables';
+@use 'property.variables' as variables;
 
 // Functions.
 @use 'property.set.mixin' as property;
 
 // Modules.
 @use '../class';
+@use '../meta';
+@use '../selector';
 @use '../values';
 
 // Status: DONE
-// Property `property.variant()` mixin.
-@mixin variant($variant: (), $important: null, $pseudo-class: (), $dictionary: (), $function: variables.$function) {
+// Property `property.variant()` mixin sets property variant.
+// @param `$variant` Variant of map type to set.
+// @param `$important` Indicates property is important.
+// @param `$pseudo-class`
+// @param `$dictionary`
+// @param `$class-function`
+// @param `$functions`
+// @param `$execute`
+@mixin variant(
+  $variant: (),
+  $important: null,
+  $pseudo-class: (),
+  $dictionary: (),
+  $class-function: meta.get-function(class, false, selector),
+  $prefix: null,
+  $separator: null,
+  $type-function: null,
+  $functions:null,
+  $execute: true
+) {
   @if type-of($variant) == map {
-    @each $key, $value in $variant {
-      @if type-of($value) == list or type-of($value) == string {
-        $variant: map.set($variant, $key, values.variant(if(list.separator($value) == comma, $value, ($value,))...));
-      }
-    }
-    @include class.variant($variant, $pseudo-class, $dictionary, $function, map) using($resolved) {
+    $type-function: if($type-function, $type-function, variables.$type-function);
+    @include class.variant($variant, $pseudo-class, $dictionary, $class-function, map) using($resolved) {
       @if type-of(map.get($resolved, value)) == map {
         @each $attribute, $value in map.get($resolved, value) {
-          @include property.set((list.join(map.get($resolved, property), map.get($resolved, attribute) $attribute or ()): $value), $important, $dictionary, $function, true);
+          @include property.set(
+            (list.join(map.get($resolved, property), map.get($resolved, attribute) $attribute or ()): $value),
+            $important,
+            $prefix,
+            $separator,
+            $type-function,
+            $functions,
+            $execute
+          );
         }
       } @else {
-        @include property.set((list.join(map.get($resolved, property), map.get($resolved, attribute) or ()): map.get($resolved, value)), $important, $dictionary, $function, true);
+        @include property.set(
+          (list.join(map.get($resolved, property), map.get($resolved, attribute) or ()):
+          map.get($resolved, value)),
+          $important,
+          $prefix,
+          $separator,
+          $type-function,
+          $functions,
+          $execute
+        );
       }
     }
   }

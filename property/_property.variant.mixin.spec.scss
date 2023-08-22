@@ -1,5 +1,24 @@
+// Sass.
+@use 'sass:map';
+
+// Modules.
+@use '../function';
+@use '../meta';
+@use '../property';
+@use '../selector';
+@use '../var';
+
 // Mixins.
 @use 'property.variant.mixin' as *;
+
+
+function.$functions: map.merge(function.$functions, (
+  selector: meta.module-functions("selector"),
+  var: meta.module-functions("var")
+));
+
+property.$type-function: map.merge(property.$type-function, (list: --var-get));
+
 
 // Examples.
 // FEATURE: single variant: (property/class: class/value)
@@ -15,19 +34,19 @@
 // }
 
 // FEATURE: single variant: (property/class: class/value, property/class: class/value) + important + pseudo-class
-// @include variant((float: right), true, (('&:hover', '&:visited'),));
+// @include variant((float: right), true, (':hover', ':visited'));
 // .float-right:hover, .float-right:visited {
 //   float: right !important;
 // }
 
 // FEATURE: single variant: (property/class: class/value, property/class: class/value) + important + pseudo-class + dictionary
-// @include variant((float: right), true, (('&:hover', '&:visited'),), (float: f, right: r));
+// @include variant((float: right), true, (':hover', ':visited'), (float: f, right: r));
 // .f-r:hover, .f-r:visited {
 //   float: right !important;
 // }
 
 // FEATURE: single variant: (property/class: class/value + adjust + important, property/class: class/value)
-// @include variant((float: --get right ('+' 15) '!important'));
+// @include variant((float: --var-get (right, ('+' 15)) '!important'));
 // .float-right {
 //   float: calc(var(--s-right) + 15) !important;
 // }
@@ -60,7 +79,7 @@
 // }
 
 // FEATURE: multiple variants: ((property/class, property/class): (class/value, class/value)) + important + pseudo-class
-// @include variant(((float, text align): (right, left)), true, (('&:hover', '&:visited'),));
+// @include variant(((float, text align): (right, left)), true, (':hover', ':visited'));
 // .float-right:hover, .float-right:visited {
 //   float: right !important;
 // }
@@ -75,7 +94,7 @@
 // }
 
 // FEATURE: multiple variants: ((property/class, property/class): (class/value, class/value)) + important + pseudo-class + dictionary
-// @include variant(((float, text align): (right, left)), true, '&:hover', (float: f));
+// @include variant(((float, text align): (right, left)), true, ':hover', (float: f));
 // .f-right:hover {
 //   float: right !important;
 // }
@@ -187,7 +206,7 @@
 // }
 
 // @include variant((border: (2: (unit 2) ())));
-// @include variant((border: (2: --get unit 2)));
+// @include variant((border: (2: --var-get (unit 2))));
 // .border-2 {
 //   border: var(--s-unit-2);
 // }
@@ -201,7 +220,7 @@
 //   border: unit 2;
 // }
 
-// @include variant((border: (1: (unit 1) (unit 2), 2: --get unit 2)));
+// @include variant((border: (1: (unit 1) (unit 2), 2: --var-get (unit 2))));
 // .border-1 {
 //   border: var(--s-unit-1) var(--s-unit-2);
 // }
@@ -209,8 +228,8 @@
 //   border: var(--s-unit-2);
 // }
 
-// @include variant((border: (unit 1: --get unit 1 '!important', unit 2: --get unit 2)));
-// @include variant((border: (unit 1: (unit 1) '!important', unit 2: --get unit 2)));
+// @include variant((border: (unit 1: --var-get (unit 1) '!important', unit 2: --var-get (unit 2))));
+// @include variant((border: (unit 1: (unit 1) '!important', unit 2: --var-get (unit 2))));
 // .border {
 //   border: var(--s-unit-1) !important;
 // }
@@ -218,12 +237,12 @@
 //   border: var(--s-unit-2);
 // }
 
-// @include variant((border: (unit 1: --get unit 1)), true);
+// @include variant((border: (unit 1: --var-get (unit 1))), true);
 // .border-unit-1 {
 //   border: var(--s-unit-1) !important;
 // }
 
-// @include variant((border: (one 1: --get unit 1, two 2: --get unit 2)));
+// @include variant((border: (one 1: --var-get (unit 1), two 2: --var-get (unit 2))));
 // .border-one-1 {
 //   border: var(--s-unit-1);
 // }
@@ -232,7 +251,7 @@
 // }
 
 // FEATURE: (class/property: (property/class: (class: value, variant)))
-// @include variant(((border,): (radius: (1: --get unit 1, 2: --get unit 2 !important))));
+// @include variant((border: (radius: (1: --var-get (unit 1), 2: --var-get (unit 2) !important))));
 // .border-radius-1 {
 //   border-radius: var(--s-unit-1);
 // }
@@ -241,7 +260,7 @@
 // }
 
 // FEATURE: (class/property: (property/class: (class: value, variant)))
-// @include variant(((border,): ((radius, color): (1: unit 1, two: unit 2))));
+// @include variant((border: ((radius, color): (1: unit 1, two: unit 2))));
 // .border-radius-1 {
 //   border-radius: unit 1;
 // }
@@ -256,7 +275,7 @@
 // }
 
 // FEATURE: (class/property: ((property/class): ((class): value, variant)))
-// @include variant(((font,): ((size,): ((xxs, xs, sm, md, lg, xl, xxl): --get unit 1, two: --get unit 2))));
+// @include variant((font: (size: ((xxs, xs, sm, md, lg, xl, xxl): --var-get (unit 1), two: --var-get (unit 2)))));
 // .font-size-xxs, .font-size-xs, .font-size-sm, .font-size-md, .font-size-lg, .font-size-xl, .font-size-xxl {
 //   font-size: var(--s-unit-1);
 // }
@@ -264,7 +283,7 @@
 //   font-size: var(--s-unit-2);
 // }
 
-// @include variant((border: ((radius): (1: --get unit 1, two: --get unit 2))));
+// @include variant((border: (radius: (1: --var-get (unit 1), two: --var-get (unit 2)))));
 // .border-radius-1 {
 //   border-radius: var(--s-unit-1);
 // }
@@ -272,12 +291,12 @@
 //   border-radius: var(--s-unit-2);
 // }
 
-// @include variant((border: (top: (1: --get unit 1))));
+// @include variant((border: (top: (1: --var-get (unit 1)))));
 // .border-top-1 {
 //   border-top: var(--s-unit-1) !important;
 // }
 
-// @include variant((border: ((top left, right bottom): (1: --get unit 1))));
+// @include variant((border: ((top left, right bottom): (1: --var-get (unit 1)))));
 // .border-top-left-1 {
 //   border-top-left: var(--s-unit-1) !important;
 // }
@@ -285,8 +304,8 @@
 //   border-right-bottom: var(--s-unit-1) !important;
 // }
 
-// @include variant((border: (((top, bottom): color): (1: --get unit 1, 3: --get unit 3))));
-// @include variant((border: (--nest (top, bottom) color: (1: --get unit 1, 3: --get unit 3))));
+// @include variant((border: (((top, bottom): color): (1: --var-get (unit 1), 3: --var-get (unit 3)))));
+// @include variant((border: (--selector-nest ((top, bottom), color): (1: --var-get (unit 1), 3: --var-get (unit 3)))));
 // .border-top-color-1 {
 //   border-top-color: var(--s-unit-1);
 // }
@@ -300,7 +319,7 @@
 //   border-bottom-color: var(--s-unit-3);
 // }
 
-// @include variant(((border, margin): ((top left, right bottom): (1: --get unit 1, two: --get unit 2))));
+// @include variant(((border, margin): ((top left, right bottom): (1: --var-get (unit 1), two: --var-get (unit 2)))));
 // .border-top-left-1 {
 //   border-top-left: var(--s-unit-1);
 // }
@@ -326,7 +345,7 @@
 //   margin-right-bottom: var(--s-unit-2);
 // }
 
-// @include variant((padding: ((): ((xl, xs, sm): --get unit 1, 2: --get unit 2))));
+// @include variant((padding: ((): ((xl, xs, sm): --var-get (unit 1), 2: --var-get (unit 2)))));
 // .padding-xl, .padding-xs, .padding-sm {
 //   padding: var(--s-unit-1);
 // }
@@ -335,7 +354,7 @@
 // }
 
 // multiple properties + single variant + single side
-// @include variant(((margin, padding): (top: (1: --get unit 1))));
+// @include variant(((margin, padding): (top: (1: --var-get (unit 1)))));
 // .margin-top-1 {
 //   margin-top: var(--s-unit-1);
 // }
@@ -344,7 +363,7 @@
 // }
 
 // multiple properties + single variant + multiple sides
-// @include variant(((margin, padding): ((top, bottom): (1: --get unit 1))));
+// @include variant(((margin, padding): ((top, bottom): (1: --var-get (unit 1)))));
 // .margin-top-1 {
 //   margin-top: var(--s-unit-1);
 // }
@@ -359,7 +378,7 @@
 // }
 
 // multiple properties + multiple variants + multiple sides
-// @include variant(((margin, padding): ((top, bottom): (1: --get unit 1, 3: --get unit 3))));
+// @include variant(((margin, padding): ((top, bottom): (1: --var-get (unit 1), 3: --var-get (unit 3)))));
 // .margin-top-1 {
 //   margin-top: var(--s-unit-1);
 // }
@@ -390,7 +409,7 @@
 //   (outline border): (
 //     (top-left, bottom-right): (
 //       radius: 30px,
-//       color: --get primary color dark
+//       color: --var-get (primary color dark)
 //     ),
 //   )), $dictionary: (radius: r));
 // .outline-border-top-left-r {
@@ -427,7 +446,7 @@
 // }
 
 // dictionary
-// @include variant(((margin, padding): ((top, bottom): (1: --get unit 1, 3: --get unit 3))), false, ('&:hover'), (margin: m, padding: p));
+// @include variant(((margin, padding): ((top, bottom): (1: --var-get (unit 1), 3: --var-get (unit 3)))), false, ':hover', (margin: m, padding: p));
 // .m-top-1:hover {
 //   margin-top: var(--s-unit-1);
 // }

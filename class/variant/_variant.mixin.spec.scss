@@ -6,6 +6,17 @@
 // Mixins.
 @use 'variant.mixin' as *;
 
+// @include variant(((color: (background, color)): primary dark)) using($resolved...) {
+//   @debug $resolved;
+
+//   width: auto;
+// }
+
+// @include variant((color: primary dark)) using($resolved...) {
+//   @debug $resolved;
+
+//   width: auto;
+// }
 
 // @include variant(((color basic: (red, green)))) using($resolved...) {
 //   @debug $resolved;
@@ -24,7 +35,6 @@
 //   color: list.nth($resolved, 4);
 // }
 
-
 // @include variant(((color basic: (red: (light: red light, dark: red dark))))) using($resolved...) {
 //   // @debug list.nth($resolved, 4);
 //   @debug $resolved;
@@ -38,13 +48,9 @@
 //   width: auto;
 // }
 
-
-
 // @include variant(((color basic: (red: (light: red light, dark: red dark))))) using($resolved...) {
 //   color: list.nth($resolved, 5);
 // }
-
-
 
 // Examples.
 // @include variant((padding: unit 1)) using($property, $value) {

@@ -11,6 +11,7 @@
 @use '../class.content.mixin' as class;
 
 // Modules.
+@use '../../function';
 @use '../../values';
 
 // Status: DONE
@@ -27,17 +28,23 @@
   $content-type: list
 ) {
   @if type-of($variant) == map {
-    $content-keys: (class, (2: value, 4: property), (4: value-class, 5: attribute), (4: value, 5: value-class), value, variant);
+    $content-keys: (
+      class,
+      (2: value, 3: property, 4: property),
+      (3: value, 4: value-class, 5: attribute),
+      (4: value, 5: value-class),
+      value,
+      variant
+    );
     @each $class, $attribute-variant in $variant {
       $property: null;
       @if type-of($class) == map { @each $-class, $-property in $class { $class: $-class; $property: $-property; }}
       @if type-of($attribute-variant) == map {
         @each $attribute, $variant in $attribute-variant {
           @if type-of($attribute) == map {
-            @each $key, $value in $attribute { $attribute: nest(($key, $value)); }
-          } @else {
-            // @debug $attribute;
-            // $attribute: if(list.length($attribute) > 0, values.call($attribute, (list: false)), ());
+            @each $key, $value in $attribute { $attribute: nest($key, $value); }
+          } @else if function.has($attribute) {
+            $attribute: function.call-arglist($attribute...);
           }
           @each $class in if(list.separator($class) == comma, $class, ($class,)) {
             @if type-of($variant) == map {
@@ -82,8 +89,8 @@
               @include class.content(values.combine((method: join), if(&, '&', ()), $class), $pseudo-class, $dictionary, $function) {
                 $content: if(
                   $content-type == map,
-                  to-map(($class, $property, $value), $content-keys...),
-                  values.combine((separator: comma), $class, $property, $value)
+                  to-map(($class, $property or $class, $value), $content-keys...),
+                  values.combine((separator: comma), $class, $property or $class, $value)
                 );
                 @if type-of($content) == list { @content($content...); } @else { @content($content); }
               }

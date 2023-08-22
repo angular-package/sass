@@ -2,11 +2,12 @@
 @forward 'class.variables';
 
 // Mixins.
-// @forward 'class.content.mixin';
+@forward 'class.content.mixin';
 
 // Functions.
 @forward 'class.name.function';
 @forward 'class.parent-first.function';
 
 // Directory.
-// @forward 'variant';
+@forward 'variant' as variant-*;
+@forward 'variant/variant.mixin';

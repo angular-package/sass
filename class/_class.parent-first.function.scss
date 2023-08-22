@@ -3,6 +3,7 @@
 @use '../string';
 
 // Status: DONE
+// The `class.parent-first()` function returns `$name` with parent selector & as first.
 // @param `$name` The `$name` of string or list type to move parent selector as first.
 // @returns The returned value is `$name` with parent selector as first.
 @function parent-first($name) {

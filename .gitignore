@@ -9,3 +9,4 @@ package-lock.json
 !.hound.yml
 !.scss-lint.yml
 !.stylelintrc.json
+temp

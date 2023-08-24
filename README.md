@@ -33,24 +33,25 @@ Sass - extension for sass modules and new modules.
 
 Extended sass modules:
 
-<!-- * The [`sass:color`](https://sass-lang.com/documentation/modules/color/) is extended by [`@angular-package/sass/color`](https://) - module generates new colors based on existing ones, making it easy to build color themes. -->
+* The [`sass:color`](https://sass-lang.com/documentation/modules/color/) is extended by [`@angular-package/sass/color`](https://docs.angular-package.dev/v/sass/color/overview) - module generates new colors based on existing ones, making it easy to build color themes.
+<!-- * The [`@angular-package/sass/scheme`](https://) module. -->
+
 * The [`sass:list`](https://sass-lang.com/documentation/modules/list/) is extended by [`@angular-package/sass/list`](https://docs.angular-package.dev/v/sass/list/overview) - module lets you access and modify values in lists.
 * The [`sass:map`](https://sass-lang.com/documentation/modules/map/) is extended by [`@angular-package/sass/map`](https://docs.angular-package.dev/v/sass/map/overview) - module makes it possible to look up the value associated with a key in a map, and much more.
 * The [`sass:math`](https://sass-lang.com/documentation/modules/math/) is extended by [`@angular-package/sass/math`](https://docs.angular-package.dev/v/sass/math/overview) - module provides functions that operate on numbers.
 * The [`sass:meta`](https://sass-lang.com/documentation/modules/meta/) is extended by [`@angular-package/sass/meta`](https://docs.angular-package.dev/v/sass/meta/overview) - module exposes the details of Sass’s inner workings..
-<!--  * The [`sass:selector`](https://sass-lang.com/documentation/modules/selector/) is extended by [`@angular-package/sass/selector`](https://) - module provides access to Sass’s powerful selector engine. -->
+* The [`sass:selector`](https://sass-lang.com/documentation/modules/selector/) is extended by [`@angular-package/sass/selector`](https://docs.angular-package.dev/v/sass/selector/overview) - module provides access to Sass’s powerful selector engine.
 * The [`sass:string`](https://sass-lang.com/documentation/modules/string/) is extended by [`@angular-package/sass/string`](https://docs.angular-package.dev/v/sass/string/overview) - module makes it easy to combine, search, or split apart strings.
 
 New modules:
 
-<!-- * The [`@angular-package/sass/class`](https://) module. -->
-* The [`@angular-package/sass/comparison`](https://docs.angular-package.dev/v/sass/comparison/overview) module to compare single or multiple values.
-<!-- * The [`@angular-package/sass/function`](https://) module . -->
-<!-- * The [`@angular-package/sass/property`](https://) module. -->
-<!-- * The [`@angular-package/sass/scheme`](https://) module. -->
-* The [`@angular-package/sass/translator`](https://docs.angular-package.dev/v/sass/translator/overview) module handles global dictionary to translate words.
-* The [`@angular-package/sass/values`](https://docs.angular-package.dev/v/sass/values/overview) module to modify arbitrary values.
-<!-- * The [`@angular-package/sass/var`](https://) module . -->
+* The [`@angular-package/sass/class`](https://docs.angular-package.dev/v/sass/class/overview) module [`@angular-package/sass/class`](https://github.com/angular-package/sass/tree/develop/class) to handle CSS class selectors(variants).
+* The [`@angular-package/sass/comparison`](https://docs.angular-package.dev/v/sass/comparison/overview) module [`@angular-package/sass/comparison`](https://github.com/angular-package/sass/tree/develop/comparison) to compare single or multiple values.
+* The [`@angular-package/sass/function`](https://docs.angular-package.dev/v/sass/function/overview) module [`@angular-package/sass/function`](https://github.com/angular-package/sass/tree/develop/function) function to handle calling functions, especially in a form of `string`.
+* The [`@angular-package/sass/property`](https://docs.angular-package.dev/v/sass/property/overview) module [`@angular-package/sass/property`](https://github.com/angular-package/sass/tree/develop/property) to set multiple CSS properties or variants with called functions on values.
+* The [`@angular-package/sass/translator`](https://docs.angular-package.dev/v/sass/translator/overview) module [`@angular-package/sass/translator`](https://github.com/angular-package/sass/tree/develop/translator) handles global dictionary to translate words.
+* The [`@angular-package/sass/values`](https://docs.angular-package.dev/v/sass/values/overview) module [`@angular-package/sass/values`](https://github.com/angular-package/sass/tree/develop/values) to modify arbitrary values.
+* The [`@angular-package/sass/var`](https://docs.angular-package.dev/v/sass/var/overview) module [`@angular-package/sass/var`](https://github.com/angular-package/sass/tree/develop/var) is designed to handle CSS variables with the use of space-separated words separated by delimiter that can be translated by the dictionary.
 
 Sass extension is free to use. If you enjoy it, please consider donating via [`fiat`](https://docs.angular-package.dev/donate/usd-fiat) or [`cryptocurrency`](https://spectrecss.angular-package.dev/donate/thb-cryptocurrency) the [`@angular-package`](https://github.com/sponsors/angular-package) for further development. ♥  
 

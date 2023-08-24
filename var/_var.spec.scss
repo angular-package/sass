@@ -6,12 +6,12 @@
 @use '../var';
 
 // Update to the spectre settings.
-var.$var: map.merge(var.$var, (
-  prefix: s,
-  delimiter: '-'
-));
+// var.$var: map.merge(var.$var, (
+//   prefix: s,
+//   delimiter: '-'
+// ));
 
-meta.$module-functions: map.deep-merge(meta.$module-functions, (var: meta.module-functions(var)));
+// meta.$module-functions: map.deep-merge(meta.$module-functions, (var: meta.module-functions(var)));
 
 // Mixins.
 // single

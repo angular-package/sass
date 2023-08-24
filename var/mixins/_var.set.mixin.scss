@@ -3,48 +3,52 @@
 
 // Functions.
 @use '../../values/values.combine.function' as *;
+@use '../functions/var.get.function';
 @use '../functions/var.name.function' as *;
 
 // Modules.
 @use '../../meta';
-@use '../../selector';
+
+// Mixins.
+@use '../../selector/selector.nest-content.mixin';
 
 // Status: DONE
 // The `var.set()` mixin defines the CSS variables based on the given `$values`.
-// @param `$values` The values to set CSS variables.
+// @param `$property` The values of map type to set CSS variables.
 // @param `$selector` Selector in which CSS variables are placed.
-// @param `$dictionary` Dictionary to pass into the name.
-@mixin set($values, $selector: (), $dictionary: (), $function: meta.get-function('var:get')) {
-  @if type-of($values) == map {
-    @include selector.content($selector...) {
-      @each $name, $variant in $values {
+// @param `$function` Function to call on property values of list type.
+@mixin set($property, $selector: (), $function: null) {
+  @if type-of($property) == map {
+    @include selector.nest-content($selector...) {
+      @each $name, $variant in $property {
         @if type-of($variant) == map {
           @each $variant-name, $value in $variant {
             @each $name in if(list.separator($name) == comma, $name, ($name,)) {
               @if type-of($value) == map {
                 @each $value-name, $value in $value {
-                  @if type-of($value) == list and $function {
-                    $value: #{meta.call($function, $value, $dictionary: $dictionary)};
-                  }
-
-                  #{name(combine((method: join), $name, $variant-name, $value-name), $dictionary)}: #{$value};
+                  #{name(combine((method: join), $name, $variant-name, $value-name))}: if(
+                    $function,
+                    #{meta.call-arglist($function, $value)},
+                    #{$value}
+                  );
                 }
               } @else {
-                @if type-of($value) == list and $function {
-                  $value: #{meta.call($function, $value, $dictionary: $dictionary)};
-                }
-
-                #{name(combine((method: join), $name, $variant-name), $dictionary)}: #{$value};
+                #{name(combine((method: join), $name, $variant-name))}: if(
+                  $function,
+                  #{meta.call-arglist($function, $value)},
+                  #{$value}
+                );
               }
             }
           }
         } @else {
           $value: $variant;
-          @if type-of($value) == list and $function {
-            $value: #{meta.call($function, $value, $dictionary: $dictionary)};
-          }
           @each $name in if(list.separator($name) == comma, $name, ($name,)) {
-            #{name($name, $dictionary)}: #{$value};
+            #{name($name)}: if(
+              $function,
+              #{meta.call-arglist($function, $value)},
+              #{$value}
+            );
           }
         }
       }

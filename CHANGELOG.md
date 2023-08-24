@@ -1,5 +1,64 @@
 # @angular-package/sass changelog
 
+### v0.4.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.4.0-beta)
+
+- Add **class** module to handle CSS class selectors(variants). [9a7fed7] [b51b22a] [01c830a] [a2ed250] [c88c00a]
+- Add **color** module which extends `sass:color` module with functions to set `hsla()` color and `scheme` sub module to check `color-scheme`. [d596d48]
+- Add **function** module to handle calling functions in `list` as `string`, `map` or `list` type. [5dbd420]
+- Add **property** module to set CSS properties with functions. [79dccba]
+- Add **selector** module sets selectors split into words(optionally translated). [a165ed8]
+
+- Add `functions` with `name()` function to create name from words that can be translated with `$dictionary` and `important` to add `!important` flag. [16bdb40]
+- Add `list.extract-map()`, `list.replace-string()`, `list.replace()`, `list.swap()`, and `list.to-map()` functions. [66fdaef] [22f37e6] [1b37c23] [8c27019]
+- Add `map.merge-allowed()` function to merge allowed keys. [07e2904]
+- Add `math.sort()` function to sort numbers. [99484a6]
+- Add `meta.call-arglist()` function to call functions with comma-separated list as arguments and space-separated as argument. [0c0b0a0]
+- Add `string.to-map()` to transform `string` to `map` and `string.unquote()` to unquote on `$execute`.
+
+- Add different(easier) **translator(1.0.0)** with global dictionary, not exported by default. [35b3663]
+- Add **var** module with `var.adjust()` `var.css()` `var.get()` `var.is()` `var.name()` `var.negative()` and `var.unit()` functions, and `var.set()` mixin. [16bdb40] [51f7f17] [d3ace9f]
+
+- Update `comparison.compare()` to indicate map length as deprecated. [3969b97]
+- Update `meta.of-type()` function to handle multiple types. [cf31bb2]
+- Update `string.split()` to have ability to unquote returned string, and separator as multiple words instead of only one character. [62c693c] [b8feda9] [d0f372d]
+- Update `values.combine()` by changing the way of providing parameters. [ab77370]
+
+- Fix `list.append()` fix not proper adding `$val` space separated. [99c618b]
+- Fix `list.join()` function to properly add bracketed. [928914a]
+- Fix `list.remove-list()` change function name from not existing `has-type()` to `has.type()`. [b3b5d55]
+- Fix `map.pick-pattern()` by updating use `string.replace()` function. [ab8263a]
+
+[3969b97]: https://github.com/angular-package/sass/commit/3969b973927b1619fab342aa3246df7d58e65842
+[ab77370]: https://github.com/angular-package/sass/commit/ab7737052ede08a4129d88f9a7f1cd1993331359
+[99c618b]: https://github.com/angular-package/sass/commit/99c618b179a74e403bb40ad01330604ddbbd5272
+[ab8263a]: https://github.com/angular-package/sass/commit/ab8263a58f612f809a1e77723a8302d6f4d81e47
+[d3ace9f]: https://github.com/angular-package/sass/commit/d3ace9fc5e26ebd1fc2ce37486b32c6e0ec08374
+[51f7f17]: https://github.com/angular-package/sass/commit/51f7f1789102ec09b9f80708467cc3e32e9b2f27
+[35b3663]: https://github.com/angular-package/sass/commit/35b366323d20588896132f0f4e54a55d7847d1f5
+[16bdb40]: https://github.com/angular-package/sass/commit/16bdb4044ab5e667a8f3802f490bf6775a25ec4a
+[07e2904]: https://github.com/angular-package/sass/commit/07e2904edf8c26c282af8408e474db1e868bef26
+[0c0b0a0]: https://github.com/angular-package/sass/commit/0c0b0a0bff083cc640cf2ff8bade3b4c222a1394
+[8c27019]: https://github.com/angular-package/sass/commit/8c270193c210f2c8e7a8fa5173f992403c1ef43e
+[1b37c23]: https://github.com/angular-package/sass/commit/1b37c23d13cd2f9c3ed60ecc508c13cadffa8f8d
+[22f37e6]: https://github.com/angular-package/sass/commit/22f37e6689992048eb01e6befaea1fbfe0e5302f
+[a165ed8]: https://github.com/angular-package/sass/commit/a165ed8203e5e052a22c4540a3eed121df80179e
+[79dccba]: https://github.com/angular-package/sass/commit/79dccba17e90103c60271a1ce3996b4cf869df57
+[d596d48]: https://github.com/angular-package/sass/commit/d596d482f1a6e712e8cef8dc2bb808986b2f7aa1
+[c88c00a]: https://github.com/angular-package/sass/commit/c88c00a9cd686ef1046bf467b80c48155b0e1f1c
+[a2ed250]: https://github.com/angular-package/sass/commit/a2ed2506a088bff09e43da8bbeef376fef270469
+[01c830a]: https://github.com/angular-package/sass/commit/01c830a3a4b442111c5d1d91493747a740fb6f4d
+[b51b22a]: https://github.com/angular-package/sass/commit/b51b22a5a5e38da0d54462355852c133f9b041da
+[9a7fed7]: https://github.com/angular-package/sass/commit/9a7fed704ab33270413c0cb04c2e57b3c0e76ddd
+[66fdaef]: https://github.com/angular-package/sass/commit/66fdaef21c69365c5d7fdfd8ea56d6adb1fc2e09
+[928914a]: https://github.com/angular-package/sass/commit/928914a0ec051dcb5727d546230150a1b1767b56
+[cf31bb2]: https://github.com/angular-package/sass/commit/cf31bb25ce0e3326cf11028bce30fca51bbd3019
+[d0f372d]: https://github.com/angular-package/sass/commit/d0f372def4c1a22c58c4b6c8c07a78967d3e99d0
+[b8feda9]: https://github.com/angular-package/sass/commit/b8feda9e994d35798dbd1197fae27df63d1ddcb9
+[62c693c]: https://github.com/angular-package/sass/commit/62c693c88b44951a53f77a4c505f960b1b8c66ec
+[99484a6]: https://github.com/angular-package/sass/commit/99484a63ae7ed23d8afde689a91e940ee10aad2c
+[b3b5d55]: https://github.com/angular-package/sass/commit/b3b5d550234f4ed3d8d09d532874b22b070259fa
+[5dbd420]: https://github.com/angular-package/sass/commit/5dbd4207fef1f05b84d29d56c20c17bd047e5871
+
 ### v0.3.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.3.0-beta)
 
 - Add values module with a `combine()` function. [985370f]

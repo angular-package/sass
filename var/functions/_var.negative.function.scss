@@ -1,0 +1,14 @@
+// Sass.
+@use 'sass:meta';
+
+// Status: DONE
+// The function `var.negative()` returns CSS `calc()` function with the given `$var` multiplied by `-1`.
+// @param `$var` Variable to multiply by `-1`.
+// @returns The return value is CSS calculation multiplied by `-1`.
+@function negative($var) {
+  @return if(type-of($var) == calculation, calc((#{meta.calc-args($var)}) * -1), calc($var * -1));
+}
+
+// Examples.
+// @debug negative(var(--s-layout-spacing)); // calc(var(--s-layout-spacing) * -1)
+// @debug negative(calc(var(--s-layout-spacing) + 10)); // calc((var(--s-layout-spacing) + 10) * -1)

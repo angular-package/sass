@@ -1,0 +1,30 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use 'string.index.function' as *;
+@use 'string.split.function' as *;
+
+// Modules.
+@use '../list/list.nth.function' as *;
+
+// Status: DONE
+// The `string.to-map()` function returns map of type if string contains `:`.
+// @param `$string` A string type value of `key:value` pattern.
+// @returns The return value is a map built from `$string`.
+@function to-map($string) {
+  @if type-of($string) == string and index($string, ':') {
+    $string: split($string, ':');
+    $key: list.nth($string, 1);
+    $value: list.nth($string, list.length($string));
+    @if index($value, ',') {
+      $value: split($value, ',');
+    }
+    @return ($key: $value);
+  }
+  @return $string;
+}
+
+// Examples.
+// @debug to-map('separator:string,number');
+// @debug to-map('separator:bool');

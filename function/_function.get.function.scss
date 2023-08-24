@@ -1,0 +1,101 @@
+// Sass.
+@use 'sass:color';
+@use 'sass:list';
+// @use 'sass:map';
+@use 'sass:math';
+// @use 'sass:meta';
+@use 'sass:selector';
+// @use 'sass:string';
+
+// Variables.
+@use 'function.variables' as variables;
+
+// Functions.
+@use '../list/list.swap.function' as *;
+@use 'function.name.function';
+
+// Modules.
+@use '../map';
+@use '../meta';
+@use '../string';
+
+// Status: DONE
+// The `function.get()` function returns `function` named `$name`. The `$name` can be a string `module-function` or `module.function` or
+// map `(module: function)`.
+// @param `$name` Function name to retrieve.
+// @param `$prefix` Function prefixes to search in `$name`.
+// @param `$separator` Separator between module and function in string type `$name`.
+// @param `$functions` Additional functions of `map` type to get by using `$name`.
+// @returns The returned value is an existing `function` or from `$functions` retrieved by using `$name`, `$prefix`, and `$separator`.
+@function get($name, $prefix: null, $separator: null, $functions: null) {
+  @if meta.of-type(list map string, type-of($name)) {
+    $functions: if($functions, $functions, variables.$functions);
+    $name: function.name($name, $prefix, $separator, true);
+
+    // First check `$functions`.
+    @return if(
+      $functions and map.get($functions, $name),
+      map.get($functions, $name),
+      meta.get-function(
+        if(
+          list.length($name) == 2,
+          (nth($name, 2), false, nth($name, 1)),
+          list.nth($name, 1)
+        )...
+      )
+    );
+  }
+  @return null;
+}
+
+// Alias name.
+@function get-function($name, $prefix: null, $separator: null, $functions: null) {
+  @return get($name, $prefix, $separator, $functions);
+}
+
+// Examples.
+// $prefix: ('--', '__', '@', '&', '+', '/')
+// $separator: ('-', '_', '.')
+
+// string
+// @debug get(nth); // get-function("nth")
+// @debug get(list-nth); // get-function("nth")
+// @debug get(selector-nest); // get-function("nest")
+// @debug get('selector.nest'); // get-function("nest")
+
+// prefix + string + dot separator
+// @debug get('--selector.nest'); // get-function("nest")
+// @debug get('__selector.nest'); // get-function("nest")
+// @debug get('@selector.nest'); // get-function("nest")
+// @debug get('&selector.nest'); // get-function("nest")
+// @debug get('+selector.nest'); // get-function("nest")
+// @debug get('/selector.nest'); // get-function("nest")
+
+// prefix + string + dash separator
+// @debug get('--selector-nest'); // get-function("nest")
+// @debug get(--selector-nest); // get-function("nest")
+// @debug get(__selector-nest); // get-function("nest")
+// @debug get(+selector-nest); // get-function("nest")
+// @debug get(&selector-nest); // get-function("nest")
+// @debug get(/selector-nest); // get-function("nest")
+
+// prefix + string + underscore separator
+// @debug get('--selector_nest'); // get-function("nest")
+// @debug get(--selector_nest); // get-function("nest")
+// @debug get(__selector_nest); // get-function("nest")
+// @debug get(+selector_nest); // get-function("nest")
+// @debug get(&selector_nest); // get-function("nest")
+// @debug get(/selector_nest); // get-function("nest")
+// @debug get(__list-nth); // get-function("nth")
+
+// prefix + function name
+// @debug get('@nth'); // get-function("nth")
+// @debug get('/nth'); // get-function("nth")
+// @debug get('+nth'); // get-function("nth")
+
+// map
+// @debug get((selector: nest)); // get-function("nest")
+
+// map + prefix
+// @debug get((--selector: nest)); // get-function("nest")
+// @debug get((+selector: nest)); // get-function("nest")

@@ -1,0 +1,23 @@
+// Sass.
+@use 'sass:list';
+
+// Status:
+// The `list.replace()` function returns `$list` with elements of `$replace` value replaced by `$replacement`.
+// @param `$list` A list in which elements are elements `$replace` are replaced by `$replacement`.
+// @param `$replace` The element's value is replaced with `$replacement` in `$list`.
+// @param `$replacement` The replacement for `$replace` elements in `$list`.
+// @return The return value is `$list` where elements of `$replace` value are replaced with `$replacement`.
+@function replace($list, $replace, $replacement) {
+  @if (type-of($list) == list or type-of($list) == arglist) and list.length($list) > 0 {
+    @for $i from 1 through list.length($list) {
+      @if list.nth($list, $i) == $replace {
+        $list: list.set-nth($list, $i, $replacement);
+      }
+    }
+  }
+  @return $list;
+}
+
+// Example usage
+// @debug replace(('__PARENT__1123', 'aaaa__PARENT__1123', 'sdfsdfsd-dasdsad__PARENT__1123'), __PARENT__, '&'); // "__PARENT__1123", "aaaa__PARENT__1123", "sdfsdfsd-dasdsad__PARENT__1123"
+// @debug replace((test, test1, test2), test1, something aaa); // test, something aaa, test2

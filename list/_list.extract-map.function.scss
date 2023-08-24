@@ -1,0 +1,22 @@
+// Functions.
+@use 'get/get.map.function';
+@use 'remove/remove.map.function';
+
+// Status: DONE
+// The `list.extract-map()` gets and removes the map from `$list`.
+// @param `$list` A list from which the map is extracted.
+// @param `$occurrence` Extract `first`, `last` map or `all` maps.
+// @returns The returned value is a map with extracted from `$list` map(or multiple maps in list) in `map` key, and list without `map`.
+@function extract-map($list, $occurrence: first) {
+  @return (map: get.map($list, $occurrence), list: remove.map($list));
+}
+
+// Examples.
+// first map
+// @debug extract-map((a, b, (a: 1, b: 5), c, d)); // (map: (a: 1, b: 5), list: (a, b, c, d))
+
+// last map
+// @debug extract-map((a, b, (a: 1, b: 5), c, (c: 1, d: 1), d), last); // (map: (c: 1, d: 1), list: (a, b, c, d))
+
+// all maps
+// @debug extract-map((a, b, (a: 1, b: 5), c, (c: 1, d: 1), d), all); // (map: ((a: 1, b: 5), (c: 1, d: 1)), list: (a, b, c, d))

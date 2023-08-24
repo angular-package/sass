@@ -1,0 +1,87 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../translator.dictionary.function';
+@use 'translate.string.function';
+
+// Modules.
+@use '../dictionary';
+
+// Status: DONE
+// The `translate.nth()` function translates element at `$n` index in `$list` with a global dictionary and/or `$dictionary`.
+// @param `$list` A list in which element at given `$n` index is translated.
+// @param `$n` An index of `$list` to translate.
+// @param `$key` A key of the dictionary retrieved from a global and/or given `$dictionary`.
+// @param `$dictionary` The dictionary that is used to translate `$n` element in `$list`.
+// @param `$global` A `bool` value indicates whether to use a global dictionary(if in use). Default, `null`, and if it's not set function checks
+// variable `$dictionary-global` of `dictionary.variables.scss`.
+// @return The return value is the list with a translated `$n` element of `$list`.
+@function nth($list, $n, $key: null, $dictionary: (), $global: null) {
+  @if type-of($list) == list {
+    $dictionary: translator.dictionary($key, $dictionary, $global);
+    $nth: list.nth($list, $n);
+    $translation: dictionary.translation($nth, $dictionary);
+    @if type-of($nth) == list {
+      @if $translation {
+        @return list.set-nth($list, $n, $translation);
+      } @else {
+        @for $i from 1 through list.length($nth) {
+          $translation: dictionary.translation(list.nth($nth, $i), $dictionary);
+          @if $translation {
+            $nth: list.set-nth($nth, $i, $translation);
+          }
+        }
+        @return list.set-nth($list, $n, $nth);
+      }
+    }
+    @return if($translation, list.set-nth($list, $n, $translation), $list);
+  }
+  @return $list;
+}
+
+// Examples.
+// $-dictionary-example: dictionary.merge(null, (
+//   (extra large, 'extra large', extra-large): xl,
+//   (extra small, 'extra small', extra-small): xs,
+//   border: b,
+//   class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+//   color: c,
+//   general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+//   large: lg,
+//   medium: md,
+//   outline: o,
+//   prefix: spectre,
+//   small: sm,
+//   suffix: end,
+// ));
+
+// String with space.
+// @debug nth(border width 'extra small', 3); // border width xs
+
+// String with delimiter.
+// @debug nth(border width extra-large, 3); // border width xl
+
+// Translate list as phrase.
+// @debug nth(border width (extra small), 3); // border width xs
+
+// Translate list as string.
+// @debug nth(border width (extra-small, 'extra large'), 3); // border width (xs, xl)
+
+// `$global` dictionary true
+// @debug nth((prefix, suffix), 2, class); // prefix, class-suffix
+// @debug nth((prefix, name, suffix), 1, class); // class-prefix, name, suffix
+
+// `$global` dictionary false
+// @debug nth((prefix, suffix), 1, class, $global: false); // prefix, suffix
+
+// List.
+// @debug nth(((prefix, suffix), suffix), 1, class); // (class-prefix, class-suffix), suffix
+// @debug nth(((prefix, suffix, (prefix, suffix)), suffix), 1, class); // (class-prefix, class-suffix, (prefix, suffix)), suffix
+
+// Custom `$dictionary`.
+// @debug nth((prefix, suffix), 1, null, $-dictionary-example class); // class-prefix, suffix
+// @debug nth((prefix, suffix), 1, class, (test: (class: (prefix: spectre-prefix))) test, false); // spectre-prefix, suffix
+// @debug nth((wrapper, label, ), 1, null, $-dictionary-example general); // owijka, label
+// @debug nth((wrapper, label, color), 3, general, $-dictionary-example); // wrapper, label, c
+// @debug nth((wrapper, label, color), 3, $dictionary: $-dictionary-example general); // wrapper, label, c

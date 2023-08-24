@@ -1,0 +1,77 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Variables.
+@use 'dictionary.variables' as variables;
+
+// Modules.
+@use '../../../map';
+
+// Functions.
+@use 'dictionary.is-global.function';
+
+// Status: DONE
+// The `dictionary.pick()` function returns the dictionary from a global dictionary(if in use) and multiple `$dictionary` associated with `$key`.
+// @param `$key` A required key to pick the dictionary from the global dictionary(if in use) and `$dictionary`.
+// @param `$dictionary` Additional dictionaries along with a global dictionary(if in use) from which to pick dictionary associated with `$key`.
+// @param `$global` A `bool` value indicates whether to use a global dictionary. Default, `null`, then `$dictionary-global` is checked.
+// @return The return value is a dictionary consisting of the global dictionary(if in use) and given `$dictionary` from the associated `$key`.
+@function pick($key, $dictionary: (), $global: null) {
+  $dictionary: if(meta.type-of($dictionary) == list and list.length($dictionary) > 0, map.retrieve(pick, $dictionary...), $dictionary);
+  @if dictionary.is-global($global) {
+    $dictionary: if(
+      $key,
+      map.deep-merge(map.pick(variables.$dictionary, $key...), if(meta.type-of($dictionary) == map, map.pick($dictionary, $key...), ())),
+      map.deep-merge(variables.$dictionary, $dictionary)
+    );
+  } @else if $key {
+    $dictionary: map.pick($dictionary, $key...);
+  }
+  @return $dictionary;
+}
+
+// Examples.
+// $-dictionary: (
+//   general: (word: słowo, (wrapper, wrap): owijka, technology: (action: akcja)),
+//   class: (prefix: spectre-prefix, suffix: spectre-suffix, calendars: (calendar: cal), labels: (label: lab)),
+//   prefix: spectre,
+//   suffix: end,
+//   separator: '--',
+//   var: (prefix: spectre, suffix: end)
+// );
+
+// Examples.
+// Pick the global dictionary.
+// @debug pick(null); // (word: translation)
+
+// Deactivate picking from the global dictionary.
+// @debug pick(null, $global: false); // ()
+
+// Pick dictionary from the `$-dictionary` variable.
+// @debug pick(null, $-dictionary); // (word: translation, general: (word: słowo, (wrapper, wrap): owijka, technology: (action: akcja)), class: (prefix: spectre-prefix, suffix: spectre-suffix, calendars: (calendar: cal), labels: (label: lab)), prefix: spectre, suffix: end, separator: "--", var: (prefix: spectre, suffix: end))
+
+// Pick dictionary from the `$-dictionary` variable by using string key.
+// @debug pick(general, $-dictionary); // (general: (word: słowo, (wrapper, wrap): owijka, technology: (action: akcja)))
+
+// Pick dictionary from the `$-dictionary` variable by using deep key.
+// @debug pick(((class, calendars),), $-dictionary class); // (calendars: (calendar: cal))
+// @debug pick([(class, calendars)], $-dictionary); // (calendars: (calendar: cal))
+
+// Pick dictionary from the `$-dictionary` with not existing key.
+// @debug pick(no-field, $-dictionary); // (no-field: null)
+
+// Pick dictionary from the `$-dictionary` variable and `$global` false.
+// @debug pick(null, $-dictionary, $global: false); // (general: (word: słowo, (wrapper, wrap): owijka, technology: (action: akcja)), class: (prefix: spectre-prefix, suffix: spectre-suffix, calendars: (calendar: cal), labels: (label: lab)), prefix: spectre, suffix: end, separator: "--", var: (prefix: spectre, suffix: end))
+// @debug pick(general, $-dictionary, $global: false); // (general: (word: słowo, (wrapper, wrap): owijka, technology: (action: akcja)))
+// @debug pick(no-field, $-dictionary, $global: false); // (no-field: null)
+
+// Pick dictionary by using multiple keys and deep key.
+// @debug pick((general, var, (class, calendars)), $-dictionary); // (general: (word: słowo, (wrapper, wrap): owijka, technology: (action: akcja)), var: (prefix: spectre, suffix: end), calendars: (calendar: cal))
+
+// Custom dictionary.
+// @debug pick(class, $-dictionary); // (class: (prefix: spectre-prefix, suffix: spectre-suffix, calendars: (calendar: cal), labels: (label: lab)))
+// @debug pick((prefix,), $-dictionary); // (prefix: spectre)
+
+// Custom dictionary + pick key
+// @debug pick(null, $-dictionary ((class, calendars),), $global: false); // (calendars: (calendar: cal))

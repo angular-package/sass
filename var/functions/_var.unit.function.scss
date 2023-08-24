@@ -1,0 +1,39 @@
+// Sass.
+@use 'sass:map';
+@use 'sass:meta';
+
+// Variables.
+@use '../var.variables';
+
+// Functions.
+@use 'var.css.function' as *;
+@use 'var.is.function' as *;
+
+// Status: DONE
+// The `var.unit()` function returns `$var` multiplied by `$unit`.
+// @param `$var` CSS variable to multiply by `$unit`.
+// @param `$unit` A bool value , unit(rem, px ...), or CSS variable to multiply by `$var`. If `bool` then unit is retrieved from
+// `$var` variable from `default-unit` key.
+// @returns The return value is multiplied `$var` by `$unit`, if `$unit` is not `null`.
+@function unit($var, $unit: null) {
+  $unit: if(meta.type-of($unit) == bool and $unit, map.get(var.$var, default-unit), $unit);
+  $unit: if($unit and not (meta.type-of($unit) == number) and not is($unit), 1 + $unit, $unit);
+  @return if($unit, calc($var * $unit), $var);
+}
+
+// Examples.
+// unit null
+// @debug unit(layout spacing); // layout spacing
+// @debug unit(var(--s-layout-spacing)); // var(--s-layout-spacing)
+
+// unit true
+// @debug unit(var(--s-layout-spacing), true); // calc(var(--s-layout-spacing) * 1rem)
+
+// unit rem
+// @debug unit(var(--s-layout-spacing), rem); // calc(var(--s-layout-spacing) * var(--s-unit-rem))
+
+// unit px
+// @debug unit(var(--s-layout-spacing), px); // calc(var(--s-layout-spacing) * 1px)
+
+// var px
+// @debug unit(var(--s-layout-spacing), var(--s-unit-px)); // calc(var(--s-layout-spacing) * var(--s-unit-px))

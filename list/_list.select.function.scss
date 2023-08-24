@@ -14,14 +14,14 @@
 
 // Status: DONE
 // The `list.select()` function returns the list with elements selected by comparison.
-// @param `$from` The list to retrieve elements from, by the given comparison.
-// @param `$operand` The value of string type can take (index, type, value) and indicates an operand from the list used in the comparison.
 // @param `$select` The value of list or string type indicates what to retrieve from the given `$from` list.
-//        The value of list type consists of occurrence and selection, in order (occurrence, selection). It's changed to (selection, occurrence)
-//        when selection has is used, and there are (has only), (has any), (has all).
+//        The value of list type consists of occurrence and selection, in order (occurrence selection). It's changed to (selection occurrence)
+//        when selection `has` is used, and there are (has only), (has any), (has all).
 //        Occurrence (all, any, end, first, last, only) indicates how often compared elements occur in the given `$from` list.
 //        Selection can take the values has, index, type, value and indicates what to retrieve from the list.
-// @param `$operator` The operator used to compare given values with the given `$operand` of the list. TODO: operators.
+// @param `$from` The list to retrieve elements from, by the given comparison.
+// @param `$operand` The value of string type can take (index, type, value) and indicates an operand from the list used in the comparison.
+// @param `$operator` The operator used to compare given `$value` and/or `$values` with `$operand` of the `$from` list.
 // @param `$value` The required value to select from the given `$from`.
 // @arbitrary `$values...` Additional values to select from the given `$from` list.
 // @return The return value is the list with the elements selected by the given comparison.
@@ -133,15 +133,7 @@ $-example-list: 300px 'a' 10px 'b' 2px 'c' 15px 'd' 1px 'e' 300px 'f' 500px 'g' 
 // @debug select(first index, $-example-list, value, '==', 1px, 2px, 3px); // 9, 5, 15
 
 // @debug select(index, $-example-list, index, '==', 2, 5, 10); // 2, 5, 10
-// @debug select(last index, $-example-list, type, '==', number, string); // 19, 18
-// @debug select(last index, $-example-list, value, '==', 1px, 2px, 3px); // 9, 19, 15
-
-
-
-
-// DONE: all/first/last value index
-// DONE: all/first/last value type
-// DONE: all/first/last value value
+// @debug select(last index, $-example-list, tyfrom
 
 // @debug select(all value, $-example-list, index, '==', 2, 5, 10); // "a", "2px", "e"
 // @debug select(all value, $-example-list, type, '==', number, string); // (300px, 10px, 2px, 15px, 1px, 300px, 500px, 3px, 150px, 2px), ("a", "b", "c", "d", "e", "f", "g", "h", "i")

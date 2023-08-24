@@ -1,0 +1,88 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../../../list/has/has.list.function' as *;
+@use '../translator.dictionary.function';
+@use 'translate.nth.function';
+
+// Modules.
+@use '../dictionary';
+
+// Status: DONE
+// The `translate.list()` function translates `$list` with a global dictionary and/or dictionary from `$keys`.
+// @param `$list` A list or list with a few nested lists to translate.
+// @param `$keys...` Keys of dictionary retrieved from a global dictionary for translation.
+// @returns The return value is translated `$list`.
+@function list($list, $keys...) {
+  @if type-of($list) == list {
+    $translation: dictionary.translation($list, translator.dictionary($keys...));
+    @if $translation {
+      @return $translation;
+    }
+    @for $i from 1 through list.length($list) {
+      $list: translate.nth($list, $i, $keys...);
+      $sub-list-1: list.nth($list, $i);
+      @if type-of($sub-list-1) == list {
+        @for $j from 1 through list.length($sub-list-1) {
+          $sub-list-2: list.nth($sub-list-1, $j);
+          @if type-of($sub-list-2) == list {
+            @for $n from 1 through list.length($sub-list-2) {
+              $sub-list-2: translate.nth($sub-list-2, $n, $keys...);
+            }
+
+            $sub-list-1: list.set-nth($sub-list-1, $j, $sub-list-2);
+          }
+
+          $sub-list-1: translate.nth($sub-list-1, $j, $keys...);
+        }
+
+        $list: list.set-nth($list, $i, $sub-list-1);
+      }
+    }
+  }
+  @return $list;
+}
+
+// Examples.
+// $-dictionary-example: dictionary.merge(null, (
+//   (extra large, 'extra large', extra-large): xl,
+//   (extra small, 'extra small', extra-small): xs,
+//   border: b,
+//   class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+//   color: c,
+//   general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+//   large: lg,
+//   medium: md,
+//   outline: o,
+//   prefix: spectre,
+//   small: sm,
+//   suffix: end,
+// ));
+
+// @debug list(extra large);
+// @debug list(extra-large (extra small)); // xl xs
+
+// @debug list((extra-large,));
+// @debug list(border (extra large)); // b xl
+
+// List.
+// Get dictionary with a `$key` parameter`.
+// @debug list((prefix, border, suffix), class); // class-prefix, b, class-suffix
+
+// Get dictionary with a `$dictionary` parameter of list type.
+// @debug list((wrapper, technology), $dictionary: $-dictionary-example general); // owijka, tech
+// @debug list((wrapper, technology) color, general, $-dictionary-example); // (owijka, tech) c
+// @debug list((wrapper, (word,), ([word])), $dictionary: $-dictionary-example general); //  owijka, (słowo,), [słowo]
+
+// Translate by using global dictionary and `class` key.
+// @debug list(prefix (separator, prefix) suffix, $key: class); // class-prefix (class-separator, class-prefix) class-suffix
+
+// Custom dictionary.
+// @debug list((wrapper,), general, $-dictionary-example); // (owijka,)
+// @debug list((calendar, label), $dictionary: $-dictionary-example (class, calendars)); // cal, label
+// @debug list((border, outline) color, $dictionary: (border: b, outline: o, 'gray': g, 'red': r)); // (b, o) c
+// @debug list((border 'red', outline 'gray') color, $dictionary: (border: b, outline: o, 'gray': g, 'red': r)); // (b r, o g) c
+
+// Nested lists
+// @debug list((border 1 outline (border 2, outline, (border 3, outline, (border 4, outline))) color), $dictionary: (border: b, outline: o, 'gray': g, 'red': r)); // b 1 o (b 2, o, (b 3, o, (border 4, o))) c

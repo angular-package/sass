@@ -1,0 +1,82 @@
+// Sass.
+@use 'sass:list';
+
+// Variables.
+@use 'function.variables' as variables;
+
+// Modules.
+@use '../meta';
+@use '../string';
+
+// Status: DONE
+// The `function.prefix()` function gets function prefix of `$prefix` from `$name`.
+// @param `$name` Function name of `list`, `map` or `string` type to get prefix of `$prefix`.
+// @param `$prefix` Prefixes for the function name in `$name`.
+// @returns The returned value is prefix of `string` type if found, otherwise `null`.
+@function prefix($name, $prefix: null) {
+  @if meta.of-type(list map string, $name) {
+    $prefix: if($prefix, $prefix, variables.$prefix);
+    $name: if(
+      meta.of-type(list map, $name),
+      string.join('[SEPARATOR]', if(meta.type-of($name) == map, list.nth($name, 1), $name)...),
+      $name
+    );
+
+    // Split into list.
+    @if type-of($name) == string {
+      $i: 1;
+      @each $index in string.index($name, $prefix...) {
+        @if $index == 1 {
+          @return list.nth($prefix, $i);
+        }
+
+        $i: $i + 1;
+      }
+    }
+  }
+  @return null;
+}
+
+// Examples.
+// string
+// @debug prefix(nth); // ''
+// @debug prefix(color); // ''
+
+// prefixed --
+// @debug prefix(--selector-nest); // --
+// @debug prefix('--selector.nest'); // --
+
+// string + `$prefix`
+// @debug prefix(--selector-nest, '--'); // --
+// @debug prefix('--selector.nest', '--'); // --
+
+// string + different `$prefix`
+// @debug prefix(--selector-nest, '@'); // null
+// @debug prefix('--selector.nest', '@'); // null
+
+// list
+// @debug prefix(list nth); // ''
+// @debug prefix(selector nest); // ''
+// @debug prefix(--list nth); // --
+
+// list + `$prefix`
+// @debug prefix(--list nth, '--'); // --
+// @debug prefix(--selector nest, '--'); // --
+// @debug prefix((10xfunction #aaa)); // ''
+
+// list + different `$prefix`
+// @debug prefix(--selector nest, '@'); // null
+
+// map
+// @debug prefix((list: nth)); // ''
+// @debug prefix((selector: nest)); // ''
+
+// map + `$prefix`
+// @debug prefix((--list: nth), '--'); // --
+// @debug prefix((--selector: nest), '--'); // --
+
+// map + different `$prefix`
+// @debug prefix((--list: nth), '@'); // null
+// @debug prefix((--selector: nest), '@'); // null
+
+// @debug prefix((10xfunction: #aaa)); // ''

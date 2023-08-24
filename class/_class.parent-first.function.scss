@@ -1,0 +1,68 @@
+// Modules.
+@use '../list';
+@use '../string';
+
+// Status: DONE
+// The `class.parent-first()` function returns `$name` with parent selector & as first.
+// @param `$name` The `$name` of string or list type to move parent selector as first.
+// @returns The returned value is `$name` with parent selector as first.
+@function parent-first($name) {
+  // FEATURE: Remove parent and class selectors '&' '&.' '.'
+  $selector: ();
+  @if list.length($name) > 0 {
+    @each $indicator in list.index($name, any, '==', '&', '&.', '.') {
+      @if $indicator {
+        $selector: list.append($selector, list.nth($name, $indicator));
+      }
+    }
+
+    $name: list.remove-value($name, '&', '&.', '.');
+  }
+
+  // FEATURE: Replace parent and class selectors '&' '&.' '.' in string.
+  $i: 1;
+  @each $element in $name {
+    @if type-of($element) == string and string.index($element, '&.') {
+      $name: list.set-nth($name, $i, string.replace($element, first, '&.', ''));
+      $selector: list.join($selector, '&' '.');
+    } @else {
+      @if not ($element == '&') and type-of($element) == string and string.index($element, '&') {
+        $name: list.set-nth($name, $i, string.replace($element, first, '&', ''));
+        $selector: list.append($selector, '&');
+      }
+      @if type-of($element) == string and string.index($element, '.') {
+        $name: list.set-nth($name, $i, string.replace($element, first, '.', ''));
+        $selector: list.append($selector, '.');
+      }
+    }
+
+    $i: $i + 1;
+  }
+  @return list.join($selector, $name, list.separator($name));
+}
+
+// Examples.
+// nth with '&' of a string type
+// @debug parent-first('&border' 'width' 'lg'); // "&" "border" "width" "lg"
+// @debug parent-first('border' '&width' 'lg'); // "&" "border" "width" "lg"
+// @debug parent-first(border width '&lg'); // "&" border width "lg"
+
+// nth with a '&' and '.'
+// @debug parent-first('.' '&' 'border' 'width' 'lg'); // "&" "border" "width" "lg"
+// @debug parent-first('&' '.' 'border' 'width' 'lg'); // "&" "border" "width" "lg"
+
+// nth with a '&.'
+// @debug parent-first('&.' 'border' 'width' 'lg'); // "&." "border" "width" "lg"
+// @debug parent-first('border' 'width' '&.' 'lg'); // "&." "border" "width" "lg"
+// @debug parent-first('border' '&' 'width' '&' '.' 'lg'); // "&" "." "border" "width" "lg"
+
+// ! class selector dot '.' as first
+// nth with a '.'
+// @debug parent-first('border' 'width' '.' 'lg'); // "." "border" "width" "lg"
+
+// nth with '.' of a string type
+// @debug parent-first('.border' 'width' 'lg'); // "." "border" "width" "lg"
+// @debug parent-first('border' '.width' 'lg'); // "." "border" "width" "lg"
+
+// nth with '&' '.' of a string type
+// @debug parent-first('border' '&width' '.lg'); // "&" "." "border" "width" "lg"

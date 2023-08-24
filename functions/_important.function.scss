@@ -1,0 +1,12 @@
+// Status: DONE
+// The `important()` function returns the declaration important with `!` delimiter followed by the `important` keyword.
+// @param `$important` The value of a bool indicating whether to return `!important` declaration.
+// @return The return value is `!important` declaration if the `$important` is set to `true`.
+@function important($important: false) {
+  @return if($important == true, #{' !important'}, #{''});
+}
+
+// Examples.
+// @debug important(true); //  !important
+// @debug important(false); //
+// @debug 1px solid green important(true); // 1px solid green !important

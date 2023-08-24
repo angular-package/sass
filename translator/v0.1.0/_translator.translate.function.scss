@@ -1,0 +1,66 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
+// Functions.
+@use 'translator.dictionary.function';
+
+// Modules.
+@use 'dictionary';
+@use 'translate';
+
+// Status: DONE
+// The `translator.translate()` function translates `string`, `map`, or `list` with a global dictionary and/or `$dictionary`,
+// optionally with a dictionary retrieved by `$key`.
+// @param `$words` The words in `string`, `list`, or `map` to translate.
+// @param `$key` A key of the dictionary that is used to translate `$words`.
+// @param `$dictionary` The dictionary of map or list type(dictionary key) used to translate `$words`.
+// @param `$global` A `bool` value indicates whether to use a global dictionary. Default, `null`.
+// @return The return value is the translated `string`, `map`, or `list` depending on the given `$words`.
+@function translate($words, $key: null, $dictionary: (), $global: null) {
+  @return meta.call(map.get((
+      list: meta.get-function(list, false, translate),
+      map: meta.get-function(map, false, translate),
+      string: meta.get-function(string, false, translate),
+    ),
+    meta.type-of($words)),
+    $words,
+    null,
+    translator.dictionary($key, $dictionary, $global),
+  );
+}
+
+// Examples.
+// $-dictionary-example: dictionary.merge(null, (
+//   (extra large, 'extra large', extra-large): xl,
+//   (extra small, 'extra small', extra-small): xs,
+//   class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+//   general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+//   large: lg,
+//   medium: md,
+//   prefix: spectre,
+//   small: sm,
+//   suffix: end,
+// ));
+
+// List.
+// @debug translate(prefix (border, outline) color); // prefix (border, outline) color
+
+// Use `$dictionary` argument.
+// @debug translate(prefix (border, outline) color, null, $-dictionary-example); // spectre (b, o) c
+// @debug translate((wrapper, technology, prefix), null, $-dictionary-example); // wrapper, technology, spectre
+// @debug translate((wrapper, technology), null, $-dictionary-example general); // owijka, tech
+// @debug translate((wrapper, technology) color, null, $-dictionary-example general); // (owijka, tech) c
+
+// Map.
+// @debug translate((word: prefix (border, outline) color), null, $-dictionary-example); // (word: spectre (b, o) c)
+// @debug translate((word: wrapper), null, $-dictionary-example general); // (word: owijka)
+// @debug translate((limit: first), null, ((first, start): 1, (last, length, end): 50)); // (limit: 1)
+
+// String.
+// @debug translate(wrapper, null, $-dictionary-example general); // owijka
+// @debug translate(technology, null, $-dictionary-example general); // tech
+
+// Different dictionary.
+// @debug translate(calendar, null, $-dictionary-example (class, calendars)); // cal

@@ -2,31 +2,47 @@
 @use 'sass:list';
 @use 'sass:string';
 
+// Modules.
+@use '../math';
+
+// Functions.
+@use '../list/remove/remove.value.function';
+@use 'string.index.function' as *;
+@use 'string.unquote.function' as *;
+
 // Status: DONE
-// The `string.split()` function returns comma-separated list of substrings of $string that are separated by the given `$separator`.
-// The $separators aren’t included in these substrings..
-// If `$limit` is a number 1 or higher, this splits on at most that many $separators (and so returns at most $limit + 1 strings).
+// The `string.split()` function returns comma-separated list of substrings of `$string` that are separated by `$separator`.
+// The separators aren’t included in these substrings..
+// If `$limit` is a number `1` or higher, this splits on at most that many $separators (and so returns at most $limit + 1 strings).
 // The last substring contains the rest of the string, including any remaining separators.
-// @param `$string` The string to split.
-// @param `$separator` The separator that splits the string into the list.
-// @param `$limit` Limit split of string.
+// @param `$string` The `string` that is split by `$separator`.
+// @param `$separator` The separator that splits the `$string` into the returned list.
+// @param `$limit` Limit split of `$string`.
 // @param `$bracketed` Returns bracketed list.
-@function split($string, $separator, $limit: null, $bracketed: false) {
+// @param `$unquote` Whether to unquote returned elements of list.
+// @return The return value is a list separated by `$separator` limited by `$limit` times, and/or is `$bracketed`.
+@function split($string, $separator, $limit: null, $bracketed: false, $unquote: false) {
   $result: list.join((), (), comma, $bracketed);
   $index: 0;
   $i: 1;
   @while $index != null {
-    $index: string.index($string, $separator);
-    @if $index {
-      $result: list.append($result, string.slice($string, 1, $index - 1));
+    $index: null;
+    $separators: index($string, $separator...);
+    $separator-index: null;
+    @if list.length(remove.value($separators, null)) > 0 {
+      $index: math.min(remove.value($separators, null)...);
+      $separator-index: list.index($separators, $index);
+    }
+    @if $index and $separator-index {
+      $result: list.append($result, unquote(string.slice($string, 1, $index - 1), $unquote));
       @if $limit and $limit == $i {
-        $result: list.append($result, string.slice($string, $index + 1, -1));
+        $result: list.append($result, unquote(string.slice($string, $index + string.length(list.nth($separator, $separator-index)), -1), $unquote));
         $index: null;
       } @else {
-        $string: string.slice($string, $index + 1);
+        $string: string.slice($string, $index + string.length(list.nth($separator, $separator-index)));
       }
     } @else {
-      $result: list.append($result, $string);
+      $result: list.append($result, unquote($string, $unquote));
     }
 
     $i: $i + 1;
@@ -35,6 +51,7 @@
 }
 
 // Examples.
+// single character
 // @debug split('aaa bbb ccc', ' '); // "aaa", "bbb", "ccc"
 // @debug split('aaa-bbb-ccc', '-'); // "aaa", "bbb", "ccc"
 // @debug split('aaa/bbb/ccc', '/'); // "aaa", "bbb", "ccc"
@@ -42,3 +59,10 @@
 // @debug split("Segoe UI Emoji", " ", $limit: 1); // "Segoe", "UI Emoji"
 // @debug split("Segoe UI Emoji", " ", $limit: 1, $bracketed: true); // ["Segoe", "UI Emoji"]
 // @debug split("SF Mono Segoe UI Mono Roboto Mono", " ", $limit: 2, $bracketed: true); // ["SF", "Mono", "Segoe UI Mono Roboto Mono"]
+
+// word `$separator`
+// @debug split('aaa_DELIMITER_bbb_DELIMITER_ccc', '_DELIMITER_'); // "aaa", "bbb", "ccc"
+// @debug split('aaa[separator]bbb[separator]ccc', '[separator]'); // "aaa", "bbb", "ccc"
+
+// multiple separators
+// @debug split('aaa_SEPARATOR_bbb_DELIMITER_ccc_ADD_eee_SEPARATOR_ddd', ('_DELIMITER_', '_SEPARATOR_', '_ADD_')); // "aaa", "bbb", "ccc", "eee", "ddd"

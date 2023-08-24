@@ -3,9 +3,10 @@
 @use 'sass:string';
 
 // Status: DONE
-// The `string.join()` function returns the string built from the given elements separated by the given `$delimiter` in original elements order.
-// @param `$delimiter` The delimiter to add between the given `$elements`.
-// @param `$elements...` Elements to join to the string of color, list, number or string type with the delimiter.
+// The `string.join()` function returns the `string` built from `$elements` separated by `$delimiter` in original elements order.
+// @param `$delimiter` The delimiter to add between `$elements`.
+// @param `$elements...` Elements to join to returned string of `color`, `list`, `number` or `string` type with the `$delimiter`.
+// @return The return value is a `string` built from `$elements` with `$delimiter`.
 @function join($delimiter, $elements...) {
   $string: '';
   @each $element in $elements {

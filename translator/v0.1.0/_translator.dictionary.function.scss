@@ -1,0 +1,78 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Modules.
+@use '../../map';
+@use 'dictionary';
+
+// Status: DONE
+// The `translator.dictionary()` function returns(flattened map) the global and/or given `$dictionary`, optionally merged with the dictionary
+// retrieved from `$key` of this dictionary.
+// @param `$key` A key to deep merge the dictionary under this key with a global dictionary and/or with `$dictionary`.
+// @param `$dictionary` Dictionary of (flatten) map or list(dictionary keys) type to retrieve.
+// @param `$global` A `bool` value indicates whether to use a global dictionary. Default, `null`.
+// @return The return value is a flattened map dictionary consisting of (word:translation).
+@function dictionary($key: null, $dictionary: (), $global: null) {
+  @if list.length($dictionary) > 0 {
+    $dictionary: if(meta.type-of($dictionary) == map or list.separator($dictionary) == space, ($dictionary,), $dictionary);
+    @for $i from 1 through list.length($dictionary) {
+      $retrieved-dictionary: list.nth($dictionary, $i);
+      $dictionary: list.set-nth(
+        $dictionary,
+        $i,
+        if(
+          meta.type-of($retrieved-dictionary) == list and list.length($retrieved-dictionary) > 1,
+          map.deep-merge-key(dictionary.pick(null, $retrieved-dictionary, false), list.nth($retrieved-dictionary, 2)...),
+          $retrieved-dictionary
+        )
+      );
+    }
+  }
+  @return map.remove-type(map.deep-merge-key(dictionary.merge(null, $dictionary, $global), $key...), map);
+}
+
+// Variables.
+// $-dictionary-example: (
+//   general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+//   class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+//   prefix: spectre,
+//   border: b,
+//   color: c,
+//   separator: '-',
+//   suffix: end,
+//   outline: o,
+//   var: (prefix: var-prefix, suffix: var-suffix),
+// );
+
+// Examples.
+// $-test: dictionary.merge(null, $-dictionary-example class);
+// $-test: dictionary.set(global, this is global translation);
+// $-test: dictionary.set(example, $-dictionary-example class, $-dictionary-example, false);
+
+// @debug $-test;
+// @debug dictionary.$dictionary;
+// @debug dictionary(class);
+// @debug dictionary(null, ($-dictionary-example general, $-dictionary-example class));
+// @debug dictionary(null, ($-dictionary-example general, $-dictionary-example class));
+// @debug dictionary((general, class), $-dictionary-example);
+// @debug dictionary((general, class), $-dictionary-example (class, general, var));
+
+// Gets the global dictionary.
+// @debug dictionary(); // (word: translation)
+
+// Gets the global dictionary and class retrieved from the dictionary from the given `$key` of the global dictionary.
+// @debug dictionary(class, $-dictionary-example class); // (word: translation, prefix: class-prefix, separator: class-separator, suffix: class-suffix)
+
+// Gets common and class dictionary from the global and the given `$dictionary`.
+// @debug dictionary(class, (prefix: modified prefix, suffix: modified suffix)); // (word: translation, prefix: modified prefix, suffix: modified suffix)
+
+// Gets common and class dictionary from the global and the given `$dictionary`.
+// @debug dictionary(class, (class: (prefix: modified prefix, suffix: modified suffix))); // (word: translation, prefix: modified prefix, suffix: modified suffix)
+
+// Gets the dictionary without global dictionary.
+// @debug dictionary(null, (dictionary: (prefix: modified prefix, suffix: modified suffix)), false); // ()
+// @debug dictionary(dictionary, (dictionary: (prefix: modified prefix, suffix: modified suffix)), false); // (prefix: modified prefix, suffix: modified suffix)
+
+// get nested dictionary
+// @debug dictionary((class, class-1), (size: medium, class: (class-1: (prefix: modified prefix, suffix: modified suffix))), false); // (size: medium, prefix: modified prefix, suffix: modified suffix)

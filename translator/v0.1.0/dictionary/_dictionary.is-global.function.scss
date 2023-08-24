@@ -1,0 +1,25 @@
+// Sass.
+@use 'sass:meta';
+
+// Variables.
+@use 'dictionary.variables' as variables;
+
+// Status: DONE
+// The `dictionary.is-global()` function checks whether the global dictionary is in use. Function checks the `$dictionary-global`
+// from the `dictionary.variables`.
+// @param `$global` An optional `bool` value indicates whether to use or not the global dictionary. Default, `null`.
+// @return The return value is a `bool` indicating whether to use a global dictionary.
+@function is-global($global: null) {
+  @if if(meta.type-of($global) == bool, $global, variables.$dictionary-global) {
+    @return true;
+  }
+  @return $global;
+}
+
+// Examples.
+// `variables.$dictionary-global`
+// @debug is-global(); // true
+
+// `$global`
+// @debug is-global(true); // true
+// @debug is-global(false); // false

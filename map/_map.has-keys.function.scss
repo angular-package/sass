@@ -3,10 +3,10 @@
 @use 'sass:map';
 
 // Status: DONE
-// The `map.has-keys()` function checks whether the map contains given `$keys`.
-// @param `$map` A map to check whether it has all the given `$keys`.
-// @param `$keys...` The keys to check if the given `$map` contains.
-// @return The return value is a `bool` indicating map contains `$keys`.
+// The `map.has-keys()` function checks whether `$map` contains `$keys`.
+// @param `$map` A map to check whether it has all `$keys`.
+// @param `$keys...` The keys to check if `$map` contains them.
+// @return The return value is a `bool` indicating `$map` contains `$keys`.
 @function has-keys($map, $keys...) {
   $has: ();
   @each $key in $keys {

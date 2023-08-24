@@ -1,0 +1,52 @@
+// Functions.
+@use '../translator.dictionary.function';
+
+// Modules.
+@use '../dictionary';
+
+// Status: DONE
+// The `translate.string()` function returns `$string` translated with a global dictionary and/or dictionary from `$keys`
+// if translation is found, otherwise not translated `$string`.
+// @param `$string` A `string` to translate with a global dictionary and/or dictionary from `$keys`.
+// @param `$keys...` Keys of the dictionaries retrieved from a global dictionary.
+// @returns The return value is the `$string` translation retrieved from the global dictionary and/or dictionary from `$keys`.
+@function string($string, $keys...) {
+  @return if(
+    type-of($string) == string,
+    dictionary.translation($string, translator.dictionary($keys...)) or $string,
+    $string
+  );
+}
+
+// Examples.
+// $-dictionary-example: dictionary.merge(null, (
+//   (extra large, 'extra large', extra-large): xl,
+//   (extra small, 'extra small', extra-small): xs,
+//   border: b,
+//   class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+//   color: c,
+//   general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+//   large: lg,
+//   medium: md,
+//   outline: o,
+//   prefix: spectre,
+//   small: sm,
+//   suffix: end,
+// ));
+
+// Default translate.
+// @debug string(prefix); // spectre
+
+// Translate from the sub-dictionary `class`.
+// @debug string(prefix, class); // class-prefix
+
+// Translate string with delimiter '-'.
+// @debug string(extra-large); // xl
+// @debug string(extra-large, class); // xl
+
+// @debug string(word, general); // słowo
+// @debug string(wrap, general); // owijka
+// @debug string(wrapper, general); // owijka
+
+// Nested key.
+// @debug string(calendar, (class, calendars)); // cal

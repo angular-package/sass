@@ -1,0 +1,62 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use '../list/remove/remove.nth.function';
+@use 'function.is.function';
+
+// Status: DONE
+// The `function.remove()` function removes function(existing) name with arguments from `$value`.
+// @param `$value` Value from which function(existing) name with arguments is removed.
+// @param `$prefix` Prefix for the function name in `$value`.
+// @param `$functions` Additional functions of `map` type to remove from `$value`.
+// @returns The return value is `$value` without function name and arguments.
+@function remove($value, $prefix: null, $separator: null, $functions: null) {
+  @for $i from 1 through list.length($value) {
+    $element: list.nth($value, $i);
+    @if type-of($element) == map {
+      $element: map.keys($element);
+    }
+    @if type-of($element) == list {
+      $element: list.nth($element, 1);
+    }
+    @if function.is($element, $prefix, $separator, $functions) {
+      @return remove.nth($value, $i, if(type-of(list.nth($value, $i)) == string, $i + 1, 0));
+    }
+  }
+  @return $value;
+}
+
+// Alias name.
+@function remove-from-value($value, $prefix: null, $separator: null, $functions: null) {
+  @return remove($value, $prefix, $separator, $functions);
+}
+
+// Examples.
+// from list
+// @debug remove(selector-nest (unit 2)); // ()
+// @debug remove((size 2) selector-nest); // (size 2)
+// @debug remove(--color (primary dark)); // --color (primary dark)
+// @debug remove(10px --selector-nest (unit 10) 15px (unit 2)); // 10px 15px (unit 2)
+
+// nested list
+// @debug remove(10px (selector-nest (unit 10)) 15px (unit 2)); // 10px 15px (unit 2)
+
+// $-removed: remove(10px (selector-nest (unit 10)) 15px (selector-nest (unit 2))); // 10px 15px (selector-nest (unit 2))
+// @debug $-removed; // 10px 15px
+
+// $-removed: remove($-removed); //
+// @debug $-removed; // 10px 15px
+
+// from map
+// @debug remove((selector-nest: (unit 2,))); // ()
+// @debug remove((var-get: (unit 2,))); // unit 2
+// @debug remove((--color: (unit 2,))); // (--color: ((unit 2,)))
+
+// nested map
+// @debug remove(10px (selector-nest: (unit 10)) 15px (unit 2)); // 10px 15px (unit 2)
+
+// prefix
+// @debug remove(--selector-nest (unit 2)); // ()
+// @debug remove(__selector-nest (unit 2), __); // ()

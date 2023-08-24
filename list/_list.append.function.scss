@@ -1,13 +1,14 @@
 // Sass.
 @use 'sass:list';
+@use 'sass:meta';
 
 // Status: DONE
-// The modified `list.append()` function returns a copy of `$list` with `$val` added to the end, and/or with added multiple `$values`.
-// Additional values are added to the end of the parameters to preserve the original functionality.
-// @param `$list` The list to append the `$value` and/or `$values` into.
-// @param `$val` The value to append.
+// The modified `list.append()` function returns a copy of `$list` with `$val` and/or with added multiple `$values`.
+// The function is modified by adding arbitrary values to the end of the parameters to preserve the original functionality.
+// @param `$list` The list to append the `$val` and/or `$values` into.
+// @param `$val` The value to append to the end of `$list`.
 // @param `$separator` The separator `comma`, `space` or `slash` of the list. Default `auto`.
-// @arbitrary `$values...` Additional values to append into the given `$list`.
+// @arbitrary `$values...` Additional values to append into `$list`.
 // @return Returns a copy of `$list` with `$val` and/or `$values` added to the end.
 @function append($list, $val, $separator: auto, $values...) {
   @each $value in list.join(($val,), $values, comma) {
@@ -26,3 +27,9 @@
 // @debug append(10px, 20px, auto, 1em, 2rem); // 10px 20px 1em 2rem
 // @debug append(10px 20px, 30px 40px, auto, 1px, 15px, (1px 2px 3px)); // 10px 20px (30px 40px) 1px 15px (1px 2px 3px)
 // @debug append((10px, 20px), 30px 40px, auto, 1px, 15px, (1px 2px 3px), (4px, 5px)); // 10px, 20px, 30px 40px, 1px, 15px, 1px 2px 3px, (4px, 5px)
+
+// append map
+// @debug append(1 2 3, (a: 1, b: 2, c: 3), auto, (d: 4, e: 5)); // 1 2 3 (a: 1, b: 2, c: 3) (d: 4, e: 5)
+// @debug append((a: 1, b: 2), (c: 3, d: 4), auto, (e: 5, f: 6)); // a 1, b 2, (c: 3, d: 4), (e: 5, f: 6)
+// @debug append(1 2 3, (a: 1, b: 2, c: 3), auto, (d: 4, e: 5), (4, 5, 6), (7, 8, 9)); // 1 2 3 (a: 1, b: 2, c: 3) (d: 4, e: 5) (4, 5, 6) (7, 8, 9)
+// @debug append(1 2 3, (a: 1, b: 2, c: 3), auto, (d: 4, e: 5), 4, 5, 6, 7, 8, 9); // 1 2 3 (a: 1, b: 2, c: 3) (d: 4, e: 5) 4 5 6 7 8 9

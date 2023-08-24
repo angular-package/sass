@@ -1,0 +1,63 @@
+// Sass.
+@use 'sass:meta';
+
+// Modules.
+@use '../../../map';
+
+// Functions.
+@use 'dictionary.is-global.function' as *;
+@use 'dictionary.merge.function' as *;
+@use 'dictionary.pick.function' as *;
+
+// Variables.
+@forward 'dictionary.variables';
+@use 'dictionary.variables' as variables;
+
+// Status: DONE
+// The `dictionary.set()` function sets the `$value` under the `$key` in a global and/or given `$dictionary`.
+// @param `$key` A key under which set `$value`.
+// @param `$value` A value to set under the `$key`.
+// @param `$dictionary` Additional dictionaries along with a global dictionary(if in use) to set `$value` under `$key`.
+// @param `$global` A `bool` value indicates whether to use a global dictionary. Default, `null`, then `$dictionary-global` is checked.
+// @return The return value is a dictionary with updated `$value` in the `$key`.
+@function set($key, $value, $dictionary: (), $global: null) {
+  $dictionary: map.set(
+    merge(null, pick(null, $dictionary, false), $global),
+    $key,
+    if(meta.type-of($value) == list, map.retrieve(pick, $value...), $value)
+  );
+  @if is-global($global) {
+    variables.$dictionary: $dictionary;
+  }
+  @return $dictionary;
+}
+
+// Variables.
+// $-dictionary-example: (
+//   general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+//   class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+//   prefix: spectre,
+//   border: b,
+//   color: c,
+//   separator: '-',
+//   suffix: end,
+//   outline: o,
+//   var: (prefix: var-prefix, suffix: var-suffix),
+// );
+
+// Examples.
+// set global dictionary
+// @debug set(small, sm); // (word: translation, small: sm)
+// @debug variables.$dictionary; // (word: translation, small: sm)
+
+// set map dictionary
+// @debug set(example, $-dictionary-example); // (word: translation, example: (general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c), class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)), prefix: spectre, border: b, color: c, separator: "-", suffix: end, outline: o, var: (prefix: var-prefix, suffix: var-suffix)))
+// @debug variables.$dictionary; // (word: translation, example: (general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c), class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)), prefix: spectre, border: b, color: c, separator: "-", suffix: end, outline: o, var: (prefix: var-prefix, suffix: var-suffix)))
+
+// set map dictionary of key
+// @debug set(example, $-dictionary-example general); // (word: translation, example: (general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c)))
+// @debug variables.$dictionary; // (word: translation, example: (general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c)))
+
+// set map dictionary of keys
+// @debug set(example, $-dictionary-example (general, var)); // (word: translation, example: (general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c), var: (prefix: var-prefix, suffix: var-suffix)))
+// @debug variables.$dictionary; // (word: translation, example: (general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c), var: (prefix: var-prefix, suffix: var-suffix)))

@@ -2,11 +2,12 @@
 @use 'sass:string';
 
 // Status: DONE
-// The `string.replace()` function replaces the first or all substring occurrences in the string with a replacement.
-// @param `$string` The string to replace given `$replace` by `$replacement`.
-// @param `$occurrence` First or all occurrences of the given `$replace` to replace in the given `$string`.
-// @param `$replace` The string or list of strings to replace.
-// @param `$replacement` The string to replace the substring from the given `$replace`.
+// The `string.replace()` function replaces the first or all `$substring` occurrences in the string with `$replacement`.
+// @param `$string` A `string` to replace first or all `$substring` in it by `$replacement`.
+// @param `$occurrence` First or all occurrences of `$substring` to replace in `$string`.
+// @param `$substring` A `string` or list of strings to replace by `$replacement`.
+// @param `$replacement` A `string` to replace `$substring`.
+// @return The return value is a `string` with a first/all replaced `$substring` by `$replacement`.
 @function replace($string, $occurrence, $substring, $replacement) {
   @each $value in $substring {
     $index: string.index($string, $value);

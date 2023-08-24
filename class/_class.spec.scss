@@ -1,0 +1,19 @@
+// Modules.
+@use '../class';
+
+// Examples / Spec.
+@debug class.name('.' border width lg); // .borderwidthlg
+
+
+@include class.content(disabled) { cursor: crosshair; } // .disabled { cursor: crosshair; }
+
+// @include class.variant((padding: unit 1)) using($property, $value) {
+//   #{$property}: #{$value};
+// }
+
+// @include class.variant-combine((padding: unit 1)) using($property, $value) {
+//   @debug $property; // padding
+//   @debug $value; // unit 1
+
+//   #{$property}: #{$value};
+// }

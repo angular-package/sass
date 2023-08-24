@@ -1,0 +1,68 @@
+// Variables.
+@use '../../variables';
+
+// Modules.
+@use '../../map';
+@use '../../var';
+
+// Functions.
+@use 'color.name.function' as *;
+
+// Status: DONE
+// The `color.hue-var()` function returns color name of CSS variable hue.
+// @param `$name` Color name of `string` or `list` type.
+// @param `$adjust` Adjustment for hue value.
+// @param `$fallback` Fallback value of returned hue variable.
+// @param `$dictionary` Dictionary for `$name` translation.
+// @param `$delimiter` Separator between each element in name of returned CSS variable.
+// @param `$prefix` Prefix in `$name`. By default, it uses `prefix` of `$var` sass variable.
+// @param `$suffix` Suffix in `$name`. By default, it uses `suffix` of `$var` sass variable.
+// @returns The returned value is CSS variable that indicates hue of color.
+@function hue-var(
+  $name,
+  $adjust: null,
+  $fallback: null,
+  $dictionary: (),
+  $delimiter: null,
+  $prefix: null,
+  $suffix: null,
+) {
+  @return var.get(
+    name(
+      $name,
+      hue,
+      map.get($dictionary, map.get(variables.$name-configuration, delimiter)) or $delimiter
+    ),
+    $adjust,
+    null,
+    $fallback,
+    $dictionary,
+    $delimiter,
+    $prefix,
+    $suffix
+  );
+}
+
+// Examples.
+// @debug hue-var(primary); // var(--s-primary-color-hue)
+// @debug hue-var(primary dark); // var(--s-primary-color-dark-h)
+// @debug hue-var(primary light); // var(--s-primary-color-light-h)
+// @debug hue-var(primary-light); // var(--s-primary-color-light-h)
+// @debug hue-var(dark); // var(--s-dark-color-hue)
+// @debug hue-var(dark color); // var(--s-dark-color-hue)
+
+// delimiter in dictionary
+// @debug hue-var(primary-dark, $dictionary: (delimiter: '-')); // var(--s-primary-color-dark-alpha)
+
+// adjusted hue
+// @debug hue-var(primary, 1deg); // calc(var(--s-primary-color-hue) + 1deg)
+// @debug hue-var(primary ('+' 1deg), 2deg); // calc(var(--s-primary-color-hue) + 1deg)
+
+// adjusted hue + backup
+// @debug hue-var(primary, 1deg, 30deg); // calc(var(--s-primary-color-hue, 30deg) + 1deg)
+
+// adjusted hue + backup + custom dictionary
+// @debug hue-var(primary, 1deg, 10deg, (hue: hue)); // calc(var(--s-primary-color-hue, 10deg) + 1deg)
+// @debug hue-var(primary, 1deg, 30deg, (hue: hue, prefix: spectre)); // calc(var(--spectre-primary-color-hue, 30deg) + 1deg)
+// @debug hue-var(primary, 1deg, 30deg, (suffix: basic)); // calc(var(--s-primary-color-hue-basic, 30deg) + 1deg)
+// @debug hue-var(primary, 1deg, 30deg, (prefix: spectre, suffix: basic)); // calc(var(--spectre-primary-color-hue-basic, 30deg) + 1deg)

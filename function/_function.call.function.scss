@@ -1,0 +1,18 @@
+// Sass.
+@use 'sass:meta';
+
+// Functions.
+@use 'function.get.function';
+
+// Status: DONE
+// The `function.call()` function invokes function of `$name` with `$arguments`.
+// It's designed to pass $name` as `map` or `string` type with prefix. Available prefixes are set under
+// the `$prefix` sass variable ('---', '___', '--', '__', '-_-', '@', '&', '+', '/').
+// Function name as `string` without prefix must be defined as follows `module-function` or `module.function`, and as `map`
+// (module: function). Function name with prefix must be defined as follows `--module-function` or `--module-function`.
+// @param `$name` Function name to call.
+// @arbitrary `$arguments...` Arguments to pass into invoked function named `$name`.
+// @returns The returned value is result of invoked function named `$name`.
+@function call($name, $arguments...) {
+  @return meta.call(function.get($name), $arguments...);
+}

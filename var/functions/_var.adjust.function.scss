@@ -1,0 +1,62 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
+// Variables.
+@use '../var.variables';
+
+// Functions.
+@use '../../list/list.nth.function' as *;
+
+// Modules.
+@use '../../math';
+
+// Status: DONE
+// The function `var.adjust()` returns CSS variable `$var` adjusted by `$adjust` if not `null`, otherwise `$var`.
+// @param `$var` CSS variable to adjust by `$adjust`.
+// @param `$adjust` A number(addition), or list(operator, number) to adjust `$var`.
+// @returns The return value is `$var` adjusted by `$adjust`.
+@function adjust($var, $adjust: null) {
+  @if $adjust {
+    $calculate: true;
+    $operator: '+';
+    $value: $adjust;
+    @if type-of($adjust) == list {
+      @if list.length($adjust) > 1 {
+        $operator: nth($adjust, 1);
+        $value: nth($adjust, 2);
+      } @else {
+        $value: nth($adjust, 1);
+      }
+    }
+    @if
+    ($operator == '+' and math.strip-unit($value) == 0) or
+    ($operator == '*' and math.strip-unit($value) == 1) {
+      $calculate: false;
+    }
+    @if $calculate == true and type-of($value) == number {
+      @return math.calculate($var $operator $value);
+    }
+  }
+  @return $var;
+}
+
+// Examples.
+// Update to the spectre settings.
+// var.$var: map.merge(var.$var, (
+//   prefix: s,
+//   delimiter: '-'
+// ));
+
+// empty adjust
+// @debug adjust(var(--s-layout-spacing)); // var(--s-layout-spacing)
+
+// adjust number with default + operator
+// @debug adjust(var(--s-layout-spacing), 27); // calc(var(--s-layout-spacing) + 27)
+// @debug adjust(var(--s-layout-spacing), 1); // calc(var(--s-layout-spacing) + 1)
+
+// adjust with different operator
+// @debug adjust(var(--s-layout-spacing), '/' 1); // calc(var(--s-layout-spacing) / 1)
+// @debug adjust(calc(var(--s-layout-spacing) + 2), '*' 2); // calc((var(--s-layout-spacing) + 2) * 2)
+// @debug adjust(var(--s-layout-spacing), '+' 0); // var(--s-layout-spacing)

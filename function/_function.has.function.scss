@@ -1,0 +1,56 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use 'function.is.function';
+
+// Status: DONE
+// The `function.has()` function checks whether `$value` contains existing function or from `$functions` in a form `module-function args...`.
+// @param `$value` Value to check against existence function in a form `module-function args...`.
+// @param `$prefix` Prefix of the function in `$value`.
+// @param `$separator` Separator between module and function in string type function name.
+// @param `$functions` Additional functions of `map` type to check in `$value`.
+// @returns The return value is a `bool` indicating whether `$value` contains existing function.
+@function has($value, $prefix: null, $separator: null, $functions: null) {
+  @for $i from 1 through list.length($value) {
+    $element: list.nth($value, $i);
+    @if type-of($element) == map {
+      $element: map.keys($element);
+    }
+    @if type-of($element) == list and list.length($element) > 0 {
+      $element: list.nth($element, 1);
+    }
+    @if function.is($element, $prefix, $separator, $functions) {
+      @return $i;
+    }
+  }
+  @return false;
+}
+
+// Alias name.
+@function value-has($value, $prefix: null, $separator: null, $functions: null) {
+  @return has($value, $prefix, $separator, $functions);
+}
+
+// Examples.
+// list
+// @debug has(selector-nest (unit 2)); // 1
+// @debug has((unit 2) selector-nest); // 2
+// @debug has(3px solid --selector-nest (primary dark)); // 3
+
+// nested list
+// @debug has(10px (selector-nest (unit 10)) 15px (unit 2)); // 2
+
+// map
+// @debug has((selector-nest: (unit 2))); // 1
+
+// nested map
+// @debug has(10px (selector-nest: (unit 10)) 15px (unit 2)); // 2
+
+// prefix
+// @debug has(__selector-nest (unit 2), __); // 1
+// @debug has(-_-selector-nest (unit 2), -_-); // 1
+
+// false
+// @debug has(primary color); // false

@@ -2,11 +2,11 @@
 @use 'sass:map';
 
 // Status: DONE
-// The modified `map.deep-merge()` function merges multiple maps by using `deep-merge()`.
-// @param `$map1` A map to deep merge with the given `$map2`.
-// @param `$map2` The map to deep merge with the given `$map1`.
+// The modified `map.deep-merge()` function merges multiple maps by using sass original `deep-merge()`.
+// @param `$map1` A map to deep merge with `$map2`.
+// @param `$map2` A map to deep merge with `$map1`.
 // @arbitrary `$maps...` Multiple maps to deep merge with the merged `$map1` and `$map2`.
-// @return The return value is the map built from the given `$map2` and `$maps`.
+// @return The return value is the map built from `$map2` and `$maps`.
 @function deep-merge($map1, $map2, $maps...) {
   $map1: map.deep-merge($map1, $map2);
   @each $map in $maps {

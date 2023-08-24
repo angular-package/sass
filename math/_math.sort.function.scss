@@ -1,0 +1,35 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:math';
+
+// Modules.
+@use '../list/remove/remove.nth.function';
+
+// Status: DONE
+// The `list.sort()` function sort `$numbers` in ascending or descending order.
+// @param `$sort` The order ascending(asc) or descending(desc) which `$numbers` are sorted.
+// @arbitrary `$numbers...` Numbers to `$sort` in ascending(asc) or descending(desc) order.
+// @returns The returned value is sorted list `$numbers` in order `$sort` ascending(asc) or descending(desc).
+@function sort($sort, $numbers...) {
+  @if list.length($numbers) > 0 {
+    $result: ();
+    $do: true;
+    @while $do == true {
+      $number: if($sort == desc, math.max($numbers...), math.min($numbers...));
+      $index: list.index($numbers, $number);
+      $numbers: remove.nth($numbers, $index);
+      $result: list.append($result, $number);
+      @if list.length($numbers) == 0 {
+        $do: false;
+      }
+    }
+    @return $result;
+  }
+  @return $numbers;
+}
+
+// Examples.
+// $-numbers: (21, 12, 43, 64, 75, 36, 27, 18, 29, 510);
+
+// @debug sort(asc, $-numbers...); // 12 18 21 27 29 36 43 64 75 510
+// @debug sort(desc, $-numbers...); // 510 75 64 43 36 29 27 21 18 12

@@ -1,0 +1,64 @@
+// Sass.
+@use 'sass:map';
+
+// Variables.
+@use 'function.variables' as variables;
+
+// Modules.
+@use '../color';
+@use '../function';
+@use '../meta';
+@use '../values';
+@use '../var';
+
+// Custom functions.
+// variables.$functions: (
+//   // string
+//   'meta:call': meta.get-function(call, $module: meta),
+
+//   // map
+//   (meta: call): meta.get-function(call, $module: meta),
+
+//   // list
+//   meta: (call: meta.get-function(call, $module: meta))
+// );
+
+// variables.$functions: map.deep-merge(variables.$functions, (
+//   color: meta.module-functions(color),
+//   values: meta.module-functions(values),
+//   var: meta.module-functions(var),
+// ));
+
+// Examples `function.call()`
+// List
+// @debug function.call(selector-nest, (top, bottom) color...); // top color, bottom color
+// @debug function.call('--selector.nest', (top, bottom) color...); // top color, bottom color
+// @debug function.call(--selector-nest, (top, bottom) color...); // top color, bottom color
+
+// name
+// @debug function.call(var-get, (unit 2)); // var(--s-unit-2)
+// @debug function.call(var-get, (unit 5)); // var(--s-unit-5)
+// @debug function.call(var-get, unit 2, 5, false, null, (unit: u)); // calc(var(--s-u-2) + 5)
+// @debug function.call(var-get, unit 2, (adjust: 1, dictionary: (unit: u))...);
+
+// @debug function.call(selector-nest, (padding, margin), (top, bottom)); // padding top, padding bottom, margin top, margin bottom
+// @debug function.call(color-color, primary dark); // var(--s-primary-color-dark)
+// @debug function.call(values-combine, padding, margin top, bottom); // padding (margin top) bottom
+
+// prefix
+// @debug function.call(---var-get, unit 2); // var(--s-unit-2)
+// @debug function.call(___var-get, unit 2); // var(--s-unit-2)
+// @debug function.call('@var-get', unit 2); // var(--s-unit-2)
+// @debug function.call('&var-get', unit 2); // var(--s-unit-2)
+// @debug function.call(--color-color, primary dark); // var(--s-primary-color-dark)
+
+// adjust
+// @debug function.call(--var-get, (unit 5), ('+' 15%)); // calc(var(--s-unit-5) + 15%)
+// @debug function.call(--var-get, (unit 5), ('/' 15%)); // calc(var(--s-unit-5) / 15%)
+// @debug function.call(--var-get, (unit 5), ('*' 15%)); // calc(var(--s-unit-5) * 15%)
+
+// color
+// @debug function.call(--color-color, (primary dark) 15%); // hsla(var(--s-primary-color-dark-h), var(--s-primary-color-dark-s), calc(var(--s-primary-color-dark-l) + 15%), var(--s-primary-color-dark-a))
+// @debug function.call(--color-color, (primary dark) 15% 0.5); // hsla(var(--s-primary-color-dark-h), var(--s-primary-color-dark-s), calc(var(--s-primary-color-dark-l) + 15%), calc(var(--s-primary-color-dark-a) + 0.5))
+// @debug function.call(--color-color, (primary dark) 15% 0.5 5%); // hsla(calc(var(--s-primary-color-dark-h) + 15%), var(--s-primary-color-dark-s), calc(var(--s-primary-color-dark-l) + 0.5), calc(var(--s-primary-color-dark-a) + 5%))
+// @debug function.call(--color-color, (primary dark) 15deg 5% 15% 0.1); // hsla(calc(var(--s-primary-color-dark-h) + 15deg), calc(var(--s-primary-color-dark-s) + 5%), calc(var(--s-primary-color-dark-l) + 15%), calc(var(--s-primary-color-dark-a) + 0.1))

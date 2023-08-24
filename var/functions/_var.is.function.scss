@@ -1,0 +1,14 @@
+// Sass.
+@use 'sass:string';
+
+// Status: DONE
+// The `var.is()` function checks whether the given value is CSS variable `var()`.
+// @param `$value` The value to check against the CSS variable.
+// @returns The return value is a `bool` indicating whether the given `$value` is CSS variable.
+@function is($value) {
+  @return if(type-of($value) == string and string.index($value, 'var('), true, false);
+}
+
+// Examples.
+// @debug is(var(--s-any-color)); // true
+// @debug is(--s-any-color); // false

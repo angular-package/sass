@@ -3,8 +3,10 @@
 @use 'sass:meta';
 
 // Status: DONE
-// The `math.calculate()` function.
-// @arbitrary `$operations...`
+// The `math.calculate()` function performs value and operand calculation by using a given operator `+` addition, `-` subtraction,
+// `*` multiplication, `/` division of `string` type.
+// @arbitrary `$operations...` Arbitrary values in order (value, operator, operand) to perform calculation.
+// @return The return value is calculated `number` or CSS function `calc()` with a specified calculation.
 @function calculate($operations...) {
   @each $value, $operator, $operand in if(list.length($operations) == 3, ($operations,), $operations){
     @if $value and $operand {
@@ -23,8 +25,13 @@
 }
 
 // Examples.
+// number
 // @debug calculate(15 '+' 13); // 28
 // @debug calculate(15 '-' 12); // 3
 // @debug calculate(55 '*' 17); // 935
 // @debug calculate(42 '/' 14); // 3
 // @debug calculate(15, '+', 13); // 28
+
+// var()
+// @debug calculate(15, '+', var(--age)); // calc(15 + var(--age))
+// @debug calculate(var(--age), '+', var(--age)); // calc(var(--age) + var(--age))

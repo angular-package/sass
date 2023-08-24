@@ -1,0 +1,71 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Variables.
+@forward 'dictionary.variables';
+@use 'dictionary.variables' as variables;
+
+// Functions.
+@use 'dictionary.get.function' as *;
+@use 'dictionary.is-global.function' as *;
+
+// Modules.
+@use '../../../map';
+
+// Status: DONE
+// The `dictionary.merge()` function returns a global dictionary(if in use) merged with multiple dictionaries from `$dictionary` optionally merged in `$key`.
+// @param `$key` The optional key under which multiple dictionaries from `$dictionary` are being merged.
+// @param `$dictionary` Dictionary or multiple dictionaries of map or list type(dictionary key, dictionary key) to merge with a global dictionary(if in use).
+// @param `$global` A `bool` value indicates whether to use a global dictionary. Default, `null`, then `$dictionary-global` is checked.
+// @return The return value is a dictionary consisting of global dictionary(if in use) and multiple dictionaries from `$dictionary` optionally merged in `$key`.
+@function merge($key: null, $dictionary, $global: null) {
+  @if type-of($dictionary) == list {
+    $retrieved-dictionary: ();
+    @each $dictionary in if(list.separator($dictionary) == comma, $dictionary, ($dictionary,)) {
+      @if type-of($dictionary) == list and list.length($dictionary) > 1 {
+        $dictionary: map.retrieve(pick, list.nth($dictionary, 1), list.nth($dictionary, 2));
+      }
+
+      $retrieved-dictionary: map.deep-merge($retrieved-dictionary, $dictionary);
+    }
+
+    $dictionary: $retrieved-dictionary;
+  }
+
+  $dictionary: if(
+    $key,
+    map.merge(get($global: $global), list.append($key, $dictionary)...),
+    map.deep-merge(get($global: $global), $dictionary)
+  );
+  @if is-global($global) {
+    variables.$dictionary: $dictionary;
+  }
+  @return $dictionary;
+}
+
+// Examples.
+// $-dictionary: (
+//   (extra large, 'extra large', extra-large): xl,
+//   (extra small, 'extra small', extra-small): xs,
+//   class: (prefix: class-prefix, suffix: class-suffix),
+//   large: lg,
+//   medium: md,
+//   prefix: spectre,
+//   size: s,
+//   small: sm,
+//   suffix: end,
+//   var: (prefix: var-prefix, suffix: var-suffix),
+// );
+
+// @debug variables.$dictionary; // (word: translation)
+
+// merge in `class` key
+// @debug merge(class, (prefix: spectre, suffix: end)); // (word: translation, class: (prefix: spectre, suffix: end))
+
+// merge in nested (accordion, class) key
+// @debug merge((accordion, class), (prefix: spectre, suffix: end)); // (word: translation, accordion: (class: (prefix: spectre, suffix: end)))
+
+// merge in nested (accordion, class) key + pick key
+// @debug merge(accordion, ($-dictionary class, $-dictionary var)); // (word: translation, accordion: (class: (prefix: class-prefix, suffix: class-suffix), var: (prefix: var-prefix, suffix: var-suffix)))
+// @debug merge(accordion, $-dictionary (class, var)); // (word: translation, accordion: (class: (prefix: class-prefix, suffix: class-suffix), var: (prefix: var-prefix, suffix: var-suffix)))

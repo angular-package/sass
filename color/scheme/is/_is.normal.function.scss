@@ -1,0 +1,14 @@
+// Variables.
+@use '../scheme.variables';
+
+// Status: DONE
+// The `is.normal()` function checks whether variable `$color-scheme` of scheme module is set to `normal`.
+// @returns The returned value is a bool indicating whether `$color-scheme` of scheme module is set to `normal`.
+@function normal() {
+  @return scheme.$color-scheme == normal;
+}
+
+// Examples.
+// @debug is-normal(); // true
+// scheme.$color-scheme: light;
+// @debug is-normal(); // false

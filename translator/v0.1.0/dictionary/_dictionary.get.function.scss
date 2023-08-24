@@ -1,0 +1,84 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Variables.
+@forward 'dictionary.variables';
+@use 'dictionary.variables' as variables;
+
+// Functions.
+@use '../../../meta/meta.of-type.function' as *;
+@use 'dictionary.is-global.function' as *;
+
+// Modules.
+@use '../../../map';
+
+// Status: DONE
+// The `dictionary.get()` function returns the global dictionary(if in use) along with `$dictionary` and/or from `$key`.
+// @param `$key` A key to retrieve a dictionary from a global dictionary(if in use) and/or `$dictionary`.
+// @param `$dictionary` Dictionary of list(dictionary key) or map type to get along with the global dictionary(if in use).
+// @param `$default` The default returned value if dictionary is `null`.
+// @param `$global` A `bool` value indicates whether to use a global dictionary. Default, `null`, then `$dictionary-global` is checked.
+// @return The return value is a global dictionary(if in use) and/or `$dictionary`, optionally from `$key`.
+@function get($key: null, $dictionary: (), $default: null, $global: null) {
+  $dictionary: if(meta.type-of($dictionary) == list and list.length($dictionary) > 0, map.retrieve(get, $dictionary...), $dictionary);
+  @if is-global($global) {
+    @if $key {
+      $dictionary: if(
+        of-type(map, map.get(variables.$dictionary, $key, ()), map.get($dictionary, $key, $default)),
+        map.deep-merge(map.get(variables.$dictionary, $key), map.get($dictionary, $key, $default)),
+        map.get($dictionary, $key, $default) or map.get(variables.$dictionary, $key, $default)
+      );
+    } @else {
+      $dictionary: map.deep-merge(variables.$dictionary, $dictionary);
+    }
+  } @else if $key {
+    $dictionary: map.get($dictionary, $key, $default);
+  }
+  @return $dictionary;
+}
+
+// Examples.
+// $-dictionary-example: map.merge(variables.$dictionary, (
+//   (extra large, 'extra large', extra-large): xl,
+//   (extra small, 'extra small', extra-small): xs,
+//   border: b,
+//   class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+//   color: c,
+//   general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+//   large: lg,
+//   medium: md,
+//   outline: o,
+//   prefix: spectre,
+//   small: sm,
+//   suffix: end,
+// ));
+
+// Get the global dictionary.
+// @debug get(); // (word: translation)
+
+// Deactivate picking from the global dictionary.
+// @debug get($global: false); // ()
+
+// Get the dictionary from the `$dictionary-example` variable.
+// @debug get(null, $-dictionary-example); // (word: translation, (extra large, "extra large", extra-large): xl, (extra small, "extra small", extra-small): xs, border: b, class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)), color: c, general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c), large: lg, medium: md, outline: o, prefix: spectre, small: sm, suffix: end)
+// @debug get(null, $-dictionary-example, $global: false); // (word: translation, (extra large, "extra large", extra-large): xl, (extra small, "extra small", extra-small): xs, border: b, class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)), color: c, general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c), large: lg, medium: md, outline: o, prefix: spectre, small: sm, suffix: end)
+
+// Get the dictionary from the `$dictionary-example` variable by using string key.
+// @debug get(general, $-dictionary-example); // (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c)
+// @debug get(class, $-dictionary-example); // (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab))
+
+// Get the dictionary from the `$dictionary-example` variable by using deep key.
+// @debug get((class, calendars), $-dictionary-example); // (calendar: cal)
+
+// Get dictionary from the `$dictionary-example` variable.
+// @debug get(general, $-dictionary-example, $global: false); // (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c)
+
+// Get the default value on `null`.
+// @debug get(no-field, $-dictionary-example, (prefix: spectre)); // (prefix: spectre)
+
+// Get dictionary from the `$dictionary-example` variable with a deep key.
+// @debug get(null, $-dictionary-example (class, calendars), $global: false); // (calendar: cal)
+
+// Get single translation.
+// @debug get((class, separator)); // null

@@ -5,16 +5,16 @@
 @use 'list.nth.function' as *;
 
 // Modules.
-@use '../number';
+@use '../math';
 
 // Status: DONE
-// The `list.range()` function returns the list from the `$list` of the given range `$from` to `$to`.
-// @param `$list` The list to retrieve the elements from.
+// The `list.range()` function returns the list from the `$list` of range `$from` to `$to`.
+// @param `$list` The list to retrieve the elements from the range `$from` to `$to`.
 // @param `$from` Index from which retrieving elements begins.
 // @param `$to` Index where the retrieval of elements ends.
 // @return The return value is the list of the given range.
 @function range($list, $from: 1, $to: list.length($list)) {
-  @return nth($list, number.range(($from, $to, 1, 0)...) or $to);
+  @return nth($list, (math.range(($from, $to, 1, 0)...) or $to)...);
 }
 
 // from or to

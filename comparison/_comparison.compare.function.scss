@@ -13,10 +13,10 @@
 @use '../meta/meta.of-type.function' as *;
 @use 'comparison.equal.function' as *;
 
-// Status: DONE
+// Status: TODO: number of pairs in a map.
 // The `comparison.compare()` function returns a bool indicating the result of the comparison.
 // @param `$value` The value to compare with the given `$operand`.
-// @param `$operator` Operator of string type
+// @param `$operator` The operator used to compare `$value` and `$operand`.
 // @param `$operand` The value to compare with the given `$value`.
 // @return The return value is a bool indicating the result of the comparison.
 @function compare($value, $operator, $operand) {
@@ -26,14 +26,15 @@
   // List length.
   @if string.index($operator, '(,)') {
     $operator: string.replace($operator, first, '(,)', '');
-    $check-type: meta.type-of($value) == list;
+    $check-type: meta.type-of($value) == list or meta.type-of($value) == map;
     $value: if($check-type, list.length($value), $value);
 
   // Map length.
   } @else if string.index($operator, '(:)') {
+    // @deprecated
     $operator: string.replace($operator, first, '(:)', '');
     $check-type: meta.type-of($value) == map;
-    $value: if(meta.type-of($value) == map, list.length(map.keys($value)), $value);
+    $value: if($check-type, list.length($value), $value);
 
   // Type of.
   } @else if string.index($operator, ':') == 1 {
@@ -100,12 +101,11 @@
 // Arbitrary.
 // @debug compare(27, '==', 27); // true
 // @debug compare(27px, '==', 27em); // false
-// @debug compare(27px, '===', 27em); // false
 // @debug compare('bold ', '!~=', 'bold'); // false
 
 // List.
-// @debug compare(27 '==' 27); // true
-// @debug compare((27, '==', 27)); // true
+// @debug compare(27 '==' 27...); // true
+// @debug compare((27, '==', 27)...); // true
 
 // Map.
 // @debug compare((value: 27, operator: '==', operand: 27)); // true
@@ -121,23 +121,28 @@
 // @debug compare(27 '==' 27, 17 '==' 27, 5 '>' 3); // true, false, true
 // @debug compare((27, '==', 27), (27, '!=', 27)); // true, false
 
-// !=
+// ===
+// @debug compare(27px, '===', 27px); // true
+// @debug compare(27px, '===', 27em); // false
+
+// !==
 // @debug compare(27, '!==', 27); // false
-// @debug compare('there is a word', '!=', 'there is a word'); // false
-// @debug compare(null, '!=', null); // false
-// @debug compare((a: 2222), '!=', ('a': 2222)); // false
+// @debug compare('there is a word', '!==', 'there is a word'); // false
+// @debug compare(null, '!==', null); // false
+// @debug compare((a: 2222), '!==', ('a': 2222)); // false
+// @debug compare(true, '!==', null); // true
 
 // :==
 // @debug compare('a', ':==', string); // true
-// @debug compare(3, ':!=', string); // true
 // @debug compare(null, ':==', null); // true
 // @debug compare(false, ':==', bool); // true
 
-// :!=
-// @debug compare(27, ':!=', string); // true
-// @debug compare('a', ':!=', string); // false
-// @debug compare(null, ':!=', null); // false
-// @debug compare(false, ':!=', bool); // false
+// :!==
+// @debug compare(3, ':!=', string); // true
+// @debug compare(27, ':!==', string); // true
+// @debug compare('a', ':!==', string); // false
+// @debug compare(null, ':!==', null); // false
+// @debug compare(false, ':!==', bool); // false
 
 // ~=
 // @debug compare('bold king', '~=', 'bold'); // true
@@ -187,13 +192,13 @@
 // @debug compare(('a', 'b', 'c'), '(,)<=', 2); // false
 
 // (:)==
-// @debug compare(('a': 1, 'b': 2, 'c': 3), '(:)==', 3); // true
-// @debug compare(('a': 1, 'b': 2, 'c': 3), '(:)==', 4); // false
+// @debug compare(('a': 1, 'b': 2, 'c': 3), '(,)==', 3); // true
+// @debug compare(('a': 1, 'b': 2, 'c': 3), '(,)==', 4); // false
 
 // (:)!=
-// @debug compare(('a': 1, 'b': 2, 'c': 3), '(:)!=', 3); // false
-// @debug compare(('a': 1, 'b': 2, 'c': 3), '(:)!=', 2); // true
+// @debug compare(('a': 1, 'b': 2, 'c': 3), '(,)!=', 3); // false
+// @debug compare(('a': 1, 'b': 2, 'c': 3), '(,)!=', 2); // true
 
 // (:)> (:)<
-// @debug compare(('a': 1, 'b': 2, 'c': 3), '(:)>', 3); // false
-// @debug compare(('a': 1, 'b': 2, 'c': 3), '(:)<', 2); // false
+// @debug compare(('a': 1, 'b': 2, 'c': 3), '(,)>', 3); // false
+// @debug compare(('a': 1, 'b': 2, 'c': 3), '(,)<', 2); // false

@@ -1,0 +1,48 @@
+// Sass.
+@use 'sass:map';
+
+// Variables.
+@use '../var.variables' as variables;
+
+// Functions.
+@use 'var.name.function';
+
+// Status: DONE
+// The `var.css()` function returns the CSS variable of `$name`, `$fallback` value, `$delimiter`, `$prefix`, `$suffix` translated with `$dictionary`.
+// `$name` structure `--#{$prefix}#{$delimiter}#{$name}#{$delimiter}#{$suffix}`
+// @param `$name` The `string` or `list` to set the CSS variable name.
+// @param `$fallback` A fallback value for returned CSS variable of `$name`.
+// @param `$dictionary` Dictionary to translate `$name`.
+// @param `$delimiter` Separator between each element in name of returned CSS variable.
+// @param `$prefix` Prefix in `$name`. By default, it uses `prefix` of `$var` sass variable.
+// @param `$suffix` Suffix in `$name`. By default, it uses `suffix` of `$var` sass variable.
+// @returns The return value is CSS variable of `$name`.
+@function css(
+  $name,
+  $fallback: null,
+  $dictionary: (),
+  $delimiter: null,
+  $prefix: null,
+  $suffix: null,
+) {
+  @return var(var.name(
+    $name,
+    $dictionary,
+    $delimiter,
+    $prefix,
+    $suffix) + if($fallback, #{', ' + $fallback},
+    null
+  ));
+}
+
+// Examples.
+// @debug css(layout spacing, $delimiter: '-', $prefix: 's'); // var(--s-layout-spacing)
+// @debug css(layout spacing 1, $delimiter: '-', $prefix: 's'); // var(--s-layout-spacing-1)
+
+// fallback
+// @debug css(layout spacing, 250px, $delimiter: '-', $prefix: 's'); // var(--s-layout-spacing, 250px)
+
+// dictionary
+// @debug css(layout spacing, 250px, (layout: lay, spacing: spa), '-', 's'); // var(--s-lay-spa, 250px)
+// @debug css(- b o r d e r, 250px, (delimiter: ''), '-', 's'); // var(--s-border, 250px)
+// @debug css(- b o r d e r '-', 250px, (delimiter: '', prefix: spectre, suffix: width), '-', 's'); // var(--spectre-border-width, 250px)

@@ -1,0 +1,90 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Modules.
+@use '../../function';
+@use '../../meta';
+@use '../../var';
+
+// Mixins.
+@use 'var.set.mixin' as *;
+
+function.$functions: map.deep-merge(function.$functions, (var: meta.module-functions(var)));
+var.$var: map.deep-merge(var.$var, (
+  prefix: 'spectre',
+  delimiter: '-'
+));
+
+// Examples.
+// :host {
+  // name + value
+  // @include set((blur: 0.05rem)); // --spectre-blur: 0.05rem;
+  // @include set((border blur: 0.05rem)); // --spectre-border-blur: 0.05rem;
+  // @include set(((border blur, button width): 0.05rem)); // --spectre-border-blur: 0.05rem;
+  // --spectre-border-blur: 0.05rem;
+  // --spectre-button-width: 0.05rem;
+
+  // @include set(((border blur, button width): (low: 0.05rem, medium: 1rem, high: 2rem)));
+  // --spectre-border-blur-low: 0.05rem;
+  // --spectre-button-width-low: 0.05rem;
+  // --spectre-border-blur-medium: 1rem;
+  // --spectre-button-width-medium: 1rem;
+  // --spectre-border-blur-high: 2rem;
+  // --spectre-button-width-high: 2rem;
+
+  // @include set((blur: (low: 0.05rem, medium: 0.075rem, high: 0.1rem)));
+  // --spectre-blur-low: 0.05rem;
+  // --spectre-blur-medium: 0.075rem;
+  // --spectre-blur-high: 0.1rem;
+
+  // @include set((window blur: (low: 0.05rem, medium: 0.075rem, high: 0.1rem)));
+  // --spectre-window-blur-low: 0.05rem;
+  // --spectre-window-blur-medium: 0.075rem;
+  // --spectre-window-blur-high: 0.1rem;
+
+  // @include set((
+  //   button: (
+  //     height: (
+  //       extra small: (button height medium (-15px,)),
+  //       medium: (default height),
+  //       extra large: (button height medium (115px,))
+  //     )
+  //   )
+  // ));
+  // :root, :host {
+  //   --spectre-button-height-extra-small: calc(var(--spectre-button-height-medium) - 15px);
+  //   --spectre-button-height-medium: var(--spectre-default-height);
+  //   --spectre-button-height-extra-large: calc(var(--spectre-button-height-medium) + 115px);
+  // }
+
+  // @include set((
+  //   border: (
+  //     width: (
+  //       xs: (width md ('-' 0.25rem)),
+  //       sm: (width md ('-' 0.15rem)),
+  //       md: unit-var(2),
+  //       lg: (width md ('+' 0.25rem)),
+  //       xl: (width md ('+' 0.5rem)),
+  //       1x: 1em,
+  //     )
+  //   )
+  // ));
+  // :root, :host {
+  //   --spectre-border-width-xs: calc(var(--spectre-border-width-md) - 0.25rem);
+  //   --spectre-border-width-sm: calc(var(--spectre-border-width-md) - 0.15rem);
+  //   --spectre-border-width-md: var(--spectre-unit-2);
+  //   --spectre-border-width-lg: calc(var(--spectre-border-width-md) + 0.25rem);
+  //   --spectre-border-width-xl: calc(var(--spectre-border-width-md) + 0.5rem);
+  //   --spectre-border-width-1x: 1em;
+  // }
+// }
+
+// @include set((
+//     blur: 0.05rem,
+//     border blur: 0.05rem,
+//     button width: 0.05rem
+//   ),
+//   ':root',
+//   meta.get-function(get, false, var)
+// );

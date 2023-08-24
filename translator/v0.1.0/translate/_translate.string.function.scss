@@ -1,0 +1,61 @@
+// Functions.
+@use '../translator.dictionary.function';
+
+// Modules.
+@use '../dictionary';
+
+// Status: DONE
+// The `translate.string()` function returns `$string` translated with a global dictionary(if in use) and/or `$dictionary`
+// if translation is found, otherwise not translated `$string`.
+// Global dictionary(if in use) and/or given `$dictionary` is used to translate the `$string`.
+// @param `$string` A `string` to translate with a global dictionary and/or `$dictionary`.
+// @param `$key` A key to retrieve the dictionary from the global(if in use) and/or `$dictionary`.
+// @param `$dictionary` The dictionary that is used to translate `$string`.
+// @param `$global` A `bool` value indicates whether to use a global dictionary(if in use). Default, `null`, and if it's not set function checks
+// variable `$dictionary-global` of `dictionary.variables.scss`.
+// @return The return value is the `$string` translation retrieved from the global dictionary(if in use) and/or `$dictionary`.
+@function string($string, $key: null, $dictionary: (), $global: null) {
+  @return if(
+    type-of($string) == string,
+    dictionary.translation($string, translator.dictionary($key, $dictionary, $global)) or $string,
+    $string
+  );
+}
+
+// Examples.
+// $-dictionary-example: dictionary.merge(null, (
+//   (extra large, 'extra large', extra-large): xl,
+//   (extra small, 'extra small', extra-small): xs,
+//   border: b,
+//   class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+//   color: c,
+//   general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+//   large: lg,
+//   medium: md,
+//   outline: o,
+//   prefix: spectre,
+//   small: sm,
+//   suffix: end,
+// ));
+
+// Default translate.
+// @debug string(prefix); // spectre
+
+// Translate from the sub-dictionary `class`.
+// @debug string(prefix, class); // class-prefix
+
+// Translate string with delimiter '-'.
+// @debug string(extra-large); // xl
+// @debug string(extra-large, class); // xl
+
+// Translate with a provided `$dictionary`.
+// @debug string(prefix, class, $-dictionary-example); // class-prefix
+// @debug string(word, general, $-dictionary-example); // słowo
+// @debug string(wrap, general, $-dictionary-example); // owijka
+// @debug string(wrapper, general, $-dictionary-example); // owijka
+
+// Nested key.
+// @debug string(calendar, (class, calendars), $-dictionary-example); // cal
+
+// Deactivate global dictionary.
+// @debug string(extra-large, $global: false); // extra-large

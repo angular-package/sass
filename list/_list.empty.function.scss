@@ -8,3 +8,8 @@
 @function empty($list) {
   @return type-of($list) == list and list.length($list) == 0;
 }
+
+// Examples.
+// @debug empty(()); // true
+// @debug empty((1, )); // true
+// @debug empty((a: 1)); // false

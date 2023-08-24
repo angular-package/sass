@@ -3,7 +3,6 @@
 @use 'sass:map';
 
 // Functions.
-@use '../map.get.function' as *;
 @use 'pick.key-substring.function' as *;
 @use 'pick.type.function' as *;
 
@@ -11,7 +10,7 @@
 @use '../../string';
 
 // Status: DONE
-// The `pick.pattern()` function returns a map filtered by using pattern.
+// The `pick.pattern()` function returns a copy of `$map` filtered by using pattern.
 // @param `$map` A map from which properties are picked.
 // @arbitrary `$patterns...` A patterns to pick properties from a `$map`.
 // @return The return value is a copy of `$map` with properties associated with patterns.
@@ -20,7 +19,7 @@
   @each $pattern in $patterns {
     @if type-of($pattern) == string {
       @if string.index($pattern, '*') {
-        $result: map.deep-merge($result, key-substring($map, string.replace($pattern, list.join(first '*', ''))));
+        $result: map.deep-merge($result, key-substring($map, string.replace($pattern, first, '*', '')));
       }
       @else if string.index($pattern, 'value:') or string.index($pattern, 'key:') {
         $result: map.deep-merge($result, type($map, $pattern));

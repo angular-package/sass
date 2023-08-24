@@ -1,0 +1,80 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use 'function.get.function' as *;
+@use 'function.is.function' as *;
+
+// Status: DONE
+// The `function.pick()` function returns retrieved existing `function`, its `name`, name with arguments , or `index` from `$value`.
+// @param `$value` Value from which existing function is retrieved.
+// @param `$pick` A `string` value indicates whether to return existing `function`, its `name`, name with arguments, or `index`.
+// @param `$prefix` Prefix to pick function from `$value`.
+// @param `$separator` Separator between module and function in `string` type function name.
+// @param `$functions` Additional functions of `map` type to pick from `$value`.
+// @returns The return value is an existing `function`, its `name`, `name arguments` or `index`, if function is not found then an error occurs.
+@function pick($value, $pick: function, $prefix: null, $separator: null, $functions: null) {
+  @for $index from 1 through list.length($value) {
+    $arguments: null;
+    $function: null;
+    @if type-of(list.nth($value, $index)) == map {
+      @each $-function, $-arguments in list.nth($value, $index) {
+        $arguments: $-arguments;
+        $function: $-function;
+      }
+    } @else if type-of(list.nth($value, $index)) == list {
+      @if list.separator(list.nth($value, $index)) == space {
+        $arguments: list.nth(list.nth($value, $index), 2);
+        $function: list.nth(list.nth($value, $index), 1);
+      }
+    } @else if is(list.nth($value, $index), $prefix, $separator, $functions) {
+      $arguments: list.nth($value, $index + 1);
+      $function: list.nth($value, $index);
+    }
+    @if $function and is($function, $prefix, $separator, $functions) and $arguments {
+      @return map.get((
+        arguments: $arguments,
+        function: get($function, $prefix, $separator, $functions),
+        index: $index,
+        name: $function,
+        name arguments: list.append($function, $arguments, space)
+      ), $pick);
+    }
+  }
+  @return null;
+}
+
+// Alias name.
+@function pick-from-value($value, $pick: function, $prefix: null, $separator: null, $functions: null) {
+  @return pick($value, $pick, $prefix, $separator, $functions);
+}
+
+// Examples.
+// list
+// @debug pick(selector-nest (padding, margin) top); // get-function("nest")
+// @debug pick(list-nth (padding, margin) 1); // get-function("nth")
+
+// @debug pick((padding, margin) top selector-nest (unit 5), function); // get-function("nest")
+// @debug pick((padding, margin) top selector-nest (unit 5), index, '--'); // 3
+// @debug pick((padding, margin) top --selector-nest (unit 10), function, --); // get-function("nest")
+
+// @debug pick((padding, margin) top --selector_nest (unit 10), function, --); // get-function("nest")
+// @debug pick((padding, margin) top '--selector.nest' (unit 10), function, --, '__'); // null
+
+// nested list
+// @debug pick(10px (selector-nest (unit 10)) 15px (unit 2), name arguments); // selector-nest (unit 10)
+
+// from map
+// @debug pick((selector-nest: unit 2)); // get-function("nest")
+// @debug pick((list-nth: unit 2)); // get-function("nth")
+
+// nested map
+// @debug pick(10px (selector-nest: (unit 10)) 15px (unit 2), name arguments); // selector-nest (unit 10)
+
+// default
+// @debug pick(wrong-function unit 2);
+
+// error
+// @debug pick(list-wrong);
+

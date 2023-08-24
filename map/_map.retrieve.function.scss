@@ -2,13 +2,13 @@
 @use 'map.get.function' as *;
 @use 'map.pick.function' as *;
 
-// Status: DONE
-// The `map.retrieve()` function retrieves a value from the `$map` by a `$method` get or pick with a `$key`.
+// Status: TODO: Handle `null` in pick function with map.values.
+// The `map.retrieve()` function retrieves a value from `$map` by a `$method` get or pick with a `$key`.
 // @param `$method` The method get(`map.get()`)  or pick(`map.pick()`) used to retrieve the value.
-// @param `$map` A map to get the value by using the specified `$method` and `$key`.
-// @param `$key` A key to get or pick the value from the `$map`.
-// @param `$fallback` The fallback value if the returned value is `null`.
-// @return The return value is a retrieved value from the `$map` or `$fallback`.
+// @param `$map` A map to get the value by using `$method` and `$key`.
+// @param `$key` A key to get or pick the value from `$map`.
+// @param `$fallback` The fallback value if returned is `null`.
+// @return The return value is a retrieved value from `$map` or `$fallback`.
 @function retrieve($method, $map, $key, $fallback: null) {
   @return if($method == get, get($map, $key, $fallback), if($method == pick, pick($map, $key...), $map or $fallback));
 }

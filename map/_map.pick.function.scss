@@ -11,11 +11,11 @@
 @use 'pattern';
 @use 'pick';
 
-// Status: DONE
-// The `map.pick()` function returns a map with the specified `$keys`.
-// @param `$map` A map from which values of the given `$keys` are taken.
+// Status: TODO: Examples.
+// The `map.pick()` function returns a copy of `$map` of `$keys`.
+// @param `$map` A map from which values of `$keys` are taken.
 // @arbitrary `$keys...` List of keys to get the values from `$map`.
-// @return The return value is a map built of the given `$keys`.
+// @return The return value is a copy of `$map` built of `$keys`.
 @function pick($map, $keys...) {
   $result: ();
   @each $key in $keys {

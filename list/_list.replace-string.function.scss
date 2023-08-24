@@ -1,0 +1,26 @@
+// Sass.
+@use 'sass:list';
+
+// Modules.
+@use '../string';
+
+// Status: DONE
+// The `list.replace-string()` function returns `$list` with replaced all substrings `$replace` by `$replacement`.
+// @param `$list` A list in which `$replace` substring in the elements of `string` type are replaced by `$replacement`.
+// @param `$replace` A substring to replace with `$replacement` in the `$list` elements of the `string` type.
+// @param `$replacement` The string to replace `$replace` in the `string` type elements of `$list`.
+// @return The return value is `$list` where substring `$replace` of `string` type elements are replaced with `$replacement`.
+@function replace-string($list, $replace, $replacement) {
+  @if (type-of($list) == list or type-of($list) == arglist) and list.length($list) > 0 {
+    @for $i from 1 through list.length($list) {
+      @if type-of(list.nth($list, $i)) == string {
+        $list: list.set-nth($list, $i, string.replace(list.nth($list, $i), all, $replace, $replacement));
+      }
+    }
+  }
+  @return $list;
+}
+
+// Example usage
+// @debug replace-string(('__PARENT__1123', 'aaaa__PARENT__1123', 'sdfsdfsd-dasdsad__PARENT__1123'), __PARENT__, '&'); // "&1123", "aaaa&1123", "sdfsdfsd-dasdsad&1123"
+// @debug replace-string((test, test1, test2), test1, something); // test, something, test2

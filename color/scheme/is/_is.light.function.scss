@@ -1,0 +1,14 @@
+// Variables.
+@use '../scheme.variables';
+
+// Status: DONE
+// The `is.light()` function checks whether variable `$color-scheme` of scheme module is set to `light`.
+// @returns The returned value is a bool indicating whether `$color-scheme` of scheme module is set to `light`.
+@function light() {
+  @return scheme.$color-scheme == light or (scheme.$color-scheme != dark and scheme.$color-scheme != normal);
+}
+
+// Examples.
+// @debug is-light(); // false
+// scheme.$color-scheme: light;
+// @debug is-light(); // true

@@ -1,8 +1,26 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
 // Status: DONE
-// The `meta.of-type()` function.
+// The `meta.of-type()` function checks whether `$values` are of `$type`.
+// @param `$type` The type to check against `$values`.
+// @param `$values...` Values to check against `$type`.
+// @returns The return value is `bool` indicating all `$values` are of `$type`.
 @function of-type($type, $values...) {
+  // Set null as type-of(null)
+  $i: 1;
+  @each $value in $type {
+    @if not $value {
+      $type: list.set-nth($type, $i, meta.type-of($value));
+    }
+
+    $i: $i + 1;
+  }
+
+  // Check values against `$type`.
   @each $value in $values {
-    @if not (type-of($value) == $type) {
+    @if not list.index($type, type-of($value)) {
       @return false;
     }
   }
@@ -10,5 +28,14 @@
 }
 
 // Examples.
+// single type
 // @debug of-type(string, a, b, c, d); // true
 // @debug of-type(string, a, 2, 3, 5); // false
+
+// multiple types
+// @debug of-type(number string, a, 2, 3, 5); // true
+// @debug of-type(number string, a, 2, 3, 5, null); // false
+
+// null
+// @debug of-type(number string null, a, 2, 3, 5, null); // true
+

@@ -1,0 +1,48 @@
+// Sass.
+@use 'sass:list';
+
+// Status: DONE
+// The `dictionary.translation()` function returns a translation of `$search` from `$dictionaries...`.
+// @param `$search` A word(string) or phrase(list space separated) to search for translation.
+// @arbitrary `$dictionaries...` Dictionaries to look for `$search` translation.
+// @return The return value is a translation of the `$search`.
+@function translation($search, $dictionaries...) {
+  @each $dictionary in $dictionaries {
+    @each $phrase, $translation in $dictionary {
+      @if list.index($phrase, $search) and $translation {
+        @return $translation;
+      }
+    }
+  }
+  @return null;
+}
+
+// Examples.
+// $-nested-dictionary: (
+//   general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+//   class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+//   var: (prefix: var-prefix, suffix: var-suffix),
+// );
+// $-flatten-dictionary: (
+//   'extra small': xs,
+//   (extra large, extra-large): xl,
+//   border: b,
+//   color: c,
+//   delimiter: '-',
+//   outline: o,
+//   prefix: spectre,
+//   separator: '-',
+//   suffix: end,
+// );
+
+// single dictionary
+// @debug translation(prefix, $-flatten-dictionary); // spectre
+// @debug translation(extra large, $-flatten-dictionary); // xl
+
+// multiple dictionaries
+// @debug translation(extra-large, $-nested-dictionary, $-flatten-dictionary); // xl
+// @debug translation('extra small', $-nested-dictionary, $-flatten-dictionary); // xs
+
+// @debug translation(prefix, $-nested-dictionary, $-flatten-dictionary); // spectre
+// @debug translation(outline, $-nested-dictionary, $-flatten-dictionary); // o
+// @debug translation(delimiter, $-nested-dictionary, $-flatten-dictionary); // -

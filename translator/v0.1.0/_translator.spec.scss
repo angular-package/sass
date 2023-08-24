@@ -1,0 +1,80 @@
+// Translator.
+@use '../../translator';
+
+// ---
+// Dictionary
+// ---
+$-dictionary: (
+  class: (prefix: class-prefix, suffix: class-suffix),
+  prefix: spectre,
+  suffix: end,
+
+  // Sizes.
+  (extra large, 'extra large', extra-large): xl,
+  (extra small, 'extra small', extra-small): xs,
+
+  large: lg,
+  medium: md,
+  small: sm,
+
+  size: s,
+);
+
+// Use the global dictionary.
+// translator.$dictionary-global: false; // set the dictionary global to false
+// @debug translator.$dictionary-global; // true
+// @debug translator.$dictionary; // (word: translation)
+
+// Working on the global dictionary.
+// set the (word:translation)
+// @debug translator.dictionary-set(prefix, spectre); // (word: translation, prefix: spectre)
+// @debug translator.dictionary-set(suffix, end); // (word: translation, prefix: spectre, suffix: end)
+
+// set the dictionary under the key `class`
+// @debug translator.dictionary-set(class, (prefix: spectre, suffix: end)); // (word: translation, class: (prefix: spectre, suffix: end))
+
+// merge `$-dictionary` with a global dictionary
+// @debug translator.dictionary-merge($dictionary: $-dictionary); // (word: translation, class: (prefix: class-prefix, suffix: class-suffix), prefix: spectre, suffix: end, (extra large, "extra large", extra-large): xl, (extra small, "extra small", extra-small): xs, large: lg, medium: md, small: sm, size: s)
+
+// merge `$-dictionary` under the sub-dictionary key with a global dictionary
+// @debug translator.dictionary-merge(sub-dictionary, $dictionary: $-dictionary); // (word: translation, sub-dictionary: (class: (prefix: class-prefix, suffix: class-suffix), prefix: spectre, suffix: end, (extra large, "extra large", extra-large): xl, (extra small, "extra small", extra-small): xs, large: lg, medium: md, small: sm, size: s))
+
+// merge class from `$-dictionary` under the sub-dictionary key with a global dictionary
+// @debug translator.dictionary-merge(sub-dictionary, $dictionary: $-dictionary class); // (word: translation, sub-dictionary: (class: (prefix: class-prefix, suffix: class-suffix), prefix: spectre, suffix: end, (extra large, "extra large", extra-large): xl, (extra small, "extra small", extra-small): xs, large: lg, medium: md, small: sm, size: s))
+
+// merge class from `$-dictionary` under the sub-dictionary key with a global dictionary
+@debug translator.dictionary-merge(sub-dictionary, $-dictionary class); // (word: translation, sub-dictionary: (class: (prefix: class-prefix, suffix: class-suffix)))
+
+// get dictionary
+@debug translator.dictionary-get(sub-dictionary); // (class: (prefix: class-prefix, suffix: class-suffix))
+
+// merge then pick dictionary
+@debug translator.dictionary-pick(sub-dictionary); // (sub-dictionary: (class: (prefix: class-prefix, suffix: class-suffix)))
+
+// check whether global dictionary is in use
+@debug translator.dictionary-is-global(); // true
+
+// check modified dictionary
+@debug translator.$dictionary; // (word: translation, sub-dictionary: (class: (prefix: class-prefix, suffix: class-suffix)))
+
+// get flattened dictionary by picking from the global dictionary
+@debug translator.dictionary((sub-dictionary, class)); // (word: translation, prefix: class-prefix, suffix: class-suffix)
+
+// ---
+// Translate
+// ---
+// merge before translate
+@debug translator.dictionary-merge($dictionary: $-dictionary);
+
+// check dictionary
+@debug translator.dictionary(); // (word: translation, prefix: spectre, suffix: end, (extra large, "extra large", extra-large): xl, (extra small, "extra small", extra-small): xs, large: lg, medium: md, small: sm, size: s)
+
+// do some translates
+@debug translator.translate-string(prefix, (sub-dictionary, class)); // class-prefix
+@debug translator.translate-string(suffix); // end
+@debug translator.translate-string(extra-large); // xl
+
+// use translate
+@debug translator.translate(extra large); // xl
+@debug translator.translate((extra large) (extra small)); // xl xs
+@debug translator.translate(prefix width suffix, (sub-dictionary, class)); // class-prefix width class-suffix

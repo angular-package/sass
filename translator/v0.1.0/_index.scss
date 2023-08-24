@@ -1,0 +1,5 @@
+@forward 'dictionary' as dictionary-*;
+@forward 'translate' as translate-*;
+@forward 'dictionary/dictionary.variables';
+@forward 'translator.dictionary.function';
+@forward 'translator.translate.function';

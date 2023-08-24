@@ -1,0 +1,89 @@
+// Sass.
+@use 'sass:map';
+
+// Variables.
+@use 'class.variables' as variables;
+
+// Modules.
+@use '../list';
+
+// Functions.
+@use '../functions';
+@use 'class.parent-first.function';
+
+// Status: DONE
+// https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors
+// The `class.name()` function defines name from `$name`, `$prefix`, `$suffix` separated by `$delimiter` and translated with `$dictionary`.
+// @param `$name` The name of string or list type.
+// @param `$dictionary` Dictionary to translate class `$name` words.
+// @param `$delimiter` Delimiter to put between elements of `$name`.
+// @param `$prefix` The `$name` prefix .
+// @param `$suffix` The `$name` suffix.
+// @returns The returned value is a class `$name`.
+@function name(
+  $name,
+  $dictionary: (),
+  $delimiter: map.get(variables.$class, delimiter),
+  $prefix: map.get(variables.$class, prefix),
+  $suffix: map.get(variables.$class, suffix),
+) {
+  $selector: null;
+  $name: class.parent-first($name);
+  @if list.length($name) > 0 {
+    @each $indicator in list.index($name, any, '==', '&', '.', '&.') {
+      @if $indicator {
+        $selector: list.append($selector, list.nth($name, $indicator));
+      }
+    }
+    @if list.length($selector) > 0 {
+      $name: list.remove-value($name, '&', '.', '&.');
+    }
+  }
+  @return #{functions.name($selector) + functions.name($name, $dictionary, $delimiter, $prefix, $suffix)};
+}
+
+// Examples.
+// variables.$class: map.merge(variables.$class, (delimiter: '-'));
+
+// no class/parent indicators
+// @debug name(border width lg); // border-width-lg
+
+// single class/parent indicator
+// @debug name('.' border width lg); // .border-width-lg
+// @debug name('.' '&' 'border' 'width' 'lg'); // &.border-width-lg
+// @debug name('&' 'border' 'width' 'lg'); // &border-width-lg
+// @debug name('&' '.' 'border' 'width' 'lg'); // &.border-width-lg
+// @debug name('&.' 'border' 'width' 'lg'); // &.border-width-lg
+// @debug name('&' '.' accordion, (prefix: spectre));
+// @debug name('border' 'width' '&.' 'lg'); // &.border-width-lg
+// @debug name('border' '&' 'width' '&' '.' 'lg'); // &.border-width-lg
+
+// class/parent indicator in the string
+// @debug name('border' '&.width' lg); // .&border-width-lg
+// @debug name('.border' 'width' '&lg'); // .border-width-&lg
+// @debug name('.' 'border' '&width' lg); // .border-&width-lg
+
+// delimiter
+// @debug name('' 'border' 'width' 'lg', $delimiter: '-'); // -border-width-lg
+// @debug name('' 'border' 'width' 'lg' '', $delimiter: '-'); // -border-width-lg-
+// @debug name('border' 'width' 'lg' '', $delimiter: '-'); // border-width-lg-
+// @debug name('border' 'width' 'lg', $delimiter: '--'); // border--width--lg
+
+// dictionary
+// @debug name('border' 'width' 'lg', ('prefix': 'spectre', 'suffix': 'ver2'), '-'); // spectre-border-width-lg-ver2
+// @debug name('border' 'width' 'lg', ('border': 'modified-border'), $delimiter: '-'); // modified-border-width-lg
+// @debug name('border' 'width' 'lg', ('width': 'modified-width', 'lg': 'lg-modified'), $delimiter: '-'); // border-modified-width-lg-modified
+// @debug name('border' ('prefix': 'spectre', 'suffix': 'ver2') 'width' 'lg', $delimiter: '-'); // spectre-border-width-lg-ver2
+// @debug name('border' ('border': 'modified-border') 'width' 'lg', $delimiter: '-'); // modified-border-width-lg
+
+// other
+// @debug name('border' 'width' 'lg' ' ' 'border' '>' 'active', $delimiter: '-'); // border-width-lg- -border->-active
+// @debug name('border' 'width' 'lg' '~' 'border' '+' 'active', $delimiter: '-'); // border-width-lg-~-border-+-active
+// @debug name('border' 'width' 'lg' ' ' 'border' '||' 'active', $delimiter: '-'); // border-width-lg- -border-||-active
+// @debug name('100' 'border' 'width', $delimiter: '-'); // 100-border-width
+// @debug name('border' 'width' '100', $delimiter: '-'); // border-width-100
+// @debug name('border' 'width' '200', $delimiter: '-'); // border-width-200
+// @debug name('dark' 'theme' ' ' 'button' 'red' ' ' 'icon' 'svg', $delimiter: '-'); // dark-theme- -button-red- -icon-svg
+// @debug name('light' 'theme' ' ' 'button' 'red', $delimiter: '-'); // light-theme- -button-red
+// @debug name('.' '100' 'border' 'width', $delimiter: '-'); // .100-border-width
+// @debug name('&' '.' '100' 'border' 'width', $delimiter: '-'); // &.100-border-width

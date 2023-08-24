@@ -1,0 +1,11 @@
+// Available prefixes.
+// It's used to verify `string` is function name.
+$prefix: ('--', '__', '@', '&', '+', '/') !default;
+
+// Available separator between module and function.
+// It's used to verify `string` is function name.
+// E.g. 'selector.nest', module_function, module-function.
+$separator: ('-', '_', '.') !default;
+
+// Available custom functions.
+$functions: () !default;

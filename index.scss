@@ -1,23 +1,18 @@
-// @forward 'class' as class-*;
+@forward 'class' as class-*;
 // @forward 'color' as color-*;
-
 @forward 'comparison' as comparison-*;
-
-// @forward 'function' as function-*;
-
-// @forward 'functions';
+@forward 'function' as function-*;
+@forward 'functions';
 @forward 'list' as list-*;
 @forward 'map' as map-*;
 @forward 'math' as math-*;
 @forward 'meta' as meta-*;
 @forward 'number' as number-*;
-
-// @forward 'property' as property-*;
-// @forward 'scheme' as scheme-*;
-// @forward 'selector' as selector-*;
+@forward 'property' as property-* hide property;
+@forward 'property/property.mixin';
+@forward 'selector' as selector-*;
 @forward 'string' as string-*;
-
-// @forward 'translator' as translator-*;
-// @forward 'values' as values-*;
-// @forward 'var' as var-*;
-// @forward 'variables';
+@forward 'translator' as translator-*;
+@forward 'values' as values-*;
+@forward 'var' as var-*;
+@forward 'variables';

@@ -1,0 +1,207 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+@use 'sass:selector';
+
+// Variables.
+@use 'selector.variables' as variables;
+
+// Functions.
+@use '../class/class.name.function' as *;
+@use '../class/class.parent-first.function' as *;
+
+// List modules.
+@use '../list/get';
+@use '../list/has';
+@use '../list/remove';
+
+// @use 'selector.name.function' as *; // TODO: try to use this function instead of class.name.
+@use 'selector.nest.function' as *;
+@use 'selector.pseudo-class.function' as *;
+
+// Modules.
+@use '../map';
+
+// Status: DONE.
+// The `selector.class()` function returns classes built from `$name`, `$pseudo-class`, `$delimiter`, `$prefix`, `$suffix` translated with `$dictionary`.
+// @param `$name` The `string` or `list` type to built class names.
+// @param `$pseudo-class` Pseudo class to add to `$name`.
+// @param `$dictionary` The dictionary to translate `$name`.
+// @param `$delimiter` Separator to separate each element of `$name`.
+// @param `$prefix` A prefix to place at start of `$name`.
+// @param `$suffix` The suffix placed at the end of `$name`.
+// @return The return value is class names built from `$name`, `$pseudo-class`, `$delimiter`, `$prefix`, `$suffix` translated with `$dictionary`.
+@function class(
+  $name,
+  $pseudo-class: (),
+  $dictionary: (),
+  $delimiter: map.get(variables.$selector, delimiter),
+  $prefix: map.get(variables.$selector, prefix),
+  $suffix: map.get(variables.$selector, suffix),
+) {
+  // Dictionary from `$name`.
+  $dictionary: map.deep-merge(
+    $dictionary,
+    map.get(get.map($name) or (), dictionary, get.map($name) or ())
+  );
+
+  // Name.
+  $name: remove.list(remove.list(parent-first(remove.map($name)), $bracketed: only), 0);
+
+  @if has.list($name) {
+    $parent: ();
+
+    @if type-of($name) == list and list.nth($name, 1) == '&' {
+      $name: remove.value($name, '&');
+      $parent: '&';
+    }
+
+    @for $i from 1 through list.length($name) {
+      $value: list.nth($name, $i);
+      @for $j from 1 through list.length($value) {
+        $value: list.set-nth(
+          $value,
+          $j,
+          name(
+            list.join(
+              if($i == 1 and not (list.nth($value, $j) == '&'), (), '&' ''),
+              if(meta.type-of(list.nth($value, $j)) == number, #{list.nth($value, $j)}, list.nth($value, $j))
+            ),
+            map.merge($dictionary, (prefix: null, suffix: null)),
+            $delimiter,
+            $prefix,
+            $suffix,
+          )
+        );
+      }
+
+      $name: list.set-nth($name, $i, $value);
+    }
+
+    $name: nest($name...);
+    @for $i from 1 through list.length($name) {
+      $value: list.nth($name, $i);
+      @for $j from 1 through list.length($value) {
+        $value: list.set-nth($value, $j, name(list.join($parent '.', list.nth($value, $j)), $dictionary, $delimiter, $prefix, $suffix));
+      }
+
+      $name: list.set-nth($name, $i, $value);
+    }
+  } @else {
+    $name: nest(name(list.join('.', $name), $dictionary, $delimiter, $prefix, $suffix));
+  }
+
+  @return pseudo-class($name, $pseudo-class);
+}
+
+// Examples.
+$-dictionary: (class: (prefix: a, suffix: b, border: brd, outline: o, color: c, delimiter: '-'));
+
+// @debug class('&' (border xs, outline xl) color, ':hover', (outline: out, class: (prefix: a, suffix: b, border: b, delimiter: '--'))); // &.border-xs-color:hover, &.out-xl-color:hover
+// @debug class('&' (border xs, outline xl) color, ':hover', (outline: out, class: (prefix: a, suffix: b, border: b)), false); // &.borderxscolor:hover, &.outxlcolor:hover
+
+// String.
+// @debug class(border); // (.border,)
+
+// List.
+// @debug class(border width lg); // (.border-width-lg,)
+// @debug class(border width 100); // (.border-width-100,)
+// @debug class((border, width, lg)); // (.border-width-lg,)
+
+// List + dictionary.
+// @debug class(border width 100, $dictionary: (prefix: modified-prefix)); // (.modified-prefix-border-width-100,)
+
+// Parent selector.
+// @debug class('&border'); // (&.border,)
+// @debug class('&' border); // (&.border,)
+// @debug class('&' border width); // (&.border-width,)
+// @debug class(border '&'); // (&.border,)
+// @debug class(border '&width'); // (&.border-width,)
+// @debug class(border width '&'); // (&.border-width,)
+
+// Multiple classes.
+// @debug class((('&border', '&width'),)); // &.border, &.width
+// @debug class((('&border', width),)); // &.border, .width
+
+// @debug class('&' (border, width)); // &.border, &.width
+// @debug class('&' (header, body, footer)); // &.header, &.body, &.footer
+// @debug class('&' (border xs, outline xl) color, ':hover', (prefix: a, suffix: b, border: b, delimiter: '--')); // &.a--border-xs-color--b:hover, &.a--outline-xl-color--b:hover
+// @debug class('&' basic (header small, body medium, footer high) 'silver'); // &.basic-header-small-silver, &.basic-body-medium-silver, &.basic-footer-high-silver
+// @debug class('&' border (header, body, footer)); // &.border-header, &.border-body, &.border-footer
+// @debug class('&' border (header, body, footer) basic); // &.border-header-basic, &.border-body-basic, &.border-footer-basic
+// @debug class('&' border width (header, body, footer)); // &.border-width-header, &.border-width-body, &.border-width-footer
+
+// @debug class('&border' (header, body, footer) basic); // &.border-header-basic, &.border-body-basic, &.border-footer-basic
+// @debug class('&basic' (header small, body medium, footer high) 'silver', (':hover', ':visited')); // &.basic-header-small-silver:hover, &.basic-header-small-silver:visited, &.basic-body-medium-silver:hover, &.basic-body-medium-silver:visited, &.basic-footer-high-silver:hover, &.basic-footer-high-silver:visited
+
+// @debug class(('&card', (header, body, footer, ))); // &.card-header, &.card-body, &.card-footer
+// @debug class(('&card', (header, body, footer), 'silver')); // &.card-header-silver, &.card-body-silver, &.card-footer-silver
+// @debug class(('&' card, border, '&chat') (header, body)); // &.card-header, &.card-body, .border-header, .border-body, &.chat-header, &.chat-body
+
+// @debug class((card, '&border') (header, body)); // .card-header, .card-body, &.border-header, &.border-body
+
+// @debug class(accordion test, ()); // (.accordion-test,)
+
+// @debug class(border, (), (prefix: prefix, suffix: suffix)); // (.prefix-border-suffix,)
+
+// @debug class('&' accordion test, ()); // (&.accordion-test,)
+// @debug class('&' accordion test, (), (prefix: prefix, suffix: suffix)); // (&.prefix-accordion-test-suffix,)
+// @debug class('&accordion' test, $dictionary: (prefix: spectre)); // (&.spectre-accordion-test,)
+
+// @debug class(border, $dictionary: (prefix: p)); // (.p-border,)
+// @debug class(border width xs, $dictionary: (prefix: p, suffix: s)); // (.p-border-width-xs-s,)
+// @debug class(border width xs, $dictionary: (prefix: p, suffix: s, delimiter: '--')); // (.p--border--width--xs--s,)
+// @debug class(border (dictionary: (prefix: p))); // (.p-border,)
+
+// @debug class('&' accordion, $dictionary: (prefix: spectre)); // (&.spectre-accordion,)
+
+// Pseudo-class.
+// @debug class(border, ':hover'); // (.border:hover,)
+// @debug class(border, '.lg'); // (.border.lg,)
+// @debug class(border, ('.lg', ':hover')); // .border.lg, .border:hover
+
+// Has list.
+// @debug class(card (header body footer)); // (.card-header .card-body .card-footer,)
+// @debug class((border, outline) color); // .border-color, .outline-color
+
+// Has list + dictionary.
+// @debug class((border, outline) color, (), (prefix: prefix, suffix: suffix, border: b, outline: o, color: c)); // .prefix-border-color-suffix, .prefix-outline-color-suffix
+// @debug class((card, (header, body, footer,), 'silver'), $dictionary: ('silver': primary, header: h)); // .card-header-silver, .card-body-silver, .card-footer-silver
+// @debug class((card, (header, body, footer,), 'silver'), $dictionary: (prefix: s, suffix: p, 'silver': primary)); // .s-card-header-silver-p, .s-card-body-silver-p, .s-card-footer-silver-p
+// @debug class('&' border width (header, body), $dictionary: (header: h)); // &.border-width-h, &.border-width-body
+// @debug class('&' (border xs, outline xl) color, ':hover', (prefix: a, suffix: b, border: b)); // &.a-border-xs-color-b:hover, &.a-outline-xl-color-b:hover
+// @debug class((border xs, outline xl) color, ':hover', (prefix: a, suffix: b, border: b)); // .a-border-xs-color-b:hover, .a-outline-xl-color-b:hover
+
+// Translated with `$-dictionary`.
+// @debug class(basic (border xs, outline xl), (), $-dictionary); // .basic-border-xs, .basic-outline-xl
+// @debug class(basic (border xs, outline xl) color, (), $-dictionary); // .basic-border-xs-color, .basic-outline-xl-color
+// @debug class((border xs, outline xl) color, (), $-dictionary); // .border-xs-color, .outline-xl-color
+
+// variants
+// @debug class((border width (xl, lg, md, sm, xs))); // .border-width-xl, .border-width-lg, .border-width-md, .border-width-sm, .border-width-xs
+
+// variants + parent
+// @debug class(('&' border width (xl, lg, md, sm, xs))); // &.border-width-xl, &.border-width-lg, &.border-width-md, &.border-width-sm, &.border-width-xs
+// @debug class(('&border' width (xl, lg, md, sm, xs))); // &.border-width-xl, &.border-width-lg, &.border-width-md, &.border-width-sm, &.border-width-xs
+
+// variants + parent + pseudo-class
+// @debug class((border width (xl, lg, md, sm, xs)), ':hover'); // .border-width-xl:hover, .border-width-lg:hover, .border-width-md:hover, .border-width-sm:hover, .border-width-xs:hover
+
+// variants + parent + pseudo-class + dictionary
+// @debug class((border width (xl, lg, md, sm, xs)), ':hover', (border: b, width: w)); // .b-w-xl:hover, .b-w-lg:hover, .b-w-md:hover, .b-w-sm:hover, .b-w-xs:hover
+// @debug class(('&' border width (xl, lg, md, sm, xs)), ':hover', (border: b)); // &.b-width-xl:hover, &.b-width-lg:hover, &.b-width-md:hover, &.b-width-sm:hover, &.b-width-xs:hover
+
+// TODO: Check examples.
+// @debug class((card, (header, body, footer,), 'silver', ((prefix: first))), $dictionary: (silver: primary)); // .first-card-header-silver, .first-card-body-silver, .first-card-footer-silver
+// @debug class((card, (header, body, footer,), 'silver', (dictionary: (prefix: first))), $dictionary: (silver: primary)); // .first-card-header-silver, .first-card-body-silver, .first-card-footer-silver
+// @debug class((card, (header, body, footer,), 'silver', (dictionary: (prefix1: first))), $dictionary: (prefix: second, silver: primary));
+
+// @debug class((card, (header, body, footer,), 'silver', (dictionary: (prefix: first))), $dictionary: (prefix: second, silver: primary));
+// @debug class((card, (header, body, footer,), 'silver', (dictionary: (class: (prefix: first)))), $dictionary: (prefix: second, silver: primary));
+// @debug class((card, (header, body, footer,), 'silver', (dictionary: (prefix: first))), $dictionary: (class: (prefix: second, silver: primary)));
+// @debug class((card, (header, body, footer,), 'silver', (dictionary: (class: (prefix: first, header: hfirst)))), $dictionary: (class: (prefix: second, header: hsecond, silver: primary)));
+
+// @debug class((card, (header, body, footer,), 'silver', (dictionary: (prefix: aaa))), $dictionary: (class: (silver: primary)));
+// @debug class((card, (header, body, footer,), 'silver', (dictionary: (class: (), header: h, 'silver': s))), $dictionary: (class: (prefix: spectre2, silver: primary)));
+// @debug class((card, (header, body, footer,), 'silver', (dictionary: (prefix: spectre1, header: h, 'silver': s))), $dictionary: (class: (prefix: spectre2, silver: primary)));
+

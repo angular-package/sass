@@ -1,5 +1,5 @@
 // Translator.
-@use '../translator';
+@use 'v1.0.0' as translator;
 
 // ---
 // Dictionary
@@ -50,9 +50,6 @@ $-dictionary: (
 
 // merge then pick dictionary
 @debug translator.dictionary-pick(sub-dictionary); // (sub-dictionary: (class: (prefix: class-prefix, suffix: class-suffix)))
-
-// check whether global dictionary is in use
-@debug translator.dictionary-is-global(); // true
 
 // check modified dictionary
 @debug translator.$dictionary; // (word: translation, sub-dictionary: (class: (prefix: class-prefix, suffix: class-suffix)))

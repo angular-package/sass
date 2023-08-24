@@ -1,0 +1,17 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Status: DONE
+// The `meta.call-arglist()` function calls `$function` on `$arglist` with a separator comma where elements are arguments or space where the whole
+// list is an argument.
+// @param `$function` Function of function type to call `$arglist` as comma-separated arguments or argument.
+// @param `$arglist` List on which to call `$function`.
+// @returns The returned value is the result of invoked `$function`.
+@function call-arglist($function, $arglist) {
+  @return if(
+    list.separator($arglist) == comma,
+    meta.call($function, $arglist...),
+    meta.call($function, $arglist)
+  );
+}

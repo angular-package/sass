@@ -1,0 +1,103 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Functions.
+@use '../../list/list.to-map.function' as *;
+@use '../../selector/selector.class.function' as *;
+@use '../../selector/selector.nest.function' as *;
+
+// Mixins.
+@use '../class.content.mixin' as class;
+
+// Modules.
+@use '../../function';
+@use '../../values';
+
+// Status: DONE
+// The `class.variant()` mixin sets class `$variant` with `$pseudo-class` translated with `$dictionary`, and called by `$function`.
+// @param `$variant` Class variant with `$pseudo-class` called by `$function`.
+// @param `$pseudo-class` Pseudo class for class `$variant`.
+// @param `$dictionary` Dictionary to translate class `$variant`.
+// @param `$function` The function to set class `$variant`.
+@mixin variant(
+  $variant,
+  $pseudo-class: (),
+  $dictionary: (),
+  $function: meta.get-function(class),
+  $content-type: list
+) {
+  @if type-of($variant) == map {
+    $content-keys: (
+      class,
+      (2: value, 3: property, 4: property),
+      (3: value, 4: value-class, 5: attribute),
+      (4: value, 5: value-class),
+      value,
+      variant
+    );
+    @each $class, $attribute-variant in $variant {
+      $property: null;
+      @if type-of($class) == map { @each $-class, $-property in $class { $class: $-class; $property: $-property; }}
+      @if type-of($attribute-variant) == map {
+        @each $attribute, $variant in $attribute-variant {
+          @if type-of($attribute) == map {
+            @each $key, $value in $attribute { $attribute: nest($key, $value); }
+          } @else if function.has($attribute) {
+            $attribute: function.call-arglist($attribute...);
+          }
+          @each $class in if(list.separator($class) == comma, $class, ($class,)) {
+            @if type-of($variant) == map {
+              @each $attribute in if(list.separator($attribute) == comma, $attribute, ($attribute,)) {
+                @each $value-class, $value in $variant {
+                  @include class.content(values.combine((method: join), if(&, '&', ()), $class, $attribute, if(list.separator($value-class) == comma, ($value-class,), $value-class)), $pseudo-class, $dictionary, $function) {
+                    $values: ($class, if($property, $property, $class), $attribute, $value-class, $value, ($value-class: $value));
+                    $content: if(
+                      $content-type == map,
+                      to-map($values, $content-keys...),
+                      values.combine((separator: comma), $values...)
+                    );
+                    @if type-of($content) == list { @content($content...); } @else { @content($content); }
+                  }
+                }
+              }
+            } @else {
+              // FEATURE: Works fine.
+              @each $variant in if(list.separator($variant) == comma, $variant, ($variant,)) {
+                $value: $variant;
+                @each $attribute in if(list.separator($attribute) == comma, $attribute, ($attribute,)) {
+                  $value-class: $attribute;
+                  @include class.content(values.combine((method: join), if(&, '&', ()), $class, $value-class), $pseudo-class, $dictionary, $function) {
+                    $values: ($class, if($property, $property, $class), null, $value-class, $value, ($value-class: $value));
+                    $content: if(
+                      $content-type == map,
+                      to-map($values, $content-keys...),
+                      values.combine((separator: comma), $values...)
+                    );
+                    @if type-of($content) == list { @content($content...); } @else { @content($content); }
+                  }
+                }
+              }
+            }
+          }
+        }
+      } @else {
+        // FEATURE: Works fine.
+        @each $value in if(list.separator($attribute-variant) == comma, $attribute-variant, ($attribute-variant,)) {
+          @each $class in if(list.separator($class) == comma, $class, ($class,)) {
+            @each $value in if(list.separator($value) == comma, $value, ($value,)) {
+              @include class.content(values.combine((method: join), if(&, '&', ()), $class), $pseudo-class, $dictionary, $function) {
+                $content: if(
+                  $content-type == map,
+                  to-map(($class, $property or $class, $value), $content-keys...),
+                  values.combine((separator: comma), $class, $property or $class, $value)
+                );
+                @if type-of($content) == list { @content($content...); } @else { @content($content); }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

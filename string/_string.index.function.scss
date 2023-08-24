@@ -4,10 +4,10 @@
 @use 'sass:string';
 
 // Status: DONE
-// The `string.index()` function returns index or list of indexes of the given substrings.
-// @param `$string` The value to check whether it contains given substrings.
-// @param `$substring` A substring to find in the given `$string`.
-// @arbitrary `$substrings...` The list of substrings to find in the given `$string`.
+// The `string.index()` function returns index or list of indexes of `$substrings`.
+// @param `$string` The value to check whether it contains `$substrings`.
+// @param `$substring` A substring to find in `$string`.
+// @arbitrary `$substrings...` The list of substrings to find in `$string`.
 // @return The return value is the index or list of indexes of the given found substrings.
 @function index($string, $substring, $substrings...) {
   @if type-of($string) == string {

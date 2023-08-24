@@ -1,0 +1,57 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../../values/values.combine.function' as *;
+@use '../functions/var.get.function';
+@use '../functions/var.name.function' as *;
+
+// Modules.
+@use '../../meta';
+
+// Mixins.
+@use '../../selector/selector.nest-content.mixin';
+
+// Status: TODO: Use property module.
+// The `var.set()` mixin defines the CSS variables based on the given `$property`.
+// @param `$property` The property or properties of map type to set CSS variables.
+// @param `$selector` Selector in which CSS variables are set.
+// @param `$function` Function to call on property values of list type.
+@mixin set($property, $selector: (), $function: null) {
+  @if type-of($property) == map {
+    @include selector.nest-content($selector...) {
+      @each $name, $variant in $property {
+        @if type-of($variant) == map {
+          @each $variant-name, $value in $variant {
+            @each $name in if(list.separator($name) == comma, $name, ($name,)) {
+              @if type-of($value) == map {
+                @each $value-name, $value in $value {
+                  #{name(combine((method: join), $name, $variant-name, $value-name))}: if(
+                    $function,
+                    #{meta.call-arglist($function, $value)},
+                    #{$value}
+                  );
+                }
+              } @else {
+                #{name(combine((method: join), $name, $variant-name))}: if(
+                  $function,
+                  #{meta.call-arglist($function, $value)},
+                  #{$value}
+                );
+              }
+            }
+          }
+        } @else {
+          $value: $variant;
+          @each $name in if(list.separator($name) == comma, $name, ($name,)) {
+            #{name($name)}: if(
+              $function,
+              #{meta.call-arglist($function, $value)},
+              #{$value}
+            );
+          }
+        }
+      }
+    }
+  }
+}

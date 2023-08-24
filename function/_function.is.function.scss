@@ -1,0 +1,90 @@
+// Sass.
+@use 'sass:color';
+@use 'sass:list';
+// @use 'sass:map';
+@use 'sass:math';
+// @use 'sass:meta';
+@use 'sass:selector';
+// @use 'sass:string';
+
+// Variables.
+@use 'function.variables' as variables;
+
+// Functions.
+@use '../list/list.swap.function' as *;
+@use 'function.name.function' as *;
+@use 'function.prefix.function' as *;
+
+// Modules.
+@use '../map/map.get.function';
+@use '../meta';
+@use '../string';
+
+// Status: DONE
+// The `function.is()` function checks whether `$name` in a form `module-function` or `module.function` is existing `function` or from `$functions`.
+// @param `$name` Function name to check.
+// @param `$prefix` Prefixes for the function in `$name`.
+// @param `$separator` Separator between module and function in string type `$name`.
+// @param `$functions` Additional module functions(instead of built-in) of `map` type to check.
+// @returns The return value is a `bool` indicating `$name` is an existing function or from `$functions` function.
+@function is($name, $prefix: null, $separator: null, $functions: null) {
+  @if meta.of-type(list map string, $name) {
+    $functions: if($functions, $functions, variables.$functions);
+    $prefix: if($prefix, $prefix, variables.$prefix);
+    $separator: if($separator, $separator, variables.$separator);
+    @if not prefix($name, $prefix) {
+      @return false;
+    } @else {
+      $name: name($name, $prefix, $separator, true);
+    }
+
+    // First check `$functions`.
+    @return if(
+      $functions and map.get($functions, $name),
+      if(meta.type-of(map.get($functions, $name)) == function, true, false),
+      meta.function-exists(if(list.length($name) == 2, swap($name, 1, 2), list.nth($name, 1))...)
+    );
+  }
+  @return false;
+}
+
+// Examples.
+// string
+// @debug is(nth); // true
+// @debug is(color); // false // TODO:  color
+
+// string + delimiter
+// @debug is(selector-nest); // true
+// @debug is(var-get); // true
+
+// string + dot
+// @debug is('selector.nest'); // true
+
+// string false
+// @debug is(any); // false
+
+// prefixed --
+// @debug is(--selector-nest, '--'); // true
+// @debug is('--selector.nest', '--'); // true
+
+// list
+// @debug is(list nth); // true
+// @debug is(selector nest); // true
+
+// @debug is(--list nth, '--'); // true
+// @debug is(--selector nest, '--'); // true
+
+// @debug is((10xfunction #aaa)); // false
+
+// map
+// @debug is((list: nth)); // true
+// @debug is((selector: nest)); // true
+
+// @debug is((--list: nth), '--'); // true
+// @debug is((--selector: nest), '--'); // true
+
+// @debug is((10xfunction: #aaa)); // ERROR: Error
+
+// Error
+// @debug is(no-function); // Error
+// @debug is(nth list); // Error

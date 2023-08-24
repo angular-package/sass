@@ -1,0 +1,43 @@
+// Modules.
+@use 'map.get.function' as *;
+@use 'map.set.function' as *;
+
+// Status: DONE
+// The `map.merge-allowed()` function returns `$map1` merged with `$map2` with allowed keys.
+// @param `$map1` The map to merge with `$map2`.
+// @param `$map2` A map to merge with `$map1`.
+// @param `$key-allowed` Allowed keys of map type where (key:type/value).
+// @returns The returned value is `$map1` merged with `$map2` with allowed keys `$key-allowed`.
+@function merge-allowed($map1, $map2, $key-allowed) {
+  @each $key, $value in $map2 {
+    $map1: set($map1, $key, $value, get($key-allowed, $key)...);
+  }
+  @return $map1;
+}
+
+// Examples.
+// @debug merge-allowed((
+//     'extra small': xs,
+//     (extra large, extra-large): xl,
+//     border: b,
+//     color: c,
+//     delimiter: '-',
+//     outline: o,
+//     prefix: spectre,
+//     separator: '-',
+//     suffix: end,
+//   ),
+//   (
+//     bracketed: true,
+//     delimiter: '---',
+//     method: append,
+//     separator: slash
+//   ),
+//   (
+//     bracketed: (auto, bool,),
+//     delimiter: (string, number),
+//     method: (append, join),
+//     null: bool,
+//     separator: (auto, comma, space, slash)
+//   )
+// );

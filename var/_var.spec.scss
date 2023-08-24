@@ -1,0 +1,67 @@
+// Sass.
+@use 'sass:map';
+
+// Modules.
+@use '../meta';
+@use '../var';
+
+// Update to the spectre settings.
+// var.$var: map.merge(var.$var, (
+//   prefix: s,
+//   delimiter: '-'
+// ));
+
+// meta.$module-functions: map.deep-merge(meta.$module-functions, (var: meta.module-functions(var)));
+
+// Mixins.
+// single
+// :root { @include var.set((blur: 0.05rem)); }
+
+// single + selector
+// @include var.set((blur: 0.05rem), ((':host', ':root'),));
+
+// single + selector + dictionary
+// @include var.set((blur: 0.05rem), ((':host', ':root'),), (blur: b));
+
+// multiple + selector
+// @include var.set((
+//   blur: 0.05rem,
+//   border width: 1px,
+//   width: 100px,
+// ), ((':host', ':root'),));
+
+// Functions.
+// var
+// not adjusted
+// @debug var.adjust(var(--s-layout-spacing),); // var(--s-layout-spacing)
+// @debug var.adjust(var(--s-layout-spacing), 3px); // calc(var(--s-layout-spacing) + 3px)
+
+// css()
+// @debug var.css(layout spacing); // var(--s-layout-spacing)
+// @debug var.css(layout spacing, 3px); // var(--s-layout-spacing, 3px)
+// @debug var.css(layout spacing, 3px, (layout: lay)); // var(--s-lay-spacing, 3px)
+// @debug var.css(layout spacing, 3px, (layout: lay), '--'); // var(--s--lay--spacing, 3px)
+// @debug var.css(layout spacing, 3px, (layout: lay), '--', spectre, end); // var(--spectre--lay--spacing--end, 3px)
+
+// get()
+// @debug var.get(primary); // var(--s-primary)
+// @debug var.get(primary, 3px); // calc(var(--s-primary) + 3px)
+// @debug var.get(primary, 3px, px); // calc(var(--s-primary) * 1px + 3px)
+// @debug var.get(primary, 3px, px, 5px); // calc(var(--s-primary, 5px) * 1px + 3px)
+// @debug var.get(primary, 3px, px, 5px, (primary: p)); // calc(var(--s-p, 5px) * 1px + 3px)
+// @debug var.get(primary, 3px, px, 5px, (primary: p), '--', spectre, end); // calc(var(--spectre--p--end, 5px) * 1px + 3px)
+
+// is()
+// @debug var.is(var(--s-layout-spacing)); // true
+
+// name()
+// @debug var.name(layout spacing); // --s-layout-spacing
+// @debug var.name(layout spacing, (spacing: s)); // --s-layout-s
+// @debug var.name(layout spacing, (spacing: s), '--'); // --s--layout--s
+// @debug var.name(layout spacing, (spacing: s), '--', spectre, end); // --spectre--layout--s--end
+
+// negative()
+// @debug var.negative(var(--s-layout-spacing)); // calc(var(--s-layout-spacing) * -1)
+
+// unit()
+// @debug var.unit(var(--s-layout-spacing), rem); // calc(var(--s-layout-spacing) * 1rem)

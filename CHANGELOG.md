@@ -8,25 +8,36 @@
 - Add **property** module to set CSS properties with functions. [79dccba]
 - Add **selector** module sets selectors split into words(optionally translated). [a165ed8]
 
-- Add `functions` with `name()` function to create name from words that can be translated with `$dictionary` and `important` to add `!important` flag. [16bdb40]
-- Add `list.extract-map()`, `list.replace-string()`, `list.replace()`, `list.swap()`, and `list.to-map()` functions. [66fdaef] [22f37e6] [1b37c23] [8c27019]
-- Add `map.merge-allowed()` function to merge allowed keys. [07e2904]
-- Add `math.sort()` function to sort numbers. [99484a6]
-- Add `meta.call-arglist()` function to call functions with comma-separated list as arguments and space-separated as argument. [0c0b0a0]
-- Add `string.to-map()` to transform `string` to `map` and `string.unquote()` to unquote on `$execute`.
+- Add `functions` with [`name()`](https://github.com/angular-package/sass/blob/develop/functions/_name.function.scss) function to create name from words that can be translated with `$dictionary` and `important` to add `!important` flag. [16bdb40]
+- Add [`list.extract-map()`](https://github.com/angular-package/sass/blob/develop/list/_list.extract-map.function.scss),
+  [`list.replace-string()`](https://github.com/angular-package/sass/blob/develop/list/_list.replace-string.function.scss),
+  [`list.replace()`](https://github.com/angular-package/sass/blob/develop/list/_list.replace.function.scss),
+  [`list.swap()`](https://github.com/angular-package/sass/blob/develop/list/_list.swap.function.scss),
+  and [`list.to-map()`](https://github.com/angular-package/sass/blob/develop/list/_list.to-map.function.scss) functions. [66fdaef] [22f37e6] [1b37c23] [8c27019]
+- Add [`map.merge-allowed()`](https://github.com/angular-package/sass/blob/develop/map/_map.merge-allowed.function.scss) function to merge allowed keys. [07e2904]
+- Add [`math.sort()`](https://github.com/angular-package/sass/blob/develop/math/_math.sort.function.scss) function to sort numbers. [99484a6]
+- Add [`meta.call-arglist()`](https://github.com/angular-package/sass/blob/develop/meta/_meta.call-arglist.function.scss) function to call functions with comma-separated list as arguments and space-separated as argument. [0c0b0a0]
+- Add [`string.to-map()`](https://github.com/angular-package/sass/blob/develop/string/_string.to-map.function.scss) to transform `string` to `map` and [`string.unquote()`](https://github.com/angular-package/sass/blob/develop/string/_string.unquote.function.scss) to unquote on `$execute`.
 
 - Add different(easier) **translator(1.0.0)** with global dictionary, not exported by default. [35b3663]
-- Add **var** module with `var.adjust()` `var.css()` `var.get()` `var.is()` `var.name()` `var.negative()` and `var.unit()` functions, and `var.set()` mixin. [16bdb40] [51f7f17] [d3ace9f]
+- Add **var** module with
+  [`var.adjust()`](https://github.com/angular-package/sass/blob/develop/var/functions/_var.adjust.function.scss)
+  [`var.css()`](https://github.com/angular-package/sass/blob/develop/var/functions/_var.css.function.scss)
+  [`var.get()`](https://github.com/angular-package/sass/blob/develop/var/functions/_var.get.function.scss)
+  [`var.is()`](https://github.com/angular-package/sass/blob/develop/var/functions/_var.is.function.scss)
+  [`var.name()`](https://github.com/angular-package/sass/blob/develop/var/functions/_var.name.function.scss)
+  [`var.negative()`](https://github.com/angular-package/sass/blob/develop/var/functions/_var.negative.function.scss) and
+  [`var.unit()`](https://github.com/angular-package/sass/blob/develop/var/functions/_var.unit.function.scss) functions, and [`var.set()`](https://github.com/angular-package/sass/blob/develop/var/mixins/_var.set.mixin.scss) mixin. [16bdb40] [51f7f17] [d3ace9f]
 
-- Update `comparison.compare()` to indicate map length as deprecated. [3969b97]
-- Update `meta.of-type()` function to handle multiple types. [cf31bb2]
-- Update `string.split()` to have ability to unquote returned string, and separator as multiple words instead of only one character. [62c693c] [b8feda9] [d0f372d]
-- Update `values.combine()` by changing the way of providing parameters. [ab77370]
+- Update [`comparison.compare()`](https://github.com/angular-package/sass/blob/develop/comparison/_comparison.compare.function.scss) to indicate map length as deprecated. [3969b97]
+- Update [`meta.of-type()`](https://github.com/angular-package/sass/blob/develop/meta/_meta.of-type.function.scss) function to handle multiple types. [cf31bb2]
+- Update [`string.split()`](https://github.com/angular-package/sass/blob/develop/string/_string.split.function.scss) to have ability to unquote returned string, and separator as multiple words instead of only one character. [62c693c] [b8feda9] [d0f372d]
+- Update [`values.combine()`](https://github.com/angular-package/sass/blob/develop/values/_values.combine.function.scss) by changing the way of providing parameters. [ab77370]
 
-- Fix `list.append()` fix not proper adding `$val` space separated. [99c618b]
-- Fix `list.join()` function to properly add bracketed. [928914a]
-- Fix `list.remove-list()` change function name from not existing `has-type()` to `has.type()`. [b3b5d55]
-- Fix `map.pick-pattern()` by updating use `string.replace()` function. [ab8263a]
+- Fix [`list.append()`](https://github.com/angular-package/sass/blob/develop/list/_list.append.function.scss) fix not proper adding `$val` space separated. [99c618b]
+- Fix [`list.join()`](https://github.com/angular-package/sass/blob/develop/list/_list.join.function.scss) function to properly add bracketed. [928914a]
+- Fix [`list.remove-list()`](https://github.com/angular-package/sass/blob/develop/list/remove/_remove.list.function.scss) change function name from not existing `has-type()` to `has.type()`. [b3b5d55]
+- Fix [`map.pick-pattern()`](https://github.com/angular-package/sass/blob/develop/map/pick/_pick.pattern.function.scss) by updating use `string.replace()` function. [ab8263a]
 
 [3969b97]: https://github.com/angular-package/sass/commit/3969b973927b1619fab342aa3246df7d58e65842
 [ab77370]: https://github.com/angular-package/sass/commit/ab7737052ede08a4129d88f9a7f1cd1993331359

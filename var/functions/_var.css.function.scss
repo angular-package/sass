@@ -8,22 +8,22 @@
 @use 'var.name.function';
 
 // Status: DONE
-// The `var.css()` function returns the CSS variable of `$name`, `$fallback` value, `$delimiter`, `$prefix`, `$suffix` and translated with `$dictionary`.
+// The `var.css()` function returns the CSS variable of `$name`, `$fallback` value, `$delimiter`, `$prefix`, `$suffix` translated with `$dictionary`.
 // `$name` structure `--#{$prefix}#{$delimiter}#{$name}#{$delimiter}#{$suffix}`
 // @param `$name` The `string` or `list` to set the CSS variable name.
-// @param `$fallback` A fallback value.
+// @param `$fallback` A fallback value for returned CSS variable of `$name`.
 // @param `$dictionary` Dictionary to translate `$name`.
-// @param `$delimiter` Separator between each element of `$name`.
-// @param `$prefix` Prefix as the first word in `$name`.
-// @param `$suffix` Suffix as the last word in `$name`.
-// @return The return value is CSS variable.
+// @param `$delimiter` Separator between each element in name of returned CSS variable.
+// @param `$prefix` Prefix in `$name`. By default, it uses `prefix` of `$var` sass variable.
+// @param `$suffix` Suffix in `$name`. By default, it uses `suffix` of `$var` sass variable.
+// @returns The return value is CSS variable of `$name`.
 @function css(
   $name,
   $fallback: null,
   $dictionary: (),
-  $delimiter: map.get(variables.$var, delimiter),
-  $prefix: map.get(variables.$var, prefix),
-  $suffix: map.get(variables.$var, suffix),
+  $delimiter: null,
+  $prefix: null,
+  $suffix: null,
 ) {
   @return var(var.name(
     $name,

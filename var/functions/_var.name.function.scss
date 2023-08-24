@@ -9,20 +9,27 @@
 @use '../../list/get/get.map.function';
 
 // Status: DONE
-// The `var.name()` function .
-// @param `$name`
-// @param `$dictionary`
-// @param `$prefix`
-// @param `$suffix`
-// @return
+// https://developer.mozilla.org/en-US/docs/Web/CSS/var
+// The `var.name()` function returns custom property(CSS variable.
+// @param `$name` The `string` or `list` to set the CSS variable name.
+// @param `$delimiter` Separator between each element in name of returned CSS variable.
+// @param `$prefix` Prefix in `$name`. By default, it uses `prefix` of `$var` sass variable.
+// @param `$suffix` Suffix in `$name`. By default, it uses `suffix` of `$var` sass variable.
+// @returns The return value is CSS variable of `$name`.
 @function name(
   $name,
   $dictionary: (),
-  $delimiter: map.get(var.$var, delimiter),
-  $prefix: map.get(var.$var, prefix),
-  $suffix: map.get(var.$var, suffix)
+  $delimiter: null,
+  $prefix: null,
+  $suffix: null
 ) {
-  @return --#{functions.name($name, $dictionary, $delimiter, $prefix, $suffix)};
+  @return --#{functions.name(
+    $name,
+    $dictionary,
+    $delimiter or map.get(var.$var, delimiter),
+    $prefix or map.get(var.$var, prefix),
+    $suffix or map.get(var.$var, suffix)
+  )};
 }
 
 // Examples.

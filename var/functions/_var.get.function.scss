@@ -15,24 +15,25 @@
 @use 'var.unit.function' as *;
 
 // Status: DONE
-// The `var.get()` function returns CSS variable .
-// @param `$name`
-// @param `$adjust`
-// @param `$unit`
-// @param `$fallback`
-// @param `$dictionary`
-// @param `$prefix`
-// @param `$suffix`
-// @return
+// The `var.get()` function returns CSS variable built from `$name`, `$delimiter`, `$prefix`, and `$suffix`.
+// @param `$name` The property name of `string` or `list` type.
+// @param `$adjust` Adjust the CSS variable `var()`.
+// @param `$unit` A `bool` (then default unit is taken), or unit type value to multiply returned CSS variable.
+// @param `$fallback` Fallback value if property `$name` does not exist.
+// @param `$dictionary` Dictionary to translate `$name`.
+// @param `$delimiter` Separator between each element in name of returned CSS variable.
+// @param `$prefix` Prefix in `$name`. By default, it uses `prefix` of `$var` sass variable.
+// @param `$suffix` Suffix in `$name`. By default, it uses `suffix` of `$var` sass variable.
+// @returns The return value is CSS variable of `$name`.
 @function get(
   $name,
   $adjust: null,
   $unit: false,
   $fallback: null,
   $dictionary: (),
-  $delimiter: map.get(var.$var, delimiter),
-  $prefix: map.get(var.$var, prefix),
-  $suffix: map.get(var.$var, suffix),
+  $delimiter: null,
+  $prefix: null,
+  $suffix: null,
 ) {
   @if type-of($name) == list and list.length($name) == 0 {
     @return (); // REVIEW: consider changing the solution

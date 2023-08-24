@@ -12,10 +12,10 @@
 // Mixins.
 @use '../../selector/selector.nest-content.mixin';
 
-// Status: DONE
-// The `var.set()` mixin defines the CSS variables based on the given `$values`.
-// @param `$property` The values of map type to set CSS variables.
-// @param `$selector` Selector in which CSS variables are placed.
+// Status: TODO: Use property module.
+// The `var.set()` mixin defines the CSS variables based on the given `$property`.
+// @param `$property` The property or properties of map type to set CSS variables.
+// @param `$selector` Selector in which CSS variables are set.
 // @param `$function` Function to call on property values of list type.
 @mixin set($property, $selector: (), $function: null) {
   @if type-of($property) == map {

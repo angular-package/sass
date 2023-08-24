@@ -16,7 +16,7 @@
 // The function `var.adjust()` returns CSS variable `$var` adjusted by `$adjust` if not `null`, otherwise `$var`.
 // @param `$var` CSS variable to adjust by `$adjust`.
 // @param `$adjust` A number(addition), or list(operator, number) to adjust `$var`.
-// @return The return value is `$var` adjusted by `$adjust`.
+// @returns The return value is `$var` adjusted by `$adjust`.
 @function adjust($var, $adjust: null) {
   @if $adjust {
     $calculate: true;
@@ -44,10 +44,10 @@
 
 // Examples.
 // Update to the spectre settings.
-var.$var: map.merge(var.$var, (
-  prefix: s,
-  delimiter: '-'
-));
+// var.$var: map.merge(var.$var, (
+//   prefix: s,
+//   delimiter: '-'
+// ));
 
 // empty adjust
 // @debug adjust(var(--s-layout-spacing)); // var(--s-layout-spacing)

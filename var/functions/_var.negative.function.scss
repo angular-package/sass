@@ -4,7 +4,7 @@
 // Status: DONE
 // The function `var.negative()` returns CSS `calc()` function with the given `$var` multiplied by `-1`.
 // @param `$var` Variable to multiply by `-1`.
-// @return The return value is CSS calculation multiplied by `-1`.
+// @returns The return value is CSS calculation multiplied by `-1`.
 @function negative($var) {
   @return if(type-of($var) == calculation, calc((#{meta.calc-args($var)}) * -1), calc($var * -1));
 }

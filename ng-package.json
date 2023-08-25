@@ -6,6 +6,7 @@
   },
   "assets": [
     "./class/**/*.scss",
+    "./color/**/*.scss",
     "./comparison/**/*.scss",
     "./function/**/*.scss",
     "./functions/**/*.scss",

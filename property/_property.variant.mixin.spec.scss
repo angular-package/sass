@@ -471,3 +471,36 @@ property.$type-function: map.merge(property.$type-function, (list: --var-get));
 // .p-bottom-3:hover {
 //   padding-bottom: var(--s-unit-3);
 // }
+
+// Variant.
+// @include variant((
+//   border: (
+//     (top-left, bottom-right): (
+//       radius: (radius: 5%),
+//     )
+//   ),
+//   scroll: (
+//     ((margin, padding): block): (
+//       start 5: (start: 5%),
+//       end 10: (end: 10%),
+//     )
+//   )
+// ));
+// .border-top-left-radius {
+//   border-top-left-radius: 5%;
+// }
+// .border-bottom-right-radius {
+//   border-bottom-right-radius: 5%;
+// }
+// .scroll-margin-block-start-5 {
+//   scroll-margin-block-start: 5%;
+// }
+// .scroll-margin-block-end-10 {
+//   scroll-margin-block-end: 10%;
+// }
+// .scroll-padding-block-start-5 {
+//   scroll-padding-block-start: 5%;
+// }
+// .scroll-padding-block-end-10 {
+//   scroll-padding-block-end: 10%;
+// }

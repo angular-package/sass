@@ -34,8 +34,6 @@ Sass - extension for sass modules and new modules.
 Extended sass modules:
 
 * The [`sass:color`](https://sass-lang.com/documentation/modules/color/) is extended by [`@angular-package/sass/color`](https://docs.angular-package.dev/v/sass/color/overview) - module generates new colors based on existing ones, making it easy to build color themes.
-<!-- * The [`@angular-package/sass/scheme`](https://) module. -->
-
 * The [`sass:list`](https://sass-lang.com/documentation/modules/list/) is extended by [`@angular-package/sass/list`](https://docs.angular-package.dev/v/sass/list/overview) - module lets you access and modify values in lists.
 * The [`sass:map`](https://sass-lang.com/documentation/modules/map/) is extended by [`@angular-package/sass/map`](https://docs.angular-package.dev/v/sass/map/overview) - module makes it possible to look up the value associated with a key in a map, and much more.
 * The [`sass:math`](https://sass-lang.com/documentation/modules/math/) is extended by [`@angular-package/sass/math`](https://docs.angular-package.dev/v/sass/math/overview) - module provides functions that operate on numbers.
@@ -47,11 +45,22 @@ New modules:
 
 * The [`@angular-package/sass/class`](https://docs.angular-package.dev/v/sass/class/overview) module to handle CSS class selectors(variants).
 * The [`@angular-package/sass/comparison`](https://docs.angular-package.dev/v/sass/comparison/overview) module to compare single or multiple values.
-* The [`@angular-package/sass/function`](https://docs.angular-package.dev/v/sass/function/overview) module function to handle calling functions, especially in a form of `string`.
+* The [`@angular-package/sass/function`](https://docs.angular-package.dev/v/sass/function/overview) module function to handle calling functions, especially in a form of `string` in `list`.
 * The [`@angular-package/sass/property`](https://docs.angular-package.dev/v/sass/property/overview) module to set multiple CSS properties or variants with called functions on values.
 * The [`@angular-package/sass/translator`](https://docs.angular-package.dev/v/sass/translator/overview) module handles global dictionary to translate words.
 * The [`@angular-package/sass/values`](https://docs.angular-package.dev/v/sass/values/overview) module to modify arbitrary values.
-* The [`@angular-package/sass/var`](https://docs.angular-package.dev/v/sass/var/overview) module is designed to handle CSS variables with the use of space-separated words separated by delimiter that can be translated by the dictionary.
+* The [`@angular-package/sass/var`](https://docs.angular-package.dev/v/sass/var/overview) module is designed to handle CSS variables with the use of words that can be translated by the dictionary.
+
+Module moved
+
+* The `@angular-package/sass/number` moved to the [`@angular-package/sass/math`](https://docs.angular-package.dev/v/sass/math/overview) module.
+
+Translator
+
+In the `beta` version, two translators are inside the `translator` folder. First(will be deprecated) `v0.1.0`, the default exported dictionary, was created to pass an external dictionary in some functions to merge with a global dictionary.
+The second, newer, and simplified translator `v1.0.0` is designed with only the global(internal) dictionary, and the external dictionary is passing only in `merge` and `translation`.
+
+<br>
 
 Sass extension is free to use. If you enjoy it, please consider donating via [`fiat`](https://docs.angular-package.dev/donate/usd-fiat) or [`cryptocurrency`](https://spectrecss.angular-package.dev/donate/thb-cryptocurrency) the [`@angular-package`](https://github.com/sponsors/angular-package) for further development. ♥  
 

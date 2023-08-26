@@ -1,21 +1,33 @@
 // Sass.
 @use 'sass:list';
+@use 'sass:meta';
 
 // Functions.
-@use '../function.call.function' as *;
+@use '../function.get.function';
 
 // Status: DONE
 // The `call.arglist()` function calls function of `$name` on `$arglist` with a separator comma where elements are arguments or space where the whole
 // list is an argument.
 // @param `$name` Function name to call arguments from `$arglist` as comma-separated arguments or argument.
 // @param `$arglist` List on which to call function of `$name`.
+// @param `$prefix` Allowed prefixes of the function name.
+// @param `$separator` Allowed separators of the function name.
+// @param `$functions` Functions instead of global functions retrieved from `function.$functions`.
+// @param `$function` Parameter to retrieve function from global `function.$functions`.
 // @returns The returned value is the result of invoked function.
-@function arglist($name, $arglist) {
+@function arglist(
+  $name,
+  $arglist,
+  $prefix: null,
+  $separator: null,
+  $functions: null,
+  $function: function.get($name, $prefix, $separator, $functions)
+) {
   @if $name {
     @return if(
       list.separator($arglist) == comma,
-      call($name, $arglist...),
-      call($name, $arglist)
+      meta.call($function, $arglist...),
+      meta.call($function, $arglist)
     );
   }
   @return null;

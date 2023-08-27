@@ -34,8 +34,6 @@ Sass - extension for sass modules and new modules.
 Extended sass modules:
 
 * The [`sass:color`](https://sass-lang.com/documentation/modules/color/) is extended by [`@angular-package/sass/color`](https://docs.angular-package.dev/v/sass/color/overview) - module generates new colors based on existing ones, making it easy to build color themes.
-<!-- * The [`@angular-package/sass/scheme`](https://) module. -->
-
 * The [`sass:list`](https://sass-lang.com/documentation/modules/list/) is extended by [`@angular-package/sass/list`](https://docs.angular-package.dev/v/sass/list/overview) - module lets you access and modify values in lists.
 * The [`sass:map`](https://sass-lang.com/documentation/modules/map/) is extended by [`@angular-package/sass/map`](https://docs.angular-package.dev/v/sass/map/overview) - module makes it possible to look up the value associated with a key in a map, and much more.
 * The [`sass:math`](https://sass-lang.com/documentation/modules/math/) is extended by [`@angular-package/sass/math`](https://docs.angular-package.dev/v/sass/math/overview) - module provides functions that operate on numbers.
@@ -43,19 +41,36 @@ Extended sass modules:
 * The [`sass:selector`](https://sass-lang.com/documentation/modules/selector/) is extended by [`@angular-package/sass/selector`](https://docs.angular-package.dev/v/sass/selector/overview) - module provides access to Sass’s powerful selector engine.
 * The [`sass:string`](https://sass-lang.com/documentation/modules/string/) is extended by [`@angular-package/sass/string`](https://docs.angular-package.dev/v/sass/string/overview) - module makes it easy to combine, search, or split apart strings.
 
+<br>
+
 New modules:
 
 * The [`@angular-package/sass/class`](https://docs.angular-package.dev/v/sass/class/overview) module to handle CSS class selectors(variants).
 * The [`@angular-package/sass/comparison`](https://docs.angular-package.dev/v/sass/comparison/overview) module to compare single or multiple values.
-* The [`@angular-package/sass/function`](https://docs.angular-package.dev/v/sass/function/overview) module function to handle calling functions, especially in a form of `string`.
+* The [`@angular-package/sass/function`](https://docs.angular-package.dev/v/sass/function/overview) module function to handle calling functions, especially in a form of `string` in `list`.
 * The [`@angular-package/sass/property`](https://docs.angular-package.dev/v/sass/property/overview) module to set multiple CSS properties or variants with called functions on values.
 * The [`@angular-package/sass/translator`](https://docs.angular-package.dev/v/sass/translator/overview) module handles global dictionary to translate words.
 * The [`@angular-package/sass/values`](https://docs.angular-package.dev/v/sass/values/overview) module to modify arbitrary values.
-* The [`@angular-package/sass/var`](https://docs.angular-package.dev/v/sass/var/overview) module is designed to handle CSS variables with the use of space-separated words separated by delimiter that can be translated by the dictionary.
+* The [`@angular-package/sass/var`](https://docs.angular-package.dev/v/sass/var/overview) module is designed to handle CSS variables with the use of words that can be translated by the dictionary.
 
-Sass extension is free to use. If you enjoy it, please consider donating via [`fiat`](https://docs.angular-package.dev/donate/usd-fiat) or [`cryptocurrency`](https://spectrecss.angular-package.dev/donate/thb-cryptocurrency) the [`@angular-package`](https://github.com/sponsors/angular-package) for further development. ♥  
+<br>
 
-> Feel free to submit a pull request. Help is always appreciated.
+Module moved:
+
+* The `@angular-package/sass/number` moved to the [`@angular-package/sass/math`](https://docs.angular-package.dev/v/sass/math/overview) module.
+
+<br>
+
+Translator:
+
+In the `beta` version, two translators are inside the [`translator`](https://github.com/angular-package/sass/tree/main/translator) folder. First(will be deprecated) [`v0.1.0`](https://github.com/angular-package/sass/tree/main/translator/v0.1.0), the default exported dictionary, was created to pass an external dictionary in some functions to merge with a global dictionary.
+The second, newer, and simplified translator [`v1.0.0`](https://github.com/angular-package/sass/tree/main/translator/v1.0.0) is designed with only the global(internal) dictionary, and the external dictionary is passed only in `merge` and `translation`.
+
+<br>
+
+Sass extension is **free** to use. If you enjoy it, please consider donating via [fiat](https://docs.angular-package.dev/v/sass/donate/fiat), [Revolut platform](https://business.revolut.com/revolutme/angularpackage) or [cryptocurrency](https://spectrecss.angular-package.dev/donate/thb-cryptocurrency) the [@angular-package](https://github.com/sponsors/angular-package) for further development. ♥  
+
+> Feel **free** to submit a pull request. Help is always appreciated.
 
 <br>
 
@@ -140,6 +155,8 @@ How do I know when to release 1.0.0?
 
 > If your software is being used in production, it should probably already be 1.0.0. If you have a stable API on which users have come to depend, you should be 1.0.0. If you’re worrying a lot about backwards compatibility, you should probably already be 1.0.0.
 
+<br>
+
 ## License
 
 MIT © angular-package ([license][sass-license])
@@ -148,7 +165,7 @@ MIT © angular-package ([license][sass-license])
 [github-badge-sponsor]: https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&link=https://github.com/sponsors/angular-package
 [github-sponsor-link]: https://github.com/sponsors/angular-package
 [patreon-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dangularpackage%26type%3Dpatrons&style=flat
-[patreon-link]: https://patreon.com/angularpackage
+[patreon-link]: https://www.patreon.com/join/angularpackage/checkout?fan_landing=true&rid=0
 
 [angulario]: https://angular.io
 [skeleton]: https://github.com/angular-package/skeleton
@@ -163,7 +180,7 @@ MIT © angular-package ([license][sass-license])
 
 <!-- Discord -->
 [discord-badge]: https://img.shields.io/discord/925168966098386944?style=social&logo=discord&label=Discord
-[discord-channel]: https://discord.com/channels/925168966098386944
+[discord-channel]: https://discord.com/invite/rUCR2CW75G
 
 <!-- Gitter -->
 [gitter-badge]: https://img.shields.io/gitter/room/angular-package/ap-sass?style=social&logo=gitter

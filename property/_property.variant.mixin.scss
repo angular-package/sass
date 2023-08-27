@@ -12,17 +12,16 @@
 @use '../class';
 @use '../meta';
 @use '../selector';
-@use '../values';
 
 // Status: DONE
 // Property `property.variant()` mixin sets property variant.
 // @param `$variant` Variant of map type to set.
 // @param `$important` Indicates property is important.
-// @param `$pseudo-class`
-// @param `$dictionary`
-// @param `$class-function`
-// @param `$functions`
-// @param `$execute`
+// @param `$pseudo-class` Pseudo class for `$variant`.
+// @param `$dictionary` Dictionary to translate class `$variant`.
+// @param `$class-function` Function to set class selector.
+// @param `$functions` Functions to use to call on property values.
+// @param `$execute` Execute `property.property()` function.
 @mixin variant(
   $variant: (),
   $important: null,
@@ -52,8 +51,7 @@
         }
       } @else {
         @include property.set(
-          (list.join(map.get($resolved, property), map.get($resolved, attribute) or ()):
-          map.get($resolved, value)),
+          (list.join(map.get($resolved, property), map.get($resolved, attribute) or ()): map.get($resolved, value)),
           $important,
           $prefix,
           $separator,

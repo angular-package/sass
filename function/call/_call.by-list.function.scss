@@ -17,10 +17,18 @@
 // elements are arguments or space where the whole list is an argument.
 // Nested list can contain function name in the first element, then it's used instead of `$function` argument to call following list.
 // @param `$list` List with nested lists on which to call `$function` or function from nested lists.
-// @param `$prefix` Prefix to pick function name from nested lists of `$list`.
-// @param `$function` Function name, with prefix of `$prefix` to call nested list in `$list` as arguments or argument.
+// @param `$prefix` Allowed prefixes to pick function name from nested lists of `$list`.
+// @param `$separator` Allowed separators to pick function name from nested lists of `$list`.
+// @param `$functions` Functions instead of global functions retrieved from `function.$functions`.
+// @param `$execute` Executes the function.
 // @returns The returned value is `$list` with nested lists invoked by function.
-@function by-list($list, $prefix: null, $separator: null, $functions: null, $execute: true) {
+@function by-list(
+  $list,
+  $prefix: null,
+  $separator: null,
+  $functions: null,
+  $execute: true
+) {
   @if type-of($list) == list {
     $result: ();
     $index: 1;
@@ -43,8 +51,12 @@
         );
       }
       @if $function-arguments {
-        $result: list.append($result, call.arglist($function-arguments...), list.separator($list));
-        $list: remove($list, $prefix, $functions);
+        $result: list.append(
+          $result,
+          call.arglist(nth($function-arguments, 1), nth($function-arguments, 2), $prefix, $separator, $functions),
+          list.separator($list)
+        );
+        $list: remove($list, $prefix, $separator, $functions);
       } @else {
         $result: list.append($result, list.nth($list, $index), list.separator($list));
         $index: $index + 1;

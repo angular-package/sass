@@ -1,5 +1,17 @@
 # @angular-package/sass changelog
 
+### v0.4.1-beta [#](https://github.com/angular-package/sass/releases/tag/v0.4.1-beta)
+
+- Add `property.variant()` to the `index`. [8c16e87]
+- Fix `class.variant()` by checking `$attribute` against empty `list`. [9280a21]
+- Fix `property.variant()` function by adding arguments to properly call retrieved functions. [96bcb0a]
+- Fix unnecessary imports, and use `property.property()` in `property.variant()`. [213d174]
+
+[9280a21]: https://github.com/angular-package/sass/commit/9280a21be5d222ba5b850ba6a8ec5a3f79920e3a
+[213d174]: https://github.com/angular-package/sass/commit/213d17417cbf7fe94ff522a45221e734751fd228
+[96bcb0a]: https://github.com/angular-package/sass/commit/96bcb0a2f38c4ea0199ed30d694f204b7fd7797c
+[8c16e87]: https://github.com/angular-package/sass/commit/8c16e877f2c1d9bc5161db5b75158b4c7c899368
+
 ### v0.4.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.4.0-beta)
 
 - Add **class** module to handle CSS class selectors(variants). [9a7fed7] [b51b22a] [01c830a] [a2ed250] [c88c00a]

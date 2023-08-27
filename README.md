@@ -68,7 +68,7 @@ The second, newer, and simplified translator [`v1.0.0`](https://github.com/angul
 
 <br>
 
-Sass extension is **free** to use. If you enjoy it, please consider donating via [`fiat`](https://docs.angular-package.dev/donate/usd-fiat), [Revolut platform](https://business.revolut.com/revolutme/angularpackage) or [`cryptocurrency`](https://spectrecss.angular-package.dev/donate/thb-cryptocurrency) the [`@angular-package`](https://github.com/sponsors/angular-package) for further development. ♥  
+Sass extension is **free** to use. If you enjoy it, please consider donating via [fiat](https://docs.angular-package.dev/donate/usd-fiat), [Revolut platform](https://business.revolut.com/revolutme/angularpackage) or [cryptocurrency](https://spectrecss.angular-package.dev/donate/thb-cryptocurrency) the [@angular-package](https://github.com/sponsors/angular-package) for further development. ♥  
 
 > Feel **free** to submit a pull request. Help is always appreciated.
 

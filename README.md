@@ -155,6 +155,8 @@ How do I know when to release 1.0.0?
 
 > If your software is being used in production, it should probably already be 1.0.0. If you have a stable API on which users have come to depend, you should be 1.0.0. If you’re worrying a lot about backwards compatibility, you should probably already be 1.0.0.
 
+<br>
+
 ## License
 
 MIT © angular-package ([license][sass-license])
@@ -163,7 +165,7 @@ MIT © angular-package ([license][sass-license])
 [github-badge-sponsor]: https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&link=https://github.com/sponsors/angular-package
 [github-sponsor-link]: https://github.com/sponsors/angular-package
 [patreon-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dangularpackage%26type%3Dpatrons&style=flat
-[patreon-link]: https://patreon.com/angularpackage
+[patreon-link]: https://www.patreon.com/join/angularpackage/checkout?fan_landing=true&rid=0
 
 [angulario]: https://angular.io
 [skeleton]: https://github.com/angular-package/skeleton

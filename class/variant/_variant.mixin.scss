@@ -43,7 +43,7 @@
         @each $attribute, $variant in $attribute-variant {
           @if type-of($attribute) == map {
             @each $key, $value in $attribute { $attribute: nest($key, $value); }
-          } @else if function.has($attribute) {
+          } @else if list.length($attribute) > 0 and function.has($attribute) {
             $attribute: function.call-arglist($attribute...);
           }
           @each $class in if(list.separator($class) == comma, $class, ($class,)) {

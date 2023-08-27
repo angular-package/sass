@@ -41,6 +41,8 @@ Extended sass modules:
 * The [`sass:selector`](https://sass-lang.com/documentation/modules/selector/) is extended by [`@angular-package/sass/selector`](https://docs.angular-package.dev/v/sass/selector/overview) - module provides access to Sass’s powerful selector engine.
 * The [`sass:string`](https://sass-lang.com/documentation/modules/string/) is extended by [`@angular-package/sass/string`](https://docs.angular-package.dev/v/sass/string/overview) - module makes it easy to combine, search, or split apart strings.
 
+<br>
+
 New modules:
 
 * The [`@angular-package/sass/class`](https://docs.angular-package.dev/v/sass/class/overview) module to handle CSS class selectors(variants).
@@ -51,20 +53,24 @@ New modules:
 * The [`@angular-package/sass/values`](https://docs.angular-package.dev/v/sass/values/overview) module to modify arbitrary values.
 * The [`@angular-package/sass/var`](https://docs.angular-package.dev/v/sass/var/overview) module is designed to handle CSS variables with the use of words that can be translated by the dictionary.
 
-Module moved
+<br>
+
+Module moved:
 
 * The `@angular-package/sass/number` moved to the [`@angular-package/sass/math`](https://docs.angular-package.dev/v/sass/math/overview) module.
 
-Translator
+<br>
 
-In the `beta` version, two translators are inside the `translator` folder. First(will be deprecated) `v0.1.0`, the default exported dictionary, was created to pass an external dictionary in some functions to merge with a global dictionary.
-The second, newer, and simplified translator `v1.0.0` is designed with only the global(internal) dictionary, and the external dictionary is passing only in `merge` and `translation`.
+Translator:
+
+In the `beta` version, two translators are inside the [`translator`](https://github.com/angular-package/sass/tree/main/translator) folder. First(will be deprecated) [`v0.1.0`](https://github.com/angular-package/sass/tree/main/translator/v0.1.0), the default exported dictionary, was created to pass an external dictionary in some functions to merge with a global dictionary.
+The second, newer, and simplified translator [`v1.0.0`](https://github.com/angular-package/sass/tree/main/translator/v1.0.0) is designed with only the global(internal) dictionary, and the external dictionary is passed only in `merge` and `translation`.
 
 <br>
 
-Sass extension is free to use. If you enjoy it, please consider donating via [`fiat`](https://docs.angular-package.dev/donate/usd-fiat) or [`cryptocurrency`](https://spectrecss.angular-package.dev/donate/thb-cryptocurrency) the [`@angular-package`](https://github.com/sponsors/angular-package) for further development. ♥  
+Sass extension is **free** to use. If you enjoy it, please consider donating via [`fiat`](https://docs.angular-package.dev/donate/usd-fiat), [Revolut platform](https://business.revolut.com/revolutme/angularpackage) or [`cryptocurrency`](https://spectrecss.angular-package.dev/donate/thb-cryptocurrency) the [`@angular-package`](https://github.com/sponsors/angular-package) for further development. ♥  
 
-> Feel free to submit a pull request. Help is always appreciated.
+> Feel **free** to submit a pull request. Help is always appreciated.
 
 <br>
 
@@ -172,7 +178,7 @@ MIT © angular-package ([license][sass-license])
 
 <!-- Discord -->
 [discord-badge]: https://img.shields.io/discord/925168966098386944?style=social&logo=discord&label=Discord
-[discord-channel]: https://discord.com/channels/925168966098386944
+[discord-channel]: https://discord.com/invite/rUCR2CW75G
 
 <!-- Gitter -->
 [gitter-badge]: https://img.shields.io/gitter/room/angular-package/ap-sass?style=social&logo=gitter

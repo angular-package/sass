@@ -6,11 +6,12 @@
 @use 'property.variables' as variables;
 
 // Functions.
-@use 'property.mixin' as property;
+@use 'property.set.mixin' as property;
 
 // Modules.
 @use '../class';
 @use '../meta';
+@use '../selector';
 
 // Status: DONE
 // Property `property.variant()` mixin sets property variant.
@@ -38,7 +39,7 @@
     @include class.variant($variant, $pseudo-class, $dictionary, $class-function, map) using($resolved) {
       @if type-of(map.get($resolved, value)) == map {
         @each $attribute, $value in map.get($resolved, value) {
-          @include property.property(
+          @include property.set(
             (list.join(map.get($resolved, property), map.get($resolved, attribute) $attribute or ()): $value),
             $important,
             $prefix,
@@ -49,7 +50,7 @@
           );
         }
       } @else {
-        @include property.property(
+        @include property.set(
           (list.join(map.get($resolved, property), map.get($resolved, attribute) or ()): map.get($resolved, value)),
           $important,
           $prefix,

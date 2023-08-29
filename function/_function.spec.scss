@@ -87,6 +87,19 @@ var.$var: map.merge(var.$var, (prefix: s, delimiter: '-'));
 // @debug function.call-arglist(selector-nest, ((top, left), color)); // top color, left color
 // @debug function.call-arglist(selector-nest, (border, (bottom, right))); // border bottom, border right
 
+// arguments as map
+// @debug function.call-arglist(--var-get, (unit 5, 1px, (args: (dictionary: (unit: u)))));
+// @debug function.call-arglist(--var-get, (unit 5, 1px, (arguments: (dictionary: (unit: u)))));
+
+// `$arguments` parameter
+// @debug function.call-arglist(--var-get, (unit 5, 1px), $arguments: (true, 10px));
+
+// pass dictionary in by `$arguments`
+// @debug function.call-arglist(--var-get, (unit 5, 1px), $arguments: (dictionary: (unit: u)));
+
+
+
+
 // `function.call-by-list()`
 // function name + arguments
 // @debug function.call-by-list(--var-get (unit 5, 15, rem));
@@ -109,6 +122,7 @@ var.$var: map.merge(var.$var, (prefix: s, delimiter: '-'));
 // @debug function.call-by-list(function.insert((ut 1) (), $type-function: (list: var-get)));
 // @debug function.call-by-list(function.insert(((ut 1),), $type-function: (list: var-get)));
 
+// TODO: Check.
 // `function.call-nested-list()`
 // @debug function.call-nested-list((px solid (primary dark)), $function: var-get);
 // @debug function.call-nested-list((ut 5) 5px (ut 1) 10px, $function: var-get);

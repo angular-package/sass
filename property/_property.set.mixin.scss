@@ -16,20 +16,26 @@
 @use 'property.value.function' as *;
 
 // Status: DONE
-// The `property.set()` mixin sets property or properties by using .
-// @param `$property-value` The property of map type to set.
-// @param `$important` Indicates property is important.
-// @param `$function` The function to invoke on arguments.
-// @param `$list` Indicates to call list.
-// @param `$invoke` A bool value indicates whether to invoke `$function`.
+// The `property.set()` mixin sets property or properties by providing `map` type value, with ability to call `$functions` on specific types in value.
+// @param `$name-value` The property of map type to set.
+// @param `$important` Indicates whether property is important.
+// @param `$prefix` Prefix(es) of the function name defined in value and/or `$type-function` that are used to call them on types in value.
+// @param `$separator` Separator(s) of the function name defined in value and/or `$type-function`.
+// @param `$type-function` A map of (type: function) to determine which types are to be invoked in value.
+// @param `$functions` Additional functions that can be called in value.
+// @param `$execute` Whether to execute calling functions in value.
+// @param `$arguments` Additional arguments of `list` or `map` type to pass into called functions.
 @mixin set(
+  // property
   $name-value,
   $important: false,
+  // function to call
   $prefix: null,
   $separator: null,
   $type-function: null,
   $functions: null,
-  $execute: true
+  $execute: true,
+  $arguments: null
 ) {
   $type-function: if($type-function, $type-function, variables.$type-function);
   @each $name, $value in $name-value {
@@ -40,7 +46,7 @@
 
     // Set property.
     @each $name in name($name) {
-      #{$name}: value($value, $important, $prefix, $separator, $type-function, $functions, $execute);
+      #{$name}: value($value, $important, $prefix, $separator, $type-function, $functions, $execute, $arguments);
     }
   }
 }

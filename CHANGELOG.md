@@ -1,5 +1,16 @@
 # @angular-package/sass changelog
 
+### v0.5.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.5.0-beta)
+
+- Update `property` module to handle arguments to use `var.get()` function dictionary. [d28f797]
+- Fix `dictionary/v1.0.0` purge `$dictionary` map variable. [5acab9f]
+- Update `function/call` module to handle map type arguments with additional `$arguments` parameter and add spec. [dc6d444] [dc6926b]
+
+[d28f797]: https://github.com/angular-package/sass/commit/d28f7979b4ee261919b254a3ddbfd05fa5f2f9be
+[dc6926b]: https://github.com/angular-package/sass/commit/dc6926bd63b367123f1c51fc75b0d8183b202368
+[5acab9f]: https://github.com/angular-package/sass/commit/5acab9f9b6d2d1cbb92a63dc10f16218fb3038b8
+[dc6d444]: https://github.com/angular-package/sass/commit/dc6d444285b0f52f569d60126c7bacae30aa7b7a
+
 ### v0.4.1-beta [#](https://github.com/angular-package/sass/releases/tag/v0.4.1-beta)
 
 - Add `property.variant()` to the `index`. [8c16e87]

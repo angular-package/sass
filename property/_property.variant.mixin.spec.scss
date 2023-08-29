@@ -19,7 +19,6 @@ function.$functions: map.merge(function.$functions, (
 
 property.$type-function: map.merge(property.$type-function, (list: --var-get));
 
-
 // Examples.
 // FEATURE: single variant: (property/class: class/value)
 // @include variant((float: right)); // TODO: use `variant.create()`

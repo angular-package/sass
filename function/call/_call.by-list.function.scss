@@ -21,13 +21,15 @@
 // @param `$separator` Allowed separators to pick function name from nested lists of `$list`.
 // @param `$functions` Functions instead of global functions retrieved from `function.$functions`.
 // @param `$execute` Executes the function.
+// @param `$arguments` Additional arguments as `list` or `map` to pass into `$list`.
 // @returns The returned value is `$list` with nested lists invoked by function.
 @function by-list(
   $list,
   $prefix: null,
   $separator: null,
   $functions: null,
-  $execute: true
+  $execute: true,
+  $arguments: null,
 ) {
   @if type-of($list) == list {
     $result: ();
@@ -53,7 +55,14 @@
       @if $function-arguments {
         $result: list.append(
           $result,
-          call.arglist(nth($function-arguments, 1), nth($function-arguments, 2), $prefix, $separator, $functions),
+          call.arglist(
+            nth($function-arguments, 1),
+            nth($function-arguments, 2),
+            $prefix,
+            $separator,
+            $functions,
+            $arguments: $arguments
+          ),
           list.separator($list)
         );
         $list: remove($list, $prefix, $separator, $functions);

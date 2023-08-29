@@ -6,7 +6,7 @@
 @use 'property.variables' as variables;
 
 // Functions.
-@use 'property.set.mixin' as property;
+@use 'property.set.mixin';
 
 // Modules.
 @use '../class';
@@ -15,24 +15,33 @@
 
 // Status: DONE
 // Property `property.variant()` mixin sets property variant.
-// @param `$variant` Variant of map type to set.
-// @param `$important` Indicates property is important.
-// @param `$pseudo-class` Pseudo class for `$variant`.
-// @param `$dictionary` Dictionary to translate class `$variant`.
+// @param `$variant` Property variant of `map` type to set. (See examples for map structure)
+// @param `$important` Indicates property is `important`.
+// @param `$pseudo-class` Pseudo class for class selector in `$variant`.
+// @param `$dictionary` Dictionary to translate class selector and passed as (dictionary arguments) for called functions.
 // @param `$class-function` Function to set class selector.
-// @param `$functions` Functions to use to call on property values.
-// @param `$execute` Execute `property.property()` function.
+// @param `$prefix` Prefix(es) of the function name defined in value and/or `$type-function` that are used to call them on types in value.
+// @param `$separator` Separator(s) of the function name defined in value and/or `$type-function`.
+// @param `$type-function` A map of (type: function) to determine which types are to be invoked in property value.
+// @param `$functions` Functions instead of global that can be called on property values.
+// @param `$execute` Whether to execute `property.set()` function.
+// // @param `$arguments` Additional arguments of `list` or `map` type to pass into called functions.
 @mixin variant(
+  // class, property
   $variant: (),
   $important: null,
+  // class
   $pseudo-class: (),
-  $dictionary: (),
+  // class, value
+  $dictionary: null,
+  // class
   $class-function: meta.get-function(class, false, selector),
+  // function
   $prefix: null,
   $separator: null,
   $type-function: null,
   $functions:null,
-  $execute: true
+  $execute: true,
 ) {
   @if type-of($variant) == map {
     $type-function: if($type-function, $type-function, variables.$type-function);
@@ -46,7 +55,8 @@
             $separator,
             $type-function,
             $functions,
-            $execute
+            $execute,
+            $dictionary
           );
         }
       } @else {
@@ -57,7 +67,8 @@
           $separator,
           $type-function,
           $functions,
-          $execute
+          $execute,
+          $dictionary
         );
       }
     }

@@ -32,7 +32,8 @@
   $separator: null,
   $type-function: null,
   $functions: null,
-  $execute: true
+  $execute: true,
+  $arguments: null
 ) {
   $type-function: if($type-function, $type-function, variables.$type-function);
   @each $name, $attribute-value in $property {
@@ -47,7 +48,8 @@
               $separator,
               $type-function,
               $functions,
-              $execute
+              $execute,
+              $arguments
             );
           }
         } @else {
@@ -58,7 +60,8 @@
             $separator,
             $type-function,
             $functions,
-            $execute
+            $execute,
+            $arguments
           );
         }
       }
@@ -70,7 +73,8 @@
         $separator,
         $type-function,
         $functions,
-        $execute
+        $execute,
+        $arguments
       );
     }
   }

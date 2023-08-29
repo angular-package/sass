@@ -108,4 +108,18 @@ var.$var: map.merge(var.$var, (prefix: s, delimiter: '-'));
 
   // @include property.property(((margin, padding): ((top: 1px), 2px, (left: 4px), unit 1)));
   // @include property.property(((border, margin): ((top, right): (unit 1, unit 2))));
+
+  // pass dictionary inside `$arguments`
+  // @include property.property(((border, margin): ((top, right): ((unit 1) (), unit 2))), $arguments: (dictionary: (unit: u)));
+  // border-top: calc(var(--s-u) + 1), unit 2;
+  // border-right: calc(var(--s-u) + 1), unit 2;
+  // margin-top: calc(var(--s-u) + 1), unit 2;
+  // margin-right: calc(var(--s-u) + 1), unit 2;
+
+  // pass adjust inside `$arguments`
+  // @include property.property(((border, margin): ((top, right): ((unit 1) 1px, unit 2))), $arguments: (true, 100px, (unit: u)));
+  // border-top: calc(var(--s-u, 100px) * 1rem + 1) 1px, unit 2;
+  // border-right: calc(var(--s-u, 100px) * 1rem + 1) 1px, unit 2;
+  // margin-top: calc(var(--s-u, 100px) * 1rem + 1) 1px, unit 2;
+  // margin-right: calc(var(--s-u, 100px) * 1rem + 1) 1px, unit 2;
 // }

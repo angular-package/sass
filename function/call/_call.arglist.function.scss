@@ -29,14 +29,14 @@
   $arguments: null
 ) {
   @if $name {
+    @if $arguments {
+      $arglist: if(
+        meta.type-of($arguments) == map,
+        list.append($arglist, (arguments: $arguments), comma),
+        list.join($arglist, $arguments, comma)
+      );
+    }
     @if list.separator($arglist) == comma {
-      @if $arguments {
-        $arglist: if(
-          meta.type-of($arguments) == map,
-          list.append($arglist, (arguments: $arguments), comma),
-          list.join($arglist, $arguments, comma)
-        );
-      }
       @if get.map($arglist) {
         // Map type arguments
         @if map.has-key(get.map($arglist), arguments) or map.has-key(get.map($arglist), args) {

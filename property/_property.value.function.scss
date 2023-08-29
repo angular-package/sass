@@ -12,21 +12,26 @@
 
 // Status: DONE
 // The `property.value()` function creates property value with some types called by function defined in `$type-function`.
-// @param `$value` Property value that some types in it can be called by functions defined in `$type-function`.
-// @param `$important` Indicates whether value is important.
-// @param `$prefix` Prefixes of the function defined in `$type-function` that are used to call types.
-// @param `$separator` Separators of the function defined  in `$type-function`.
-// @param `$type-function` The function to invoke on arguments.
-// @param `$functions` Additional functions to call types in `$value`.
-// @returns The returned value is property value with some types called by functions defined in `$type-function`.
+// @param `$value` A property value in which some types in it can be called by functions defined in `$type-function`.
+// @param `$important` Indicates whether `$value` is important.
+// @param `$prefix` Prefix(es) of the function name defined in `$value` and/or `$type-function` that are used to call them on types in `$value`.
+// @param `$separator` Separator(s) of the function name defined in `$value` and/or `$type-function`.
+// @param `$type-function` A map of (type: function) to determine which types are to be invoked in `$value`.
+// @param `$functions` Additional functions that can be called in `$value`.
+// @param `$execute` Whether to execute calling functions in `$value`.
+// @param `$arguments` Additional arguments of `list` or `map` type to pass into called functions.
+// @returns The returned value is property value with some types replaced by called functions defined in `$type-function`.
 @function value(
+  // value
   $value,
   $important: false,
+  // function
   $prefix: null,
   $separator: null,
   $type-function: null,
   $functions: null,
-  $execute: true
+  $execute: true,
+  $arguments: null,
 ) {
   $type-function: if($type-function, $type-function, variables.$type-function);
   @if $type-function {
@@ -34,7 +39,7 @@
     @each $-value in if(list.separator($value) == comma, $value, ($value,)) {
       $-value: function.call-by-list(
         function.insert($-value, $prefix, $separator, $type-function, $functions),
-        $prefix, $separator, $functions, $execute
+        $prefix, $separator, $functions, $execute, $arguments
       );
       @if list.separator($value) == comma {
         $value: list.set-nth($value, $i, $-value);

@@ -114,4 +114,18 @@ var.$var: map.merge(var.$var, (prefix: s, delimiter: '-'));
   // FEATURE: (property: value, value)
   // @include property.set((box shadow: (3px 3px (--var-get red), -1em 0 0.4em olive)));
   // box-shadow: 3px 3px var(--s-red), -1em 0 0.4em olive;
+
+  // FEATURE: dictionary
+  // @include property.set((box shadow: (3px 3px (--var-get ('orange', (args: (dictionary: ('orange': o))))), -1em 0 0.4em olive)));
+  // @include property.set((box shadow: (3px 3px (--var-get 'orange'), -1em 0 0.4em olive)), $arguments: (dictionary: ('orange': o)));
 // }
+
+// Way of passing arguments
+// @function test($param1: null, $param2: null, $param3: null, $dictionary: null) {
+//   @debug $dictionary;
+
+//   @return null;
+// }
+
+// @debug test((param1: first, param2: second, param3: third)...);
+// @debug test(first, second, (dictionary: third, param333: a, param3: second)...);

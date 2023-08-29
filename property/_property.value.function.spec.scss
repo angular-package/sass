@@ -1,0 +1,15 @@
+// Sass.
+@use 'sass:map';
+@use 'sass:meta';
+
+// Modules.
+@use '../function';
+@use '../property';
+@use '../var';
+
+function.$functions: map.merge(function.$functions, (var: meta.module-functions(var)));
+property.$type-function: map.merge(property.$type-function, (list: --var-get));
+
+// @debug property.value((unit 5, 1px, false), false);
+// @debug property.value((2px solid (unit 10, (arguments: (dictionary: (unit: u)))), a));
+// @debug property.value(((unit 10, (arguments: (dictionary: (unit: u)))) (), a));

@@ -22,7 +22,7 @@
 // Modules.
 @use '../map';
 
-// Status: DONE.
+// Status: TODO: set `$prefix` before `$dictionary`
 // The `selector.class()` function returns classes built from `$name`, `$pseudo-class`, `$delimiter`, `$prefix`, `$suffix` translated with `$dictionary`.
 // @param `$name` The `string` or `list` type to built class names.
 // @param `$pseudo-class` Pseudo class to add to `$name`.

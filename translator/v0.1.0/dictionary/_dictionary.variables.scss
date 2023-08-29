@@ -1,7 +1,5 @@
 // Global dictionary.
-$dictionary: (
-  word: translation
-) !default;
+$dictionary: () !default;
 
 // If `true` then each function of translator
 // uses global `$dictionary`.

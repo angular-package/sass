@@ -18,7 +18,13 @@
 // @param `$type-function` Map type value indicates which functions are inserted on specified types in `$value`.
 // @param `$functions` Additional functions available to insert into `$value`.
 // @returns The returned value is `$value` with inserted function names in specified types.
-@function insert($value, $prefix: null, $separator: null, $type-function, $functions: null) {
+@function insert(
+  $value,
+  $prefix: null,
+  $separator: null,
+  $type-function,
+  $functions: null
+) {
   @if $type-function {
     $index: 1;
     @each $val in $value {
@@ -53,13 +59,13 @@
 
 // Examples.
 // string
-// @debug insert(primary-color-dark, $type-function: ((list, string): --selector-nest));
+// @debug insert(primary-color-dark, $type-function: ((list, string): --selector-nest)); // (--selector-nest primary-color-dark)
 
 // number
-// @debug insert(5px, $type-function: (number: --selector-nest));
+// @debug insert(5px, $type-function: (number: --selector-nest)); // (--selector-nest 5px)
 
-// list
-// @debug insert((ut 1,), $type-function: (list: --selector-nest)); // (selector-nest (ut 1))
+// list(--selector-nest 5px)
+// @debug insert((ut 1,), $type-function: (list: --selector-nest)); // (--selector-nest (ut 1))
 // @debug insert((padding, (top, bottom)) (), $type-function: (list: --selector-nest)); // (selector-nest (ut 1))
 
 // @debug insert(((primary-color-dark, 15%),), $type-function: (list: --selector-nest)); // ()
@@ -75,3 +81,6 @@
 
 // each function different prefix // TODO:
 // @debug insert((unit 1) 10px (unit 20) 15px, $type-function: (list: ('--': selector-nest, '__': var-get)));
+
+// map arguments
+// @debug insert((unit 10, (arguments: (dictionary: (unit: u)))), $type-function: (list: --selector-nest));

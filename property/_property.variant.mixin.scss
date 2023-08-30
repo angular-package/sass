@@ -56,7 +56,7 @@
             $type-function,
             $functions,
             $execute,
-            $dictionary
+            (dictionary: $dictionary)
           );
         }
       } @else {
@@ -68,7 +68,7 @@
           $type-function,
           $functions,
           $execute,
-          $dictionary
+          (dictionary: $dictionary)
         );
       }
     }

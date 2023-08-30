@@ -516,3 +516,13 @@ property.$type-function: map.merge(property.$type-function, (list: --var-get));
 // .scroll-padding-block-end-10 {
 //   scroll-padding-block-end: 10%;
 // }
+
+// dictionary
+// @include property.variant(
+//   (z-index: (aaa: (primary dark) a)),
+//   true,
+//   (),
+//   (class: (primary: p), var: (primary: n)),
+//   $type-function: (list: --var-get),
+//   $functions: (var: (get: meta.get-function(get, false, var))),
+// );

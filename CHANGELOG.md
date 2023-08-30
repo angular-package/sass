@@ -2,7 +2,9 @@
 
 ### v0.5.1-beta [#](https://github.com/angular-package/sass/releases/tag/v0.5.1-beta)
 
-- Fix `function.call-arglist()` by adding `$arguments` to the `$arglist` by using only `list.append()` function and checking if `$arglist` is space-separated list.
+- Fix `function.call-arglist()` by adding `$arguments` to the `$arglist` by using only `list.append()` function and checking if `$arglist` is space-separated list. [fd90100]
+
+[fd90100]: https://github.com/angular-package/sass/commit/fd90100e2bca35904c8710c78189fd95aa7fcd0b
 
 ### v0.5.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.5.0-beta)
 

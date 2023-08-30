@@ -18,14 +18,14 @@
 // @returns The return value is CSS variable of `$name`.
 @function name(
   $name,
-  $dictionary: (),
+  $dictionary: null,
   $delimiter: null,
   $prefix: null,
   $suffix: null
 ) {
   @return --#{functions.name(
     $name,
-    $dictionary,
+    if($dictionary and map.has-key($dictionary, var), map.get($dictionary, var), $dictionary) or (),
     $delimiter or map.get(var.$var, delimiter),
     $prefix or map.get(var.$var, prefix),
     $suffix or map.get(var.$var, suffix)
@@ -33,6 +33,7 @@
 }
 
 // Examples.
+// @debug name(layout spacing, null, '-', s); // --s-layout-spacing
 // @debug name(layout spacing, (), '-', s); // --s-layout-spacing
 
 // dictionary
@@ -44,6 +45,7 @@
 // dictionary passed in the name
 // @debug name(layout spacing (layout: lay, spacing: spa), (), '-', s); // --s-lay-spa
 // @debug name(layout spacing (layout: lay, spacing: spa), (prefix: spectre), '-'); // --spectre-lay-spa
+// @debug name(layout spacing (layout: lay, spacing: spa), (var: (prefix: spectre)), '-'); // --spectre-lay-spa
 
 // dictionary with the var key
 // @debug name(layout spacing, (prefix: spectre, suffix: end), '-'); // --spectre-layout-spacing-end

@@ -45,6 +45,9 @@
     map.get(get.map($name) or (), dictionary, get.map($name) or ())
   );
 
+  // Retrieve class dictionary if passed.
+  $dictionary: if(map.has-key($dictionary, class), map.get($dictionary, class), $dictionary);
+
   // Name.
   $name: remove.list(remove.list(parent-first(remove.map($name)), $bracketed: only), 0);
 

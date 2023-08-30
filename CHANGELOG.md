@@ -1,5 +1,15 @@
 # @angular-package/sass changelog
 
+### v0.6.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.6.0-beta)
+
+- Fix `property.variant()` passing `$dictionary` argument by adding map `(dictionary: $dictionary)`. [df48216]
+- Update `selector.class()` functionality to retrieve dictionary from `$dictionary` if key `class` is found. [ae518d4]
+- Update `var.name()` functionality to retrieve dictionary from `$dictionary` if `var` is found. [f3e5c83]
+
+[f3e5c83]: https://github.com/angular-package/sass/commit/f3e5c8387fc476bc33525bcb7c0fd88e116f0736
+[ae518d4]: https://github.com/angular-package/sass/commit/ae518d4f0119f72c89f418fb70e275d86b183307
+[df48216]: https://github.com/angular-package/sass/commit/df48216ed068549775da62dd1ba3a0f63d3841d4
+
 ### v0.5.1-beta [#](https://github.com/angular-package/sass/releases/tag/v0.5.1-beta)
 
 - Fix `function.call-arglist()` by adding `$arguments` to the `$arglist` by using only `list.append()` function and checking if `$arglist` is space-separated list. [fd90100]

@@ -116,6 +116,7 @@ var.$var: map.merge(var.$var, (prefix: s, delimiter: '-'));
 // @debug function.call-by-list(5px (var-get primary) 10px (var-get secondary));
 // @debug function.call-by-list(5px (--var-get (unit 1)) 10px (--var-get (unit 5)) 1px 2px);
 // @debug function.call-by-list(((--var-get: (unit 5, 15, rem)) 15px));
+// @debug function.call-by-list((--var-get (unit 5)), $arguments: (dictionary: (unit: u)));
 
 // `function.insert()`
 // @debug function.call-by-list(function.insert((padding, (top, bottom)) (), $type-function: (list: selector-nest)));

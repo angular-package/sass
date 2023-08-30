@@ -30,10 +30,10 @@
 ) {
   @if $name {
     @if $arguments {
-      $arglist: if(
-        meta.type-of($arguments) == map,
-        list.append($arglist, (arguments: $arguments), comma),
-        list.join($arglist, $arguments, comma)
+      $arglist: list.append(
+        if(meta.type-of($arglist) == list and list.separator($arglist) == space, ($arglist,), $arglist),
+        if(meta.type-of($arguments) == map, (arguments: $arguments), $arguments),
+        comma
       );
     }
     @if list.separator($arglist) == comma {

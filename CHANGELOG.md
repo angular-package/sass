@@ -1,5 +1,9 @@
 # @angular-package/sass changelog
 
+### v0.5.1-beta [#](https://github.com/angular-package/sass/releases/tag/v0.5.1-beta)
+
+- Fix `function.call-arglist()` by adding `$arguments` to the `$arglist` by using only `list.append()` function and checking if `$arglist` is space-separated list.
+
 ### v0.5.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.5.0-beta)
 
 - Update `property` module to handle arguments to use `var.get()` function dictionary. [d28f797]

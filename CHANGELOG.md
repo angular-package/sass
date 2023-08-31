@@ -1,5 +1,11 @@
 # @angular-package/sass changelog
 
+### v0.6.1-beta [#](https://github.com/angular-package/sass/releases/tag/v0.6.1-beta)
+
+- Fix `color.hsla-color()` and `color.retrieve()` by removing `values.map` import and change `values.map` to `list.to-map()`. [e8fe993]
+
+[e8fe993]: https://github.com/angular-package/sass/commit/e8fe99345d70f82bd18d1f12c1a0f50c6ba0b8a1
+
 ### v0.6.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.6.0-beta)
 
 - Fix `property.variant()` passing `$dictionary` argument by adding map `(dictionary: $dictionary)`. [df48216]

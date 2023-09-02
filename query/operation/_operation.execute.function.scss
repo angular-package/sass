@@ -1,0 +1,69 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
+// Functions.
+@use '../../list/list.to-map.function' as *;
+
+// Modules.
+@use '../../comparison';
+@use 'result';
+
+// Status: DONE
+// The `operation.execute()` function.
+// @param `$query`
+// @param `$operand`
+// @returns
+@function execute($query, $operand) {
+  $result: ();
+  $i: 1;
+
+  // Each list element.
+  @each $value in map.get($query, from) {
+    // What select from the list.
+    $selected: map.get((
+      index: $i,
+      nth: $value,
+      select: meta.type-of($value)
+    ), map.get($query, select));
+
+    // Left operand.
+    $value: if(map.get($query, 'operand') == index, $i, if(map.get($query, 'operand') == type, meta.type-of($value), $value));
+
+    // Compare value with the operand.
+    $operation-result: comparison.compare($value, map.get($query, where, operator) or map.get($query, operator), $operand);
+
+    // Add to result whether the `$operation-result` is true.
+    $result: if(
+      $operation-result,
+      list.append($result, $selected, list.separator(map.get($query, from))),
+      $result
+    );
+
+    // If occurrence is set to any return the `$result`.
+    @if map.get($query, occurrence) == any and $operation-result {
+      @return $result;
+    }
+
+    $i: $i + 1;
+  }
+  @return result.filter($query, $result);
+}
+
+// Examples.
+$-from: (227, 'a', 2, (key-1: value-1, key-2: value-2), 69, 220, 115, (226, 3), 4, 4, 4, 4, 'a', 'b', 3, 'c', 4, 'd', 5, 'e', 6, 450, 'f', 7, 'g');
+
+// (index, $-from, all, nth, '==', ('a', 4), 2 '...' 3),
+
+// $query: to-map(
+//   (index, $-from, all, nth, '==', ('a', 4), 2 3),
+//   (select: has index nth quantity type),
+//   (from: list),
+//   (occurrence: any all first last),
+//   (operand: index nth type),
+//   (operator: string),
+//   (operands: list),
+//   (range: list, limit: number list),
+// );
+// $operation-result: execute($query, 4);

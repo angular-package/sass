@@ -1,0 +1,28 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use '../../../list/list.limit.function' as list-limit;
+
+// Status: TODO:
+// The `result.limit()` function.
+// @param `$query`
+// @param `$result`
+// @returns
+@function limit($query, $result) {
+  @if map.get($query, limit) {
+    @if not list.index(map.get($query, limit), '...') or not map.get($query, range) {
+      $limit: list.nth(map.get($query, limit), if(list.length(map.get($query, limit)) > 1, 2, 1));
+      $offset: if(list.length(map.get($query, limit)) > 1, list.nth(map.get($query, limit), 1), 1);
+      @if $offset < list.length($result) {
+        $limit: if($limit > list.length($result), (list.length($result) - $offset) + 1, $limit);
+      } @else {
+        $limit: 1;
+      }
+
+      $result: list-limit.limit($result, $offset $limit...);
+    }
+  }
+  @return $result;
+}

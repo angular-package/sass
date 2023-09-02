@@ -1,0 +1,23 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use 'result.limit.function' as result-limit;
+@use 'result.range.function' as result-range;
+
+// Status: TODO:
+// The `operation.result-filter()` function.
+// @param `$query`
+// @param `$result`
+// @returns
+@function filter($query, $result) {
+  // Do operations on `$result`.
+  @if type-of($result) == list and list.length($result) > 0 {
+    $result: result-limit.limit($query, $result);
+    $result: result-range.range($query, $result);
+  }
+
+  // Return the result.
+  @return if(map.get($query, select) == quantity, list.length($result), $result);
+}

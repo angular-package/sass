@@ -1,0 +1,27 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Object.
+@use 'object.var' as object;
+
+// Status: DONE
+// The `object.get()` function.
+// @param `$name`
+// @param `$key`
+// @returns
+@function get($key: null, $name: auto) {
+  $name: if(
+    $name == auto and list.length(map.keys(object.$object)) > 0,
+    list.nth(map.keys(object.$object), list.length(object.$object)),
+    $name
+  );
+  @return if(
+    $key,
+    map.get(object.$object, $name, $key),
+    map.get(object.$object, $name)
+  );
+}
+
+// Examples.
+// @debug get();

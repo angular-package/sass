@@ -1,0 +1,24 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Object.
+@use 'object.var' as object;
+
+// Functions.
+@use 'object.get.function' as *;
+
+// Status: DONE
+// The `object.set()` function.
+@function set($key, $value, $name: auto) {
+  $name: if(
+    $name == auto and list.length(map.keys(object.$object)) > 0,
+    list.nth(map.keys(object.$object), list.length(object.$object)),
+    $name
+  );
+  object.$object: map.set(object.$object, $name, $key, $value);
+  @return get();
+}
+
+// Examples.
+// @debug set(test, key, value);

@@ -12,9 +12,9 @@
 @use 'operation';
 
 // Status: TODO:
-// The `query.execute()` function.
-// @arbitrary `$query...
-// @returns
+// The `query.execute()` function executes query to select values from list and filter with range or limit.
+// @arbitrary `$query...` Arbitrary values of (select, from, occurrence, operand, operator, operand, range or limit).
+// @returns The returned value is a list of selected values from `$query`.
 @function execute($query...) {
   $result: ();
   $query: to-map(

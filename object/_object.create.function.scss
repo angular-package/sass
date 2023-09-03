@@ -1,6 +1,7 @@
 // Sass.
 @use 'sass:list';
 @use 'sass:map';
+@use 'sass:meta';
 
 // Object.
 @use 'object.var' as object;
@@ -9,29 +10,14 @@
 @use 'object.get.function' as *;
 
 // Status: DONE
-// The `object.create()` function creates map in `$object` variable.
-// @param `$object`
-// @param `$name`
-// @returns
-@function create($object, $name: auto) {
-  $name: if(
-    $name == auto,
-    if(
-      list.length(object.$object) > 0,
-      list.length(object.$object) + 1,
-      1
-    ),
-    $name
-  );
+// The `object.create()` function sets `map` type object in `object.$object` variable under `$name` key.
+// @param `$object` A `map` type value to set in `object.$object` under `$name`.
+// @param `$name` The name under which `$object` of `map` type is stored, `null` indicates add new object under incremented `number`.
+// @returns The returned value is `$object` of `map` type under `$name` key of `object.$object`.
+@function create($object, $name: list.length(object.$object) + 1) {
+  $object: if(meta.type-of(list) and list.length($object) == 0, map.remove((1:1), 1), $object);
   @if type-of($object) == map {
-    @if map.has-key(object.$object, $name) {
-      @error "Object `#{$name}` exists";
-    }
     object.$object: map.set(object.$object, $name, $object);
   }
   @return get();
 }
-
-// Examples.
-// @debug create((a: 1, b: 2, c: 3k));
-// @debug create((a: 1, b: 2, c: 3k));

@@ -1,0 +1,36 @@
+// Sass.
+@use 'sass:list';
+
+// Variables.
+@use 'object.var' as object;
+
+// Modules.
+@use '../map';
+
+// Functions.
+@use '../list/list.insert-nth.function' as *;
+@use 'object.get.function' as *;
+@use 'object.set.function' as *;
+
+// Status: DONE
+// The `object.remove()` function removes `$keys` from object in use.
+// @arbitrary `$keys...` A list of keys to remove.
+// @returns The returned value is object in use.
+@function remove($keys...) {
+  @each $key in $keys {
+    @if type-of($key) == map {
+      @each $name, $key in $key {
+        object.$object: map.remove(
+          object.$object,
+          insert-nth(if(list.separator($key) == comma, $key, ($key,)), 1, object.$name or last-name())
+        );
+      }
+    } @else {
+      object.$object: map.remove(
+        object.$object,
+        insert-nth(if(list.separator($key) == comma, $key, ($key,)), 1, object.$name or last-name())
+      );
+    }
+  }
+  @return get();
+}

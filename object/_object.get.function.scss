@@ -1,27 +1,28 @@
 // Sass.
 @use 'sass:list';
-@use 'sass:map';
 
 // Object.
 @use 'object.var' as object;
 
-// Status: DONE
-// The `object.get()` function.
-// @param `$name`
-// @param `$key`
-// @returns
-@function get($key: null, $name: auto) {
-  $name: if(
-    $name == auto and list.length(map.keys(object.$object)) > 0,
-    list.nth(map.keys(object.$object), list.length(object.$object)),
-    $name
-  );
-  @return if(
-    $key,
-    map.get(object.$object, $name, $key),
-    map.get(object.$object, $name)
-  );
-}
+// Modules.
+@use '../map';
 
-// Examples.
-// @debug get();
+// Functions.
+@use 'object.last-name.function' as *;
+@use 'object.use.function' as *;
+
+// Status: DONE
+// The `object.get()` function gets `map` from `object.$object` variable of key `$name`, where by default is last created or set by `object.use()`.
+// @param `$key` An optional key of `map` from `object.$object` to get.
+// @param `$fallback` Fallback value if retrieved is `null`.
+// // @param `$name` A name of `map` in `object.$object` to get, `null` indicates last created object.
+// @returns The returned value is a `map` retrieved from `object.$object` of `$name`, optionally value retrieved from `$key`.
+@function get($key: null, $fallback: null) {
+  $name: object.$name or last-name();
+  @if type-of($key) == map {
+    @each $name, $key in $key {
+      @return map.get(object.$object, list.append($name, $key, comma), $fallback);
+    }
+  }
+  @return map.get(object.$object, if($key, list.append($name, $key, comma), $name), $fallback);
+}

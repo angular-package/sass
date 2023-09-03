@@ -1,0 +1,18 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Object.
+@use 'object.var' as object;
+
+// Functions.
+@use 'object.get.function' as *;
+@use 'object.last-name.function' as *;
+
+// Status: DONE
+// The `object.keys()` function.
+// @param `$key`
+// @returns
+@function keys($key: null) {
+  @return map.keys(get($key));
+}

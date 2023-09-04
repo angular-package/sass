@@ -13,10 +13,10 @@
 @use 'object.last-name.function' as *;
 
 // Status: DONE
-// The `object.merge()` function.
-// @param `$key`
-// @param `$objects...`
-// @returns
+// The `object.merge()` function merges `$objects` into object in use, optionally under `$key`.
+// @param `$key` A key under which `$objects` are merged.
+// @arbitrary `$objects...` Objects to merge into object in use.
+// @returns The returned value is object in use with merged `$objects`.
 @function merge($key: null, $objects...) {
   $name: object.$name or last-name();
   $retrieved-object: ();

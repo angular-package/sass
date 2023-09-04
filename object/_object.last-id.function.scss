@@ -6,8 +6,8 @@
 @use 'object.var' as object;
 
 // Status: DONE
-// The `object.last-id()` returns last object id.
-// @returns The returned value is  of last added object.
+// The `object.last-id()` returns last created object number.
+// @returns The returned value is number of last created object.
 @function last-id() {
   @return list.length(map.keys(object.$object));
 }

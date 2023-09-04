@@ -1,5 +1,4 @@
 // Sass.
-@use 'sass:list';
 @use 'sass:map';
 
 // Object.
@@ -7,12 +6,11 @@
 
 // Functions.
 @use 'object.get.function' as *;
-@use 'object.last-name.function' as *;
 
 // Status: DONE
-// The `object.keys()` function.
-// @param `$key`
-// @returns
+// The `object.keys()` function gets the keys of object, optionally from value retrieved from `$key`.
+// @param `$key` An optional key of object, or object with key.
+// @returns The returned value is list of keys.
 @function keys($key: null) {
   @return map.keys(get($key));
 }

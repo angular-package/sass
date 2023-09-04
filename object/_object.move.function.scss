@@ -1,21 +1,15 @@
-// Sass.
-@use 'sass:list';
-@use 'sass:map';
-
 // Object.
 @use 'object.var' as object;
 
 // Functions.
 @use 'object.copy.function' as *;
-@use 'object.get.function' as *;
 @use 'object.remove.function' as *;
-@use 'object.use.function' as *;
 
 // Status: DONE
-// The `object.move()` function.
-// @param `$from`
-// @param `$to`
-// @returns
+// The `object.move()` function move value from `$from` to `$to`.
+// @param `$from` A key which from value is moved to key `$to`.
+// @param `$to` A key under which `$value` is pasted.
+// @returns The returned value is object with moved value from key `$from` to `$to`(if it's the same object).
 @function move($from, $to) {
   $debug: copy($from, $to);
   @return remove($from);

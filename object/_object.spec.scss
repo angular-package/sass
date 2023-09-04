@@ -66,10 +66,9 @@ $dictionary: (
 ) !default;
 
 
-$a: object.create($dictionary, dictionary);
-$a: object.use(dictionary);
-$a: object.set((class, prefix), spectre);
-
+$debug: object.create($dictionary, dictionary);
+$debug: object.use(dictionary);
+$debug: object.set((class, prefix), spectre);
 
 // Theme
 $theme-light: (
@@ -159,4 +158,4 @@ $debug: object.merge(light, (object 1: 1), (object 2: 2));
 // move between objects
 // $debug: object.move((theme: light), (dictionary: (dark color, theme)));
 
-// @debug object.$object;
+@debug object.$object;

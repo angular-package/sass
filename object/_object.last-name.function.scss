@@ -10,7 +10,7 @@
 
 // Status: DONE
 // The `object.last-name()` returns last object key name.
-// @returns The returned value is key name of last added object.
+// @returns The returned value is key name of last created object.
 @function last-name() {
   @return if(last-id(), list.nth(map.keys(object.$object), last-id()), null);
 }

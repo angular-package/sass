@@ -6,24 +6,32 @@
 
 // Functions.
 @use '../map/map.set.function';
+@use 'object.get-key.function' as *;
 @use 'object.get.function' as *;
-@use 'object.last-name.function' as *;
 
 // Status: DONE
-// The `object.set()` function sets `$value` under `$key` in `object.$object` of `dd`, where `null` is last created object.
+// The `object.set()` function sets `$value` under `$key` in object in use.
 // @param `$key` A key under which `$value` is set.
 // @param `$value` A value to set under `$key`.
-// // @param `$name` Name of `map` from `object.$object`, if `null` then last created `map` is used.
-// @returns The returned value is a map of `$key` from `object.$object`.
+// @arbitrary `$allowed...` Allowed `$value` types to set.
+// @returns The returned value is object in use.
 @function set($key, $value, $allowed: ()) {
-  $name: object.$name or last-name();
   @if type-of($key) == map {
     @each $name, $key in $key {
-      object.$object: map.set(object.$object, list.join($name, $key, comma), $value, $allowed...);
+      object.$object: map.set(
+        object.$object,
+        get-key($name, $key),
+        $value,
+        $allowed...
+      );
     }
   } @else {
-    @debug $key;
-    object.$object: map.set(object.$object, list.join($name, $key, comma), $value, $allowed...);
+    object.$object: map.set(
+      object.$object,
+      get-key($key: $key),
+      $value,
+      $allowed...
+    );
   }
   @return get();
 }

@@ -8,8 +8,10 @@
 @forward 'math' as math-*;
 @forward 'meta' as meta-*;
 @forward 'number' as number-*;
+@forward 'object' as object-*;
 @forward 'property' as property-* hide property;
 @forward 'property/property.mixin';
+@forward 'query' as query-*;
 @forward 'selector' as selector-*;
 @forward 'string' as string-*;
 @forward 'translator' as translator-*;

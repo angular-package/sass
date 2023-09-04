@@ -1,0 +1,22 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use '../../../list/list.range.function' as list-range;
+
+// Status: TODO:
+// The `result.range()` function.
+// @param `$query`
+// @param `$result`
+// @returns
+@function range($query, $result) {
+  @if map.get($query, range) {
+    @if list.index(map.get($query, range), '...') or not map.get($query, limit) {
+      $from: list.nth(map.get($query, 'range'), 1);
+      $to: list.nth(map.get($query, 'range'), if(list.length(map.get($query, range)) == 3, 3, 2));
+      $result: list-range.range($result, $from if($to > list.length($result), if($from > list.length($result), $from, list.length($result)), $to)...);
+    }
+  }
+  @return $result;
+}

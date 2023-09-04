@@ -5,12 +5,11 @@
 
 // Status: DONE
 // The `map.set()` function sets `$allowed` `$value` under `$key` in `$map`.
-// ? Original sass `map.set()` function modified, by adding `$allowed...` arbitrary argument to check if `$value` is allowed to be set.
 // @param `$map` A map to set `$value` at `$key`.
 // @param `$key` A key under which `$value` is set.
 // @param `$value` The value to set in `$map` under `key`.
 // @arbitrary `$allowed...` Allowed value types and/or values to set in `$map`.
-// @return The return value is updated `$map` with `$value` at `$key`.
+// @returns The return value is updated `$map` with `$value` at `$key`.
 @function set($map, $key, $value, $allowed...) {
   @return if(
     if(
@@ -18,7 +17,14 @@
       if(list.index($allowed, meta.type-of($value)) or list.index($allowed, $value), true, false),
       true
     ),
-    map.set($map, list.append($key, $value, comma)...),
+    map.set(
+      $map,
+      list.append(
+        if(meta.type-of($key) == list and list.separator($key) == comma, $key, ($key,)),
+        $value,
+        comma
+      )...
+    ),
     $map
   );
 }

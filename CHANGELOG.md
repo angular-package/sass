@@ -1,5 +1,18 @@
 # @angular-package/sass changelog
 
+### v0.7.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.7.0-beta)
+
+- Fix `map.set()` - add checking whether `$key` is comma-separated list to have ability to add space separated keys. [1d46564]
+- Add `query` module to search in `list` by using query. [3e2c20c]
+- Add experimental `object` module to handle multiple multiple `keys` in `map` variable as objects. [5274590] [6e16608]
+- Add `map.is()` function to check whether the `$value` is `map` of optionally `$length`. [1a3c52c]
+
+[6e16608]: https://github.com/angular-package/sass/commit/6e166083a52cdafc4c338d3a0e65a2467f7915c8
+[1d46564]: https://github.com/angular-package/sass/commit/1d46564fce0eb819a331f74b691e62320b6d001a
+[3e2c20c]: https://github.com/angular-package/sass/commit/3e2c20c300f1daa4317a4ec6861bf2982cd9f245
+[5274590]: https://github.com/angular-package/sass/commit/52745909997a1c514b348183a07cbb3203acd169
+[1a3c52c]: https://github.com/angular-package/sass/commit/1a3c52cf6fe2b24119cca6325e6c5fc59242b3fd
+
 ### v0.6.1-beta [#](https://github.com/angular-package/sass/releases/tag/v0.6.1-beta)
 
 - Fix `color.hsla-color()` and `color.retrieve()` by removing `values.map` import and change `values.map` to `list.to-map()`. [e8fe993]

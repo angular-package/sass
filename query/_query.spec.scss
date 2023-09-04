@@ -1,0 +1,58 @@
+// Modules.
+@use '../query';
+
+// query.
+$-from: (227, 'a', 2, (key-1: value-1, key-2: value-2), 69, 220, 115, (226, 3), 4, 4, 4, 4, 'a', 'b', 3, 'c', 4, 'd', 5, 'e', 6, 450, 'f', 7, 'g');
+
+// $-query: (select: index) (from: $-from) (occurrence: all) (operand: nth) (operator: '==') (operands: (4, (226, 3), 'a', 'bb'));
+// @debug query.execute($-query...); // (8, 9, 10, 11, 16), 7, (2, 12), null
+
+// select: nth where: all/any index operand {operator} value/(value)
+// @debug query.execute((nth, $-from, any, index, '==', (4, 5, 10, 12))...); // (key-1: value-1, key-2: value-2), 69, 4, 4
+// @debug query.execute((nth, $-from, any, index, '>', (4, 5, 10, 12))...); // 69, 220, 4, "a"
+// @debug query.execute((nth, $-from, any, index, '<', (4, 5, 10, 12))...); // 227, 227, 227, 227
+
+
+// select: index where all/any nth operand {operator} value/(value)
+// @debug query.execute(index $-from all nth '==' (4 (226, 3) 'a' 'bb')...); // (9, 10, 11, 12, 17), 8, (2, 13), null
+// @debug query.execute((index, $-from, all, nth, '==', ('a', 4))...); // (2, 13), (9, 10, 11, 12, 17)
+// @debug query.execute((index, $-from, any, nth, '==', (4, (226, 3), 'a', 'bb'))...); // 9, 8, 2, null
+// @debug query.execute((index, $-from, any, nth, '(,)==', (1, 2, 3))...); // null, 8, null
+// @debug query.execute((index, $-from, all, nth, '(:)==', (2,),)...); // 4
+// -- limit
+// @debug query.execute((index, $-from, any, nth, '==', ('a',), (limit: 5))...); // 2
+// @debug query.execute((index, $-from, all, nth, '==', ('a', 4), (limit: 5))...); // (2, 13), (9, 10, 11, 12, 17)
+// @debug query.execute((index, $-from, all, nth, '==', ('a', 4), (limit: 2 7))...); // 13, (10, 11, 12, 17)
+// @debug query.execute((index, $-from, all, nth, '==', (4, (226, 3), 'a', 'bb'), 2)...); // (9, 10), 8, (2, 13), null
+// @debug query.execute((index, $-from, all, nth, '==', (4, (226, 3), 'a', 'bb'), 2 3)...); // (10, 11, 12), null, 13, null
+// @debug query.execute((index, $-from, any, nth, '==', (4, (226, 3), 'a', 'bb'), (limit: 5))...); // 9, 8, 2, null
+// @debug query.execute((index, $-from, any, nth, '==', (4, (226, 3), 'a', 'bb'), (offset: 1, limit: 5))...); // 9, 8, 2, null
+// -- range
+// @debug query.execute((index, $-from, all, nth, '==', (4, (226, 3), 'a', 'bb'), 2 '...' 3)...); // (10, 11), null, 13, null
+// @debug query.execute((index, $-from, all, nth, '==', (4, (226, 3), 'a', 'bb'), (range: 2 5))...); // (10, 11, 12, 17), null, 13, null
+// @debug query.execute((index, $-from, any, nth, '==', (4, (226, 3), 'a', 'bb'), (2, '...', 5))...); // null, null, null, null
+// @debug query.execute((index, $-from, any, nth, '==', (4, (226, 3), 'a', 'bb'), (1, '...', 5))...); // 9, 8, 2, null
+// @debug query.execute((index, $-from, any, nth, '==', (4, (226, 3), 'a', 'bb'), (to: 5))...); // 9, 8, 2, null
+// @debug query.execute((index, $-from, any, nth, '==', (4, (226, 3), 'a', 'bb'), (from: 1, to: 5))...); // 9, 8, 2, null
+
+
+// select: quantity where: all/any index {operator} value/(value)
+// @debug query.execute((quantity, $-from, all, nth, '==', (4, (226, 3), 'a', 'bb'))...); // 5, 1, 2, 0
+// @debug query.execute((quantity, $-from, all, nth, ':==', (list, number, string))...); // 1, 15, 8
+
+
+// select: type where all/any index {operator} value/(value)
+// @debug query.execute((type, $-from, all, index, '==', (1, 8, 225),)...); // number, list, null
+// @debug query.execute((type, (1, 1, 1, 'a', 2, 2, 2, 1,), all, nth, ':==', (number, string))...);
+// -- range
+// @debug query.execute((type, $-from, all, index, '==', (1, 63, 225), (1 '...' 3))...); // number, null, null
+
+
+// select: nth where all/any nth {operator} value/(value)
+// @debug query.execute((nth, list.join($-from, 'bold king'), any, nth, '~=', (bold, king))...); // "bold king", "bold king"
+// @debug query.execute((nth, list.join($-from, 'king one'  'bold king'), all, nth, '~=', (bold, king))...); // "bold king", ("king one", "bold king")
+
+
+// select nth of all given nth of the type
+// @debug query.execute((nth, $-from, all, nth, ':==', number string)...); // (227, 2, 69, 220, 115, 4, 4, 4, 4, 3, 4, 5, 6, 450, 7), ("a", "a", "b", "c", "d", "e", "f", "g")
+

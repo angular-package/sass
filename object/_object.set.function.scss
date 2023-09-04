@@ -1,0 +1,29 @@
+// Sass.
+@use 'sass:list';
+
+// Object.
+@use 'object.var' as object;
+
+// Functions.
+@use '../map/map.set.function';
+@use 'object.get.function' as *;
+@use 'object.last-name.function' as *;
+
+// Status: DONE
+// The `object.set()` function sets `$value` under `$key` in `object.$object` of `dd`, where `null` is last created object.
+// @param `$key` A key under which `$value` is set.
+// @param `$value` A value to set under `$key`.
+// // @param `$name` Name of `map` from `object.$object`, if `null` then last created `map` is used.
+// @returns The returned value is a map of `$key` from `object.$object`.
+@function set($key, $value, $allowed: ()) {
+  $name: object.$name or last-name();
+  @if type-of($key) == map {
+    @each $name, $key in $key {
+      object.$object: map.set(object.$object, list.join($name, $key, comma), $value, $allowed...);
+    }
+  } @else {
+    @debug $key;
+    object.$object: map.set(object.$object, list.join($name, $key, comma), $value, $allowed...);
+  }
+  @return get();
+}

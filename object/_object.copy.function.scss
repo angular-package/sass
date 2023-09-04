@@ -1,0 +1,22 @@
+// Sass.
+@use 'sass:list';
+
+// Variables.
+@use 'object.var' as object;
+
+// Modules.
+@use '../map';
+
+// Functions.
+@use 'object.get.function' as *;
+@use 'object.set.function' as *;
+@use 'object.use.function' as *;
+
+// Status: DONE
+// The `object.copy()` function.
+// @param `$from`
+// @param `$to`
+// @returns
+@function copy($from, $to) {
+  @return set($to, get($from));
+}

@@ -1,0 +1,19 @@
+// Sass.
+@use 'sass:list';
+
+// Status: DONE
+// The `map.is()` function checks whether `$value` is `map` type, optionally of `$length`.
+// @param `$value` The value to check against `map` type.
+// @returns The returned value is a `bool` indicating whether `$value` is a map, optionally of `$length`.
+@function is($value, $length: null) {
+  @return if(
+    $length,
+    type-of($value) == map and list.length($value) == $length,
+    type-of($value) == map
+  );
+}
+
+// Examples.
+// @debug is((a: 1, b: 2, c: 3));
+// @debug is((a: 1, b: 2, c: 3), 2);
+// @debug is((a: 1, b: 2, c: 3), 3);

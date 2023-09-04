@@ -1,0 +1,13 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Object.
+@use 'object.var' as object;
+
+// Status: DONE
+// The `object.last-id()` returns last object id.
+// @returns The returned value is  of last added object.
+@function last-id() {
+  @return list.length(map.keys(object.$object));
+}

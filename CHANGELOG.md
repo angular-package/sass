@@ -2,9 +2,9 @@
 
 ### v0.8.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.8.0-beta)
 
-- Add [`object.destroy()`](https://github.com/angular-package/sass/blob/main/object/_object.destroy.function.scss) to remove object name. [127c5e4]
+- Add [`object.destroy()`](https://github.com/angular-package/sass/blob/main/object/_object.destroy.function.scss) to remove object. [127c5e4]
 - Update [`translator/dictionary`](https://github.com/angular-package/sass/tree/main/translator/v1.0.0/dictionary) module to use `object` module. [ae50b2a]
-- Update [`object.set()`](https://github.com/angular-package/sass/blob/main/object/_object.set.function.scss) function to return `$name` on `$name` equal to it `object.$object`. [3e2f9b8]
+- Update [`object.set()`](https://github.com/angular-package/sass/blob/main/object/_object.set.function.scss) function to return `$name` on `$name` equal to `object.$name`. [3e2f9b8]
 - Add [`object.has-key()`](https://github.com/angular-package/sass/blob/main/object/_object.has-key.function.scss) function to check the key in any object. [25b7bff]
 - Add [`object.get-key()`](https://github.com/angular-package/sass/blob/main/object/_object.get-key.function.scss) function to get key object of `$name` and `$key`. [c05d520] [112747d]
 

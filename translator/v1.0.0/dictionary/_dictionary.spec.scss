@@ -5,10 +5,10 @@
 @use '../dictionary';
 
 // global dictionary defaults.
-dictionary.$dictionary: (
-  prefix: spectre,
-  suffix: end
-);
+// dictionary.$dictionary: (
+//   prefix: spectre,
+//   suffix: end
+// );
 
 // Variables.
 $-dictionary-example: (
@@ -23,49 +23,144 @@ $-dictionary-example: (
   var: (prefix: var-prefix, suffix: var-suffix),
 );
 
+// merge
+@debug dictionary.merge(null, $-dictionary-example);
+
 // Set the dictionary.
-// $-test: dictionary.set('example', $-dictionary-example);
+@debug dictionary.set(example, $-dictionary-example);
 
-// get.
-// @debug -dictionary.get((example, general)); // (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c)
+// `get()`.
+// @debug dictionary.get();
+// @debug dictionary.get((example, general)); // (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c)
 
-// --- List
-// @debug -dictionary.translate-list((wrapper, technology), $dictionary: $dictionary-example general); // owijka, tech
-// @debug -dictionary.translate-list((wrapper, technology) color, $dictionary: $dictionary-example general); // (owijka, tech) c
-// @debug -dictionary.translate-list((wrapper,), general, $dictionary-example); // (owijka,)
+// `keys()`
+// @debug dictionary.keys();
 
-// Different -dictionary.
-// @debug -dictionary.translate-list((calendar, label), $dictionary: ($dictionary-example, (class, calendars))); // cal, label
+// `last-id()`
+// @debug dictionary.last-id();
 
-// --- Map
-// String.
-// @debug -dictionary.translate-map((word: wrapper), $dictionary: $dictionary-example general); // (word: owijka)
-// @debug -dictionary.translate-map((limit: first), $dictionary: ((first, start): 1, (last, length, end): 50)); // (limit: 1)
+// `last-name()`
+// @debug dictionary.last-name();
 
-// List.
-// @debug -dictionary.translate-map((word: (wrapper, wrap)), $dictionary: $dictionary-example general); // (word: (owijka, owijka))
+// `dictionary.merge()`
+// @debug dictionary.merge();
 
-// Different -dictionary.
-// @debug -dictionary.translate-map((calendar: calendar), $dictionary: ($dictionary-example, (class, calendars))); // (calendar: cal)
+// `dictionary.move()`
+// @debug dictionary.move(var, class);
 
+// `dictionary.pick()`
+// @debug dictionary.pick(class, general);
 
-// --- String
-// @debug -dictionary.translate-string(word, $dictionary: map.get($dictionary-example, general)); // słowo
-// @debug -dictionary.translate-string(wrapper, general, $dictionary-example); // owijka
-// @debug -dictionary.translate-string(calendar, $dictionary: map.get($dictionary-example, class, calendars)); // cal
+// `dictionary.remove()`
+// @debug dictionary.remove(border);
 
 
-// --- Any
-// List.
-// @debug -dictionary.translate((wrapper, technology), $dictionary: ($dictionary-example, 'general')); // owijka, tech
-// @debug -dictionary.translate((wrapper, technology) color, $dictionary: $dictionary-example general); // (owijka, tech) c
+// @debug dictionary.merge(null, (test: (ok: (first: accept, second: do))));
+// @debug dictionary.get((test, ok)); // (first: accept, second: do)
+// @debug dictionary.get((word, wrong)); // null
 
-// Map.
-// @debug -dictionary.translate((word: wrapper), $dictionary: $dictionary-example general); // (word: owijka)
-// @debug -dictionary.translate((limit: first), $dictionary: ((first, start): 1, (last, length, end): 50)); // (limit: 1)
 
-// String.
-// @debug -dictionary.translate(wrapper, $dictionary: $dictionary-example general); // owijka
 
-// Different dictionary.
-// @debug -dictionary.translate(calendar, $dictionary: $dictionary-example (class, calendars)); // cal
+// Gets nested key
+// variables.$dictionary: map.merge(variables.$dictionary, (test: (ok: (first: accept, second: do))));
+// @debug dictionary.merge(null, (test: (ok: (first: accept, second: do))));
+// @debug dictionary.get((test, ok)); // (first: accept, second: do)
+// @debug dictionary.get((word,@debug dictionary.set(example, $-dictionary-example);
+
+// Examples.
+// $-dictionary: (
+//   (extra large, 'extra large', extra-large): xl,
+//   (extra small, 'extra small', extra-small): xs,
+//   class: (prefix: class-prefix, suffix: class-suffix),
+//   large: lg,
+//   medium: md,
+//   prefix: spectre,
+//   size: s,
+//   small: sm,
+//   suffix: end,
+//   var: (prefix: var-prefix, suffix: var-suffix),
+// );
+
+// merge in `class` key
+// @debug dictionary.merge(class, (prefix: spectre, suffix: end)); // (word: translation, class: (prefix: spectre, suffix: end))
+
+// merge in nested (accordion, class) key
+// @debug dictionary.merge((accordion, class), (prefix: spectre, suffix: end)); // (word: translation, class: (prefix: spectre, suffix: end), accordion: (class: (prefix: spectre, suffix: end)))
+
+
+
+
+// Examples.
+$-dictionary: (
+  general: (word: słowo, (wrapper, wrap): owijka, technology: (action: akcja)),
+  class: (prefix: spectre-prefix, suffix: spectre-suffix, calendars: (calendar: cal), labels: (label: lab)),
+  prefix: spectre,
+  suffix: end,
+  separator: '--',
+  var: (prefix: spectre, suffix: end)
+);
+
+//
+// $-test: dictionary.merge(null, $-dictionary);
+
+
+
+// Examples.
+// Pick the key
+// @debug dictionary.pick(general); // (general: (word: słowo, (wrapper, wrap): owijka, technology: (action: akcja)))
+
+// Pick nested key
+// @debug dictionary.pick((class, calendars)); // (calendars: (calendar: cal))
+
+// Pick multiple keys
+// @debug dictionary.pick(general, (class, calendars)); // (general: (word: słowo, (wrapper, wrap): owijka, technology: (action: akcja)), calendars: (calendar: cal))
+
+
+
+
+// Sets translation of `small` as `sm`
+// @debug dictionary.set(small, sm); // (word: translation, small: sm)
+// @debug dictionary.set((small x,), small x); // (word: translation, small x: small x)
+
+// set `var` dictionary
+// @debug dictionary.set((var, prefix), spectre); // (word: translation, small x: small x, var: (prefix: spectre))
+
+// number not working
+// @debug dictionary.set(small, 5); // (word: translation)
+
+// Sets the `class` dictionary
+// @debug dictionary.set(class, map.get($-dictionary, class)); // (word: translation, small: sm, class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)))
+
+
+// Examples.
+$-nested-dictionary: (
+  general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c),
+  class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+  var: (prefix: var-prefix, suffix: var-suffix),
+);
+$-flatten-dictionary: (
+  'extra small': xs,
+  (extra large, extra-large): xl,
+  border: b,
+  color: c,
+  delimiter: '-',
+  outline: o,
+  prefix: spectre,
+  separator: '-',
+  suffix: end,
+);
+
+// single dictionary
+// @debug dictionary.translation(prefix, $-flatten-dictionary); // spectre
+// @debug dictionary.translation(extra large, $-flatten-dictionary); // xl
+// @debug dictionary.translation((extra large), $-flatten-dictionary); // xl
+
+// multiple dictionaries
+// @debug dictionary.translation(extra-large, $-nested-dictionary, $-flatten-dictionary); // xl
+// @debug dictionary.translation('extra small', $-nested-dictionary, $-flatten-dictionary); // xs
+
+// @debug dictionary.translation(prefix, $-nested-dictionary, $-flatten-dictionary); // spectre
+// @debug dictionary.translation(outline, $-nested-dictionary, $-flatten-dictionary); // o
+// @debug dictionary.translation(delimiter, $-nested-dictionary, $-flatten-dictionary); // -
+
+// @debug dictionary.translation(word, $-nested-dictionary general, $-flatten-dictionary); // słowo

@@ -1,22 +1,13 @@
-// Sass.
-@use 'sass:list';
-
-// Variables.
-@use 'object.var' as object;
-
-// Modules.
-@use '../map';
-
 // Functions.
 @use 'object.get.function' as *;
 @use 'object.set.function' as *;
-@use 'object.use.function' as *;
 
 // Status: DONE
-// The `object.copy()` function.
-// @param `$from`
-// @param `$to`
-// @returns
+// The `object.copy()` function copies value from key `$from` to key `$to` of last created or selected object.
+// Copy values of different object names by providing map type (name: key). For example. (dictionary: class).
+// @param `$from` A key which from value is copied to key `$to`.
+// @param `$to` A key under which `$value` is pasted.
+// @returns The returned value is object with copied value from key `$from` to `$to`(if it's the same object).
 @function copy($from, $to) {
   @return set($to, get($from));
 }

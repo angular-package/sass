@@ -1,0 +1,22 @@
+// Sass.
+@use 'sass:list';
+
+// Object.
+@use 'object.var' as object;
+
+// Functions.
+@use '../list/list.insert-nth.function' as *;
+@use 'object.last-name.function' as *;
+
+// Status: DONE
+// The `object.get-key()` function gets key object of `$name` and `$key`.
+// @param `$name` Object name, by default selected by `object.use()` or last object.
+// @param `$key` A key to retrieve from object of `$name`.
+// @returns The returned value is an object key of `$name` and `$key`.
+@function get-key($name: object.$name or last-name(), $key: null) {
+  @return if(
+    $key,
+    insert-nth(if(list.separator($key) == comma, $key, ($key,)), 1, $name),
+    $name
+  );
+}

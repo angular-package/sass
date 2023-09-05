@@ -1,0 +1,8 @@
+@forward '../../../object';
+
+// Modules.
+@use '../../../object' as dictionary;
+
+// Initialize.
+$debug: dictionary.create((), dictionary);
+$debug: dictionary.use(dictionary);

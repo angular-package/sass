@@ -1,0 +1,22 @@
+// Sass.
+@use 'sass:map';
+
+// Object.
+@use 'object.var' as object;
+
+// Functions.
+@use 'object.get.function' as *;
+@use 'object.last-name.function' as *;
+@use 'object.use.function' as *;
+
+// Status: DONE
+// The `object.destroy()` function removes object(`map`) of `$name`.
+// @param `$name` Object name to remove.
+// @returns The returned value is last created object.
+@function destroy($name: object.$name or last-name()) {
+  @if map.has-key(object.$object, $name) {
+    $debug: use(null);
+    object.$object: map.remove(object.$object, $name);
+  }
+  @return get();
+}

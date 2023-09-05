@@ -20,6 +20,22 @@ $-dictionary: (
   size: s,
 );
 
+// ---
+// Dictionary example.
+// ---
+$-dictionary-example: translator.dictionary-merge(null, (
+  (extra large, 'extra large', extra-large): xl,
+  (extra small, 'extra small', extra-small): xs,
+  class: (prefix: class-prefix, separator: class-separator, suffix: class-suffix, calendars: (calendar: cal), labels: (label: lab)),
+  general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, border: b, outline: o, color: c),
+  large: lg,
+  medium: md,
+  prefix: spectre,
+  small: sm,
+  suffix: end,
+));
+
+
 // Use the global dictionary.
 // translator.$dictionary-global: false; // set the dictionary global to false
 // @debug translator.$dictionary-global; // true
@@ -52,16 +68,19 @@ $-dictionary: (
 @debug translator.dictionary-pick(sub-dictionary); // (sub-dictionary: (class: (prefix: class-prefix, suffix: class-suffix)))
 
 // check modified dictionary
-@debug translator.$dictionary; // (word: translation, sub-dictionary: (class: (prefix: class-prefix, suffix: class-suffix)))
+@debug translator.dictionary-get(); // (word: translation, sub-dictionary: (class: (prefix: class-prefix, suffix: class-suffix)))
 
 // get flattened dictionary by picking from the global dictionary
 @debug translator.dictionary((sub-dictionary, class)); // (word: translation, prefix: class-prefix, suffix: class-suffix)
+
+
+
 
 // ---
 // Translate
 // ---
 // merge before translate
-@debug translator.dictionary-merge($dictionary: $-dictionary);
+@debug translator.dictionary-merge(null, $-dictionary);
 
 // check dictionary
 @debug translator.dictionary(); // (word: translation, prefix: spectre, suffix: end, (extra large, "extra large", extra-large): xl, (extra small, "extra small", extra-small): xs, large: lg, medium: md, small: sm, size: s)
@@ -75,3 +94,53 @@ $-dictionary: (
 @debug translator.translate(extra large); // xl
 @debug translator.translate((extra large) (extra small)); // xl xs
 @debug translator.translate(prefix width suffix, (sub-dictionary, class)); // class-prefix width class-suffix
+
+
+
+
+
+
+
+// TODO: Check.
+// --- List
+// @debug translator.translate-list((wrapper, technology), general); // owijka, tech
+// @debug translator.translate-list((wrapper, technology) color, general); // (owijka, tech) c
+// @debug translator.translate-list((wrapper,), general); // (owijka,)
+
+// Different -dictionary.
+// @debug translator.translate-list((calendar, label), (class, calendars)); // cal, label
+
+// --- Map
+// String.
+// @debug translator.translate-map((word: wrapper), general); // (word: owijka)
+
+// @debug translator.translate-map((limit: first), ((first, start): 1, (last, length, end): 50)); // (limit: 1) // TODO:
+
+// List.
+// @debug translator.translate-map((word: (wrapper, wrap)), general); // (word: (owijka, owijka))
+
+// Different -dictionary.
+// @debug translator.translate-map((calendar: calendar), (class, calendars)); // (calendar: cal)
+
+
+// --- String
+// @debug translator.translate-string(word, general); // słowo
+// @debug translator.translate-string(wrapper, general); // owijka
+// @debug translator.translate-string(calendar, (class, calendars)); // cal
+
+
+// --- Any
+// List.
+// @debug translator.translate((wrapper, technology), general); // owijka, tech
+// @debug translator.translate((wrapper, technology) color, general); // (owijka, tech) c
+
+// Map.
+// @debug translator.translate((word: wrapper), general); // (word: owijka)
+
+// @debug translator.translate((limit: first), ((first, start): 1, (last, length, end): 50)); // (limit: 1) // TODO:
+
+// String.
+// @debug translator.translate(wrapper, general); // owijka
+
+// Different dictionary.
+// @debug translator.translate(calendar, (class, calendars)); // cal

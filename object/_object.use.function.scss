@@ -1,17 +1,18 @@
 // Sass.
-@use 'sass:list';
 @use 'sass:map';
 
 // Object.
 @use 'object.var' as object;
 
 // Status: DONE
-// The `object.use()` function.
-// @param `$name` The to use object functions on `map`.
-// @returns The returned value is `$name` if object was created or `null`.
+// The `object.use()` function select object on which object functions, by default operates.
+// @param `$name` Name of the object, if it's `null` indicates to not use any object.
+// @returns The returned value is `$name` if object was created, otherwise `null`.
 @function use($name) {
   @if $name {
-    @if map.has-key(object.$object, $name) {
+    @if object.$name == $name {
+      @return $name;
+    } @else if map.has-key(object.$object, $name) {
       object.$name: $name;
       @return object.$name;
     }

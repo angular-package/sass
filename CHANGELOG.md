@@ -1,5 +1,20 @@
 # @angular-package/sass changelog
 
+### v0.8.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.8.0-beta)
+
+- Add [`object.destroy()`](https://github.com/angular-package/sass/blob/main/object/_object.destroy.function.scss) to remove object name. [127c5e4]
+- Update [`translator/dictionary`](https://github.com/angular-package/sass/tree/main/translator/v1.0.0/dictionary) module to use `object` module. [ae50b2a]
+- Update [`object.set()`](https://github.com/angular-package/sass/blob/main/object/_object.set.function.scss) function to return `$name` on `$name` equal to it `object.$object`. [3e2f9b8]
+- Add [`object.has-key()`](https://github.com/angular-package/sass/blob/main/object/_object.has-key.function.scss) function to check the key in any object. [25b7bff]
+- Add [`object.get-key()`](https://github.com/angular-package/sass/blob/main/object/_object.get-key.function.scss) function to get key object of `$name` and `$key`. [c05d520] [112747d]
+
+[3e2f9b8]: https://github.com/angular-package/sass/pull/18/commits/3e2f9b8569d98d9f9baa5b1319f62a0ccad58d8a
+[127c5e4]: https://github.com/angular-package/sass/commit/127c5e4235ca08608a7889cc67c6872eea03509f
+[ae50b2a]: https://github.com/angular-package/sass/commit/ae50b2a9cdf76d8791aeebe93ef4c5def16b11c8
+[25b7bff]: https://github.com/angular-package/sass/commit/25b7bff9bfdce8b1399ced485aa015b74f72671f
+[112747d]: https://github.com/angular-package/sass/commit/112747d3b4baeac610f08e7fc0ec22cc7c40d5af
+[c05d520]: https://github.com/angular-package/sass/commit/c05d52067755dfdaf368e16164bb1ba9570592ed
+
 ### v0.7.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.7.0-beta)
 
 - Fix `map.set()` - add checking whether `$key` is comma-separated list to have ability to add space separated keys. [1d46564]

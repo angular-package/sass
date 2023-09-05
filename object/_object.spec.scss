@@ -135,6 +135,10 @@ $debug: object.use(theme);
 $debug: object.set((light, dark color), #aaa);
 $debug: object.merge(light, (object 1: 1), (object 2: 2));
 
+// @debug object.destroy();
+// @debug object.destroy(theme);
+// @debug object.destroy(dictionary);
+
 // $debug: object.use(null);
 // @debug object.get();
 // @debug object.last-name();

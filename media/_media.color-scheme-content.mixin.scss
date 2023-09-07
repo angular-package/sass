@@ -1,0 +1,35 @@
+// Sass.
+@use 'sass:list';
+
+// Modules.
+@use '../color/scheme';
+
+// Status: DONE
+// The `media.color-scheme-content()` mixin.
+// $detect: boolean if true then it's sensitive to the `$color-scheme` argument.
+// @param `$color-scheme`
+// @param `$detect`
+@mixin color-scheme-content($color-scheme, $detect: false) {
+  @if list.index(dark light normal, $color-scheme) {
+    @if list.index(dark light, $color-scheme)  {
+      @if not $detect or ($detect and scheme.is($color-scheme)) {
+        @media (prefers-color-scheme: $color-scheme) {
+          @content;
+        }
+      }
+    } @else {
+      @if not $detect or ($detect and scheme.is($color-scheme)) {
+        @content;
+      }
+    }
+  } @else {
+    @content;
+  }
+}
+
+// Examples.
+// div {
+//   @include color-scheme-content(dark) { color: orange; }
+//   @include color-scheme-content(light) { color: red; }
+//   @include color-scheme-content(light, true) { color: red; }
+// }

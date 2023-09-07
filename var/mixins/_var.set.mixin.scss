@@ -12,12 +12,12 @@
 // Mixins.
 @use '../../selector/selector.nest-content.mixin';
 
-// Status: TODO: Use property module.
+// Status: TODO: Use property module. Remove `$selector`?
 // The `var.set()` mixin defines the CSS variables based on the given `$property`.
 // @param `$property` The property or properties of map type to set CSS variables.
 // @param `$selector` Selector in which CSS variables are set.
 // @param `$function` Function to call on property values of list type.
-@mixin set($property, $selector: (), $function: null) {
+@mixin set($property, $selector: (), $function: null, $dictionary: ()) {
   @if type-of($property) == map {
     @include selector.nest-content($selector...) {
       @each $name, $variant in $property {
@@ -26,14 +26,14 @@
             @each $name in if(list.separator($name) == comma, $name, ($name,)) {
               @if type-of($value) == map {
                 @each $value-name, $value in $value {
-                  #{name(combine((method: join), $name, $variant-name, $value-name))}: if(
+                  #{name(combine((method: join), $name, $variant-name, $value-name), $dictionary)}: if(
                     $function,
                     #{meta.call-arglist($function, $value)},
                     #{$value}
                   );
                 }
               } @else {
-                #{name(combine((method: join), $name, $variant-name))}: if(
+                #{name(combine((method: join), $name, $variant-name), $dictionary)}: if(
                   $function,
                   #{meta.call-arglist($function, $value)},
                   #{$value}
@@ -44,7 +44,7 @@
         } @else {
           $value: $variant;
           @each $name in if(list.separator($name) == comma, $name, ($name,)) {
-            #{name($name)}: if(
+            #{name($name, $dictionary)}: if(
               $function,
               #{meta.call-arglist($function, $value)},
               #{$value}

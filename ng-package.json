@@ -13,6 +13,7 @@
     "./list/**/*.scss",
     "./map/**/*.scss",
     "./math/**/*.scss",
+    "./media/**/*.scss",
     "./meta/**/*.scss",
     "./number/**/*.scss",
     "./object/**/*.scss",

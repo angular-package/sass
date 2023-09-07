@@ -1,5 +1,11 @@
 # @angular-package/sass changelog
 
+### v0.9.2-beta [#](https://github.com/angular-package/sass/releases/tag/v0.9.2-beta)
+
+- Remove function from `color/mixins`. [b7ff1af]
+
+[b7ff1af]: https://github.com/angular-package/sass/commit/b7ff1afe3370499d6a1ee2fcdd9ed5146fafcf24
+
 ### v0.9.1-beta [#](https://github.com/angular-package/sass/releases/tag/v0.9.1-beta)
 
 - Fix by adding `media` to ng-package assets. [5da60de]

@@ -2,14 +2,16 @@
 @use 'sass:meta';
 
 // Modules.
-@use '../../../map/map.get.function' as map;
-@use '../../../math/math.calculate.function' as math;
-@use '../../../list/list.to-map.function' as values;
-@use '../../../var/mixins/var.set.mixin' as var;
+@use '../../../math';
 
-// Mixins.
+// Functions.
+@use '../../../list/list.to-map.function';
+@use '../../../map/map.get.function';
 @use '../../functions/color.color.function' as *;
 @use '../../functions/color.name.function' as *;
+
+// Mixins.
+@use '../../../var/mixins/var.set.mixin';
 @use 'color.set-alpha-var.mixin' as *;
 @use 'color.set-hue-var.mixin' as *;
 @use 'color.set-lightness-var.mixin' as *;
@@ -33,7 +35,7 @@
   $color: null,
   $dictionary: ()
 ) {
-  $color: values.to-map(
+  $color: list.to-map(
     $color,
     (color: color string list),
     (lightness: number list, (alpha hue saturation: number list): map),

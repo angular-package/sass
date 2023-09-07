@@ -1,0 +1,79 @@
+// Sass.
+@use 'sass:map';
+
+// Variables.
+@use '../../var/var.variables' as variables;
+
+// Functions.
+@use '../../list';
+@use '../../string';
+
+// Status: DONE
+// The `color.name()` function returns color name of `list` type built from `$name` and `$type` ready for translation.
+// It's designed to add word `color` to the name in a proper place, and split name of `string` type with delimiter into `list`.
+// @param `$name` Color name of `string` or `list` type. String type is being split by `$delimiter`.
+// @param `$type` Color type e.g. `hue`, `alpha`, `saturation`, `lightness`, `rgb`.
+// @param `$delimiter` Delimiter to split `$name` and `$type` of `string` type into `list`.
+// @returns The returned value is a color name of `list` type in format `[name][delimiter][color][delimiter][shade][delimiter][type]`.
+@function name($name, $type: null, $delimiter: map.get(variables.$var, delimiter)) {
+  @if type-of($name) == string {
+    $name: if($delimiter and string.length($delimiter) > 0, string.split($name, $delimiter), ($name,));
+  }
+  @if type-of($type) == string {
+    $type: if($delimiter and string.length($delimiter) > 0, string.split($type, $delimiter), ($type,));
+  }
+  @if not list.index($name, color) {
+    @if list.length($name) == 1 or not (list.index($name, dark) or list.index($name, light)) {
+      $name: list.join($name, color);
+    }
+  }
+
+  $shade-index: list.index($name, dark) or list.index($name, light);
+  @if $shade-index and not list.index($name, color) {
+    $name: list.insert-nth($name, $shade-index, color);
+  }
+  @return if($type, list.join($name, $type, space), list.join((), $name, space));
+}
+
+// Examples.
+// $-delimiter: '-';
+
+// string
+// @debug name(color, $delimiter: $-delimiter); // color
+// @debug name("color", $delimiter: $-delimiter); // color
+
+// @debug name(dark, $delimiter: $-delimiter); // dark color
+// @debug name(light, $delimiter: $-delimiter); // light color
+// @debug name(dark-color, $delimiter: $-delimiter); // dark color
+// @debug name('gray', $delimiter: $-delimiter); // gray color
+// @debug name(primary, $delimiter: $-delimiter); // primary color
+
+// color
+// @debug name(gray); // gray color
+// @debug name(orange); // orange color
+
+// string + shade in string
+// @debug name(primary-dark, $delimiter: '--'); // primary-dark color
+// @debug name(primary-dark, $delimiter: $-delimiter); // primary color dark
+// @debug name(primary-color-dark, $delimiter: $-delimiter); // primary color dark
+// @debug name(primary-light, $delimiter: $-delimiter); // primary color light
+// @debug name(primary-dark, hue, $-delimiter); // primary color dark hue
+// @debug name(primary-dark-color, $delimiter: $-delimiter); // primary dark color
+
+// list
+// @debug name(dark color, $delimiter: $-delimiter); // dark color
+// @debug name(primary hue, $delimiter: $-delimiter); // primary hue color
+// @debug name(primary hue light, alpha, $delimiter: $-delimiter); // primary hue color light alpha
+
+// list + dark/light
+// @debug name(primary dark, $delimiter: $-delimiter) ; // primary color dark
+// @debug name(primary light, $delimiter: $-delimiter); // primary color light
+// @debug name(primary basic light, $delimiter: $-delimiter); // primary basic color light
+
+// list + dark/light + type
+// @debug name(primary light, hue, $-delimiter); // primary color light hue
+// @debug name(primary basic light, alpha, $-delimiter); // primary basic color light alpha
+// @debug name(primary basic light dark, alpha, $-delimiter); // primary basic light color dark alpha
+
+// @debug name(primary basic light dark, contrast saturation, $-delimiter); // primary basic light color dark alpha
+// @debug name(primary basic light dark, contrast-saturation, $-delimiter); // primary basic light color dark alpha

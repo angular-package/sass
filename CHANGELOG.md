@@ -1,5 +1,21 @@
 # @angular-package/sass changelog
 
+### v0.9.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.9.0-beta)
+
+- Update [`var.set()`](https://github.com/angular-package/sass/blob/main/var/mixins/_var.set.mixin.scss) add `$dictionary` argument to translate CSS variable names. [99647c2]
+- Add [`media`](https://github.com/angular-package/sass/tree/main/media) module with function to add `@content` depending on `$color-scheme`. [439305e]
+- Add `color.scheme-has()` function to check whether value has `dark`, `light`, or `normal` string. [a4b9f63]
+- Add color mixins to set color CSS variable and CSS property. [ed33bb0]
+- Fix [`list.remove-value()`](https://github.com/angular-package/sass/blob/main/list/remove/_remove.list.function.scss) function by using separator from `$list` in the returned result. [0c35160]
+- Fix [`string`](https://github.com/angular-package/sass/tree/main/string) module by removing `split` function from `@forward`. [fffcc7d]
+
+[99647c2]: https://github.com/angular-package/sass/commit/99647c2531b13f58f20d96c021fe4958f8a80103
+[439305e]: https://github.com/angular-package/sass/commit/439305e74d3a31bdf3e31e7336da35738dcb0bd0
+[a4b9f63]: https://github.com/angular-package/sass/commit/a4b9f636ea20e2014f55c41a1619aff01e498ac0
+[ed33bb0]: https://github.com/angular-package/sass/commit/ed33bb0a189d54225aa8c29a4925ca291a69f53f
+[0c35160]: https://github.com/angular-package/sass/commit/0c351602825c019fde91cce471da24bbf8329449
+[fffcc7d]: https://github.com/angular-package/sass/commit/fffcc7dc59109bffd0ab14d13d4e5e8c4507a89a
+
 ### v0.8.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.8.0-beta)
 
 - Add [`object.destroy()`](https://github.com/angular-package/sass/blob/main/object/_object.destroy.function.scss) to remove object. [127c5e4]

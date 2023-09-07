@@ -1,0 +1,49 @@
+// Functions.
+@use 'color.color.mixin' as *;
+
+// Status: DONE
+// The `color.background()` mixin.
+// @param `$color`
+// @param `$hue`
+// @param `$saturation`
+// @param `$lightness`
+// @param `$alpha`
+// @param `$fallback`
+// @param `$important`
+// @param `$selector`
+// @param `$dictionary`
+@mixin background(
+  $color,
+  $hue: null,
+  $saturation: null,
+  $lightness: null,
+  $alpha: null,
+  $fallback: null,
+  $important: false,
+  $selector: null,
+  $dictionary: (),
+) {
+  @include color(
+    (background: $color),
+    $hue,
+    $saturation,
+    $lightness,
+    $alpha,
+    $fallback,
+    $important,
+    $selector,
+    $dictionary,
+  );
+}
+
+// Examples.
+// :host {
+  // @include background(primary dark);
+
+  // @include background((
+  //   dark: (code, -42.5%),
+  //   light: (code, 42.5%),
+  //   normal: (code, 42.5%),
+  // ));
+
+// }

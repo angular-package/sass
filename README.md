@@ -45,13 +45,16 @@ Extended sass modules:
 
 New modules:
 
-* The [`@angular-package/sass/class`](https://docs.angular-package.dev/v/sass/class/overview) module to handle CSS class selectors(variants).
+* The [`@angular-package/sass/class`](https://docs.angular-package.dev/v/sass/class/overview) module to handle [CSS class selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors)(variants).
 * The [`@angular-package/sass/comparison`](https://docs.angular-package.dev/v/sass/comparison/overview) module to compare single or multiple values.
-* The [`@angular-package/sass/function`](https://docs.angular-package.dev/v/sass/function/overview) module function to handle calling functions, especially in a form of `string` in `list`.
-* The [`@angular-package/sass/property`](https://docs.angular-package.dev/v/sass/property/overview) module to set multiple CSS properties or variants with called functions on values.
+* The [`@angular-package/sass/function`](https://docs.angular-package.dev/v/sass/function/overview) module function to handle calling [functions](https://github.com/angular-package/sass/tree/main/function), especially in a form of `string` in `list`.
+* The [`@angular-package/sass/media`](https://docs.angular-package.dev/v/sass/media/overview) module to handle [@media](https://developer.mozilla.org/en-US/docs/Web/CSS/@media) [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS) [at-rule](https://developer.mozilla.org/en-US/docs/Web/CSS/At-rule).
+* The [`@angular-package/sass/object`](https://docs.angular-package.dev/v/sass/object/overview) module to handle [sass variable](https://sass-lang.com/documentation/variables/) of [`map`](https://sass-lang.com/documentation/modules/map/) type as named objects.
+* The [`@angular-package/sass/property`](https://docs.angular-package.dev/v/sass/property/overview) module to set multiple [CSS properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) or variants with called [functions](https://github.com/angular-package/sass/tree/main/function) on values.
+* The [`@angular-package/sass/query`](https://docs.angular-package.dev/v/sass/query/overview) module to execute query on [`list`](https://sass-lang.com/documentation/modules/list/) to retrieve data.
 * The [`@angular-package/sass/translator`](https://docs.angular-package.dev/v/sass/translator/overview) module handles global dictionary to translate words.
 * The [`@angular-package/sass/values`](https://docs.angular-package.dev/v/sass/values/overview) module to modify arbitrary values.
-* The [`@angular-package/sass/var`](https://docs.angular-package.dev/v/sass/var/overview) module is designed to handle CSS variables with the use of words that can be translated by the dictionary.
+* The [`@angular-package/sass/var`](https://docs.angular-package.dev/v/sass/var/overview) module is designed to handle [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) with the use of words that can be translated by the dictionary.
 
 <br>
 

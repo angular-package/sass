@@ -1,5 +1,11 @@
 # @angular-package/sass changelog
 
+### v0.9.3-beta [#](https://github.com/angular-package/sass/releases/tag/v0.9.3-beta)
+
+- Fix [`color/mixins`](https://github.com/angular-package/sass/tree/main/color/mixins) by using function from functions and update imports. [159a652]
+
+[159a652]: https://github.com/angular-package/sass/commit/159a6520c867320c1c39f02196fdba7fc11e92f5
+
 ### v0.9.2-beta [#](https://github.com/angular-package/sass/releases/tag/v0.9.2-beta)
 
 - Remove function from `color/mixins`. [b7ff1af]

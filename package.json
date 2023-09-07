@@ -14,13 +14,20 @@
   "license": "MIT",
   "keywords": [
     "@angular-package",
-    "extension",
+    "class",
     "color",
+    "color/scheme",
+    "comparison",
     "css variables",
     "css",
     "dictionary",
+    "extension",
+    "function",
+    "media",
+    "object",
     "preprocessor",
     "property",
+    "query",
     "sass",
     "sass:color",
     "sass:list",
@@ -29,11 +36,11 @@
     "sass:meta",
     "sass:selector",
     "sass:string",
-    "scheme",
     "scss",
     "string",
     "style",
     "translator",
+    "translator/dictionary",
     "values",
     "var"
   ],
@@ -41,12 +48,12 @@
     "url": "https://github.com/angular-package/sass/issues"
   },
   "devDependencies": {
-    "stylelint": "^15.9.0",
+    "stylelint": "^15.10.3",
     "stylelint-config-prettier-scss": "^1.0.0",
-    "stylelint-config-standard-scss": "^9.0.0",
+    "stylelint-config-standard-scss": "^11.0.0",
     "stylelint-order": "^6.0.3"
   },
   "peerDependencies": {
-    "sass": "^1.63.6"
+    "sass": "^1.66.1"
   }
 }

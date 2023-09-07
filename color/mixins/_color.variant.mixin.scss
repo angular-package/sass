@@ -11,13 +11,8 @@
 @use '../../property';
 @use '../../string';
 
-// @use '../../values';
-
 // Functions.
-// @use '../../list/has/list.has-list.function' as *;
-// @use '../../list/list.nths.function' as *;
-
-// @use '../../list/remove/list.remove-list.function' as *;
+@use '../../list/list.nth.function' as *;
 @use '../../selector/selector.class.function' as *;
 
 // Mixins.
@@ -80,7 +75,7 @@
       @if $variant-property and list.separator($variant-property) == comma {
         @if $count <= $max-count {
           $count: $count + 1;
-          $-property: nths($variant-property, $count);
+          $-property: nth($variant-property, $count);
         }
         @if $count == $max-count {
           $count: 0;

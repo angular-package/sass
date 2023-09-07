@@ -1,0 +1,113 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+@use 'sass:selector';
+
+// Modules.
+@use '../../class';
+@use '../../list/has';
+@use '../../list/remove';
+@use '../../map';
+@use '../../property';
+@use '../../string';
+
+// @use '../../values';
+
+// Functions.
+// @use '../../list/has/list.has-list.function' as *;
+// @use '../../list/list.nths.function' as *;
+
+// @use '../../list/remove/list.remove-list.function' as *;
+@use '../../selector/selector.class.function' as *;
+
+// Mixins.
+@use 'color.color.mixin' as *;
+
+// Status: TODO:
+// The `color.variant()` mixin.
+// @param `$variant`
+// @param `$hue`
+// @param `$saturation`
+// @param `$lightness`
+// @param `$alpha`
+// @param `$important`
+// @param `$pseudo-class`
+// @param `$dictionary`
+// @param `$property`
+// @param `$function`
+@mixin variant(
+  $variant,
+  $hue: null,
+  $saturation: null,
+  $lightness: null,
+  $alpha: null,
+  $important: false,
+  $pseudo-class: (),
+  $dictionary: (),
+  $property: null,
+  $function: meta.get-function(class),
+) {
+  $variant-property: null;
+
+  // FEATURE: Obtain variant property.
+  @each $class-property, $variant in $variant {
+    @if type-of($class-property) == map {
+      @each $class, $-property in $class-property {
+        $variant-property: $-property;
+      }
+    }
+  }
+
+  $max-count: if($variant-property and list.separator($variant-property) == comma, list.length($variant-property), 0);
+  $count: 0;
+
+  @include class.variant($variant, $pseudo-class, $dictionary, $function, map) using($resolved) {
+    $attribute: map.get($resolved, attribute);
+    $color: map.get($resolved, value);
+    $-property: if(meta.type-of($property) == map, map.get($property, name), $property) or map.get($resolved, property) or color;
+    @if has.list($attribute) {
+      $attribute: property.name($attribute);
+    }
+    @if type-of($attribute) == list and list.length($attribute) == 0 {
+      $attribute: null;
+    }
+    @if type-of($color) == map {
+      @each $key, $value in $color {
+        $color: $value;
+        $-property: $key;
+      }
+    } @else {
+      @if $variant-property and list.separator($variant-property) == comma {
+        @if $count <= $max-count {
+          $count: $count + 1;
+          $-property: nths($variant-property, $count);
+        }
+        @if $count == $max-count {
+          $count: 0;
+        }
+      } @else {
+        @if has.list($-property) {
+          $-property: remove.list($-property);
+        }
+      }
+    }
+    @if $attribute or map.get($property, suffix) {
+      $result: ();
+      $suffix: if(list.index($attribute, map.get($property, suffix)), null, map.get($property, suffix));
+
+      @each $value in $-property {
+        @each $value in property.name($value, $attribute, $suffix) {
+          $result: list.append($result, $value);
+        }
+
+        // $result: list.append($result, property.name($value, $attribute, map.get($property, suffix)));
+      }
+
+      $-property: $result;
+    }
+    @if $color {
+      @include color(($-property: $color), $hue, $saturation, $lightness, $alpha, null, $important, $dictionary: $dictionary);
+      @content;
+    }
+  }
+}

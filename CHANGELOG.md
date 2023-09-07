@@ -1,5 +1,11 @@
 # @angular-package/sass changelog
 
+### v0.9.1-beta [#](https://github.com/angular-package/sass/releases/tag/v0.9.1-beta)
+
+- Fix by adding `media` to ng-package assets. [5da60de]
+
+[5da60de]: https://github.com/angular-package/sass/commit/5da60de6ae46298a4ee083e656aaa42989a9b3bd
+
 ### v0.9.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.9.0-beta)
 
 - Update [`var.set()`](https://github.com/angular-package/sass/blob/main/var/mixins/_var.set.mixin.scss) add `$dictionary` argument to translate CSS variable names. [99647c2]

@@ -7,8 +7,8 @@
 @use '../../property';
 
 // Functions.
-@use '../functions/color.color.function' as *;
 @use '../../functions/important.function' as *;
+@use '../functions/color.color.function' as *;
 
 // Status: TODO: Add use map as arguments in `$color`.
 // The `color.property-color()` mixin.

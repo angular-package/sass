@@ -1,5 +1,7 @@
 # @angular-package/sass changelog
 
+### v0.9.4-beta [#](https://github.com/angular-package/sass/releases/tag/v0.9.4-beta)
+
 - Fix `color` module mixins `color.background-color()`, `color.background()`, and `color.color()` by removing `$selector` argument not in use. [8884903]
 
 [8884903]: https://github.com/angular-package/sass/commit/888490353c3831e66d604f2c5a6d0763e73e9526

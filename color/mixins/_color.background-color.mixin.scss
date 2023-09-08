@@ -10,7 +10,6 @@
 // @param `$alpha`
 // @param `$fallback`
 // @param `$important`
-// @param `$selector`
 // @param `$dictionary`
 @mixin background-color(
   $color,
@@ -20,7 +19,6 @@
   $alpha: null,
   $fallback: null,
   $important: false,
-  $selector: null,
   $dictionary: (),
 ) {
   @include color(
@@ -31,8 +29,7 @@
     $alpha,
     $fallback,
     $important,
-    $selector,
-    $dictionary
+    $dictionary,
   );
 }
 

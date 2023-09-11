@@ -1,7 +1,4 @@
-// Sass.
-@use 'sass:map';
-
-// Object.
+// Variables.
 @use 'object.var' as object;
 
 // Status: DONE
@@ -9,15 +6,6 @@
 // @param `$name` Name of the object, if it's `null` indicates to not use any object.
 // @returns The returned value is `$name` if object was created, otherwise `null`.
 @function use($name) {
-  @if $name {
-    @if object.$name == $name {
-      @return $name;
-    } @else if map.has-key(object.$object, $name) {
-      object.$name: $name;
-      @return object.$name;
-    }
-  } @else {
-    object.$name: null;
-  }
-  @return null;
+  object.$name: $name;
+  @return object.$name;
 }

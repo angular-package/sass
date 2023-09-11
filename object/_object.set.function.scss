@@ -5,9 +5,11 @@
 @use 'object.var' as object;
 
 // Functions.
-@use '../map/map.set.function';
 @use 'object.get-key.function' as *;
 @use 'object.get.function' as *;
+
+// Modules.
+@use '../map';
 
 // Status: DONE
 // The `object.set()` function sets `$value` under `$key` in object in use.

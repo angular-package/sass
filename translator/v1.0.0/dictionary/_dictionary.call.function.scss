@@ -1,0 +1,11 @@
+// Modules.
+@use '../../../object/object.call.function';
+
+// Status: DONE
+// The `dictionary.call()` function.
+// @param `$function`
+// @arbitrary `$args...`
+// @returns The returned value is the result of executed `$function`.
+@function call($function, $args...) {
+  @return object.call(dictionary, $function, $args...);
+}

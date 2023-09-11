@@ -1,5 +1,23 @@
 # @angular-package/sass changelog
 
+### v0.10.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.10.0-beta)
+
+- Update [`dictionary`](https://github.com/angular-package/sass/tree/main/translator/v1.0.0/dictionary) use [`object wrapper`](https://github.com/angular-package/sass/blob/develop/object/_object.wrapper.scss) functions and update spec. [a68ed19]
+- Update [`dictionary`](https://github.com/angular-package/sass/tree/main/translator/v1.0.0/dictionary) by adding `call()` function to use as separate object. [a349181]
+- Update [`object.use()`](https://github.com/angular-package/sass/blob/main/object/_object.use.function.scss) by simply assign value. [83835d9]
+- Update test [`object`](https://github.com/angular-package/sass/blob/main/object/_object.spec.scss) update. [fc324ed]
+- Update [`object`](https://github.com/angular-package/sass/tree/main/object) by using internal [`map.set()`](https://github.com/angular-package/sass/blob/main/map/_map.set.function.scss) in the [`object.create()`](https://github.com/angular-package/sass/blob/main/object/_object.create.function.scss) and [`object.set()`](https://github.com/angular-package/sass/blob/main/object/_object.set.function.scss). [066b449]
+- Add [`object.wrapper`](https://github.com/angular-package/sass/blob/main/object/_object.wrapper.scss) functions in combination with [`object.call()`](https://github.com/angular-package/sass/blob/main/object/_object.call.function.scss) function to use as different objects. [df03e46]
+- Update [`object`](https://github.com/angular-package/sass/tree/main/object) module by removing `object.var` from [`move()`](https://github.com/angular-package/sass/blob/main/object/_object.move.function.scss) and [`keys()`](https://github.com/angular-package/sass/blob/main/object/_object.keys.function.scss) functions, and set as first in [`index`](https://github.com/angular-package/sass/blob/main/object/_index.scss). [847c2f0]
+
+[a68ed19]: https://github.com/angular-package/sass/commit/a68ed199a578905e35f707d6c954fa3b818fb551
+[a349181]: https://github.com/angular-package/sass/commit/a349181bf24ff1aac9c43963f3f730165e72fc00
+[83835d9]: https://github.com/angular-package/sass/commit/83835d98a131198840a49cb903cba9b444174cad
+[fc324ed]: https://github.com/angular-package/sass/commit/fc324edd26db0911985f958e23e18bd7508b3c43
+[066b449]: https://github.com/angular-package/sass/commit/066b449e5afa1d20598635b14d1c548353c16fdd
+[df03e46]: https://github.com/angular-package/sass/commit/df03e46bdca5c4384d4a3fd281f798d8fa68343e
+[847c2f0]: https://github.com/angular-package/sass/commit/847c2f0f9806d74d8a80df0069e771876d0fdd61
+
 ### v0.9.4-beta [#](https://github.com/angular-package/sass/releases/tag/v0.9.4-beta)
 
 - Fix `color` module mixins `color.background-color()`, `color.background()`, and `color.color()` by removing `$selector` argument not in use. [8884903]

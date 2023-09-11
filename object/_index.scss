@@ -1,3 +1,4 @@
+@forward 'object.var';
 @forward 'object.copy.function';
 @forward 'object.create.function';
 @forward 'object.destroy.function';
@@ -13,4 +14,3 @@
 @forward 'object.remove.function';
 @forward 'object.set.function';
 @forward 'object.use.function';
-@forward 'object.var';

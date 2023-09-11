@@ -1,18 +1,8 @@
 // Sass.
 @use 'sass:meta';
 
-// Functions.
-@forward 'dictionary.translation.function';
-@use 'dictionary.call.function' as *;
-
 // Variables.
-$-function: meta.get-function(call, false);
-
-// Object.
-@use '../../../object';
-
-// Initialize.
-$debug: object.create((), dictionary);
+$-function: null;
 
 // Wrapper function for `object.copy()`.
 @function copy($from, $to) {

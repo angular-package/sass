@@ -1,43 +1,46 @@
 // Modules.
-@use '../map';
 @use '../object' as theme;
 @use '../object';
 
 // Examples.
+// get-key
+// @debug object.get-key(accordion, (dictionary, class));
+
+
 // create
-@debug '-- create';
-@debug object.create((), dictionary);
-@debug object.create((object: first));
-@debug object.create((object: second, objective: fourth), test);
-@debug object.create((objective: third));
+// @debug '-- create';
+// @debug object.create((), dictionary);
+// @debug object.create((object: first));
+// @debug object.create((object: second, objective: fourth), test);
+// @debug object.create((objective: third));
 
-// get
-@debug '-- get';
-@debug object.get();
+// // get
+// @debug '-- get';
+// @debug object.get();
 
-// keys
-@debug '-- keys';
-@debug object.keys();
+// // keys
+// @debug '-- keys';
+// @debug object.keys();
 
-// set
-@debug '-- set';
-@debug object.set(f, 333);
+// // set
+// @debug '-- set';
+// @debug object.set(f, 333);
 
-// merge
-@debug '-- merge';
-@debug object.merge(null, (merged: true));
+// // merge
+// @debug '-- merge';
+// @debug object.merge(null, (merged: true));
 
-// use
-@debug '-- use';
-@debug object.use(dictionary);
-@debug object.set(word, translation);
+// // use
+// @debug '-- use';
+// @debug object.use(dictionary);
+// @debug object.set(word, translation);
 
-@debug object.use(test);
-@debug object.set(in test, set);
+// @debug object.use(test);
+// @debug object.set(in test, set);
 
-// pick
-@debug '-- pick';
-@debug object.pick(object);
+// // pick
+// @debug '-- pick';
+// @debug object.pick(object);
 
 
 // Dictionary
@@ -66,9 +69,9 @@ $dictionary: (
 ) !default;
 
 
-$debug: object.create($dictionary, dictionary);
-$debug: object.use(dictionary);
-$debug: object.set((class, prefix), spectre);
+// $debug: object.create($dictionary, dictionary);
+// $debug: object.use(dictionary);
+// $debug: object.set((class, prefix), spectre);
 
 // Theme
 $theme-light: (
@@ -130,10 +133,10 @@ $theme-light: (
 ) !default;
 
 // Initialize
-$debug: object.create((light: $theme-light), theme);
-$debug: object.use(theme);
-$debug: object.set((light, dark color), #aaa);
-$debug: object.merge(light, (object 1: 1), (object 2: 2));
+// $debug: object.create((light: $theme-light), theme);
+// $debug: object.use(theme);
+// $debug: object.set((light, dark color), #aaa);
+// $debug: object.merge(light, (object 1: 1), (object 2: 2));
 
 // @debug object.destroy();
 // @debug object.destroy(theme);
@@ -165,4 +168,4 @@ $debug: object.merge(light, (object 1: 1), (object 2: 2));
 // move between objects
 // $debug: object.move((theme: light), (dictionary: (dark color, theme)));
 
-@debug object.$object;
+// @debug object.$object;

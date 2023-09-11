@@ -1,0 +1,19 @@
+// Sass.
+@use 'sass:meta';
+
+// Modules.
+@use '../object';
+
+// Status: DONE
+// The `object.call()` function calls `$function` with `$args`.
+// @param `$name` A function
+// @param `$function`
+// @arbitrary `$args...`
+// @returns The returned value is the result of executed `$function`.
+@function call($name, $function, $args...) {
+  $-name: object.$name;
+  $debug: object.use($name);
+  $result: meta.call(meta.get-function($function, false, object), $args...);
+  $debug: object.use($-name);
+  @return $result;
+}

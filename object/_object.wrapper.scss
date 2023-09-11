@@ -1,0 +1,60 @@
+// Sass.
+@use 'sass:meta';
+
+// Variables.
+$-function: null;
+
+// Wrapper function for `object.copy()`.
+@function copy($from, $to) {
+  @return meta.call($-function, copy, $from, $to);
+}
+
+// Wrapper function for `object.get()`.
+@function get($key: null, $fallback: null) {
+  @return meta.call($-function, get, $key, $fallback);
+}
+
+// Wrapper function for `object.has-key()`.
+@function has-key($key, $keys...) {
+  @return meta.call($-function, has-key, $key, $keys...);
+}
+
+// Wrapper function for `object.keys()`.
+@function keys($key: null) {
+  @return meta.call($-function, keys, $key);
+}
+
+// Wrapper function for `object.last-id()`.
+@function last-id() {
+  @return meta.call($-function, last-id);
+}
+
+// Wrapper function for `object.last-name()`.
+@function last-name() {
+  @return meta.call($-function, last-name);
+}
+
+// Wrapper function for `object.merge()`.
+@function merge($key: null, $objects...) {
+  @return meta.call($-function, merge, $key, $objects...);
+}
+
+// Wrapper function for `object.move()`.
+@function move($from, $to) {
+  @return meta.call($-function, move, $from, $to);
+}
+
+// Wrapper function for `object.pick()`.
+@function pick($key, $keys...) {
+  @return meta.call($-function, pick, $key, $keys...);
+}
+
+// Wrapper function for `object.remove()`.
+@function remove($keys...) {
+  @return meta.call($-function, remove, $keys...);
+}
+
+// Wrapper function for `object.set()`.
+@function set($key, $value, $allowed: ()) {
+  @return meta.call($-function, set, $key, $value, $allowed);
+}

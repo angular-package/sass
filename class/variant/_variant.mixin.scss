@@ -25,7 +25,8 @@
   $pseudo-class: (),
   $dictionary: (),
   $function: meta.get-function(class),
-  $content-type: list
+  $content-type: list,
+  $modifier: null
 ) {
   @if type-of($variant) == map {
     $content-keys: (
@@ -38,11 +39,18 @@
     );
     @each $class, $attribute-variant in $variant {
       $property: null;
-      @if type-of($class) == map { @each $-class, $-property in $class { $class: $-class; $property: $-property; }}
+      @if type-of($class) == map {
+        @each $-class, $-property in $class {
+          $class: $-class;
+          $property: $-property;
+        }
+      }
       @if type-of($attribute-variant) == map {
         @each $attribute, $variant in $attribute-variant {
           @if type-of($attribute) == map {
-            @each $key, $value in $attribute { $attribute: nest($key, $value); }
+            @each $key, $value in $attribute {
+              $attribute: nest($key, $value);
+            }
           } @else if list.length($attribute) > 0 and function.has($attribute) {
             $attribute: function.call-arglist($attribute...);
           }
@@ -50,14 +58,28 @@
             @if type-of($variant) == map {
               @each $attribute in if(list.separator($attribute) == comma, $attribute, ($attribute,)) {
                 @each $value-class, $value in $variant {
-                  @include class.content(values.combine((method: join), if(&, '&', ()), $class, $attribute, if(list.separator($value-class) == comma, ($value-class,), $value-class)), $pseudo-class, $dictionary, $function) {
-                    $values: ($class, if($property, $property, $class), $attribute, $value-class, $value, ($value-class: $value));
+                  @include class.content(
+                    values.join(
+                      if(&, '&', ()),
+                      $class,
+                      $attribute,
+                      if(list.separator($value-class) == comma, ($value-class,), $value-class)
+                    ),
+                    $pseudo-class,
+                    $dictionary,
+                    $function,
+                  ) {
+                    $values: ($class, $property or $class, $attribute, $value-class, $value, ($value-class: $value));
                     $content: if(
                       $content-type == map,
                       to-map($values, $content-keys...),
                       values.combine((separator: comma), $values...)
                     );
-                    @if type-of($content) == list { @content($content...); } @else { @content($content); }
+                    @if type-of($content) == list {
+                      @content($content...);
+                    } @else {
+                      @content($content);
+                    }
                   }
                 }
               }
@@ -67,14 +89,23 @@
                 $value: $variant;
                 @each $attribute in if(list.separator($attribute) == comma, $attribute, ($attribute,)) {
                   $value-class: $attribute;
-                  @include class.content(values.combine((method: join), if(&, '&', ()), $class, $value-class), $pseudo-class, $dictionary, $function) {
-                    $values: ($class, if($property, $property, $class), null, $value-class, $value, ($value-class: $value));
-                    $content: if(
+                  @include class.content(
+                    values.join(if(&, '&', ()), $class, $value-class),
+                    $pseudo-class,
+                    $dictionary,
+                    $function,
+                  ) {
+                    $values: ($class, $property or $class, null, $value-class, $value, ($value-class: $value));
+                    $arguments: if(
                       $content-type == map,
                       to-map($values, $content-keys...),
                       values.combine((separator: comma), $values...)
                     );
-                    @if type-of($content) == list { @content($content...); } @else { @content($content); }
+                    @if type-of($arguments) == list {
+                      @content($arguments...);
+                    } @else {
+                      @content($arguments);
+                    }
                   }
                 }
               }
@@ -85,14 +116,21 @@
         // FEATURE: Works fine.
         @each $value in if(list.separator($attribute-variant) == comma, $attribute-variant, ($attribute-variant,)) {
           @each $class in if(list.separator($class) == comma, $class, ($class,)) {
-            @each $value in if(list.separator($value) == comma, $value, ($value,)) {
-              @include class.content(values.combine((method: join), if(&, '&', ()), $class), $pseudo-class, $dictionary, $function) {
-                $content: if(
-                  $content-type == map,
-                  to-map(($class, $property or $class, $value), $content-keys...),
-                  values.combine((separator: comma), $class, $property or $class, $value)
-                );
-                @if type-of($content) == list { @content($content...); } @else { @content($content); }
+            @include class.content(
+              values.join(if(&, '&', ()), $class),
+              $pseudo-class,
+              $dictionary,
+              $function
+            ) {
+              $arguments: if(
+                $content-type == map,
+                to-map(($class, $property or $class, $value), $content-keys...),
+                values.combine((separator: comma), $class, $property or $class, $value)
+              );
+              @if type-of($arguments) == list {
+                @content($arguments...);
+              } @else {
+                @content($arguments);
               }
             }
           }

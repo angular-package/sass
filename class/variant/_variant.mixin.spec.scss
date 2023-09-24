@@ -6,11 +6,28 @@
 // Mixins.
 @use 'variant.mixin' as *;
 
-// @include variant(((color: (background, color)): primary dark)) using($resolved...) {
+
+// @include variant((padding: unit 1), $content-type: map) using($resolved...) {
 //   @debug $resolved;
 
 //   width: auto;
 // }
+
+
+// @include variant((padding: unit 1, margin: unit 2), $content-type: map) using($resolved) {
+//   @debug $resolved;
+
+//   width: map.get($resolved, value);
+// }
+
+
+// @include variant(((padding, margin): (1: unit 1, 2: unit 2)), $content-type: map) using($resolved) {
+//   @debug $resolved;
+
+//   #{map.get($resolved, property)}: map.get($resolved, value);
+// }
+
+
 
 // @include variant((color: primary dark)) using($resolved...) {
 //   @debug $resolved;
@@ -53,7 +70,9 @@
 // }
 
 // Examples.
-// @include variant((padding: unit 1)) using($property, $value) {
+// @include variant((padding: unit 1)) using($class, $property, $value) {
+//   @debug $property, $value;
+
 //   #{$property}: #{$value};
 // }
 // .padding {

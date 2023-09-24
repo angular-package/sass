@@ -1,0 +1,22 @@
+// Functions.
+@use 'values.combine.function';
+
+// Status: DONE
+// Wrapper `values.join()` function for `values.combine()` combines by `list.join()` method multiple `$values` into the list.
+// The parameters of the list (bracketed, delimiter, method, null, separator) can be changed by providing map value eg. (method: join).
+// @arbitrary `$values...` Arbitrary values to combine into the returned list.
+// @returns The return value is the list combined by join method, with a separator, and/or delimiter.
+@function join($values...) {
+  @return values.combine((method: join), $values...);
+}
+
+// Examples.
+// The default append method + separator auto.
+// @debug join('&', layout sidebar, primary dark, extra small); // "&" layout sidebar primary dark extra small
+// @debug join(('&', dark), layout sidebar, primary dark, extra small); // "&" dark layout sidebar primary dark extra small
+// @debug join('&' dark, layout sidebar, primary dark, extra small); // "&" dark layout sidebar primary dark extra small
+// @debug join((separator: comma), '&', layout sidebar, primary dark, extra small); // "&", layout, sidebar, primary, dark, extra, small
+
+// Provide separator
+// @debug join(1, 2, (delimiter: '-', separator: space), 3, 4); // 1 "-" 2 "-" 3 "-" 4
+// @debug join(1, 2, (separator: comma), (prefix: spectre, separator: '-', suffix: end), 4, 5);

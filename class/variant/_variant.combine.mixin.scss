@@ -4,7 +4,9 @@
 
 // Functions.
 @use '../../selector/selector.class.function' as *;
-@use '../../values/values.combine.function' as *;
+
+// Modules.
+@use '../../values';
 
 // Status: REVIEW:
 // The `variant.combine()` mixin.
@@ -30,11 +32,24 @@
                 @each $attribute in if(list.separator($attribute) == comma, $attribute, ($attribute,)) {
                   $-value-class: $value-class;
                   @each $value-class in if(list.separator($value-class) == comma, $value-class, ($value-class,)) {
-                    $-class: list.append($-class, meta.call($function, combine((method: join), if(&, '&', ()), $class, $attribute, $value-class), $pseudo-class, $dictionary), $separator: comma);
+                    $-class: list.append(
+                      $-class,
+                      meta.call(
+                        $function,
+                        values.join(
+                          if(&, '&', ()),
+                          $class,
+                          $attribute,
+                          $value-class
+                        ),
+                        $pseudo-class,
+                        $dictionary
+                      ),
+                      $separator: comma
+                    );
                   }
                 }
               }
-
               #{$-class} {
                 @content($class, $attribute, $-value-class, $value);
               }
@@ -44,11 +59,22 @@
               $-class: ();
               @each $class in if(list.separator($class) == comma, $class, ($class,)) {
                 @each $attribute in if(list.separator($attribute) == comma, $attribute, ($attribute,)) {
-                  $-class: list.append($-class, meta.call($function, combine((method: join), if(&, '&', ()), $class, $attribute), $pseudo-class, $dictionary), $separator: comma);
+                  $-class: list.append(
+                    $-class, meta.call(
+                      $function,
+                      values.join(
+                        if(&, '&', ()),
+                        $class,
+                        $attribute
+                      ),
+                      $pseudo-class,
+                      $dictionary
+                    ),
+                    $separator: comma
+                  );
                 }
               }
             }
-
             #{$-class} {
               @content($class, $attribute, $value);
             }
@@ -58,10 +84,21 @@
         @each $value in $attribute-value {
           $-class: ();
           @each $class in if(list.separator($class) == comma, $class, ($class,)) {
-            $-class: list.append($-class, meta.call($function, combine((method: join), if(&, '&', ()), $class), $pseudo-class, $dictionary), $separator: comma);
+            $-class: list.append(
+              $-class,
+              meta.call(
+                $function,
+                values.join(
+                  if(&, '&', ()),
+                  $class
+                ),
+                $pseudo-class,
+                $dictionary
+              ),
+              $separator: comma
+            );
           }
         }
-
         #{$-class} {
           @content($class, $attribute-value);
         }

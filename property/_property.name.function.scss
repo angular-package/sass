@@ -42,6 +42,7 @@
     $name: list.nth($name, 1);
   }
 
+  $name: list.remove-list($name, 0);
   $property: if(list.has-list($name) and list.separator($name) == space, selector.nest($name...), selector.nest($name));
   @for $i from 1 through list.length($property) {
     $property: list.set-nth($property, $i, string.unquote(string.join('-', list.nth($property, $i))));

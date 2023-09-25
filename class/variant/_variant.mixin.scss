@@ -12,6 +12,7 @@
 
 // Modules.
 @use '../../function';
+@use '../../map';
 @use '../../values';
 
 // Status: DONE
@@ -20,6 +21,7 @@
 // @param `$pseudo-class` Pseudo class for class `$variant`.
 // @param `$dictionary` Dictionary to translate class `$variant`.
 // @param `$function` The function to set class `$variant`.
+// @param `$modifier`
 @mixin variant(
   $variant,
   $pseudo-class: (),
@@ -47,6 +49,7 @@
       }
       @if type-of($attribute-variant) == map {
         @each $attribute, $variant in $attribute-variant {
+          // TODO: Remove in future.
           @if type-of($attribute) == map {
             @each $key, $value in $attribute {
               $attribute: nest($key, $value);
@@ -61,15 +64,46 @@
                   @include class.content(
                     values.join(
                       if(&, '&', ()),
+                      map.get($modifier, (class, prefix), null),
                       $class,
                       $attribute,
-                      if(list.separator($value-class) == comma, ($value-class,), $value-class)
+                      map.get($modifier, (class, attribute), null),
+                      if(list.separator($value-class) == comma, ($value-class,), $value-class),
+                      map.get($modifier, (class, suffix), null),
                     ),
                     $pseudo-class,
                     $dictionary,
                     $function,
                   ) {
-                    $values: ($class, $property or $class, $attribute, $value-class, $value, ($value-class: $value));
+                    // Set property.
+                    $-property: $property or $class;
+                    @if $modifier {
+                      @if list.separator($-property) == comma {
+                        $i: 1;
+                        @each $base in $-property {
+                          $-property: list.set-nth(
+                            $-property,
+                            $i,
+                            values.join(
+                              map.get($modifier, (property, name), null),
+                              $base,
+                              $attribute,
+                              map.get($modifier, (property, attribute), null),
+                            )
+                          );
+                          $i: $i + 1;
+                        }
+                      } @else {
+                        $-property: values.join(
+                          map.get($modifier, (property, name), null),
+                          $-property,
+                          $attribute,
+                          map.get($modifier, (property, attribute), null),
+                        );
+                      }
+                    }
+
+                    $values: ($class, $-property, $attribute, $value-class, $value, ($value-class: $value));
                     $content: if(
                       $content-type == map,
                       to-map($values, $content-keys...),
@@ -90,12 +124,45 @@
                 @each $attribute in if(list.separator($attribute) == comma, $attribute, ($attribute,)) {
                   $value-class: $attribute;
                   @include class.content(
-                    values.join(if(&, '&', ()), $class, $value-class),
+                    values.join(
+                      if(&, '&', ()),
+                      map.get($modifier, (class, prefix), null),
+                      $class,
+                      map.get($modifier, (class, attribute), null),
+                      $value-class,
+                      map.get($modifier, (class, suffix), null),
+                    ),
                     $pseudo-class,
                     $dictionary,
                     $function,
                   ) {
-                    $values: ($class, $property or $class, null, $value-class, $value, ($value-class: $value));
+                    // Set property.
+                    $-property: $property or $class;
+                    @if $modifier {
+                      @if list.separator($-property) == comma {
+                        $i: 1;
+                        @each $base in $-property {
+                          $-property: list.set-nth(
+                            $-property,
+                            $i,
+                            values.join(
+                              map.get($modifier, (property, name), null),
+                              $base,
+                              map.get($modifier, (property, attribute), null),
+                            )
+                          );
+                          $i: $i + 1;
+                        }
+                      } @else {
+                        $-property: values.join(
+                          map.get($modifier, (property, name), null),
+                          $-property,
+                          map.get($modifier, (property, attribute), null),
+                        );
+                      }
+                    }
+
+                    $values: ($class, $-property, null, $value-class, $value, ($value-class: $value));
                     $arguments: if(
                       $content-type == map,
                       to-map($values, $content-keys...),
@@ -114,18 +181,54 @@
         }
       } @else {
         // FEATURE: Works fine.
+        // `variant.class-value()`
         @each $value in if(list.separator($attribute-variant) == comma, $attribute-variant, ($attribute-variant,)) {
           @each $class in if(list.separator($class) == comma, $class, ($class,)) {
             @include class.content(
-              values.join(if(&, '&', ()), $class),
+              values.join(
+                if(&, '&', ()),
+                map.get($modifier, (class, prefix), null),
+                $class,
+                map.get($modifier, (class, attribute), null),
+                map.get($modifier, (class, suffix), null),
+              ),
               $pseudo-class,
               $dictionary,
               $function
             ) {
+              // Set property.
+              $-property: $property or $class;
+              @if $modifier {
+                @if list.separator($-property) == comma {
+                  $i: 1;
+                  @each $base in $-property {
+                    $-property: list.set-nth(
+                      $-property,
+                      $i,
+                      values.join(
+                        (separator: space),
+                        map.get($modifier, (property, name), null),
+                        $base,
+                        map.get($modifier, (property, attribute), null),
+                      )
+                    );
+                    $i: $i + 1;
+                  }
+                } @else {
+                  $-property: values.join(
+                    (separator: space),
+                    map.get($modifier, (property, name), null),
+                    $-property,
+                    map.get($modifier, (property, attribute), null),
+                  );
+                }
+              }
+
+              // Set `$arguments` for `@content`.
               $arguments: if(
                 $content-type == map,
-                to-map(($class, $property or $class, $value), $content-keys...),
-                values.combine((separator: comma), $class, $property or $class, $value)
+                to-map(($class, $-property, $value), $content-keys...),
+                values.combine((separator: comma), $class, $-property, $value)
               );
               @if type-of($arguments) == list {
                 @content($arguments...);

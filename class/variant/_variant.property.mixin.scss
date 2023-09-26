@@ -60,9 +60,9 @@
                       if(&, '&', ()),
                       map.get($modifier, (class, prefix), null),
                       $class,
-                      map.get($modifier, (class, attribute), null)
+                      map.get($modifier, (class, attribute), null),
                       $value-class,
-                      map.get($modifier, (class, suffix), null)
+                      map.get($modifier, (class, suffix), null),
                     ),
                     $pseudo-class,
                     $dictionary,
@@ -72,11 +72,15 @@
                     @if list.separator($-property) == comma {
                       $i: 1;
                       @each $base in $-property {
-                        $-property: list.set-nth($-property, $i, values.join(
-                          map.get($modifier, (property, name), null),
-                          $base,
-                          map.get($modifier, (property, attribute), null),
-                        ));
+                        $-property: list.set-nth(
+                          $-property,
+                          $i,
+                          values.join(
+                            map.get($modifier, (property, name), null),
+                            $base,
+                            map.get($modifier, (property, attribute), null),
+                          )
+                        );
                         $i: $i + 1;
                       }
                     } @else {

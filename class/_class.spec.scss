@@ -1,11 +1,15 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
 // Modules.
 @use '../class';
+@use '../property';
 
 // Examples / Spec.
-@debug class.name('.' border width lg); // .borderwidthlg
+// @debug class.name('.' border width lg); // .borderwidthlg
 
-
-@include class.content(disabled) { cursor: crosshair; } // .disabled { cursor: crosshair; }
+// @include class.content(disabled) { cursor: crosshair; } // .disabled { cursor: crosshair; }
 
 // @include class.variant((padding: unit 1)) using($property, $value) {
 //   #{$property}: #{$value};
@@ -16,4 +20,382 @@
 //   @debug $value; // unit 1
 
 //   #{$property}: #{$value};
+// }
+
+
+
+// ---
+// class.variant-class-value()
+// ---
+// @include class.variant-class-value((right color: unit 1), $content-type: map, $modifier: (property: (name: border))) using($resolved) {
+//   #{map.get($resolved, property)}: map.get($resolved, value);
+// }
+// .border-right-color {
+//   border-right-color: unit 1;
+// }
+
+// @include class.variant-class-value((padding: unit 1, margin: unit 2), $content-type: map) using($resolved) {
+//   #{map.get($resolved, property)}: map.get($resolved, value);
+// }
+
+// @include class.variant-class-value((padding top: unit 1, margin bottom: unit 2), $content-type: map) using($resolved) {
+//   #{map.get($resolved, property)}: map.get($resolved, value);
+// }
+
+// @include class.variant-class-value((padding top: unit 1, margin bottom: 20px), $content-type: map) using($resolved) {
+//   #{map.get($resolved, property)}: map.get($resolved, value);
+// }
+
+// @include class.variant-class-value((padding top: unit 1, margin bottom: 20px), $content-type: list) using($resolved...) {
+//   #{list.nth($resolved, 1)}: list.nth($resolved, 3);
+// }
+
+// @include class.variant-class-value(((padding basic: padding): unit 1, margin: unit 2), $content-type: map) using($resolved) {
+//   #{map.get($resolved, property)}: map.get($resolved, value);
+// }
+
+// @include class.variant-class-value(((pm basic: (padding, margin)): unit 1, margin: unit 2), $content-type: map) using($resolved) {
+//   @if list.separator(map.get($resolved, property)) == comma {
+//     @each $property in map.get($resolved, property) {
+//       #{$property}: map.get($resolved, value);
+//     }
+//   } @else {
+//     #{map.get($resolved, property)}: map.get($resolved, value);
+//   }
+// }
+// .padding-basic {
+//   padding: unit 1;
+//   margin: unit 1;
+// }
+// .margin {
+//   margin: unit 2;
+// }
+
+// @include class.variant-class-value(
+//   (border: primary dark, background: primary light),
+//   $content-type: map,
+//   $modifier: (prefix: extended, suffix: color)
+// ) using($resolved) {
+//   #{map.get($resolved, property)}: map.get($resolved, value);
+// }
+
+// @include class.variant-class-value(
+//   (border: primary dark, background: primary light),
+//   $content-type: map,
+//   $modifier: (prefix: basic, suffix: color)
+// ) using($resolved) {
+//   #{property.name(map.get($resolved, property))}: map.get($resolved, value);
+// }
+
+// @include class.variant-class-value(
+//   ((top color, right color): primary dark, (bottom, left): primary light),
+//   $content-type: map,
+//   $modifier: (property: (name: border))
+// ) using($resolved) {
+//   #{property.name(map.get($resolved, property))}: map.get($resolved, value);
+// }
+// .top-color {
+//   border-top-color: primary dark;
+// }
+// .right-color {
+//   border-right-color: primary dark;
+// }
+// .bottom {
+//   border-bottom: primary light;
+// }
+// .left {
+//   border-left: primary light;
+// }
+
+// @include class.variant-class-value(
+//   ((top, right): primary dark, (bottom, left): primary light),
+//   $content-type: map,
+//   $modifier: (class: (prefix: basic, suffix: color), property: (name: border, attribute: color))
+// ) using($resolved) {
+//   #{property.name(map.get($resolved, property))}: map.get($resolved, value);
+// }
+// .basic-top-color {
+//   border-top-color: primary dark;
+// }
+// .basic-right-color {
+//   border-right-color: primary dark;
+// }
+// .basic-bottom-color {
+//   border-bottom-color: primary light;
+// }
+// .basic-left-color {
+//   border-left-color: primary light;
+// }
+
+
+// @include class.variant-class-value(
+//   ((basic: (top, right)): (unit 1, unit 2), margin: unit 2),
+//   $content-type: map,
+//   $modifier: (property: (name: border, attribute: color))
+// ) using($resolved) {
+//   @if list.separator(map.get($resolved, property)) == comma {
+//     @each $property in property.name(map.get($resolved, property)) {
+//       #{$property}: map.get($resolved, value);
+//     }
+//   }
+// }
+// .basic {
+//   border-top-color: unit 1;
+//   border-right-color: unit 1;
+// }
+// .basic {
+//   border-top-color: unit 2;
+//   border-right-color: unit 2;
+// }
+
+// @include class.variant-class-value(
+//   (((basic, extended): (top, right)): (unit 1, unit 2), margin: unit 2),
+//   $content-type: map,
+//   $modifier: (property: (name: border, attribute: color))
+// ) using($resolved) {
+//   @if list.separator(map.get($resolved, property)) == comma {
+//     @each $property in property.name(map.get($resolved, property)) {
+//       #{$property}: map.get($resolved, value);
+//     }
+//   }
+// }
+
+
+
+// ---
+// class.variant-property()
+// ---
+// ((class + property): variant)
+// @include class.variant-property(
+//   ((top, right): (1: unit 1, 2: unit 2)),
+//   $modifier: (class: (prefix: border, attribute: color), property: (name: border, attribute: color))
+// ) using($resolved) {
+//   @debug $resolved;
+
+//   #{property.name(map.get($resolved, property))}: #{map.get($resolved, value)}
+// }
+// .border-top-color-1 {
+//   border-top-color: unit 1;
+// }
+// .border-right-color-1 {
+//   border-right-color: unit 1;
+// }
+// .border-top-color-2 {
+//   border-top-color: unit 2;
+// }
+// .border-right-color-2 {
+//   border-right-color: unit 2;
+// }
+
+// @include class.variant-property(
+//   ((top, bottom): (1: unit 1, 2: unit 2)),
+//   $content-type: map,
+//   $modifier: (class: (prefix: border, attribute: color, suffix: test), property: (name: border, attribute: color))
+// ) using($resolved) {
+//   #{property.name(map.get($resolved, property))}: map.get($resolved, value);
+// }
+// .border-top-color-1-test {
+//   border-top-color: unit 1;
+// }
+// .border-bottom-color-1-test {
+//   border-bottom-color: unit 1;
+// }
+// .border-top-color-2-test {
+//   border-top-color: unit 2;
+// }
+// .border-bottom-color-2-test {
+//   border-bottom-color: unit 2;
+// }
+
+// @include class.variant-property(
+//   (((top, bottom): (padding, margin)): (1: unit 1, 2: unit 2)),
+//   $content-type: map,
+// ) using($resolved) {
+//   @if list.separator(map.get($resolved, property)) == comma {
+//     @each $property in map.get($resolved, property) {
+//       #{property.name($property, map.get($resolved, class))}: map.get($resolved, value);
+//     }
+//   }
+// }
+// .top-1 {
+//   padding-top: unit 1;
+//   margin-top: unit 1;
+// }
+// .bottom-1 {
+//   padding-bottom: unit 1;
+//   margin-bottom: unit 1;
+// }
+// .top-2 {
+//   padding-top: unit 2;
+//   margin-top: unit 2;
+// }
+// .bottom-2 {
+//   padding-bottom: unit 2;
+//   margin-bottom: unit 2;
+// }
+
+// @include class.variant-property(
+//   (((top, bottom): (padding, margin)): (1: unit 1, 2: unit 2)),
+//   $content-type: map,
+//   $modifier: (property: (attribute: color))
+// ) using($resolved) {
+//   // $property: property.name(map.get($resolved, property)...);
+
+//   // @if list.separator($property) == comma {
+//   //   @each $property in $property {
+//   //     #{property.name($property, map.get($resolved, class))}: map.get($resolved, value);
+//   //   }
+//   // } @else {
+//   //   // @debug map.get($resolved, property);
+//   //   #{property.name(map.get($resolved, property))}: map.get($resolved, value);
+//   // }
+// }
+
+// @include class.variant-property(
+//   (((top, bottom): (border, outline) (top, bottom)): (1: unit 1, 2: unit 2)),
+//   $content-type: map,
+//   $modifier: (property: (attribute: color))
+// ) using($resolved) {
+//   $property: property.name(map.get($resolved, property));
+//   @if list.separator($property) == comma {
+//     @each $property in $property {
+//       #{property.name($property)}: map.get($resolved, value);
+//     }
+//   } @else {
+//     #{property.name(map.get($resolved, property))}: map.get($resolved, value);
+//   }
+// }
+// .top-1 {
+//   border-top-color: unit 1;
+//   border-bottom-color: unit 1;
+//   outline-top-color: unit 1;
+//   outline-bottom-color: unit 1;
+// }
+// .bottom-1 {
+//   border-top-color: unit 1;
+//   border-bottom-color: unit 1;
+//   outline-top-color: unit 1;
+//   outline-bottom-color: unit 1;
+// }
+// .top-2 {
+//   border-top-color: unit 2;
+//   border-bottom-color: unit 2;
+//   outline-top-color: unit 2;
+//   outline-bottom-color: unit 2;
+// }
+// .bottom-2 {
+//   border-top-color: unit 2;
+//   border-bottom-color: unit 2;
+//   outline-top-color: unit 2;
+//   outline-bottom-color: unit 2;
+// }
+
+// @include class.variant-property(
+//   (((top, bottom): (border, outline) (top, bottom)): (1: unit 1, 2: unit 2)),
+//   $content-type: map,
+//   $modifier: (property: (attribute: color))
+// ) using($resolved) {
+//   $property: property.name(map.get($resolved, property));
+//   @if list.separator($property) == comma {
+//     @each $property in $property {
+//       #{property.name($property)}: map.get($resolved, value);
+//     }
+//   } @else {
+//     #{property.name(map.get($resolved, property))}: map.get($resolved, value);
+//   }
+// }
+
+
+
+
+// ---
+// class.variant-attribute()
+// ---
+// ((class + property): variant)
+// @include class.variant-attribute(
+//   (border: ((top, right): (1: unit 1, 2: unit 2))),
+//   // $modifier: (class: (prefix: border, suffix: color), property: (name: border, attribute: color))
+// ) using($resolved) {
+//   #{property.name(map.get($resolved, property))}: #{map.get($resolved, value)};
+// }
+// .border-top-1 {
+//   border-top: unit 1;
+// }
+// .border-top-2 {
+//   border-top: unit 2;
+// }
+// .border-right-1 {
+//   border-right: unit 1;
+// }
+// .border-right-2 {
+//   border-right: unit 2;
+// }
+
+// @include class.variant-attribute(
+//   (border: ((start start, end end): (1: unit 1, 2: unit 2))),
+//   $modifier: (class: (attribute: radius), property: (attribute: radius))
+// ) using($resolved) {
+//   @debug $resolved;
+
+//   #{property.name(map.get($resolved, property))}: #{map.get($resolved, value)};
+// }
+// .border-start-start-radius-1 {
+//   border-start-start-radius: unit 1;
+// }
+// .border-start-start-radius-2 {
+//   border-start-start-radius: unit 2;
+// }
+// .border-end-end-radius-1 {
+//   border-end-end-radius: unit 1;
+// }
+// .border-end-end-radius-2 {
+//   border-end-end-radius: unit 2;
+// }
+
+// @include class.variant-attribute(
+//   ((border, outline): ((start start, end end): (1: unit 1, 2: unit 2))),
+//   $modifier: (property: (attribute: radius), class: (attribute: radius))
+// ) using($resolved) {
+//   #{property.name(map.get($resolved, property))}: #{map.get($resolved, value)};
+// }
+// .border-start-start-radius-1 {
+//   border-start-start-radius: unit 1;
+// }
+// .border-start-start-radius-2 {
+//   border-start-start-radius: unit 2;
+// }
+// .border-end-end-radius-1 {
+//   border-end-end-radius: unit 1;
+// }
+// .border-end-end-radius-2 {
+//   border-end-end-radius: unit 2;
+// }
+// .outline-start-start-radius-1 {
+//   outline-start-start-radius: unit 1;
+// }
+// .outline-start-start-radius-2 {
+//   outline-start-start-radius: unit 2;
+// }
+// .outline-end-end-radius-1 {
+//   outline-end-end-radius: unit 1;
+// }
+// .outline-end-end-radius-2 {
+//   outline-end-end-radius: unit 2;
+// }
+
+
+// @include class.variant-set((
+//   // class-value: ((primary: primary dark, secondary: secondary light),),
+//   // property: (variant: ((top, right): (1: unit 1, 2: unit 2)), content-type: map),
+//   // property: (((top, right): (1: unit 1, 2: unit 2)), )
+
+//   class-value: (
+//     variant: (primary: primary dark, secondary: secondary light),
+//     pseudo-class: ':visited',
+//     content-type: map
+//   )
+// )) using($resolved) {
+//   @debug $resolved;
+
+//   font: 100;
 // }

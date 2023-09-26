@@ -1,0 +1,133 @@
+
+@use '../color';
+@use '../property';
+@use '../variant';
+
+@use 'sass:list';
+@use 'sass:map';
+
+
+// Examples.
+// DONE
+// (class/property: value)
+// @include color.variant((border: primary));
+// @include property.variant((float: right));
+// .border {
+//   border: var(--primarycolor);
+// }
+// .float {
+//   float: right;
+// }
+
+
+// DONE
+// (class/property: value, class/property: value)
+// @include color.variant((border: primary, outline: solid));
+// @include property.variant((float: right, text-align: center));
+// .border {
+//   border: var(--primarycolor);
+// }
+// .outline {
+//   outline: var(--solidcolor);
+// }
+// .float {
+//   float: right;
+// }
+// .text-align {
+//   text-align: center;
+// }
+
+
+// DONE
+// ((class/property, class/property): value)
+// @include color.variant(((border, outline): primary));
+// @include property.variant(((float, text-align): right));
+// .border {
+//   border: var(--primarycolor);
+// }
+// .outline {
+//   outline: var(--primarycolor);
+// }
+// .float {
+//   float: right;
+// }
+// .text-align {
+//   text-align: right;
+// }
+
+
+// INFO: Difference.
+// @include color.variant((border color: primary, background color: secondary));
+// @include property.variant((border color: primary, background color: secondary));
+// .border-color {
+//   border: var(--primarycolor);
+//   color: var(--primarycolor);
+// }
+// .background-color {
+//   background: var(--secondarycolor);
+//   color: var(--secondarycolor);
+// }
+// .border-color {
+//   border-color: primary;
+// }
+// .background-color {
+//   background-color: secondary;
+// }
+
+
+// DONE
+// @include color.variant(((border, color): (primary: primary dark)));
+// @include property.variant(((border, color): (primary: primary dark)));
+// .border-primary {
+//   border: var(--primarycolordark);
+// }
+// .color-primary {
+//   color: var(--primarycolordark);
+// }
+// .border-primary {
+//   border: primary dark;
+// }
+// .color-primary {
+//   color: primary dark;
+// }
+
+
+// INFO: Difference.
+// @include color.variant(((basic one: (border, color)): (primary: primary dark)));
+// @include property.variant(((basic one: (border, color)): (primary: primary dark)));
+// .basic-one-primary {
+//   border: var(--primarycolordark);
+// }
+// .basic-one-primary {
+//   border: primary dark;
+//   color: primary dark;
+// }
+
+
+// INFO: Difference.
+// @include color.variant((border color: (top: (primary dark: primary dark))));
+// @include property.variant((border color: (top: (primary dark: primary dark))));
+// .border-color-top-primary-dark {
+//   border-top: var(--primarycolordark);
+//   color-top: var(--primarycolordark);
+// }
+// .border-color-top-primary-dark {
+//   border-color-top: primary dark;
+// }
+
+
+// INFO: Difference.
+// @include color.variant(((basic one: (border, color)): (top: (primary dark: primary dark))));
+// @include property.variant(((basic one: (border, color)): (top: (primary dark: primary dark))));
+// .basic-one-top-primary-dark {
+//   border-top: var(--primarycolordark);
+// }
+// .basic-one-top-primary-dark {
+//   border-top: primary dark;
+//   color-top: primary dark;
+// }
+
+
+// INFO: Difference.
+// @include property.variant(((basic one: border): ((top, right): (primary dark: primary dark))));
+// @include property.variant(((basic one: (border, outline)): ((top, right): (primary dark: primary dark, secondary dark: secondary dark))));

@@ -41,7 +41,7 @@
 ) {
   // Dictionary from `$name`.
   $dictionary: map.deep-merge(
-    $dictionary,
+    $dictionary or (),
     map.get(get.map($name) or (), dictionary, get.map($name) or ())
   );
 

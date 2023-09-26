@@ -1,0 +1,37 @@
+// Sass.
+// @use 'sass:list';
+
+// Modules.
+@use '../list';
+@use '../map';
+
+// Status: DONE
+// The `variant.create()` creates a variant built from `$value`.
+// @param `$value` A list or string type to create a variant.
+// @returns The returned value is a variant of map type where (class: value).
+@function create($value) {
+  $variant: ();
+  @if not (type-of($value) == map) {
+    @each $value in if(list.separator($value) == comma, $value, ($value,)) {
+      // Remove !important.
+      $key: list.remove-value($value, !important);
+
+      // Set variant.
+      $variant: map.merge($variant, ($key: $value));
+    }
+  }
+  @return $variant;
+}
+
+// Examples.
+// string
+// @debug create(right); // (right: right)
+
+// space-separated list
+// @debug create(padding top); // (padding top: padding top)
+
+// comma-separated list
+// @debug create((right, left)); // (right: right, left: left)
+
+//
+// @debug create((right ('+' 15), left)); // (right: right, left: left)

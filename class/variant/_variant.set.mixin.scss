@@ -1,0 +1,57 @@
+// Sass.
+@use 'sass:map';
+@use 'sass:meta';
+
+// Mixins.
+@use 'variant.attribute.mixin' as *;
+@use 'variant.class-value.mixin' as *;
+@use 'variant.property.mixin' as *;
+
+// Functions.
+@use '../../selector/selector.class.function' as *;
+
+// Status: TODO:
+// The `class.variant-set()` mixin.
+// @param `$variant`
+// @param `$pseudo-class`
+// @param `$dictionary`
+// @param `$function`
+// @param `$content-type`
+// @param `$modifier`
+@mixin set(
+  $variant,
+  $pseudo-class: (),
+  $dictionary: null,
+  $function: meta.get-function(class),
+  $content-type: list,
+  $modifier: null,
+) {
+  @if type-of($variant) == map {
+    @each $type, $arguments in $variant {
+      @if type-of($arguments) == map {
+        $arguments: map.deep-merge((
+            variant: map.get($variant, $type, variant),
+            pseudo-class: $pseudo-class,
+            dictionary: $dictionary,
+            function: $function,
+            content-type: $content-type,
+            modifier: $modifier,
+          ), $arguments
+        );
+      }
+      @if $type == class-value {
+        @include class-value($arguments...) using($resolved...) {
+          @content($resolved...);
+        }
+      } @else if $type == property {
+        @include property($arguments...) using($resolved...) {
+          @content($resolved...);
+        }
+      } @else if $type == attribute {
+        @include attribute($arguments...) using($resolved...) {
+          @content($resolved...);
+        }
+      }
+    }
+  }
+}

@@ -11,6 +11,15 @@
 // OPTIMIZE:
 // TODO:
 
+
+// @include variant(((class: border outline): ((top, right): (primary dark:  primary dark, secondary light: secondary light))), $property: (suffix: color));
+// @include variant(((class: border outline): ((top, right): (primary dark:  primary dark, secondary light: secondary light))));
+
+// (class+property: (class+property_side: (class: value)))
+// (class+property: (class+property_side: (suffix: (class: value)))
+// ((class: property): ((class: property_side): ((class: suffix): value)))
+
+
 // Mixins.
 @use 'color.variant.mixin' as *;
 
@@ -66,6 +75,7 @@
 //   border-color: var(--s-secondary-color-light);
 // }
 
+// TODO: (primary light: primary light, secondary dark: secondary dark)
 // @include variant((primary light: primary light, secondary dark: secondary dark), $property: (name: property, suffix: color));
 // .primary-light {
 //   property-color: var(--s-primary-color-light);
@@ -74,6 +84,7 @@
 //   property-color: var(--s-secondary-color-dark);
 // }
 
+// TODO: (border: (primary dark:  primary dark, secondary light: secondary light))
 // @include variant((border: (primary dark:  primary dark, secondary light: secondary light)), $property: (suffix: color));
 // .border-primary-dark {
 //   border-color: var(--s-primary-color-dark);
@@ -82,6 +93,7 @@
 //   border-color: var(--s-secondary-color-light);
 // }
 
+// TODO: (border: ((top, right): (primary dark:  primary dark, secondary light: secondary light)))
 // @include variant((border: ((top, right): (primary dark:  primary dark, secondary light: secondary light))), $property: (name: border, suffix: color));
 // .border-top-primary-dark {
 //   border-top-color: var(--s-primary-color-dark);
@@ -96,6 +108,7 @@
 //   border-right-color: var(--s-secondary-color-light);
 // }
 
+// TODO: (border: ((top, right) color: (primary dark:  primary dark, secondary light: secondary light)))
 // @include variant((border: ((top, right) color: (primary dark:  primary dark, secondary light: secondary light))), $property: (name: border));
 // .border-top-color-primary-dark, .border-right-color-primary-dark {
 //   border-top-color: var(--s-primary-color-dark);
@@ -106,6 +119,7 @@
 //   border-right-color: var(--s-secondary-color-light);
 // }
 
+// TODO: (border basic: (((left, top): color): (primary dark:  primary dark, secondary light: secondary light)))
 // @include variant((border basic: (((left, top): color): (primary dark:  primary dark, secondary light: secondary light))), $property: (name: border));
 // .border-basic-left-color-primary-dark {
 //   border-left-color: var(--s-primary-color-dark);
@@ -121,6 +135,7 @@
 // }
 
 // multiple properties in one
+// TODO: (border-color background: (primary dark:  primary dark, secondary light: secondary light))
 // @include variant((border-color background: (primary dark:  primary dark, secondary light: secondary light)));
 // .border-color-background-primary-dark {
 //   border-color: var(--s-primary-color-dark);
@@ -131,6 +146,7 @@
 //   background: var(--s-secondary-color-light);
 // }
 
+// TODO: (border background (color,): (primary dark:  primary dark, secondary light: secondary light))
 // @include variant((border background (color,): (primary dark:  primary dark, secondary light: secondary light)));
 // .border-background-color-primary-dark {
 //   border: var(--s-primary-color-dark);
@@ -141,6 +157,7 @@
 //   background: var(--s-secondary-color-light);
 // }
 
+// TODO: (border background (color,): (primary dark:  primary dark, secondary light: secondary light))
 // @include variant((border background (color,): (primary dark:  primary dark, secondary light: secondary light)), $property: (suffix: color));
 // .border-background-color-primary-dark {
 //   border-color: var(--s-primary-color-dark);
@@ -151,6 +168,7 @@
 //   background-color: var(--s-secondary-color-light);
 // }
 
+// TODO: (border background (xs, xl): (dark primary: primary dark, secondary: secondary light))
 // @include variant((border background (xs, xl): (dark primary: primary dark, secondary: secondary light)));
 // .border-background-xs-dark-primary, .border-background-xl-dark-primary {
 //   border: var(--s-primary-color-dark);
@@ -161,6 +179,7 @@
 //   background: var(--s-secondary-color-light);
 // }
 
+// TODO: ((basic,) border background: (primary dark:  primary dark, secondary light: secondary light))
 // @include variant(((basic,) border background: (primary dark:  primary dark, secondary light: secondary light)));
 // .basic-border-background-primary-dark {
 //   border: var(--s-primary-color-dark);
@@ -172,7 +191,9 @@
 // }
 
 // multiple properties separately
+// TODO: ((border, background): (primary dark:  primary dark, secondary light: secondary light))
 // @include variant(((border, background): (primary dark:  primary dark, secondary light: secondary light)));
+// TODO: (border: (primary dark:  primary dark, secondary light: secondary light), background: (primary dark:  primary dark, secondary light: secondary light))
 // @include variant((border: (primary dark:  primary dark, secondary light: secondary light), background: (primary dark:  primary dark, secondary light: secondary light)));
 // .border-primary-dark {
 //   border: var(--s-primary-color-dark);
@@ -188,6 +209,7 @@
 // }
 
 // multiple properties each separately
+// TODO: ((border background, outline caret): (primary dark:  primary dark, secondary light: secondary light))
 // @include variant(((border background, outline caret): (primary dark:  primary dark, secondary light: secondary light)));
 // .border-background-primary-dark {
 //   border: var(--s-primary-color-dark);
@@ -206,6 +228,7 @@
 //   caret: var(--s-secondary-color-light);
 // }
 
+// TODO: (((basic,) border background, outline caret (color,)): (primary dark:  primary dark, secondary light: secondary light)), $property: (suffix: color)
 // @include variant((((basic,) border background, outline caret (color,)): (primary dark:  primary dark, secondary light: secondary light)), $property: (suffix: color));
 // .basic-border-background-primary-dark {
 //   border-color: var(--s-primary-color-dark);
@@ -225,6 +248,7 @@
 // }
 
 // class name separately from properties
+// TODO: (border basic: border): (primary dark:  primary dark, secondary light: secondary light))
 // @include variant(((border basic: border): (primary dark:  primary dark, secondary light: secondary light)));
 // .border-basic-primary-dark {
 //   border: var(--s-primary-color-dark);
@@ -233,6 +257,7 @@
 //   border: var(--s-secondary-color-light);
 // }
 
+// TODO: (((border basic, border extended): border): (primary dark:  primary dark, secondary light: secondary light))
 // @include variant((((border basic, border extended): border): (primary dark:  primary dark, secondary light: secondary light)));
 // @include variant((
 //   (border basic: border): (primary dark:  primary dark, secondary light: secondary light),
@@ -251,6 +276,7 @@
 //   border: var(--s-secondary-color-light);
 // }
 
+// TODO: (((background basic, border extended): (border-color background-color)): (primary dark:  primary dark, secondary light: secondary light))
 // @include variant((((background basic, border extended): (border-color background-color)): (primary dark:  primary dark, secondary light: secondary light)));
 // .background-basic-primary-dark {
 //   border-color: var(--s-primary-color-dark);
@@ -269,6 +295,7 @@
 //   background-color: var(--s-secondary-color-light);
 // }
 
+// TODO: (((background basic, border extended): (border-color, background-color)): (primary dark:  primary dark, secondary light: secondary light))
 // @include variant((((background basic, border extended): (border-color, background-color)): (primary dark:  primary dark, secondary light: secondary light)));
 // .background-basic-primary-dark {
 //   border-color: var(--s-primary-color-dark);
@@ -284,6 +311,7 @@
 // }
 
 // multiple properties multiple sides
+// TODO: (border: ((inline end color, inline start color): (primary dark:  primary dark, secondary light: secondary light)))
 // @include variant((border: ((inline end color, inline start color): (primary dark:  primary dark, secondary light: secondary light))));
 // .border-inline-end-color-primary-dark {
 //   border-inline-end-color: var(--s-primary-color-dark);
@@ -298,6 +326,7 @@
 //   border-inline-start-color: var(--s-secondary-color-light);
 // }
 
+// TODO: (border (basic,): ((inline end, inline start) color: (primary dark:  primary dark, secondary light: secondary light)))
 // @include variant((border (basic,): ((inline end, inline start) color: (primary dark:  primary dark, secondary light: secondary light))));
 // .border-basic-inline-end-color-primary-dark, .border-basic-inline-start-color-primary-dark {
 //   border-inline-end-color: var(--s-primary-color-dark);
@@ -308,6 +337,7 @@
 //   border-inline-start-color: var(--s-secondary-color-light);
 // }
 
+// TODO: (border (basic,): ((inline end color, inline start color): (primary dark:  primary dark, secondary light: secondary light)))
 // @include variant((border (basic,): ((inline end color, inline start color): (primary dark:  primary dark, secondary light: secondary light))));
 // .border-basic-inline-end-color-primary-dark {
 //   border-inline-end-color: var(--s-primary-color-dark);
@@ -322,6 +352,7 @@
 //   border-inline-start-color: var(--s-secondary-color-light);
 // }
 
+// TODO: ((border (basic,): border): ((left color, right color): (primary dark:  primary dark, secondary light: secondary light)))
 // @include variant(((border (basic,): border): ((left color, right color): (primary dark:  primary dark, secondary light: secondary light))));
 // .border-basic-left-color-primary-dark {
 //   border-left-color: var(--s-primary-color-dark);
@@ -338,7 +369,9 @@
 
 
 // FEATURE: (class: value) and (property: variant).
+// TODO: (color primary dark: primary dark, color secondary dark: secondary dark)
 // @include variant((color primary dark: primary dark, color secondary dark: secondary dark));
+// TODO: (color: (primary dark: primary dark, secondary dark: secondary dark))
 // @include variant((color: (primary dark: primary dark, secondary dark: secondary dark)));
 // .color-primary-dark {
 //   color: var(--s-primary-color-dark);
@@ -348,6 +381,7 @@
 // }
 
 // FEATURE: variant + adjust.
+// TODO: (color primary dark: primary dark, color secondary dark: secondary dark)
 // @include variant((color primary dark: primary dark, color secondary dark: secondary dark), $hue: 15deg, $saturation: '/' 2, $lightness: '*' 5%, $alpha: 0.5);
 // .color-primary-dark {
 //   color: hsla(calc(var(--s-primary-color-dark-h) + 15deg), calc(var(--s-primary-color-dark-s) / 2), calc(var(--s-primary-color-dark-l) * 5%), calc(var(--s-primary-color-dark-a) + 0.5));
@@ -374,6 +408,7 @@
 // }
 
 // FEATURE: variant + important.
+// TODO: (color primary dark: primary dark, color secondary dark: secondary dark)
 // @include variant((color primary dark: primary dark, color secondary dark: secondary dark), $important: true);
 // .color-primary-dark {
 //   color: var(--s-primary-color-dark) !important;
@@ -383,6 +418,7 @@
 // }
 
 // FEATURE: variant + properties and (property: variant).
+// TODO: (color primary dark: primary dark, color secondary dark: secondary dark)
 // @include variant((color primary dark: primary dark, color secondary dark: secondary dark), $property: background background-color);
 // @include variant((color: (primary dark: primary dark, secondary dark: secondary dark)), $property: background background-color);
 // .color-primary-dark {
@@ -394,6 +430,7 @@
 //   background-color: var(--s-secondary-color-dark);
 // }
 
+// TODO: (border-color background-color: (primary dark: primary dark, secondary dark: secondary dark))
 // @include variant((border-color background-color: (primary dark: primary dark, secondary dark: secondary dark)));
 // .background-background-color-primary-dark {
 //   border-color: var(--s-primary-color-dark);
@@ -404,6 +441,7 @@
 //   background-color: var(--s-secondary-color-dark);
 // }
 
+// TODO: (bg primary dark: primary dark, bg secondary dark: secondary dark)
 // @include variant((bg primary dark: primary dark, bg secondary dark: secondary dark), $property: background);
 // .bg-primary-dark {
 //   background: var(--s-primary-color-dark);
@@ -412,6 +450,7 @@
 //   background: var(--s-secondary-color-dark);
 // }
 
+// TODO: (bg primary dark: primary dark, bg secondary dark: secondary dark)
 // @include variant((bg primary dark: primary dark, bg secondary dark: secondary dark), $property: (background, color));
 // .bg-primary-dark {
 //   background: var(--s-primary-color-dark);
@@ -422,6 +461,7 @@
 //   color: var(--s-secondary-color-dark);
 // }
 
+// TODO: (background: (primary dark: primary dark, secondary dark: secondary dark))
 // @include variant((background: (primary dark: primary dark, secondary dark: secondary dark)));
 // .background-primary-dark {
 //   background: var(--s-primary-color-dark);
@@ -431,6 +471,7 @@
 // }
 
 // FEATURE: (property: variant)
+// TODO: (background color: ( primary dark: primary dark, secondary dark: secondary dark))
 // @include variant((background color: ( primary dark: primary dark, secondary dark: secondary dark)));
 // .background-color-primary-dark {
 //   background: var(--s-primary-color-dark);
@@ -442,6 +483,7 @@
 // }
 
 // FEATURE: (property (class,): variant)
+// TODO: (background (basic,): (primary dark: primary dark, secondary dark: secondary dark))
 // @include variant((background (basic,): (primary dark: primary dark, secondary dark: secondary dark)));
 // .background-basic-primary-dark {
 //   background: var(--s-primary-color-dark);
@@ -451,6 +493,7 @@
 // }
 
 // FEATURE: ((property, property): variant)
+// TODO: ((background, color): ( primary dark: primary dark, secondary dark: secondary dark))
 // @include variant(((background, color): ( primary dark: primary dark, secondary dark: secondary dark)));
 // .background-primary-dark {
 //   background: var(--s-primary-color-dark);
@@ -466,6 +509,7 @@
 // }
 
 // FEATURE: (property/class: ((+property/class, +property/class): variant))
+// TODO: ((background color): ((dark, light): ( primary dark: primary dark, secondary dark: secondary dark)))
 // @include variant(((background color): ((dark, light): ( primary dark: primary dark, secondary dark: secondary dark))), $pseudo-class: '&:hover');
 // .background-color-dark-primary-dark:hover {
 //   background-dark: var(--s-primary-color-dark);
@@ -485,6 +529,7 @@
 // }
 
 // FEATURE: ((property/class, property/class): ((+property/class, +property/class): variant))).
+// TODO: ((background, color): ((dark, light): ( primary dark: primary dark, secondary dark: secondary dark)))
 // @include variant(((background, color): ((dark, light): ( primary dark: primary dark, secondary dark: secondary dark))), $pseudo-class: '&:hover');
 // .background-dark-primary-dark:hover {
 //   background-dark: var(--s-primary-color-dark);
@@ -514,6 +559,7 @@
 
 
 // dictionary
+// TODO: ((background: (primary dark: primary dark, secondary dark: secondary dark)))
 // @include variant(((background: (primary dark: primary dark, secondary dark: secondary dark))), $dictionary: (background: bg));
 // .bg-primary-dark {
 //   background: var(--s-primary-color-dark);

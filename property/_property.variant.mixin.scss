@@ -1,6 +1,5 @@
 // Sass.
 @use 'sass:list';
-@use 'sass:map';
 
 // Variables.
 @use 'property.variables' as variables;
@@ -10,8 +9,10 @@
 
 // Modules.
 @use '../class';
+@use '../map';
 @use '../meta';
 @use '../selector';
+@use '../values';
 
 // Status: DONE
 // Property `property.variant()` mixin sets property variant.
@@ -42,14 +43,19 @@
   $type-function: null,
   $functions:null,
   $execute: true,
+  $modifier: null
 ) {
   @if type-of($variant) == map {
     $type-function: if($type-function, $type-function, variables.$type-function);
-    @include class.variant($variant, $pseudo-class, $dictionary, $class-function, map) using($resolved) {
+    @include class.variant($variant, $pseudo-class, $dictionary, $class-function, map, $modifier) using($resolved) {
       @if type-of(map.get($resolved, value)) == map {
         @each $attribute, $value in map.get($resolved, value) {
+          $name: map.get($resolved, property);
+          @if not $modifier {
+            $name: values.join((method: space), map.get($resolved, property), map.get($resolved, attribute), $attribute);
+          }
           @include property.set(
-            (list.join(map.get($resolved, property), map.get($resolved, attribute) $attribute or ()): $value),
+            ($name: $value),
             $important,
             $prefix,
             $separator,
@@ -60,8 +66,12 @@
           );
         }
       } @else {
+        $name: map.get($resolved, property);
+        @if not $modifier {
+          $name: values.join(map.get($resolved, property), map.get($resolved, attribute));
+        }
         @include property.set(
-          (list.join(map.get($resolved, property), map.get($resolved, attribute) or ()): map.get($resolved, value)),
+          ($name: map.get($resolved, value)),
           $important,
           $prefix,
           $separator,

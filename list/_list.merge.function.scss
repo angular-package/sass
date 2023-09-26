@@ -1,0 +1,29 @@
+// Sass.
+@use 'sass:list';
+
+// Status: DONE
+// The `list.merge()` function merges `$list2` into `$list1`.
+// @param `$list1` A `list` to be merged with `$list2`.
+// @param `$list2` A `list` to merge with `$list1`.
+// @returns The returned value is merged `$list2` into `$list1` if its length is smaller.
+@function merge($list1, $list2) {
+  @if list.length($list1) > list.length($list2) {
+    $i: 1;
+    @each $value in $list2 {
+      @if $i < list.length($list1) {
+        $list1: list.set-nth($list1, $i, list.nth($list2, $i));
+      }
+
+      $i: $i + 1;
+    }
+  }
+  @return $list1;
+}
+
+// Examples.
+// @debug merge((md, 1, 25px, 30px), (sm, 5, 15px)); // sm, 5, 15px, 30px
+// @debug merge((md, 1, 25px, 30px, true), (sm, 5, 15px)); // sm, 5, 15px, 30px, tru
+
+// @debug merge((1, 2, 3, 4, 5, 6, 7, 8), (9, 10, 11, 12, 13)); // 9, 10, 11, 12, 13, 6, 7, 8
+// @debug merge((1, 2, 3, 4, 5), (6, 7, 8, 9, 10, 11, 12, 13)); // 1, 2, 3, 4, 5
+// @debug merge((1, 2, 3, 4, 5, 6, 7, 8, 9), (10, 11, 12, 13)); // 10, 11, 12, 13, 5, 6, 7, 8, 9

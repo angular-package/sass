@@ -1,0 +1,81 @@
+// Modules.
+@use '../property';
+@use '../variant';
+
+// border-start-start-radius(suffix)
+// -----  ----  ----  -----
+// name   side        attribute
+
+// Examples.
+// (property: variant)
+// @include property.variant(variant.add-suffix((
+//   border: (medium: 20px),
+//   outline: (medium: (unit 5))
+// ), radius));
+
+
+
+
+// (property: (side {radius}: ({radius} class: value))
+// @include property.variant(variant.add-suffix((
+//   border: (
+//     (top, right): (medium: 20px))
+// ), radius));
+
+
+
+
+// (property: (side: variant))
+// @include property.variant(variant.add-suffix((
+//   (border, outline): (
+//     (start-end, start-start): (
+//       (medium: 20px)
+//     ),
+//     (top-left, top-right): (
+//       (medium: 20px)
+//     )
+//   )
+// ), radius));
+
+
+
+
+// @include property.variant(variant.add-suffix((
+//   (border, outline): (
+//     (inline-end, inline-start): (
+//       (primary dark: primary dark)
+//     )
+//   )
+// ), color));
+
+
+
+
+// @include property.variant(variant.add-suffix((
+//   (border, outline): (
+//     (primary dark: primary color dark)
+//   )
+// ), color));
+
+
+
+
+// @include property.variant(variant.add-suffix((
+//   (border, outline): (primary dark: primary color dark),
+//   test: (secondary dark: secondary color dark),
+//   property: (
+//     (side-top, side-right): (primary dark: primary color dark),
+//     (side-bottom, side-left): (secondary light: secondary color light)
+//   )
+// ), color));
+
+
+
+
+// @include property.variant(variant.add-suffix((
+//   border: (
+//     (inline-start, inline-end): (
+//       (big dotted: dotted)
+//     )
+//   ),
+// ), style));

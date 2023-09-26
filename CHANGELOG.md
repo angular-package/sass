@@ -1,5 +1,27 @@
 # @angular-package/sass changelog
 
+### v0.11.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.11.0-beta)
+
+- Add new `variant` module to handle variants. [a7a8c1c]
+- Update `class.variant()` by adding `$modifier` argument to modify class and property. [89f34e3]
+- Update `property.variant()` to use `values.join()` function and add `$modifier` argument to modify class and property. [c8c8f5b]
+- Update `property.name()` function to remove empty lists from `$name`. [21ef23a]
+- Update `class.variant()` function to use `values.join()` and update spec. [7d0c18e]
+- Update `variant.combine()` to use `values.join()` and use and update spec. [5afd3c2]
+- Add separate mixins in `class/variant` to create class variant and update spec. [e8d08d3]
+- Add `values.join()` **wrapper** function. [971af80]
+- Add `list.merge()` function to merge smaller `$list2` into `$list1`. [9788cb3]
+
+[a7a8c1c]: https://github.com/angular-package/sass/commit/a7a8c1c60ebe58f0b06dcac8865f5068709a1c8d
+[89f34e3]: https://github.com/angular-package/sass/commit/89f34e3fcb03f77b6b5b0e659da533bf92518b81
+[c8c8f5b]: https://github.com/angular-package/sass/commit/c8c8f5b1b67530023f3ecc5bf489bb3315bee69c
+[21ef23a]: https://github.com/angular-package/sass/commit/21ef23a863551233b55be6a73e97e383c30c4a9a
+[7d0c18e]: https://github.com/angular-package/sass/commit/7d0c18edc74f3a1945a9d42e7f02443cd3259914
+[5afd3c2]: https://github.com/angular-package/sass/commit/5afd3c210a880284091709ee7136d38e15ef571d
+[e8d08d3]: https://github.com/angular-package/sass/commit/e8d08d349b66cecc58a844ebd5f1a044d49f08fc
+[971af80]: https://github.com/angular-package/sass/commit/971af807842804fe000e091440121deee29ac347
+[9788cb3]: https://github.com/angular-package/sass/commit/9788cb36dd808d4dfcd3a7f43759e28e4493bd06
+
 ### v0.10.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.10.0-beta)
 
 - Update [`dictionary`](https://github.com/angular-package/sass/tree/main/translator/v1.0.0/dictionary) use [`object wrapper`](https://github.com/angular-package/sass/blob/develop/object/_object.wrapper.scss) functions and update spec. [a68ed19]

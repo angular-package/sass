@@ -1,0 +1,67 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
+// Status: DONE
+// The `variant.modify()` function adds property suffix e.g. `color`, `radius` to the variant.
+// @param `$variant`
+// @param `$property`
+// @param `$suffix`
+// @returns
+@function modify($variant, $property: null, $suffix: null) {
+  $result: ();
+  @each $name, $side-variant in $variant {
+    @if type-of($side-variant) == map {
+      @each $side, $variant in $side-variant {
+        @if type-of($variant) == map {
+          // Modify `$property`
+          @if $property {
+            $name: if(meta.type-of($name) == map, map.set($name, $class, $property), ($name: $property));
+          }
+          @each $class, $value in $variant {
+            @if $suffix {
+              @if list.separator($class) == comma {
+                $i: 1;
+                @each $-class in $class {
+                  $class: list.set-nth($class, $i, list.join($suffix, $-class, list.separator($class)));
+                  $i: $i + 1;
+                }
+              } @else {
+                $class: list.join($suffix, $class);
+              }
+            }
+
+            $result: map.deep-merge(
+              $result,
+              ($name: ($side: ($class: if($suffix, ($suffix: $value), $value))))
+            );
+          }
+        } @else {
+          $class: $side;
+          $side: $name;
+          $value: $variant;
+          $result: map.deep-merge(
+            $result, (
+              if($property, ((): $property), ()): (
+                if($suffix, (if(list.length($name) > 0, ($name: $suffix), $suffix)), $name): ($class: $value)
+              )
+            )
+          );
+
+        }
+      }
+    } @else {
+      @if $property {
+        $class: $name;
+        $value: $side-variant;
+        $result: map.deep-merge(
+          $result, (
+            ((): $property): (if($suffix, $suffix, ()): ($class: $value))
+          )
+        );
+      }
+    }
+  }
+  @return $result;
+}

@@ -1,45 +1,14 @@
 // Sass.
 @use 'sass:list';
-@use 'sass:map';
 @use 'sass:selector';
 
 // Mixins.
 @use 'variant.mixin' as *;
 
+// Modules.
+@use '../../map';
+@use '../../property';
 
-// @include variant((padding: unit 1), $content-type: map) using($resolved...) {
-//   @debug $resolved;
-
-//   width: auto;
-// }
-
-
-// @include variant((padding: unit 1, margin: unit 2), $content-type: map) using($resolved) {
-//   @debug $resolved;
-
-//   width: map.get($resolved, value);
-// }
-
-
-// @include variant(((padding, margin): (1: unit 1, 2: unit 2)), $content-type: map) using($resolved) {
-//   @debug $resolved;
-
-//   #{map.get($resolved, property)}: map.get($resolved, value);
-// }
-
-
-
-// @include variant((color: primary dark)) using($resolved...) {
-//   @debug $resolved;
-
-//   width: auto;
-// }
-
-// @include variant(((color basic: (red, green)))) using($resolved...) {
-//   @debug $resolved;
-
-//   width: auto;
-// }
 
 // @include variant((((background basic: (background-color, color)): (red, green)))) using($resolved...) {
 //   @each $property in list.nth($resolved, 2) {
@@ -65,11 +34,12 @@
 //   width: auto;
 // }
 
-// @include variant(((color basic: (red: (light: red light, dark: red dark))))) using($resolved...) {
-//   color: list.nth($resolved, 5);
-// }
 
+
+
+// ---
 // Examples.
+// ---
 // @include variant((padding: unit 1)) using($class, $property, $value) {
 //   @debug $property, $value;
 
@@ -86,8 +56,52 @@
 //   padding-bottom: unit 1;
 // }
 
-// @include variant((padding: (unit 1, unit 2 '!important'))) using($property, $value) {
-//   #{$property}: #{$value};
+// @include variant((color: primary dark)) using($resolved...) {
+//   @debug $resolved;
+
+//   width: auto;
+// }
+
+// FEATURE: Use `$modifier` to set property name
+// @include variant(
+//   (top: 1px solid #aaa),
+//   $content-type: map,
+//   $modifier: (property: (name: border))
+// ) using($resolved) {
+//   @debug $resolved;
+
+//   #{property.name(map.get($resolved, property))}: map.get($resolved, value);
+// }
+// .top {
+//   border-b-top: 1px solid #aaa;
+// }
+
+// @include variant(
+//   (border top: 2px solid #aaa, border bottom: 5px dotted #bbb),
+//   $content-type: map,
+//   $modifier: (class: (attribute: color), property: (attribute: color))
+// ) using($resolved) {
+//   @debug $resolved;
+
+//   #{property.name(map.get($resolved, property))}: map.get($resolved, value);
+// }
+// .border-top-color {
+//   border-top-color: 2px solid #aaa;
+// }
+// .border-bottom-color {
+//   border-bottom-color: 5px dotted #bbb;
+// }
+
+// @include variant(((color basic: (red, green))), $content-type: map) using($resolved) {
+//   // @debug $resolved;
+
+//   #{property.name(map.get($resolved, property))}: #{map.get($resolved, value)};
+// }
+
+// @include variant((padding: (unit 1, unit 2 !important)), $content-type: map) using($resolved) {
+//   // @debug $resolved;
+
+//   #{property.name(map.get($resolved, property))}: #{map.get($resolved, value)};
 // }
 // .padding {
 //   padding: unit 1;
@@ -96,14 +110,14 @@
 //   padding: unit 2 !important;
 // }
 
-// @include variant((padding: (unit 1) (unit 2))) using($property, $value) {
+// @include variant((padding: (unit 1) (unit 2))) using($class, $property, $value) {
 //   #{$property}: #{$value};
 // }
 // .padding {
 //   padding: unit 1 unit 2;
 // }
 
-// @include variant((padding: unit 1, margin: unit 2)) using($property, $value) {
+// @include variant((padding: unit 1, margin: unit 2)) using($class, $property, $value) {
 //   #{$property}: #{$value};
 // }
 // .padding {
@@ -113,7 +127,7 @@
 //   margin: unit 2;
 // }
 
-// @include variant(((padding, margin): unit 1)) using($property, $value) {
+// @include variant(((padding, margin): unit 1)) using($class, $property, $value) {
 //   #{$property}: #{$value};
 // }
 // .padding {
@@ -123,7 +137,7 @@
 //   margin: unit 1;
 // }
 
-// @include variant(((padding-bottom, padding-top): unit 1)) using($property, $value) {
+// @include variant(((padding-bottom, padding-top): unit 1)) using($class, $property, $value) {
 //   #{$property}: #{$value};
 // }
 // .padding-bottom {
@@ -133,7 +147,7 @@
 //   padding-top: unit 1;
 // }
 
-// @include variant(((padding, margin): (unit 1, unit 2))) using($property, $value) {
+// @include variant(((padding, margin): (unit 1, unit 2))) using($class, $property, $value) {
 //   #{$property}: #{$value};
 // }
 // .padding {
@@ -149,33 +163,38 @@
 //   margin: unit 2;
 // }
 
-// @include variant((padding (top, bottom): unit 1)) using($property, $value) {
-  // @each $property in selector.nest($property...) {
-  //   #{$property}: #{$value};
-  // }
-  // padding top: unit 1;
-  // padding bottom: unit 1;
+// @include variant((padding (top, bottom): unit 1)) using($class, $property, $value) {
+//   @each $property in selector.nest($property...) {
+//     #{property.name($property)}: #{$value};
+//   }
 
-  // or
-  // padding-right: 0;
-  // padding-left: 0;
+//   // padding top: unit 1;
+//   // padding bottom: unit 1;
+
+//   // or
+//   // padding-right: 0;
+//   // padding-left: 0;
+// }
+// .padding-top, .padding-bottom {
+//   padding-top: unit 1;
+//   padding-bottom: unit 1;
 // }
 
-// @include variant((padding (small, large): unit 1)) using($property, $value) {
+// @include variant((padding (small, large): unit 1)) using($class, $property, $value) {
 //   padding: #{$value};
 // }
 // .padding-small, .padding-large {
 //   padding: unit 1;
 // }
 
-// @include variant(((outline, inline) padding: unit 1)) using($property, $value) {
+// @include variant(((outline, inline) padding: unit 1)) using($class, $property, $value) {
 //   padding: #{$value};
 // }
 // .outline-padding, .inline-padding {
 //   padding: unit 1;
 // }
 
-// @include variant((padding: (unit 1, unit 2))) using($property, $value) {
+// @include variant((padding: (unit 1, unit 2))) using($class, $property, $value) {
 //   #{$property}: #{$value};
 // }
 // .padding {
@@ -185,7 +204,7 @@
 //   padding: unit 2;
 // }
 
-// @include variant(((padding, margin): (unit 1, unit 2))) using($property, $value) {
+// @include variant(((padding, margin): (unit 1, unit 2))) using($class, $property, $value) {
 //   #{$property}: #{$value};
 // }
 // .padding {
@@ -201,14 +220,14 @@
 //   margin: unit 2;
 // }
 
-// @include variant((padding: ((unit 1) (unit 2)))) using($property, $value) {
+// @include variant((padding: ((unit 1) (unit 2)))) using($class, $property, $value) {
 //   #{$property}: #{$value};
 // }
 // .padding {
 //   padding: unit 1 unit 2;
 // }
 
-// @include variant(((padding, margin): ((unit 1) (unit 2)))) using($property, $value) {
+// @include variant(((padding, margin): ((unit 1) (unit 2)))) using($class, $property, $value) {
 //   #{$property}: #{$value};
 // }
 // .padding {
@@ -219,20 +238,20 @@
 // }
 
 // @include variant((padding top: (size one: unit 1))) using($class, $property, $value-class, $value, $variant) {
-//   #{$property}: #{$value};
+//   #{property.name($property)}: #{$value};
 // }
 // .padding-top-size-one {
-//   padding top: unit 1;
+//   padding-top: unit 1;
 // }
 
 // @include variant((padding bottom: (size one: unit 1, size two: unit 2))) using($class, $property, $value-class, $value, $variant) {
-//   #{$property}: #{$value};
+//   #{property.name($property)}: #{$value};
 // }
 // .padding-bottom-size-one {
-//   padding bottom: unit 1;
+//   padding-bottom: unit 1;
 // }
 // .padding-bottom-size-two {
-//   padding bottom: unit 2;
+//   padding-bottom: unit 2;
 // }
 
 // @include variant(((padding, margin): (1: unit 1, 2: unit 2))) using($class, $property, $value-class, $value, $variant) {
@@ -267,8 +286,26 @@
 //   margin: unit 2;
 // }
 
+// @include variant(((padding, margin): (1: unit 1, 2: unit 2)), $content-type: map) using($resolved) {
+//   @debug $resolved;
+
+//   #{map.get($resolved, property)}: map.get($resolved, value);
+// }
+// .padding-1 {
+//   padding: unit 1;
+// }
+// .margin-1 {
+//   margin: unit 1;
+// }
+// .padding-2 {
+//   padding: unit 2;
+// }
+// .margin-2 {
+//   margin: unit 2;
+// }
+
 // @include variant(((padding, margin): (top: (unit 1, unit 2)))) using($class, $property, $side, $value, $variant) {
-//   #{$property}-#{$side}: #{$value};
+//   #{property.name($property, $side)}: #{$value};
 // }
 // .padding-top {
 //   padding-top: unit 1;
@@ -284,7 +321,7 @@
 // }
 
 // @include variant((padding: (bottom: (one: unit 1, two: unit 2)))) using($class, $property, $side, $value-class, $value, $variant) {
-//   #{$property}-#{$side}: #{$value};
+//   #{property.name($property, $side)}: #{$value};
 // }
 // .padding-bottom-one {
 //   padding-bottom: unit 1;
@@ -294,7 +331,7 @@
 // }
 
 // @include variant(((padding, margin): ((top, bottom): (2: (unit 1) (unit 4), 3: unit 2)))) using($class, $property, $side, $value-class, $value, $variant) {
-//   #{$property}-#{$side}: #{$value};
+//   #{property.name($property, $side)}: #{$value};
 // }
 // .padding-top-2 {
 //   padding-top: unit 1 unit 4;
@@ -359,7 +396,7 @@
 // ---
 // class variant
 // @include variant(((padding top, margin bottom): ((size 1,  size 2): (15px, 30px))), $content-type: map) using($resolved) {
-//   #{map.get($resolved, property)}: #{map.get($resolved, value)};
+//   #{property.name(map.get($resolved, property))}: #{map.get($resolved, value)};
 // }
 // .padding-top-size-1 {
 //   padding top: 15px;
@@ -554,4 +591,12 @@
 //   @debug $resolved;
 
 //   font: 100;
+// }
+
+// INFO:
+// @include variant(((color basic: (red: (light: red light, dark: red dark)))), $content-type: map) using($resolved) {
+//   @debug $resolved;
+
+//   // color: list.nth($resolved, 5);
+//   color: red;
 // }

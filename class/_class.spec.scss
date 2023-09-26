@@ -27,7 +27,7 @@
 // ---
 // class.variant-class-value()
 // ---
-// @include class.variant-class-value((border right color: unit 1), $content-type: map) using($resolved) {
+// @include class.variant-class-value((right color: unit 1), $content-type: map, $modifier: (property: (name: border))) using($resolved) {
 //   #{map.get($resolved, property)}: map.get($resolved, value);
 // }
 // .border-right-color {
@@ -384,18 +384,18 @@
 // }
 
 
-@include class.variant-set((
-  // class-value: ((primary: primary dark, secondary: secondary light),),
-  // property: (variant: ((top, right): (1: unit 1, 2: unit 2)), content-type: map),
-  // property: (((top, right): (1: unit 1, 2: unit 2)), )
+// @include class.variant-set((
+//   // class-value: ((primary: primary dark, secondary: secondary light),),
+//   // property: (variant: ((top, right): (1: unit 1, 2: unit 2)), content-type: map),
+//   // property: (((top, right): (1: unit 1, 2: unit 2)), )
 
-  class-value: (
-    variant: (primary: primary dark, secondary: secondary light),
-    pseudo-class: ':visited',
-    content-type: map
-  )
-)) using($resolved) {
-  @debug $resolved;
+//   class-value: (
+//     variant: (primary: primary dark, secondary: secondary light),
+//     pseudo-class: ':visited',
+//     content-type: map
+//   )
+// )) using($resolved) {
+//   @debug $resolved;
 
-  font: 100;
-}
+//   font: 100;
+// }

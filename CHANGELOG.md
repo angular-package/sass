@@ -2,15 +2,15 @@
 
 ### v0.11.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.11.0-beta)
 
-- Add new `variant` module to handle variants. [a7a8c1c]
-- Update `class.variant()` by adding `$modifier` argument to modify class and property. [89f34e3]
-- Update `property.variant()` to use `values.join()` function and add `$modifier` argument to modify class and property. [c8c8f5b]
-- Update `property.name()` function to remove empty lists from `$name`. [21ef23a]
-- Update `class.variant()` function to use `values.join()` and update spec. [7d0c18e]
-- Update `variant.combine()` to use `values.join()` and use and update spec. [5afd3c2]
-- Add separate mixins in `class/variant` to create class variant and update spec. [e8d08d3]
-- Add `values.join()` **wrapper** function. [971af80]
-- Add `list.merge()` function to merge smaller `$list2` into `$list1`. [9788cb3]
+- Add new [`variant`](https://github.com/angular-package/sass/tree/develop/variant) module to handle variants. [a7a8c1c]
+- Update [`class.variant()`](https://github.com/angular-package/sass/blob/develop/class/variant/_variant.mixin.scss) by adding `$modifier` argument to modify class and property. [89f34e3]
+- Update [`property.variant()`](https://github.com/angular-package/sass/blob/develop/property/_property.variant.mixin.scss) to use [`values.join()`](https://github.com/angular-package/sass/blob/develop/values/_values.join.function.scss) function and add `$modifier` argument to modify class and property. [c8c8f5b]
+- Update [`property.name()`](https://github.com/angular-package/sass/blob/develop/property/_property.name.function.scss) function to remove empty lists from `$name`. [21ef23a]
+- Update [`class.variant()`](https://github.com/angular-package/sass/blob/develop/class/variant/_variant.mixin.scss) function to use [`values.join()`](https://github.com/angular-package/sass/blob/develop/values/_values.join.function.scss) and update spec. [7d0c18e]
+- Update [`variant.combine()`](https://github.com/angular-package/sass/blob/develop/values/_values.combine.function.scss) to use [`values.join()`](https://github.com/angular-package/sass/blob/develop/values/_values.join.function.scss) and use and update spec. [5afd3c2]
+- Add separate mixins in [`class/variant`](https://github.com/angular-package/sass/tree/develop/class/variant) to create class variant and update spec. [e8d08d3]
+- Add [`values.join()`](https://github.com/angular-package/sass/blob/develop/values/_values.join.function.scss) **wrapper** function. [971af80]
+- Add [`list.merge()`](https://github.com/angular-package/sass/blob/develop/list/_list.merge.function.scss) function to merge smaller `$list2` into `$list1`. [9788cb3]
 
 [a7a8c1c]: https://github.com/angular-package/sass/commit/a7a8c1c60ebe58f0b06dcac8865f5068709a1c8d
 [89f34e3]: https://github.com/angular-package/sass/commit/89f34e3fcb03f77b6b5b0e659da533bf92518b81

@@ -41,6 +41,7 @@
   $dictionary: (),
   $property: null,
   $function: meta.get-function(class),
+  $modifier: null,
 ) {
   $variant-property: null;
 
@@ -56,7 +57,7 @@
   $max-count: if($variant-property and list.separator($variant-property) == comma, list.length($variant-property), 0);
   $count: 0;
 
-  @include class.variant($variant, $pseudo-class, $dictionary, $function, map) using($resolved) {
+  @include class.variant($variant, $pseudo-class, $dictionary, $function, map, $modifier) using($resolved) {
     $attribute: map.get($resolved, attribute);
     $color: map.get($resolved, value);
     $-property: if(meta.type-of($property) == map, map.get($property, name), $property) or map.get($resolved, property) or color;

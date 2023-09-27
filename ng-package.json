@@ -25,6 +25,7 @@
     "./values/**/*.scss",
     "./var/**/*.scss",
     "./variables/**/*.scss",
+    "./variant/**/*.scss",
     "*.scss"
   ]
 }

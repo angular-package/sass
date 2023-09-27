@@ -1,5 +1,11 @@
 # @angular-package/sass changelog
 
+### v0.11.1-beta [#](https://github.com/angular-package/sass/releases/tag/v0.11.1-beta)
+
+- Update [`color.variant()`](https://github.com/angular-package/sass/blob/main/color/mixins/_color.variant.mixin.scss) use `$modifier` argument in the `class.variant()`. [dd72913]
+
+[dd72913]: https://github.com/angular-package/sass/commit/dd729133d09d7d9f581ece14ce7388dbcb2c457c
+
 ### v0.11.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.11.0-beta)
 
 - Add new [`variant`](https://github.com/angular-package/sass/tree/develop/variant) module to handle variants. [a7a8c1c]

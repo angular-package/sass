@@ -4,78 +4,98 @@
 
 // border-start-start-radius(suffix)
 // -----  ----  ----  -----
-// name   side        attribute
+// base   side        attribute
 
 // Examples.
-// (property: variant)
-// @include property.variant(variant.add-suffix((
-//   border: (medium: 20px),
-//   outline: (medium: (unit 5))
-// ), radius));
+// @include property.variant((
+//   small: 10px solid blue,
+//   medium: 20px solid red,
+//   high: 20px solid red,
+// ), $modifier: (
+//     property: (base: border, middle: null, attribute: radius),
+//     class: (prefix: border radius, suffix: test)
+//   )
+// );
 
 
+// @include property.variant(
+//   variant.modify((
+//     small: 10px solid blue,
+//     medium: 20px solid red,
+//     high: 20px solid red,
+//   ), (
+//     class: (prefix: border, suffix: test),
+//     property: (base: border, attribute: radius),
+//   )
+// ));
 
 
-// (property: (side {radius}: ({radius} class: value))
-// @include property.variant(variant.add-suffix((
-//   border: (
-//     (top, right): (medium: 20px))
-// ), radius));
-
-
-
-
-// (property: (side: variant))
-// @include property.variant(variant.add-suffix((
-//   (border, outline): (
-//     (start-end, start-start): (
-//       (medium: 20px)
+// @include property.variant(
+//   variant.modify((
+//       (top, right): (small: unit 3, medium: unit 5, high: unit 7),
+//       (bottom, left): (small: unit 3, medium: unit 5, high: unit 7),
 //     ),
-//     (top-left, top-right): (
-//       (medium: 20px)
+//     (
+//       class: (prefix: basic, suffix: test),
+//       property: (base: border, attribute: color),
 //     )
 //   )
-// ), radius));
+// );
 
 
-
-
-// @include property.variant(variant.add-suffix((
-//   (border, outline): (
-//     (inline-end, inline-start): (
-//       (primary dark: primary dark)
+// @include property.variant(
+//   variant.modify((
+//       (basic, extended): (
+//         (top left, bottom right): (
+//           small: unit 3,
+//           medium: unit 5,
+//           high: unit 7,
+//         )
+//       )
+//     ),
+//     (
+//       class: (prefix: border, suffix: test),
+//       property: (base: border, attribute: radius),
 //     )
 //   )
-// ), color));
+// );
 
 
-
-
-// @include property.variant(variant.add-suffix((
-//   (border, outline): (
-//     (primary dark: primary color dark)
+// @include property.variant(
+//   variant.modify((
+//       ((basic, extended): outline): (
+//         (top left, bottom right): (
+//           small: unit 3,
+//           medium: unit 5,
+//           high: unit 7,
+//         )
+//       )
+//     ),
+//     (
+//       class: (prefix: border, suffix: test),
+//       property: (base: border, attribute: radius),
+//     ),
 //   )
-// ), color));
+// );
 
 
-
-
-// @include property.variant(variant.add-suffix((
-//   (border, outline): (primary dark: primary color dark),
-//   test: (secondary dark: secondary color dark),
-//   property: (
-//     (side-top, side-right): (primary dark: primary color dark),
-//     (side-bottom, side-left): (secondary light: secondary color light)
-//   )
-// ), color));
-
-
-
-
-// @include property.variant(variant.add-suffix((
-//   border: (
-//     (inline-start, inline-end): (
-//       (big dotted: dotted)
-//     )
+// @include property.variant(
+//   variant.modify((
+//     ((basic, extended): outline): (
+//       (top left, bottom right): (
+//         small: unit 3,
+//         medium: unit 5,
+//         high: unit 7,
+//       )
+//     ),
+//     traffic: (
+//       (top, bottom): (
+//         low: 10px,
+//         medium: 20px,
+//         high: 40px
+//       )
+//     ),
 //   ),
-// ), style));
+//   (class: (prefix: border, suffix: test), property: (base: border, attribute: radius))
+// ));
+

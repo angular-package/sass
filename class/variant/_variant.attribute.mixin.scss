@@ -6,8 +6,10 @@
 @use '../../list/list.to-map.function' as *;
 @use '../../selector/selector.class.function' as *;
 @use '../../selector/selector.nest.function' as *;
+@use '../../variant/update/update.property.function';
 
 // Mixins.
+@use '../../list/list.each.mixin' as *;
 @use '../class.content.mixin' as class;
 
 // Modules.
@@ -50,10 +52,10 @@
       }
       @if type-of($attribute-variant) == map {
         @each $attribute, $variant in $attribute-variant {
-          @each $class in if(list.separator($class) == comma, $class, ($class,)) {
+          @include each($class) using($class) {
             @if type-of($variant) == map {
               // TODO? suffix for property
-              @each $attribute in if(list.separator($attribute) == comma, $attribute, ($attribute,)) {
+              @include each($attribute) using($attribute) {
                 @each $value-class, $value in $variant {
                   @include class.content(
                     values.join(
@@ -70,24 +72,8 @@
                     $function,
                   ) {
                     $-property: $property or $class;
-                    @if list.separator($-property) == comma {
-                      $i: 1;
-                      @each $base in $-property {
-                        $-property: list.set-nth($-property, $i, values.join(
-                          map.get($modifier, (property, name), null),
-                          $base,
-                          $attribute,
-                          map.get($modifier, (property, attribute), null),
-                        ));
-                        $i: $i + 1;
-                      }
-                    } @else {
-                      $-property: values.join(
-                        map.get($modifier, (property, name), null),
-                        $-property,
-                        $attribute,
-                        map.get($modifier, (property, attribute), null),
-                      );
+                    @if $modifier {
+                      $-property: update.property($-property, $modifier, $attribute);
                     }
 
                     $values: ($class, $-property, $attribute, $value-class, $value, ($value-class: $value));

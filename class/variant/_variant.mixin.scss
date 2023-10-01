@@ -6,15 +6,16 @@
 @use '../../list/list.to-map.function' as *;
 @use '../../selector/selector.class.function' as *;
 @use '../../selector/selector.nest.function' as *;
+@use '../../variant/update/update.property.function';
 
 // Mixins.
+@use '../../list/list.each.mixin' as *;
 @use '../class.content.mixin' as class;
 
 // Modules.
 @use '../../function';
 @use '../../map';
 @use '../../values';
-@use '../../variant/update/update.property.function';
 
 // Status: DONE
 // The `class.variant()` mixin sets class `$variant` with `$pseudo-class` translated with `$dictionary`, and called by `$function`.
@@ -22,6 +23,7 @@
 // @param `$pseudo-class` Pseudo class for class `$variant`.
 // @param `$dictionary` Dictionary to translate class `$variant`.
 // @param `$function` The function to set class `$variant`.
+// @param `$content-type`
 // @param `$modifier` Modify class and property in returned content arguments.
 @mixin variant(
   $variant,
@@ -58,9 +60,9 @@
           } @else if list.length($attribute) > 0 and function.has($attribute) {
             $attribute: function.call-arglist($attribute...);
           }
-          @each $class in if(list.separator($class) == comma, $class, ($class,)) {
+          @include each($class) using($class) {
             @if type-of($variant) == map {
-              @each $attribute in if(list.separator($attribute) == comma, $attribute, ($attribute,)) {
+              @include each($attribute) using($attribute) {
                 @each $value-class, $value in $variant {
                   @include class.content(
                     values.join(
@@ -98,10 +100,8 @@
               }
             } @else {
               // FEATURE: Works fine.
-              @each $variant in if(list.separator($variant) == comma, $variant, ($variant,)) {
-                $value: $variant;
-                @each $attribute in if(list.separator($attribute) == comma, $attribute, ($attribute,)) {
-                  $value-class: $attribute;
+              @include each($variant) using($value) {
+                @include each($attribute) using($value-class) {
                   @include class.content(
                     values.join(
                       if(&, '&', ()),
@@ -141,8 +141,8 @@
       } @else {
         // FEATURE: Works fine.
         // `variant.class-value()`
-        @each $value in if(list.separator($attribute-variant) == comma, $attribute-variant, ($attribute-variant,)) {
-          @each $class in if(list.separator($class) == comma, $class, ($class,)) {
+        @include each($attribute-variant) using($value) {
+          @include each($class) using($class) {
             @include class.content(
               values.join(
                 if(&, '&', ()),

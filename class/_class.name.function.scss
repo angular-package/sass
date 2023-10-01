@@ -23,9 +23,9 @@
 @function name(
   $name,
   $dictionary: (),
-  $delimiter: map.get(variables.$class, delimiter),
-  $prefix: map.get(variables.$class, prefix),
-  $suffix: map.get(variables.$class, suffix),
+  $delimiter: null,
+  $prefix: null,
+  $suffix: null,
 ) {
   $selector: null;
   $name: class.parent-first($name);
@@ -39,7 +39,13 @@
       $name: list.remove-value($name, '&', '.', '&.');
     }
   }
-  @return #{functions.name($selector) + functions.name($name, $dictionary, $delimiter, $prefix, $suffix)};
+  @return #{functions.name($selector) + functions.name(
+    $name,
+    $dictionary or (),
+    $delimiter or map.get(variables.$class, delimiter),
+    $prefix or map.get(variables.$class, prefix),
+    $suffix or map.get(variables.$class, suffix),
+  )};
 }
 
 // Examples.

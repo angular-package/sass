@@ -14,6 +14,7 @@
 @use '../../function';
 @use '../../map';
 @use '../../values';
+@use '../../variant/update/update.property.function';
 
 // Status: DONE
 // The `class.variant()` mixin sets class `$variant` with `$pseudo-class` translated with `$dictionary`, and called by `$function`.
@@ -21,7 +22,7 @@
 // @param `$pseudo-class` Pseudo class for class `$variant`.
 // @param `$dictionary` Dictionary to translate class `$variant`.
 // @param `$function` The function to set class `$variant`.
-// @param `$modifier`
+// @param `$modifier` Modify class and property in returned content arguments.
 @mixin variant(
   $variant,
   $pseudo-class: (),
@@ -52,7 +53,7 @@
           // TODO: Remove in future.
           @if type-of($attribute) == map {
             @each $key, $value in $attribute {
-              $attribute: nest($key, $value);
+              $attribute: nest(if(list.length($key) > 0, ($key, $value), $value)...);
             }
           } @else if list.length($attribute) > 0 and function.has($attribute) {
             $attribute: function.call-arglist($attribute...);
@@ -78,29 +79,7 @@
                     // Set property.
                     $-property: $property or $class;
                     @if $modifier {
-                      @if list.separator($-property) == comma {
-                        $i: 1;
-                        @each $base in $-property {
-                          $-property: list.set-nth(
-                            $-property,
-                            $i,
-                            values.join(
-                              map.get($modifier, (property, name), null),
-                              $base,
-                              $attribute,
-                              map.get($modifier, (property, attribute), null),
-                            )
-                          );
-                          $i: $i + 1;
-                        }
-                      } @else {
-                        $-property: values.join(
-                          map.get($modifier, (property, name), null),
-                          $-property,
-                          $attribute,
-                          map.get($modifier, (property, attribute), null),
-                        );
-                      }
+                      $-property: update.property($-property, $modifier, $attribute);
                     }
 
                     $values: ($class, $-property, $attribute, $value-class, $value, ($value-class: $value));
@@ -139,27 +118,7 @@
                     // Set property.
                     $-property: $property or $class;
                     @if $modifier {
-                      @if list.separator($-property) == comma {
-                        $i: 1;
-                        @each $base in $-property {
-                          $-property: list.set-nth(
-                            $-property,
-                            $i,
-                            values.join(
-                              map.get($modifier, (property, name), null),
-                              $base,
-                              map.get($modifier, (property, attribute), null),
-                            )
-                          );
-                          $i: $i + 1;
-                        }
-                      } @else {
-                        $-property: values.join(
-                          map.get($modifier, (property, name), null),
-                          $-property,
-                          map.get($modifier, (property, attribute), null),
-                        );
-                      }
+                      $-property: update.property($-property, $modifier);
                     }
 
                     $values: ($class, $-property, null, $value-class, $value, ($value-class: $value));
@@ -198,30 +157,10 @@
             ) {
               // Set property.
               $-property: $property or $class;
+
+              // Modify property.
               @if $modifier {
-                @if list.separator($-property) == comma {
-                  $i: 1;
-                  @each $base in $-property {
-                    $-property: list.set-nth(
-                      $-property,
-                      $i,
-                      values.join(
-                        (separator: space),
-                        map.get($modifier, (property, name), null),
-                        $base,
-                        map.get($modifier, (property, attribute), null),
-                      )
-                    );
-                    $i: $i + 1;
-                  }
-                } @else {
-                  $-property: values.join(
-                    (separator: space),
-                    map.get($modifier, (property, name), null),
-                    $-property,
-                    map.get($modifier, (property, attribute), null),
-                  );
-                }
+                $-property: update.property($-property, $modifier);
               }
 
               // Set `$arguments` for `@content`.

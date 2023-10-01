@@ -1,0 +1,58 @@
+// Modules.
+@use '../../list';
+@use '../../map';
+@use '../../values';
+
+// Status: DONE
+// The `affix.replace()` function replaces affix - `prefix` or `suffix` in each element of `$class`.
+// @param `$class` Class in which affixes are replaced.
+// @param `$affix` Prefix or suffix to replace in each element of `$class`.
+// @returns The returned value is class of list type with affix.
+@function replace($class, $affix: null) {
+  @if type-of($class) == list and list.length($class) > 0 {
+    $i: 1;
+    @each $-class in if(list.separator($class) == comma, $class, ($class,)) {
+      @if list.length($affix) == 2 {
+        @if list.length($-class) > 2 {
+          $-class: list.update(
+            $-class,
+            (1, map.get($affix, prefix)),
+            (list.length($-class), map.get($affix, suffix))
+          );
+        }
+      } @else if list.length($-class) > 1 {
+        @if map.get($affix, prefix) {
+          $-class: list.update(
+            $-class,
+            (1, map.get($affix, prefix)),
+          );
+        } @else if map.get($affix, suffix) {
+          $-class: list.update(
+            $-class,
+            (list.length($-class), map.get($affix, suffix))
+          );
+        }
+      }
+
+      $class: list.set-nth($class, $i, $-class);
+      $i: $i + 1;
+    }
+  }
+  @return $class;
+}
+
+// Examples.
+
+// prefix only on 2 elements
+// @debug replace((spectre top, right), (prefix: border)); // border top, right
+// @debug replace((spectre border, spectre right), (prefix: material)); // material border, material right
+
+// suffix only on 2 elements
+// @debug replace((top color, bottom color), (suffix: radius)); // top radius, bottom radius
+// @debug replace((border color, outline color), (suffix: radius)); // border radius, outline radius
+
+// prefix + suffix
+// @debug replace((spectre border, spectre right), (prefix: material, suffix: color)); // spectre border, spectre right
+
+// prefix + suffix only on 3 elements
+// @debug replace((spectre border radius, spectre outline radius), (prefix: material, suffix: color)); // material border color, material outline color

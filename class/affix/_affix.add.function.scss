@@ -1,0 +1,44 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../class.name.function' as *;
+
+// Modules.
+@use '../../map';
+@use '../../values';
+
+// Status: DONE
+// The `affix.add()` function adds affix - `prefix` or `suffix` to each element of `$class`.
+// @param `$class` Class to add affix.
+// @param `$affix` Prefix or suffix to add to each element of `$class`.
+// @returns The returned value is class of list type with affix.
+@function add($class, $affix: null) {
+  @if type-of($class) == list and list.length($class) > 0 {
+    $i: 1;
+    @each $-class in if(list.separator($class) == comma, $class, ($class,)) {
+      $class: list.set-nth(
+        $class,
+        $i,
+        values.join(
+          map.get($affix, prefix),
+          $-class,
+          map.get($affix, suffix)
+        )
+      );
+      $i: $i + 1;
+    }
+  } @else {
+    @return values.join(
+      map.get($affix, prefix),
+      $class,
+      map.get($affix, suffix)
+    );
+  }
+  @return $class;
+}
+
+// Examples.
+// @debug add((top, right), (prefix: border)); // border top, border right
+// @debug add((top, right), (suffix: border)); // top border, right border
+// @debug add((top, right), (prefix: border, suffix: color)); // border top color, border right color

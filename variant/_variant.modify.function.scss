@@ -1,67 +1,74 @@
 // Sass.
 @use 'sass:list';
-@use 'sass:map';
 @use 'sass:meta';
+
+// Modules.
+@use '../class';
+@use '../map';
+@use '../values';
+@use 'update';
 
 // Status: DONE
 // The `variant.modify()` function adds property suffix e.g. `color`, `radius` to the variant.
 // @param `$variant`
-// @param `$property`
-// @param `$suffix`
+// @param `$modifier`
 // @returns
-@function modify($variant, $property: null, $suffix: null) {
+@function modify($variant, $modifier) {
   $result: ();
   @each $name, $side-variant in $variant {
     @if type-of($side-variant) == map {
       @each $side, $variant in $side-variant {
         @if type-of($variant) == map {
-          // Modify `$property`
-          @if $property {
-            $name: if(meta.type-of($name) == map, map.set($name, $class, $property), ($name: $property));
-          }
-          @each $class, $value in $variant {
-            @if $suffix {
-              @if list.separator($class) == comma {
-                $i: 1;
-                @each $-class in $class {
-                  $class: list.set-nth($class, $i, list.join($suffix, $-class, list.separator($class)));
-                  $i: $i + 1;
-                }
-              } @else {
-                $class: list.join($suffix, $class);
-              }
+          @each $-class, $value in $variant {
+            @if map.get-any($modifier, class, property, null) {
+              $result: map.deep-merge(
+                $result, (
+                  update.item($name, map.pick(map.get($modifier, class), prefix), map.get($modifier, property)): (
+                    update.item($side, null, map.get($modifier, property), attribute): (
+                      class.affix-add($-class, map.pick(map.get($modifier, class), suffix)): $value
+                    )
+                  )
+                )
+              );
             }
-
-            $result: map.deep-merge(
-              $result,
-              ($name: ($side: ($class: if($suffix, ($suffix: $value), $value))))
-            );
           }
         } @else {
-          $class: $side;
-          $side: $name;
-          $value: $variant;
-          $result: map.deep-merge(
-            $result, (
-              if($property, ((): $property), ()): (
-                if($suffix, (if(list.length($name) > 0, ($name: $suffix), $suffix)), $name): ($class: $value)
+          @if map.get-any($modifier, class, property, null) {
+            $-class: $side;
+            $side: $name;
+            $value: $variant;
+            $result: map.deep-merge(
+              $result, (
+                update.item((), map.pick(map.get($modifier, class), prefix), map.get($modifier, property)): (
+                  update.item($side, null, map.get($modifier, property), attribute): (
+                    class.affix-add($-class, map.pick(map.get($modifier, class), suffix)): $value
+                  )
+                )
               )
-            )
-          );
-
+            );
+          }
         }
       }
     } @else {
-      @if $property {
-        $class: $name;
+      @if map.get-any($modifier, class, property, null) {
         $value: $side-variant;
+        $value-class: $name;
         $result: map.deep-merge(
           $result, (
-            ((): $property): (if($suffix, $suffix, ()): ($class: $value))
+            update.item((), map.pick(map.get($modifier, class), prefix), map.get($modifier, property)): (
+              update.item((), null, map.get($modifier, property), attribute): (
+                class.affix-add($value-class, map.pick(map.get($modifier, class), suffix)): $value
+              )
+            )
           )
         );
       }
     }
   }
   @return $result;
+}
+
+// Alias `variant.update()` function.
+@function update($variant, $modifier) {
+  @return modify($variant, $modifier);
 }

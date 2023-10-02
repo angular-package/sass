@@ -55,6 +55,7 @@ New modules:
 * The [`@angular-package/sass/translator`](https://docs.angular-package.dev/v/sass/translator/overview) module handles global dictionary to translate words.
 * The [`@angular-package/sass/values`](https://docs.angular-package.dev/v/sass/values/overview) module to modify arbitrary values.
 * The [`@angular-package/sass/var`](https://docs.angular-package.dev/v/sass/var/overview) module is designed to handle [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) with the use of words that can be translated by the dictionary.
+* The [`@angular-package/sass/variant`](https://docs.angular-package.dev/v/sass/variant/overview) module to create variants usable in `class` and `property` modules.
 
 <br>
 

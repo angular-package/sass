@@ -19,7 +19,7 @@
 
 
 // @include property.variant(
-//   variant.modify((
+//   variant.update((
 //     small: 10px solid blue,
 //     medium: 20px solid red,
 //     high: 20px solid red,
@@ -31,7 +31,7 @@
 
 
 // @include property.variant(
-//   variant.modify((
+//   variant.update((
 //       (top, right): (small: unit 3, medium: unit 5, high: unit 7),
 //       (bottom, left): (small: unit 3, medium: unit 5, high: unit 7),
 //     ),
@@ -44,7 +44,7 @@
 
 
 // @include property.variant(
-//   variant.modify((
+//   variant.update((
 //       (basic, extended): (
 //         (top left, bottom right): (
 //           small: unit 3,
@@ -62,7 +62,7 @@
 
 
 // @include property.variant(
-//   variant.modify((
+//   variant.update((
 //       ((basic, extended): outline): (
 //         (top left, bottom right): (
 //           small: unit 3,
@@ -80,7 +80,7 @@
 
 
 // @include property.variant(
-//   variant.modify((
+//   variant.update((
 //     ((basic, extended): outline): (
 //       (top left, bottom right): (
 //         small: unit 3,

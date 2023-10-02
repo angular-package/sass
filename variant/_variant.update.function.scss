@@ -1,0 +1,69 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Modules.
+@use '../class';
+@use '../map';
+@use '../values';
+@use 'update';
+
+// Status: DONE
+// The `variant.update()` function adds property suffix e.g. `color`, `radius` to the variant.
+// @param `$variant`
+// @param `$modifier`
+// @returns
+@function update($variant, $modifier) {
+  $result: ();
+  @each $name, $side-variant in $variant {
+    @if type-of($side-variant) == map {
+      @each $side, $variant in $side-variant {
+        @if type-of($variant) == map {
+          @each $-class, $value in $variant {
+            @if map.get-any($modifier, class, property, null) {
+              $result: map.deep-merge(
+                $result, (
+                  update.item($name, map.pick(map.get($modifier, class), prefix), map.get($modifier, property)): (
+                    update.item($side, null, map.get($modifier, property), attribute): (
+                      class.affix-add($-class, map.pick(map.get($modifier, class), suffix)): $value
+                    )
+                  )
+                )
+              );
+            }
+          }
+        } @else {
+          @if map.get-any($modifier, class, property, null) {
+            $-class: $side;
+            $side: $name;
+            $value: $variant;
+            $result: map.deep-merge(
+              $result, (
+                update.item((), map.pick(map.get($modifier, class), prefix), map.get($modifier, property)): (
+                  update.item($side, null, map.get($modifier, property), attribute): (
+                    class.affix-add($-class, map.pick(map.get($modifier, class), suffix)): $value
+                  )
+                )
+              )
+            );
+          }
+        }
+      }
+    } @else {
+      @if map.get-any($modifier, class, property, null) {
+        $value: $side-variant;
+        $value-class: $name;
+        $result: map.deep-merge(
+          $result, (
+            update.item((), map.pick(map.get($modifier, class), prefix), map.get($modifier, property)): (
+              update.item((), null, map.get($modifier, property), attribute): (
+                class.affix-add($value-class, map.pick(map.get($modifier, class), suffix)): $value
+              )
+            )
+          )
+        );
+      }
+    }
+  }
+  @return $result;
+}

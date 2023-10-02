@@ -1,9 +1,9 @@
 // Sass.
 @use 'sass:list';
-@use 'sass:map';
 
-// Modules.
+// Functions.
 @use '../list/list.append.function' as *;
+@use '../map/map.get.function';
 
 // Status: DONE
 // The `map.get-any()` function returns first value not `null` associated with `$key` or any of `$keys` in `$map`. If all values are `null`
@@ -16,11 +16,7 @@
   $i: 1;
   @each $key in append((), $key, auto, $keys...) {
     @if not ($i == list.length(append((), $key, comma, $keys...))) {
-      $result: if(
-        list.length($key) > 0,
-        if(list.separator($key) == comma, map.get($map, $key...), map.get($map, $key)),
-        null
-      );
+      $result: map.get($map, $key, null);
       @if $result {
         @return $result;
       }
@@ -32,4 +28,5 @@
 }
 
 // Examples.
-// @debug get-any((a-test: 1, b: 2, c: null, b-name: 5), c, b-name, null);
+// @debug get-any((a-test: 1, b: 2, c: null, b-name: 5), c, b-name, null); // 5
+// @debug get-any((a-test: 1, b: 2, c: null, b-name: 5, d: null), c, d, 10); // 10

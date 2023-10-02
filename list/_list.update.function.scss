@@ -1,0 +1,24 @@
+// Sass.
+@use 'sass:list';
+
+// Status: TODO:
+// The `list.update()` function updates list elements by providing nth value pairs as `map` or `list` type.
+// @param `$list` List to update elements from `$nth-value`.
+// @arbitrary `$nth-value...` Element's list of nth value pairs to update `$list`.
+// @returns The returned value is `$list` with updated values by provided `$nth-value`.
+@function update($list, $nth-value...) {
+  @each $nth-value in $nth-value {
+    @each $nth, $value in if(type-of($nth-value) == list, ($nth-value,), $nth-value) {
+      $list: list.set-nth($list, $nth, $value);
+    }
+  }
+  @return $list;
+}
+
+// Examples.
+// list
+// @debug update((a, b, c, d, e), (3, cc), (5, aaa));
+
+// map
+// @debug update((a, b, c, d, e), (3: cc), (5: aaa));
+// @debug update((a, b, c, d, e), (3: cc, 5: aaa));

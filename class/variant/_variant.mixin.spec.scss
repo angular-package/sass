@@ -35,6 +35,21 @@
 // }
 
 
+// $m: (property: (base: border, middle: null, attribute: radius), class: (prefix: border, suffix: test));
+
+// @include variant((
+//   small: 10px solid blue,
+//   medium: 20px solid red,
+//   high: 20px solid red,
+// ), $content-type: map, $modifier: $m) using($resolved) {
+//   // @each $property in list.nth($resolved, 2) {
+//   //   #{$property}: list.nth($resolved, 3);
+//   // }
+
+//   @debug $resolved;
+
+//   font: 100;
+// }
 
 
 // ---

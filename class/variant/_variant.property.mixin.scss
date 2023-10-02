@@ -6,8 +6,10 @@
 @use '../../list/list.to-map.function' as *;
 @use '../../selector/selector.class.function' as *;
 @use '../../selector/selector.nest.function' as *;
+@use '../../variant/update/update.property.function';
 
 // Mixins.
+@use '../../list/list.each.mixin' as *;
 @use '../class.content.mixin' as class;
 @use './variant.class-value.mixin' as *;
 
@@ -22,6 +24,7 @@
 // @param `$pseudo-class` Pseudo class for class `$variant`.
 // @param `$dictionary` Dictionary to translate class `$variant`.
 // @param `$function` The function to set class `$variant`.
+// @param `$content-type`
 // @param `$modifier`
 @mixin property(
   $variant,
@@ -51,10 +54,10 @@
       @if type-of($class-value) == map {
         @each $value-class, $value in $class-value {
           @if not (type-of($value) == map) {
-            @each $class in if(list.separator($class) == comma, $class, ($class,)) {
+            @include each($class) using($class) {
               // FEATURE: Works fine.
-              @each $value in if(list.separator($value) == comma, $value, ($value,)) {
-                @each $value-class in if(list.separator($value-class) == comma, $value-class, ($value-class,)) {
+              @include each($value) using($value) {
+                @include each($value-class) using($value-class) {
                   @include class.content(
                     values.join(
                       if(&, '&', ()),
@@ -69,26 +72,8 @@
                     $function
                   ) {
                     $-property: $property or $class;
-                    @if list.separator($-property) == comma {
-                      $i: 1;
-                      @each $base in $-property {
-                        $-property: list.set-nth(
-                          $-property,
-                          $i,
-                          values.join(
-                            map.get($modifier, (property, name), null),
-                            $base,
-                            map.get($modifier, (property, attribute), null),
-                          )
-                        );
-                        $i: $i + 1;
-                      }
-                    } @else {
-                      $-property: values.join(
-                        map.get($modifier, (property, name), null),
-                        $-property,
-                        map.get($modifier, (property, attribute), null),
-                      );
+                    @if $modifier {
+                      $-property: update.property($-property, $modifier);
                     }
 
                     // values to pass into the @content

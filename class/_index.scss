@@ -9,5 +9,6 @@
 @forward 'class.parent-first.function';
 
 // Directory.
+@forward 'affix' as affix-*;
 @forward 'variant' as variant-*;
 @forward 'variant/variant.mixin';

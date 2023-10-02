@@ -1,6 +1,3 @@
-// Sass.
-// @use 'sass:list';
-
 // Modules.
 @use '../list';
 @use '../map';
@@ -8,19 +5,32 @@
 // Status: DONE
 // The `variant.create()` creates a variant built from `$value`.
 // @param `$value` A list or string type to create a variant.
+// @param `$modifier`
 // @returns The returned value is a variant of map type where (class: value).
-@function create($value) {
-  $variant: ();
-  @if not (type-of($value) == map) {
+@function create($value, $modifier: null) {
+  $result: ();
+  @if type-of($value) == map {
+    @each $name, $side-variant in $value {
+      @if type-of($side-variant) == map {
+        @each $side, $variant in $side-variant {
+          @if not (type-of($variant) == map) {
+            $result: map.merge($result, (), $name, ($side: $variant));
+          }
+        }
+      } @else {
+        $result: map.merge($result, (), (), ($name: $side-variant));
+      }
+    }
+  } @else if not (type-of($value) == map) {
     @each $value in if(list.separator($value) == comma, $value, ($value,)) {
       // Remove !important.
       $key: list.remove-value($value, !important);
 
       // Set variant.
-      $variant: map.merge($variant, ($key: $value));
+      $result: map.merge($result, ($key: $value));
     }
   }
-  @return $variant;
+  @return $result;
 }
 
 // Examples.
@@ -35,3 +45,7 @@
 
 //
 // @debug create((right ('+' 15), left)); // (right: right, left: left)
+
+//
+// @debug create((medium: 1px solid red, large: 2px solid blue)); // ((): ((): (medium: 1px solid red)))
+// @debug create(((top, right): (medium: 1px solid red, large: 2px solid blue))); // ((): ((top, right): (medium: 1px solid red, large: 2px solid blue)))

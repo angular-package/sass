@@ -13,6 +13,7 @@
 
 // Other.
 @forward 'list.append.function';
+@forward 'list.each.mixin';
 @forward 'list.empty.function';
 @forward 'list.extract-map.function';
 @forward 'list.first.function';
@@ -33,6 +34,7 @@
 @forward 'list.to-map.function';
 @forward 'list.to.function';
 @forward 'list.type.function';
+@forward 'list.update.function';
 
 // Sass.
 @forward 'sass:list' hide append, index, join, nth;

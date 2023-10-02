@@ -1,0 +1,50 @@
+// Sass.
+@use 'sass:list';
+
+// Modules.
+@use '../../map';
+@use '../../values';
+
+// Status: TODO:
+// The `update.property()` function.
+// @param `$property`
+// @param `$modifier`
+// @param `$attribute`
+// @returns
+@function property($property, $modifier, $attribute: null) {
+  $property: if(
+    map.has-keys($modifier, (property, middle)),
+    map.get($modifier, (property, middle)),
+    $property
+  );
+  @if list.separator($property) == comma {
+    $i: 1;
+    @each $base in $property {
+      $property: list.set-nth(
+        $property,
+        $i,
+        values.join(
+          (separator: space),
+          map.get-any($modifier, (property, base), (property, name), null),
+          $base,
+          $attribute,
+          map.get-any($modifier, (property, attribute), (property, end), null),
+        )
+      );
+      $i: $i + 1;
+    }
+  } @else {
+    $property: values.join(
+      (separator: space),
+      map.get-any($modifier, (property, base), (property, name), null),
+      $property,
+      $attribute,
+      map.get-any($modifier, (property, attribute), (property, end), null),
+    );
+  }
+  @return $property;
+}
+
+// Examples.
+
+

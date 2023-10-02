@@ -27,31 +27,80 @@
 // ---
 // class.variant-class-value()
 // ---
-// @include class.variant-class-value((right color: unit 1), $content-type: map, $modifier: (property: (name: border))) using($resolved) {
-//   #{map.get($resolved, property)}: map.get($resolved, value);
+// @include class.variant-class-value(
+//   (right color: unit 1),
+//   $content-type: map,
+//   $modifier: (class: (prefix: border), property: (base: border))
+// ) using($resolved) {
+//   #{property.name(map.get($resolved, property))}: map.get($resolved, value);
 // }
 // .border-right-color {
 //   border-right-color: unit 1;
 // }
 
-// @include class.variant-class-value((padding: unit 1, margin: unit 2), $content-type: map) using($resolved) {
+// @include class.variant-class-value(
+//   (padding: unit 1, margin: unit 2),
+//   $content-type: map
+// ) using($resolved) {
 //   #{map.get($resolved, property)}: map.get($resolved, value);
 // }
-
-// @include class.variant-class-value((padding top: unit 1, margin bottom: unit 2), $content-type: map) using($resolved) {
-//   #{map.get($resolved, property)}: map.get($resolved, value);
+// .padding {
+//   padding: unit 1;
+// }
+// .margin {
+//   margin: unit 2;
 // }
 
-// @include class.variant-class-value((padding top: unit 1, margin bottom: 20px), $content-type: map) using($resolved) {
-//   #{map.get($resolved, property)}: map.get($resolved, value);
+// @include class.variant-class-value(
+//   (padding top: unit 1, margin bottom: unit 2),
+//   $content-type: map
+// ) using($resolved) {
+//   #{property.name(map.get($resolved, property))}: map.get($resolved, value);
+// }
+// .padding-top {
+//   padding-top: unit 1;
+// }
+// .margin-bottom {
+//   margin-bottom: unit 2;
 // }
 
-// @include class.variant-class-value((padding top: unit 1, margin bottom: 20px), $content-type: list) using($resolved...) {
-//   #{list.nth($resolved, 1)}: list.nth($resolved, 3);
+// @include class.variant-class-value(
+//   (padding top: unit 1, margin bottom: 20px),
+//   $content-type: map
+// ) using($resolved) {
+//   #{property.name(map.get($resolved, property))}: map.get($resolved, value);
+// }
+// .padding-top {
+//   padding-top: unit 1;
+// }
+// .margin-bottom {
+//   margin-bottom: 20px;
 // }
 
-// @include class.variant-class-value(((padding basic: padding): unit 1, margin: unit 2), $content-type: map) using($resolved) {
-//   #{map.get($resolved, property)}: map.get($resolved, value);
+// @include class.variant-class-value(
+//   (padding top: unit 1, margin bottom: 20px),
+//   $content-type: list
+// ) using($resolved...) {
+//   #{property.name(list.nth($resolved, 1))}: list.nth($resolved, 3);
+// }
+// .padding-top {
+//   padding-top: unit 1;
+// }
+// .margin-bottom {
+//   margin-bottom: 20px;
+// }
+
+// @include class.variant-class-value(
+//   ((padding basic: padding): unit 1, margin: unit 2),
+//   $content-type: map
+// ) using($resolved) {
+//   #{property.name(map.get($resolved, property))}: map.get($resolved, value);
+// }
+// .padding-basic {
+//   padding: unit 1;
+// }
+// .margin {
+//   margin: unit 2;
 // }
 
 // @include class.variant-class-value(((pm basic: (padding, margin)): unit 1, margin: unit 2), $content-type: map) using($resolved) {
@@ -63,7 +112,7 @@
 //     #{map.get($resolved, property)}: map.get($resolved, value);
 //   }
 // }
-// .padding-basic {
+// .pm-basic {
 //   padding: unit 1;
 //   margin: unit 1;
 // }
@@ -77,6 +126,12 @@
 //   $modifier: (prefix: extended, suffix: color)
 // ) using($resolved) {
 //   #{map.get($resolved, property)}: map.get($resolved, value);
+// }
+// .border {
+//   border: primary dark;
+// }
+// .background {
+//   background: primary light;
 // }
 
 // @include class.variant-class-value(

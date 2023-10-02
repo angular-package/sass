@@ -5,6 +5,9 @@
 // Functions.
 @use '../../selector/selector.class.function' as *;
 
+// Mixins.
+@use '../../list/list.each.mixin' as *;
+
 // Modules.
 @use '../../values';
 
@@ -28,10 +31,10 @@
             @each $value-class, $value in $value {
               $-class: ();
               $-value-class: ();
-              @each $class in if(list.separator($class) == comma, $class, ($class,)) {
-                @each $attribute in if(list.separator($attribute) == comma, $attribute, ($attribute,)) {
+              @include each($class) using($class) {
+                @include each($attribute) using($attribute) {
                   $-value-class: $value-class;
-                  @each $value-class in if(list.separator($value-class) == comma, $value-class, ($value-class,)) {
+                  @include each($value-class) using($value-class) {
                     $-class: list.append(
                       $-class,
                       meta.call(
@@ -57,8 +60,8 @@
           } @else {
             @each $value in $value {
               $-class: ();
-              @each $class in if(list.separator($class) == comma, $class, ($class,)) {
-                @each $attribute in if(list.separator($attribute) == comma, $attribute, ($attribute,)) {
+              @include each($class) using($class) {
+                @include each($attribute) using($attribute) {
                   $-class: list.append(
                     $-class, meta.call(
                       $function,
@@ -81,9 +84,9 @@
           }
         }
       } @else {
-        @each $value in $attribute-value {
+        @include each($attribute-value, false) using($value) {
           $-class: ();
-          @each $class in if(list.separator($class) == comma, $class, ($class,)) {
+          @include each($class) using($class) {
             $-class: list.append(
               $-class,
               meta.call(

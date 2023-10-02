@@ -2,8 +2,9 @@
 
 ### v0.12.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.12.0-beta)
 
+- Add [`variant.update()`](https://github.com/angular-package/sass/blob/main/variant/_variant.update.function.scss) to use instead `variant.modify()`. [69af150]
 - Update [`variant.create()`](https://github.com/angular-package/sass/blob/main/variant/_variant.create.function.scss) to have functionality to add full variant. [a76c8ce]
-- Update `variant.modify()` to use `$modifier` argument to modify, use `update` sub module, and add `variant.update()` alias name. [410cc51]
+- ~~Update `variant.modify()` to use `$modifier` argument to modify, use `update` sub module, and add `variant.update()` alias name. [410cc51]~~
 - Update [`class/variant`](https://github.com/angular-package/sass/tree/main/class/variant) to use `@each` mixin and [`update.property()`](https://github.com/angular-package/sass/blob/main/variant/update/_update.property.function.scss) function from `variant` module. [1230281]
 - Add [`list.each()`](https://github.com/angular-package/sass/blob/main/list/_list.each.mixin.scss) mixin. [6a7c2fe]
 - Add [`class/affix`](https://github.com/angular-package/sass/tree/main/class/affix) sub module to handle class affixes. [b4a49d1]
@@ -11,6 +12,7 @@
 - Add [`list.update()`](https://github.com/angular-package/sass/blob/main/list/_list.update.function.scss) function to update `$list` by provided `nth-value` pairs of `map` or `list` type. [104abd7]
 - Add [`map.get-any()`](https://github.com/angular-package/sass/blob/main/map/_map.get-any.function.scss) function to get the value from any key where value is not `null`. [cef2405]
 
+[69af150]: https://github.com/angular-package/sass/commit/69af1500dbae4a5008c32b7de04228b5cc634574
 [a76c8ce]: https://github.com/angular-package/sass/commit/a76c8cec8593c6dcccc3c8f386759acd7410362f
 [410cc51]: https://github.com/angular-package/sass/commit/410cc51677d97c069d19b8f1e8887d0da6434cfc
 [1230281]: https://github.com/angular-package/sass/commit/1230281dea6d850f78f2122667f6256ab193c0da

@@ -1,5 +1,25 @@
 # @angular-package/sass changelog
 
+### v0.12.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.12.0-beta)
+
+- Update [`variant.create()`](https://github.com/angular-package/sass/blob/main/variant/_variant.create.function.scss) to have functionality to add full variant. [a76c8ce]
+- Update `variant.modify()` to use `$modifier` argument to modify, use `update` sub module, and add `variant.update()` alias name. [410cc51]
+- Update [`class/variant`](https://github.com/angular-package/sass/tree/main/class/variant) to use `@each` mixin and [`update.property()`](https://github.com/angular-package/sass/blob/main/variant/update/_update.property.function.scss) function from `variant` module. [1230281]
+- Add [`list.each()`](https://github.com/angular-package/sass/blob/main/list/_list.each.mixin.scss) mixin. [6a7c2fe]
+- Add [`class/affix`](https://github.com/angular-package/sass/tree/main/class/affix) sub module to handle class affixes. [b4a49d1]
+- Update [`class.variant()`](https://github.com/angular-package/sass/blob/main/class/variant/_variant.mixin.scss) to use `$key` in `nest()` when its length > 0 and use [`update.property()`](https://github.com/angular-package/sass/blob/main/variant/update/_update.property.function.scss) from `variant` module. [1e8a29c]
+- Add [`list.update()`](https://github.com/angular-package/sass/blob/main/list/_list.update.function.scss) function to update `$list` by provided `nth-value` pairs of `map` or `list` type. [104abd7]
+- Add [`map.get-any()`](https://github.com/angular-package/sass/blob/main/map/_map.get-any.function.scss) function to get the value from any key where value is not `null`. [cef2405]
+
+[a76c8ce]: https://github.com/angular-package/sass/commit/a76c8cec8593c6dcccc3c8f386759acd7410362f
+[410cc51]: https://github.com/angular-package/sass/commit/410cc51677d97c069d19b8f1e8887d0da6434cfc
+[1230281]: https://github.com/angular-package/sass/commit/1230281dea6d850f78f2122667f6256ab193c0da
+[6a7c2fe]: https://github.com/angular-package/sass/commit/6a7c2fec33c28365352b91ba12657fbaf247fc48
+[b4a49d1]: https://github.com/angular-package/sass/commit/b4a49d196dbee1578c033cf93175b0133cc5413c
+[1e8a29c]: https://github.com/angular-package/sass/commit/1e8a29c0c5a1d39ec261f87e0907d92479403b4b
+[104abd7]: https://github.com/angular-package/sass/commit/104abd7e02f21fe20b714361c5d5faa529f308f1
+[cef2405]: https://github.com/angular-package/sass/commit/cef240521778b121fcb2bf8fe1a8cb5e6466e227
+
 ### v0.11.1-beta [#](https://github.com/angular-package/sass/releases/tag/v0.11.1-beta)
 
 - Update [`color.variant()`](https://github.com/angular-package/sass/blob/main/color/mixins/_color.variant.mixin.scss) use `$modifier` argument in the `class.variant()`. [dd72913]
@@ -8,15 +28,15 @@
 
 ### v0.11.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.11.0-beta)
 
-- Add new [`variant`](https://github.com/angular-package/sass/tree/develop/variant) module to handle variants. [a7a8c1c]
-- Update [`class.variant()`](https://github.com/angular-package/sass/blob/develop/class/variant/_variant.mixin.scss) by adding `$modifier` argument to modify class and property. [89f34e3]
-- Update [`property.variant()`](https://github.com/angular-package/sass/blob/develop/property/_property.variant.mixin.scss) to use [`values.join()`](https://github.com/angular-package/sass/blob/develop/values/_values.join.function.scss) function and add `$modifier` argument to modify class and property. [c8c8f5b]
-- Update [`property.name()`](https://github.com/angular-package/sass/blob/develop/property/_property.name.function.scss) function to remove empty lists from `$name`. [21ef23a]
-- Update [`class.variant()`](https://github.com/angular-package/sass/blob/develop/class/variant/_variant.mixin.scss) function to use [`values.join()`](https://github.com/angular-package/sass/blob/develop/values/_values.join.function.scss) and update spec. [7d0c18e]
-- Update [`variant.combine()`](https://github.com/angular-package/sass/blob/develop/values/_values.combine.function.scss) to use [`values.join()`](https://github.com/angular-package/sass/blob/develop/values/_values.join.function.scss) and use and update spec. [5afd3c2]
-- Add separate mixins in [`class/variant`](https://github.com/angular-package/sass/tree/develop/class/variant) to create class variant and update spec. [e8d08d3]
-- Add [`values.join()`](https://github.com/angular-package/sass/blob/develop/values/_values.join.function.scss) **wrapper** function. [971af80]
-- Add [`list.merge()`](https://github.com/angular-package/sass/blob/develop/list/_list.merge.function.scss) function to merge smaller `$list2` into `$list1`. [9788cb3]
+- Add new [`variant`](https://github.com/angular-package/sass/tree/main/variant) module to handle variants. [a7a8c1c]
+- Update [`class.variant()`](https://github.com/angular-package/sass/blob/main/class/variant/_variant.mixin.scss) by adding `$modifier` argument to modify class and property. [89f34e3]
+- Update [`property.variant()`](https://github.com/angular-package/sass/blob/main/property/_property.variant.mixin.scss) to use [`values.join()`](https://github.com/angular-package/sass/blob/develop/values/_values.join.function.scss) function and add `$modifier` argument to modify class and property. [c8c8f5b]
+- Update [`property.name()`](https://github.com/angular-package/sass/blob/main/property/_property.name.function.scss) function to remove empty lists from `$name`. [21ef23a]
+- Update [`class.variant()`](https://github.com/angular-package/sass/blob/main/class/variant/_variant.mixin.scss) function to use [`values.join()`](https://github.com/angular-package/sass/blob/develop/values/_values.join.function.scss) and update spec. [7d0c18e]
+- Update [`variant.combine()`](https://github.com/angular-package/sass/blob/main/values/_values.combine.function.scss) to use [`values.join()`](https://github.com/angular-package/sass/blob/develop/values/_values.join.function.scss) and use and update spec. [5afd3c2]
+- Add separate mixins in [`class/variant`](https://github.com/angular-package/sass/tree/main/class/variant) to create class variant and update spec. [e8d08d3]
+- Add [`values.join()`](https://github.com/angular-package/sass/blob/main/values/_values.join.function.scss) **wrapper** function. [971af80]
+- Add [`list.merge()`](https://github.com/angular-package/sass/blob/main/list/_list.merge.function.scss) function to merge smaller `$list2` into `$list1`. [9788cb3]
 
 [a7a8c1c]: https://github.com/angular-package/sass/commit/a7a8c1c60ebe58f0b06dcac8865f5068709a1c8d
 [89f34e3]: https://github.com/angular-package/sass/commit/89f34e3fcb03f77b6b5b0e659da533bf92518b81

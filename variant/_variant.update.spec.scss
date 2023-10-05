@@ -99,3 +99,14 @@
 //   (class: (prefix: border, suffix: test), property: (base: border, attribute: radius))
 // ));
 
+@debug variant.update(
+  (
+    border: (basic: (third: third light, fourth: fourth light)),
+    basic: (secondary: secondary light, primary: primary light),
+    primary: primary dark,
+  ),
+  (
+    1: (class: (prefix: border, suffix: test), property: (base: border, attribute: radius)),
+    2: (class: (prefix: border, suffix: end), property: (middle: null)),
+  )
+);

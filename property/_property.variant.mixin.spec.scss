@@ -17,6 +17,320 @@ function.$functions: map.merge(function.$functions, (
 
 property.$type-function: map.merge(property.$type-function, (list: --var-get));
 
+// FEATURE: Variant 1
+// (class + property: value)
+// @include property.variant(( border: 1px solid red ));
+// .border {
+//   border: 1px solid red;
+// }
+
+// @include property.variant(( padding: 10px, margin: 20px ));
+// .padding {
+//   padding: 10px;
+// }
+// .margin {
+//   margin: 20px;
+// }
+
+// FEATURE: Variant 1 + add 'middle' property
+// @include property.variant(( +top: 1px solid red ), $modifier: (class: (prefix: border), property: (base: border)));
+// .border-top {
+//   border-top: 1px solid red;
+// }
+
+// @include property.variant(( +top: 1px solid red, +bottom: 2px solid blue ), $modifier: (class: (prefix: border), property: (base: border)));
+// .border-top {
+//   border-top: 1px solid red;
+// }
+// .border-bottom {
+//   border-bottom: 2px solid blue;
+// }
+
+// @include property.variant(((+top left, bottom right): 1px solid red), $modifier: (class: (prefix: border), property: (base: border, attribute: color)));
+// .border-top-left {
+//   border-top-left-color: 1px solid red;
+// }
+// .border-bottom-right {
+//   border-color: 1px solid red;
+// }
+
+// @include property.variant(((+top left, +bottom right): 1px solid red), $modifier: (class: (prefix: border), property: (base: border, attribute: color)));
+// .border-top-left {
+//   border-top-left-color: 1px solid red;
+// }
+// .border-bottom-right {
+//   border-bottom-right-color: 1px solid red;
+// }
+
+// @include property.variant(('+' (top, bottom): 1px solid red ), $modifier: (class: (prefix: border), property: (base: border)));
+// .border-top, .border-bottom {
+//   border-top: 1px solid red;
+//   border-bottom: 1px solid red;
+// }
+
+
+
+
+
+
+
+
+
+
+// @include property.variant(( border top: 1px solid red ));
+// .border-top {
+//   border-top: 1px solid red;
+// }
+
+// @include property.variant(( border bottom: 1px solid blue ));
+// .border-bottom {
+//   border-bottom: 1px solid blue;
+// }
+
+// @include property.variant(( padding top: 10px, margin top: 20px ));
+// .padding-top {
+//   padding-top: 10px;
+// }
+// .margin-top {
+//   margin-top: 20px;
+// }
+
+// @include property.variant(( (border, outline): 1px solid red ));
+// .border {
+//   border: 1px solid red;
+// }
+// .outline {
+//   outline: 1px solid red;
+// }
+
+// @include property.variant(( (border, outline): 1px solid red, (padding, margin): unit 3));
+// .border {
+//   border: 1px solid red;
+// }
+// .outline {
+//   outline: 1px solid red;
+// }
+// .padding {
+//   padding: unit 3;
+// }
+// .margin {
+//   margin: unit 3;
+// }
+
+
+// @include property.variant(( (border, outline) (top, bottom): 1px solid red ));
+// .border-top, .border-bottom, .outline-top, .outline-bottom {
+//   border-top: 1px solid red;
+//   border-bottom: 1px solid red;
+//   outline-top: 1px solid red;
+//   outline-bottom: 1px solid red;
+// }
+
+// --- here
+// @include property.variant(( (border top, outline bottom): 1px solid red ));
+// .border-top {
+//   border-top: 1px solid red;
+// }
+// .outline-bottom {
+//   outline-bottom: 1px solid red;
+// }
+
+// @include property.variant(( border (top, bottom) color: 1px solid red ));
+// .border-top-color, .border-bottom-color {
+//   border-top-color: 1px solid red;
+//   border-bottom-color: 1px solid red;
+// }
+
+// @include property.variant(( (border (top, bottom) color, outline (top, bottom) color): 1px solid red ));
+// .border-top-color, .border-bottom-color {
+//   border-top-color: 1px solid red;
+//   border-bottom-color: 1px solid red;
+// }
+// .outline-top-color, .outline-bottom-color {
+//   outline-top-color: 1px solid red;
+//   outline-bottom-color: 1px solid red;
+// }
+
+// @include property.variant(( ((border, outline): color): 1px solid red ));
+// .border {
+//   color: 1px solid red;
+// }
+// .outline {
+//   color: 1px solid red;
+// }
+
+// @include property.variant(( ((border, outline): color): red ));
+// .border {
+//   color: red;
+// }
+// .outline {
+//   color: red;
+// }
+
+// @include property.variant(( ((border top, outline bottom): (background, color)): red ));
+// .border-top {
+//   background: red;
+//   color: red;
+// }
+// .outline-bottom {
+//   background: red;
+//   color: red;
+// }
+
+// @include property.variant(( ((border color, outline color): (border color, outline color)): red ));
+// .border-color {
+//   border-color: red;
+//   outline-color: red;
+// }
+// .outline-color {
+//   border-color: red;
+//   outline-color: red;
+// }
+
+// @include property.variant(( ((border color, outline color): border (top, bottom) color): red ));
+// .border-color {
+//   border-top-color: red;
+//   border-bottom-color: red;
+// }
+// .outline-color {
+//   border-top-color: red;
+//   border-bottom-color: red;
+// }
+
+// @include property.variant(( ((border color, outline color): border (top, bottom) color): (red, blue) ));
+// .border-color {
+//   border-top-color: red;
+//   border-bottom-color: red;
+// }
+// .outline-color {
+//   border-top-color: red;
+//   border-bottom-color: red;
+// }
+// .border-color {
+//   border-top-color: blue;
+//   border-bottom-color: blue;
+// }
+// .outline-color {
+//   border-top-color: blue;
+//   border-bottom-color: blue;
+// }
+
+// @include property.variant(( ((border color, outline color): border (top, bottom) color): (red, blue) ));
+// .border-color {
+//   border-top-color: red;
+//   border-bottom-color: red;
+// }
+// .outline-color {
+//   border-top-color: red;
+//   border-bottom-color: red;
+// }
+// .border-color {
+//   border-top-color: blue;
+//   border-bottom-color: blue;
+// }
+// .outline-color {
+//   border-top-color: blue;
+//   border-bottom-color: blue;
+// }
+
+
+// FEATURE: Variant 2
+// (class + property: (class: value))
+// @include property.variant((border: ((): 1px solid red)));
+// .border {
+//   border: 1px solid red;
+// }
+
+// @include property.variant((border: (top: 1px solid red)));
+// .border-top {
+//   border: 1px solid red;
+// }
+
+// @include property.variant((border: ((top, bottom): 1px solid red)));
+// .border-top {
+//   border: 1px solid red;
+// }
+// .border-bottom {
+//   border: 1px solid red;
+// }
+
+// @include property.variant(((margin, padding): ((top, bottom): unit 5)));
+
+// @include property.variant(((margin, padding): ((top, bottom): unit 5)));
+
+
+
+
+// ---
+
+// @include property.variant(
+//   // (class + property: value)
+//   (
+//     // border: 1px solid red,
+//     // border top: 1px solid red,
+//     // border bottom: 1px solid blue,
+
+//     // (border, outline): 1px solid red,
+//     // (border top, outline bottom): 1px solid red,
+
+//     // (border, outline) color: 1px solid red,
+//     // border (top, bottom) color: 1px solid red,
+//     // (border (top, bottom) color, outline (top, bottom) color): 1px solid red,
+
+//     ((border, outline): color): 1px solid red,
+//   ),
+
+//   // (border top: 1px solid red),
+
+//   // (top right: primary dark, medium: medium, small: small),
+
+//   // ((small, medium, large): 20px),
+
+//   // ((primary y red: (border top, outline bottom) color): 1px solid red),
+//   // ((primary y red: (border top, outline bottom)): 1px solid red),
+
+
+//   // (top: (large: 10px solid red, small: 2px solid red, medium: 5px solid red)),
+//   // (border: (top: (primary dark: primary dark, secondary light: secondary light, accent: accent))),
+//   // ((border, outline): (((top, bottom): color): (primary: primary dark, secondary: secondary light, accent: accent))),
+//   // (
+//   //   // + top: primary dark,
+//   //   // + top: primary dark,
+//   //   // + top color: primary dark,
+//   //   // + top: medium, // FEATURE: + adds middle to property name if `base` set.
+//   //   // small: small,
+//   //   // + top color: (large: 10px solid red, small: 2px solid red, medium: 5px solid red),
+//   //   // border: (top: (primary dark: primary dark, secondary light: secondary light, accent: accent)),
+
+//   // ),
+
+//   // important
+//   $important: false,
+
+//   // $pseudo-class,
+//   $dictionary: (),
+//   // $class-function: meta.get-function(class),
+
+//   // // function
+//   // $prefix,
+//   // $separator,
+//   // $type-function: (list: --var-var),
+//   // $functions: (var: (var: meta.get-function(var, false, var))),
+//   // $modifier: (class: (attribute: width), property: (base: border, attribute: width))
+//   // $modifier: (
+//   //   // property: (base: border),
+//   //   // property: (base: border, middle: color),
+//   //   class: (prefix: null, attribute: null), property: (base: border, middle: null, attribute: null),
+//   //   // 1: (class: (prefix: border), property: (base: border, attribute: color)), // Modify variant 1
+//   //   // // 1: (class: (prefix: border), property: (base: border)),
+//   //   // 2: (class: (prefix: border), property: (pre-base: border)),  // Modify variant 2
+//   //   // 3: (class: (prefix: null, attribute: color), property: (attribute: color)),  // Modify variant 3
+//   // )
+// );
+
+
+// @include width(((): (large: large, small: small, medium: medium)));
+// @include property.variant((primary: primary dark), /*$modifier: (property: (base: border, middle: null))*/);
 
 // @include property.variant((
 //   (test1, test2): (

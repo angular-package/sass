@@ -51,8 +51,15 @@
       @if type-of(map.get($resolved, value)) == map {
         @each $attribute, $value in map.get($resolved, value) {
           $name: map.get($resolved, property);
+
+          // FIX
           @if not $modifier {
-            $name: values.join((method: space), map.get($resolved, property), map.get($resolved, attribute), $attribute);
+            $name: values.combine(
+              (method: space),
+              map.get($resolved, property),
+              map.get($resolved, attribute),
+              $attribute
+            );
           }
           @include property.set(
             ($name: $value),
@@ -67,8 +74,13 @@
         }
       } @else {
         $name: map.get($resolved, property);
-        @if not $modifier {
-          $name: values.join(map.get($resolved, property), map.get($resolved, attribute));
+
+        // FIX: Done.
+        @if not $modifier and map.get($resolved, attribute) {
+          $name: values.combine(
+            map.get($resolved, property),
+            map.get($resolved, attribute)
+          );
         }
         @include property.set(
           ($name: map.get($resolved, value)),

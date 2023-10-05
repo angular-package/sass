@@ -1,0 +1,17 @@
+// Modules.
+@use '../../string';
+
+// Status: DONE
+// The `indicator.index()` function.
+// @param `$item`
+// @param `$indicator`
+// @returns
+@function index($item, $indicator) {
+  @each $value in $item {
+    $index: string.index(#{$value}, $indicator);
+    @if $index {
+      @return $index > 0;
+    }
+  }
+  @return false;
+}

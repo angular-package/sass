@@ -1,0 +1,274 @@
+// Modules.
+@use '../class';
+@use '../list';
+@use '../map';
+@use '../property';
+@use '../selector';
+@use '../values';
+
+
+@use 'class' as v-class;
+@use 'indicator';
+@use 'property' as v-property;
+
+// Functions.
+@use 'variant.append.function' as *;
+
+// Status: TODO:
+// The `variant.build()` function.
+// @param `$variant`
+@mixin build($attribute-variant) {
+  $rows: ();
+  @each $class-property, $middle-attribute-variant in $attribute-variant {
+    @if type-of($middle-attribute-variant) == map {
+      @each $middle, $attribute-variant in $middle-attribute-variant {
+        @if type-of($attribute-variant) == map {
+          @each $attribute, $variant in $attribute-variant {
+            // FEATURE: Variant 4.
+            @if type-of($variant) == map {
+              @include list.each($class-property) using($class) {
+                @include list.each($middle) using($middle) {
+                  @include list.each($attribute) using($attribute) {
+                    @each $value-class, $value in $variant {
+                      $rows: append(
+                        $rows,
+                        v-class.set($class, $middle, $attribute, $value-class),
+                        v-property.set($class, list.join($middle, $attribute), $value),
+                      );
+                    }
+                  }
+                }
+              }
+
+            // FEATURE: Variant 3.
+            } @else {
+              $value-class: $attribute;
+              $value: $variant;
+              @include list.each($class-property) using($class) {
+                @include list.each($middle) using($middle) {
+                  $rows: append(
+                    $rows,
+                    v-class.set($class, $middle, $value-class),
+                    v-property.set($class, $middle, $value),
+                  );
+                }
+              }
+            }
+          }
+
+        // FEATURE: Variant 2.
+        } @else {
+          $value: $attribute-variant;
+          @if type-of($class-property) == map {
+            @each $class, $property-name in $class-property {
+              @include list.each($class) using($class) {
+                $rows: append(
+                  $rows,
+                  v-class.set($class, $middle),
+                  v-property.set($property-name, $middle, $value),
+                );
+              }
+            }
+          } @else {
+            @include list.each($class-property) using($class-property) {
+              @include list.each($middle) using($middle) {
+                $rows: append(
+                  $rows,
+                  v-class.set($class-property, $middle),
+                  v-property.set($class-property, $middle, $value),
+                );
+              }
+            }
+          }
+        }
+      }
+
+    // FEATURE: Variant 1.
+    } @else {
+      $value: $middle-attribute-variant;
+      @if type-of($class-property) == map {
+        @each $class, $property-name in $class-property {
+          @include list.each($class) using($class) {
+            $rows: append($rows, $class, v-property.set($property-name, null, $value));
+          }
+        }
+      } @else {
+        @include list.each($class-property) using($class) {
+          $rows: append($rows, $class, v-property.set($class, null, $value));
+        }
+      }
+    }
+  }
+
+  // @debug $rows;
+
+  @content($rows);
+}
+
+
+
+
+@include build(
+  // FEATURE: Variant 1
+  // (border: 1px solid red)
+  // (border: (top: 1px solid red))
+
+  // FEATURE: Variant 3
+  // (border: (top: (primary: 1px solid red)))
+  // ((border, outline): ((top, bottom): (primary: 1px solid red)))
+
+  // FEATURE: Variant 4
+  ((border, outline): ((top, bottom): ((color, radius): (primary: 1px solid red))))
+  // ((border, outline): ((start, bottom) start: ((color, radius): (primary: 1px solid red))))
+  // ((border, outline): ((top, bottom): (color: (border: 1px solid red))))
+
+) using($resolved) {
+  @each $resolved in $resolved {
+    @include class.content(map.get($resolved, class)) {
+      @include property.set(
+        (map.get($resolved, (property, name)): map.get($resolved, (property, value)))
+      );
+    }
+  }
+}
+
+// @include class.content((border top, outline bottom)) {
+// @include class.content((border (top, bottom) color)) {
+//   cursor: crosshair;
+// }
+
+
+// Examples.
+// --
+// Variant 1
+// --
+// @include build((border: 1px solid red));
+// @include build((border top: 1px solid red));
+// @include build(((border, outline): 1px solid red));
+// @include build(((border top, outline top): 1px solid red));
+// @include build(((border, outline) top: 1px solid red));
+// @include build((border: 1px solid red, outline: 2px solid blue));
+// @include build((
+//   (border, outline): 1px solid red,
+//   (border, outline) (top, bottom): 1px solid red,
+//   (top, bottom): 1px solid red
+// ));
+
+
+// --
+// @include build((((basic 1, basic 2): border): 1px solid red));
+// @include build(((basic-1: border, basic-2: border): 1px solid red));
+
+
+// --
+// @include build(((basic: (border, outline)): 1px solid red));
+// @include build((((basic1, basic2): (border, outline)): 1px solid red));
+// @include build((((basic1, basic2): (border, outline) (top, bottom)): 1px solid red));
+
+
+// --
+// Variant 2
+// --
+// @include build((border: (top: 1px solid red)));
+// @include build((border: ((top, bottom): 1px solid red)));
+// @include build(((border, outline): (top: 1px solid red)));
+// @include build(((border, outline): ((top, bottom): 1px solid red)));
+// @include build(((border, outline) top: (color: 1px solid red)));
+// @include build(((border, outline) start: ((start, end) color: 1px solid red))); // TODO:
+
+// @include build(((basic: border): (top: 1px solid red)));
+// @include build(((basic: (border, outline)): (top: 1px solid red)));
+// @include build((((basic1, basic2): (border, outline)): (top: 1px solid red)));
+// @include build(((basic1: border, basic2: border): (top: 1px solid red)));
+// @include build(((border, outline): ((top, bottom): 1px solid red, bottom: 2px solid blue)));
+// @include build((((basic1, basic2): border, extended: outline): 1px solid red, outline: 2px solid blue));
+
+
+// --
+// Variant 3
+// --
+// @include build((border: (top: (primary: 1px solid red))));
+// @include build(((border, outline): (top: (primary: 1px solid red))));
+// @include build((border: ((top, bottom): (primary: 1px solid red))));
+// @include build((border: (top: ((primary, secondary): 1px solid red))));
+
+// @include build(((border, outline): ((top, bottom): (primary: 1px solid red))));
+// @include build(((border, outline) top: ((color, radius): (primary: 1px solid red))));
+// @include build(((border, outline): ((top, bottom): (primary: 1px solid red, secondary: 1px solid red))));
+// @include build(((border, outline): ((top, bottom): ((primary, secondary): 1px solid red, (third, fourth): 2px solid blue))));
+
+
+// @include build((border: (top: (primary: 1px solid red, secondary: 2px solid blue))));
+// @include build((border: (top: (primary: 1px solid red))));
+// @include build((border: ((top, right): (border: 1px solid red, outline: 2px solid blue))));
+
+
+
+// FEATURE: Variant 1
+// (border: 1px solid red)
+// ((border, outline): 1px solid red)
+// (border: 1px solid red, outline: 2px solid blue)
+
+// (border top: 1px solid red)
+// ((border color, border top): 1px solid red)
+
+// (border (top, bottom): 1px solid red)
+// ((border, outline) top: 1px solid red)
+// ((border, outline) '+top': 1px solid red) // TODO:
+
+// (border (top, bottom) color: 1px solid red)
+// ((border (top, bottom) color, outline (top, bottom) color): 1px solid red)
+// (border (top, bottom) '+color': 1px solid red) // TODO:
+
+// (((basic 1, basic 2): border): 1px solid red)
+// ((basic-1: border, basic-2: border): 1px solid red)
+
+// ((basic: (border, outline)): 1px solid red)
+// ((basic: (border top, outline bottom)): 1px solid red)
+// ((basic: border (top,bottom)): 1px solid red)
+
+// (((basic1, basic2): (border, outline)): 1px solid red)
+
+
+// FEATURE: Variant 2.
+// (border: (top: 1px solid red))
+// (border: ((top, bottom) color: 1px solid red))
+
+// ((border, outline): (top: 1px solid red))
+// ((border, outline): ((top, bottom): 1px solid red))
+// ((border, outline) top: (color: 1px solid red))
+// ((border, outline) start: ((start, end) color: 1px solid red))
+// ((border, outline) '+top': (color: 1px solid red)) // TODO:
+
+// ((basic: border): (top: 1px solid red))
+// ((basic: (border, outline)): (top: 1px solid red))
+// (((basic1, basic2): (border, outline)): (top: 1px solid red))
+// ((basic1: border, basic2: border): (top: 1px solid red))
+// ((border, outline): ((top, bottom): 1px solid red, bottom: 2px solid blue))
+// (((basic1, basic2): border, extended: outline): 1px solid red, outline: 2px solid blue)
+
+
+// FEATURE: Variant 3
+// (border: (top: (primary: 1px solid red)))
+// (border: (top: (primary: 1px solid red, secondary: 2px solid blue)))
+// (border: (top: ((primary, secondary): 1px solid red)))
+
+// ((border, outline): (top: (primary: 1px solid red)))
+// (border: ((top, bottom): (primary: 1px solid red)))
+
+// ((border, outline): ((top, bottom): (primary: 1px solid red)))
+// ((border, outline) top: ((color, radius): (primary: 1px solid red)))
+// ((border, outline): ((top, bottom): (primary: 1px solid red, secondary: 1px solid red)))
+// ((border, outline): ((top, bottom): ((primary, secondary): 1px solid red, (third, fourth): 2px solid blue)))
+
+// (border: ((top, right): (border: 1px solid red, outline: 2px solid blue)))
+// ((border, outline): ((top, right): (border: 1px solid red, outline: 2px solid blue)))
+// ((border, outline): ((top, right): ((primary, secondary): 1px solid red, outline: 2px solid blue)))
+// ((border, outline): ((top, bottom) color: ((primary, secondary): 1px solid red, outline: 2px solid blue)))
+
+// (basic (border top, outline bottom) test: ((top, bottom) color: ((primary, secondary): 1px solid red, outline: 2px solid blue)))
+
+// ((border, outline) (top, right): (color: (border: 1px solid red, outline: 2px solid blue)))
+
+
+// FEATURE: Variant 4

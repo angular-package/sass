@@ -17,24 +17,43 @@
 // Status: TODO:
 // The `variant.build()` function.
 // @param `$variant`
-@mixin build($attribute-variant) {
+@mixin build($variant) {
   $rows: ();
-  @each $class-property, $middle-attribute-variant in $attribute-variant {
+  @each $class-property, $middle-attribute-variant in $variant {
     @if type-of($middle-attribute-variant) == map {
       @each $middle, $attribute-variant in $middle-attribute-variant {
         @if type-of($attribute-variant) == map {
           @each $attribute, $variant in $attribute-variant {
             // FEATURE: Variant 4.
             @if type-of($variant) == map {
-              @include list.each($class-property) using($class) {
-                @include list.each($middle) using($middle) {
-                  @include list.each($attribute) using($attribute) {
-                    @each $value-class, $value in $variant {
-                      $rows: append(
-                        $rows,
-                        v-class.set($class, $middle, $attribute, $value-class),
-                        v-property.set($class, list.join($middle, $attribute), $value),
-                      );
+              @if type-of($class-property) == map {
+                @each $class, $property-name in $class-property {
+                  @debug $class;
+
+                  // @include list.each($class-property) using($class) {
+                  //   @include list.each($class) using($class) {
+                  //   }
+                  // }
+
+                  // @include list.each($class) using($class) {
+                  //   $rows: append(
+                  //     $rows,
+                  //     v-class.set($class, $middle),
+                  //     v-property.set($property-name, $middle, $value),
+                  //   );
+                  // }
+                }
+              } @else {
+                @include list.each($class-property) using($class) {
+                  @include list.each($middle) using($middle) {
+                    @include list.each($attribute) using($attribute) {
+                      @each $value-class, $value in $variant {
+                        $rows: append(
+                          $rows,
+                          v-class.set($class, $middle, $attribute, $value-class),
+                          v-property.set($class, list.join($middle, $attribute), $value),
+                        );
+                      }
                     }
                   }
                 }
@@ -44,13 +63,52 @@
             } @else {
               $value-class: $attribute;
               $value: $variant;
-              @include list.each($class-property) using($class) {
-                @include list.each($middle) using($middle) {
-                  $rows: append(
-                    $rows,
-                    v-class.set($class, $middle, $value-class),
-                    v-property.set($class, $middle, $value),
-                  );
+              @if type-of($class-property) == map {
+                @each $class, $property-name in $class-property {
+                  @include list.each($class) using($class) {
+                    @if type-of($middle) == map {
+                      @each $-class, $-property-name in $middle {
+                        @include list.each($-class) using($-class) {
+                          $rows: append(
+                            $rows,
+                            v-class.set($class, $-class, $value-class),
+                            v-property.set($property-name, $-property-name, $value),
+                          );
+
+                          // @include list.each(selector.nest($property-name, $-property-name)) using($-property-name) {
+                          // }
+
+                          // @include list.each(selector.nest($property-name, $-property-name)) using($-property-name) {
+                          //   @debug $value-class, $-property-name;
+
+                          //   // $rows: append(
+                          //   //   $rows,
+                          //   //   v-class.set($class, $-class, $value-class),
+                          //   //   v-property.set($property-name, $-property-name, $value),
+                          //   // );
+                          // }
+                        }
+                      }
+                    } @else {
+                      @include list.each($middle) using($middle) {
+                        $rows: append(
+                          $rows,
+                          v-class.set($class, $middle),
+                          v-property.set($property-name, null, $value),
+                        );
+                      }
+                    }
+                  }
+                }
+              } @else {
+                @include list.each($class-property) using($class) {
+                  @include list.each($middle) using($middle) {
+                    $rows: append(
+                      $rows,
+                      v-class.set($class, $middle, $value-class),
+                      v-property.set($class, $middle, $value),
+                    );
+                  }
                 }
               }
             }
@@ -62,11 +120,13 @@
           @if type-of($class-property) == map {
             @each $class, $property-name in $class-property {
               @include list.each($class) using($class) {
-                $rows: append(
-                  $rows,
-                  v-class.set($class, $middle),
-                  v-property.set($property-name, $middle, $value),
-                );
+                @include list.each($middle) using($middle) {
+                  $rows: append(
+                    $rows,
+                    v-class.set($class, $middle),
+                    v-property.set($property-name, null, $value),
+                  );
+                }
               }
             }
           } @else {
@@ -75,7 +135,7 @@
                 $rows: append(
                   $rows,
                   v-class.set($class-property, $middle),
-                  v-property.set($class-property, $middle, $value),
+                  v-property.set($class-property, null, $value),
                 );
               }
             }
@@ -111,16 +171,22 @@
 @include build(
   // FEATURE: Variant 1
   // (border: 1px solid red)
-  // (border: (top: 1px solid red))
+  // (border: (top: 1px solid red)) // TODO: add + to property
+  // ((basic: border): ((top, bottom): 1px solid red))
+  // (((basic1, basic2): (border, outline)): (((y1, y2): (top, bottom)): ((primary, secondary): 1px solid red)))
 
   // FEATURE: Variant 3
   // (border: (top: (primary: 1px solid red)))
   // ((border, outline): ((top, bottom): (primary: 1px solid red)))
 
   // FEATURE: Variant 4
-  ((border, outline): ((top, bottom): ((color, radius): (primary: 1px solid red))))
+  // ((border, outline): ((top, bottom): ((color, radius): (primary: 1px solid red))))
+  // ((border, outline): ((top, bottom): ((color, radius): (primary: 1px solid red, secondary: 2px solid blue))))
   // ((border, outline): ((start, bottom) start: ((color, radius): (primary: 1px solid red))))
+  // ((border, outline): ((top, bottom): ((color, radius): ((primary, secondary): 1px solid red))))
   // ((border, outline): ((top, bottom): (color: (border: 1px solid red))))
+
+  // ((basic: (border, outline)): ((top, bottom): ((color, radius): (primary: 1px solid red))))
 
 ) using($resolved) {
   @each $resolved in $resolved {

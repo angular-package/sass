@@ -1,0 +1,44 @@
+// Modules.
+@use '../property';
+@use '../selector';
+
+// Examples.
+// property name
+// @debug property.name(padding); // padding
+
+// property name + attribute
+// @debug property.name(padding top); // padding-top
+
+// (property name, property name)
+// @debug property.name((padding, margin)); // padding, margin
+
+// (property + attribute, property + attribute)
+// @debug property.name((padding top, border radius)); // (padding-top, border-radius)
+
+// (property name, property name) attribute
+// @debug property.name((padding, margin) top); // padding-top, margin-top
+
+// @debug property.name(border block (start, end) color); // border-block-start-color, border-block-ends-color
+// @debug property.name((padding top, margin bottom)); // padding-top, margin-bottom
+
+// (property name, property name) (attribute, attribute)
+// @debug property.name((padding, margin) (top, bottom)); // padding-top, padding-bottom, margin-top, margin-bottom
+// @debug property.name((padding, margin) (top left, bottom right)); // padding-top-left, padding-bottom-right, margin-top-left, margin-bottom-right
+
+// (property name, property name), (attribute, attribute)
+// @debug property.name((padding, margin), (top, bottom)); // padding-top, padding-bottom, margin-top, margin-bottom
+// @debug property.name((padding, margin), (top left, bottom right)); // padding-top-left, padding-bottom-right, margin-top-left, margin-bottom-right
+
+// @debug property.name(a (padding, margin) b a (top, bottom) c); // a-padding-b-a-top-c, a-padding-b-a-bottom-c, a-margin-b-a-top-c, a-margin-b-a-bottom-c
+// @debug property.name(a (padding, margin) b, a (top, bottom) c); // a-padding-b-a-top-c, a-padding-b-a-bottom-c, a-margin-b-a-top-c, a-margin-b-a-bottom-c
+
+// @debug property.name(any (padding, margin) left before (top left, bottom right) color); // any-padding-left-before-top-left-color, any-padding-left-before-bottom-right-color, any-margin-left-before-top-left-color, any-margin-left-before-bottom-right-color
+// @debug property.name(any (padding, margin) left, before (top left, bottom right) color); // any-padding-left-before-top-left-color, any-padding-left-before-bottom-right-color, any-margin-left-before-top-left-color, any-margin-left-before-bottom-right-color
+
+// @debug property.name((padding, margin) (top left, bottom right) (radius, color)); // padding-top-left-radius, padding-top-left-color, padding-bottom-right-radius, padding-bottom-right-color, margin-top-left-radius, margin-top-left-color, margin-bottom-right-radius, margin-bottom-right-color
+// @debug property.name((padding, margin), (top left, bottom right), (radius, color)); // padding-top-left-radius, padding-top-left-color, padding-bottom-right-radius, padding-bottom-right-color, margin-top-left-radius, margin-top-left-color, margin-bottom-right-radius, margin-bottom-right-color
+
+// @debug property.name(((property1, property2): ((side1, side2): attribute))); // property1-side1-attribute, property1-side2-attribute, property2-side1-attribute, property2-side2-attribute
+// @debug property.name(((property1, property2): ((side1 side1, side2 side2): (attribute1, attribute2)))); // property1-side1-side1-attribute1, property1-side1-side1-attribute2, property1-side2-side2-attribute1, property1-side2-side2-attribute2, property2-side1-side1-attribute1, property2-side1-side1-attribute2, property2-side2-side2-attribute1, property2-side2-side2-attribute2
+
+// @debug property.name((property1: (side1: attribute1)), (property2: (side2: attribute2)));

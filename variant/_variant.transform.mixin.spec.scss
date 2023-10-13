@@ -1,0 +1,248 @@
+// Modules.
+@use '../class';
+@use '../list';
+@use '../map';
+@use '../property';
+@use '../selector';
+@use '../values';
+@use 'class' as v-class;
+@use 'indicator';
+@use 'property' as v-property;
+
+// Functions.
+@use 'variant.append.function' as *;
+
+// Mixins.
+@use 'variant.class-property.mixin' as *;
+
+// Mixin
+@use 'variant.transform.mixin' as *;
+
+
+// Test.
+@include transform(
+  // FEATURE: Variant 2
+  // (border: (top: 1px solid red))
+  // ((border, outline): (top: 1px solid red))
+
+  // ((border, outline): ((top: ()): 1px solid red))
+  // ((border, outline): (((top, bottom): ()): 1px solid red))
+  // ((border, outline): ((top, bottom): 1px solid red))
+
+  // (true (border, outline): ((top, bottom): 1px solid red))
+  // ((border, outline): (true (top, bottom): 1px solid red))
+  // (true (border, outline): (true (top, bottom): 1px solid red))
+
+  // ((border, outline) top: (color: 1px solid red))
+  // ((border, outline) start: ((start, end) color: 1px solid red))
+  // ((border, outline) '+top': (color: 1px solid red)) // TODO:
+
+  // ((basic: border): (top: 1px solid red))
+  // ((basic: border): ((one: top): 1px solid red))
+  // ((basic: border): ((one: (top, bottom)): 1px solid red))
+
+  // ((basic: (border, outline)): (top: 1px solid red))
+  // ((basic: (border, outline)): ((one: top): 1px solid red))
+  // ((basic: (border, outline)): ((one: (top, bottom)): 1px solid red))
+
+  // (((basic1, basic2): border): (top: 1px solid red))
+  // (((basic1, basic2): (border, outline)): (top: 1px solid red))
+  // ((basic1: border, basic2: border): (top: 1px solid red))
+
+  // (((basic1, basic2): (border, outline)): ((top, bottom): 1px solid red))
+  // (((basic1, basic2): (border, outline)): ((one: (top, bottom)): 1px solid red))
+
+  // ((border, outline): ((top, bottom): 1px solid red, bottom: 2px solid blue))
+  // (((basic1, basic2): border, extended: outline): 1px solid red, outline: 2px solid blue)
+
+, false false false) using($resolved) {
+  @each $resolved in $resolved {
+    @include class.content(map.get($resolved, class)) {
+      @include property.set(
+        (map.get($resolved, (property, name)): map.get($resolved, (property, value)))
+      );
+    }
+  }
+}
+
+// @include class.content((border top, outline bottom)) {
+// @include class.content((border (top, bottom) color)) {
+//   cursor: crosshair;
+// }
+
+
+// Examples.
+// --
+// Variant 1
+// --
+// @include build((border: 1px solid red));
+// @include build((border top: 1px solid red));
+// @include build(((border, outline): 1px solid red));
+// @include build(((border top, outline top): 1px solid red));
+// @include build(((border, outline) top: 1px solid red));
+// @include build((border: 1px solid red, outline: 2px solid blue));
+// @include build((
+//   (border, outline): 1px solid red,
+//   (border, outline) (top, bottom): 1px solid red,
+//   (top, bottom): 1px solid red
+// ));
+
+
+// --
+// @include build((((basic 1, basic 2): border): 1px solid red));
+// @include build(((basic-1: border, basic-2: border): 1px solid red));
+
+
+// --
+// @include build(((basic: (border, outline)): 1px solid red));
+// @include build((((basic1, basic2): (border, outline)): 1px solid red));
+// @include build((((basic1, basic2): (border, outline) (top, bottom)): 1px solid red));
+
+
+// --
+// Variant 2
+// --
+// @include build((border: (top: 1px solid red)));
+// @include build((border: ((top, bottom): 1px solid red)));
+// @include build(((border, outline): (top: 1px solid red)));
+// @include build(((border, outline): ((top, bottom): 1px solid red)));
+// @include build(((border, outline) top: (color: 1px solid red)));
+// @include build(((border, outline) start: ((start, end) color: 1px solid red))); // TODO:
+
+// @include build(((basic: border): (top: 1px solid red)));
+// @include build(((basic: (border, outline)): (top: 1px solid red)));
+// @include build((((basic1, basic2): (border, outline)): (top: 1px solid red)));
+// @include build(((basic1: border, basic2: border): (top: 1px solid red)));
+// @include build(((border, outline): ((top, bottom): 1px solid red, bottom: 2px solid blue)));
+// @include build((((basic1, basic2): border, extended: outline): 1px solid red, outline: 2px solid blue));
+
+
+// --
+// Variant 3
+// --
+// @include build((border: (top: (primary: 1px solid red))));
+// @include build(((border, outline): (top: (primary: 1px solid red))));
+// @include build((border: ((top, bottom): (primary: 1px solid red))));
+// @include build((border: (top: ((primary, secondary): 1px solid red))));
+
+// @include build(((border, outline): ((top, bottom): (primary: 1px solid red))));
+// @include build(((border, outline) top: ((color, radius): (primary: 1px solid red))));
+// @include build(((border, outline): ((top, bottom): (primary: 1px solid red, secondary: 1px solid red))));
+// @include build(((border, outline): ((top, bottom): ((primary, secondary): 1px solid red, (third, fourth): 2px solid blue))));
+
+
+// @include build((border: (top: (primary: 1px solid red, secondary: 2px solid blue))));
+// @include build((border: (top: (primary: 1px solid red))));
+// @include build((border: ((top, right): (border: 1px solid red, outline: 2px solid blue))));
+
+
+
+// FEATURE: Variant 1
+// (border: 1px solid red)
+// ((border, outline): 1px solid red)
+// (border: 1px solid red, outline: 2px solid blue)
+
+// (border top: 1px solid red)
+// ((border color, border top): 1px solid red)
+// (true (border color, border top): 1px solid red)
+
+// (border (top, bottom): 1px solid red)
+// ((border, outline) top: 1px solid red)
+// ((border, outline) '+top': 1px solid red) // TODO:
+
+// (border (top, bottom) color: 1px solid red)
+// ((border (top, bottom) color, outline (top, bottom) color): 1px solid red)
+// (border (top, bottom) '+color': 1px solid red) // TODO:
+
+// (((basic 1, basic 2): border): 1px solid red)
+// ((basic-1: border, basic-2: border): 1px solid red)
+
+// ((basic: (border, outline)): 1px solid red)
+// ((basic: (border top, outline bottom)): 1px solid red)
+// ((basic: border (top,bottom)): 1px solid red)
+
+// (((basic1, basic2): (border, outline)): 1px solid red)
+// (((basic1, basic2): (border, outline)): 1px solid red)
+
+
+// FEATURE: Variant 2.
+// (border: (top: 1px solid red))
+// ((border, outline): (top: 1px solid red))
+
+// ((border, outline): ((top: ()): 1px solid red))
+// ((border, outline): (((top, bottom): ()): 1px solid red))
+// ((border, outline): ((top, bottom): 1px solid red))
+
+// (true (border, outline): ((top, bottom): 1px solid red))
+// ((border, outline): (true (top, bottom): 1px solid red))
+// (true (border, outline): (true (top, bottom): 1px solid red))
+
+// ((border, outline) top: (color: 1px solid red))
+// ((border, outline) start: ((start, end) color: 1px solid red))
+// ((border, outline) '+top': (color: 1px solid red)) // TODO:
+
+// ((basic: border): (top: 1px solid red))
+// ((basic: border): ((one: top): 1px solid red))
+// ((basic: border): ((one: (top, bottom)): 1px solid red))
+
+// ((basic: (border, outline)): (top: 1px solid red))
+// ((basic: (border, outline)): ((one: top): 1px solid red))
+// ((basic: (border, outline)): ((one: (top, bottom)): 1px solid red))
+
+// (((basic1, basic2): border): (top: 1px solid red))
+// (((basic1, basic2): (border, outline)): (top: 1px solid red))
+// ((basic1: border, basic2: border): (top: 1px solid red))
+
+// (((basic1, basic2): (border, outline)): ((top, bottom): 1px solid red))
+// (((basic1, basic2): (border, outline)): ((one: (top, bottom)): 1px solid red))
+
+// ((border, outline): ((top, bottom): 1px solid red, bottom: 2px solid blue))
+// (((basic1, basic2): border, extended: outline): 1px solid red, outline: 2px solid blue)
+
+// FEATURE: Variant 3
+// (border: (top: (primary: 1px solid red)))
+// ((border, outline): (top: (primary: 1px solid red)))
+// ((border, outline): ((top, bottom): (primary: 1px solid red)))
+// ((border, outline): ((top, bottom): ((primary, secondary): 1px solid red)))
+// (border: (top: ((primary, secondary): 1px solid red)))
+// (border: ((top, bottom): ((primary, secondary): 1px solid red)))
+
+// ((basic1: (border, outline)): (top: (primary: 1px solid red)))
+// ((basic1 basic2: (border, outline)): (top bottom: (primary red: 1px solid red)))
+
+// ((basic1: (border, outline)): ((top bottom: (top, bottom)): (primary: 1px solid red)))
+// ((basic1: (border, outline)): (((top, bottom): (top, bottom)): (primary: 1px solid red)))
+// ((basic1: (border, outline)): (((top, bottom): (top, bottom)): ((primary, secondary): 1px solid red)))
+
+// (((basic1, basic2): (border, outline)): (top bottom: (primary red: 1px solid red, secondary: 2px solid blue)))
+// (((basic1, basic2): (border, outline)): (((top, bottom): (top, bottom)): ((primary, secondary): 1px solid red)))
+
+// (((basic1, basic2): (border, outline)): (((y1, y2): (top, bottom)): ((primary, secondary): 1px solid red)))
+
+
+// FEATURE: Variant 4
+// ((border, outline): ((top, bottom): ((color, radius): (primary: 1px solid red))))
+// ((border, outline): ((top, bottom): ((color, radius): ((primary, secondary): 1px solid red))))
+
+// ((border, outline): ((top, bottom): ((color, radius): (primary: 1px solid red, secondary: 2px solid blue))))
+
+// ((border, outline) start: ((start, bottom): ((color, radius):s (primary: 1px solid red))))
+// ((border, outline) start: ((start, bottom): ((color, radius): ((primary, secondary): 1px solid red))))
+
+// ((border, outline): ((start, bottom) start: ((color, radius): (primary: 1px solid red))))
+// ((border, outline): ((start, bottom) start: ((color, radius): ((primary, secondary): 1px solid red))))
+
+// ((border, outline): ((start, bottom): ((color, radius) end: (primary: 1px solid red))))
+// ((border, outline): ((start, bottom): ((color, radius) end: ((primary, secondary): 1px solid red))))
+
+// ((border, outline) item1: ((start, bottom) item2: ((color, radius) item3: (primary: 1px solid red))))
+// ((border, outline) item1: ((start, bottom) item2: ((color, radius) item3: ((primary, secondary): 1px solid red))))
+
+// ((border, outline): ((top, bottom): ((color, radius): ((primary, secondary): 1px solid red))))
+// ((border, outline): ((top, bottom): (color: (border: 1px solid red))))
+// ((border, outline): ((top, bottom): (color: (primary: 1px solid red))))
+
+// ((basic: (border, outline)): ((top, bottom): ((color, radius): (primary: 1px solid red))))
+
+// (((basic1, basic2): (border, outline)): (((y1, y2): (top, bottom)): ((color, radius): ((primary, secondary): 1px solid red))))
+// (((basic1, basic2): (border, outline)): (((y1, y2): (top, bottom)): (((end1, end2): (color, radius)): ((primary, secondary): 1px solid red))))

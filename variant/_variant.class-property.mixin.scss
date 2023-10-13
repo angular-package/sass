@@ -1,0 +1,36 @@
+// Modules.
+@use '../list';
+
+// Status:
+// The `variant.class-property()` mixin.
+// @param `$class-property-name`
+// @param `$combine`
+@mixin class-property($class-property-name, $combine: false) {
+  @if type-of($class-property-name) == map {
+    @each $class, $property-name in $class-property-name {
+      @if list.has-bool($class) {
+        $combine: list.bool($class);
+        $class: list.remove-value($class, true, false);
+      }
+      @if $combine {
+        @content($class, $property-name);
+      } @else {
+        @include list.each($class) using($class) {
+          @content($class, $property-name);
+        }
+      }
+    }
+  } @else {
+    @if list.has-bool($class-property-name) {
+      $combine: list.bool($class-property-name);
+      $class-property-name: list.remove-value($class-property-name, true, false);
+    }
+    @if $combine {
+      @content($class-property-name, null);
+    } @else {
+      @include list.each($class-property-name) using($class-property-name) {
+        @content($class-property-name, null);
+      }
+    }
+  }
+}

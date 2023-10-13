@@ -1,0 +1,139 @@
+// Modules.
+@use '../class';
+@use '../list';
+@use '../map';
+@use '../property';
+@use '../selector';
+@use '../values';
+@use 'class' as v-class;
+@use 'indicator';
+@use 'property' as v-property;
+
+// Functions.
+@use 'variant.append.function' as *;
+@use 'variant.combine-get.function' as *;
+
+// Mixins.
+@use 'variant.class-property.mixin' as *;
+
+// Status: TODO:
+// The `variant.transform()` mixin transforms variant from level 1 - 3 to map and append to rows.
+// @param `$variant`
+// @param `$combine`
+@mixin transform($variant, $combine: false) {
+  $rows: ();
+  @each $class-property, $middle_attribute_variant in $variant {
+    @include class-property($class-property, combine-get($combine, 1)) using($class_property, $property-name) {
+      @if type-of($middle_attribute_variant) == map { // FEATURE: Variant 2
+        @each $middle, $attribute-variant in $middle_attribute_variant {
+          @include class-property($middle, combine-get($combine, 2)) using($class_property1, $property-name1) {
+            @if type-of($attribute-variant) == map { // FEATURE: Variant 3
+              @each $attribute, $variant in $attribute-variant {
+                @include class-property($attribute, combine-get($combine, 3)) using($class_property2, $property-name2) {
+                  @if type-of($variant) == map { // FEATURE: Variant 4.
+                    // FEATURE: Variant 4.
+                    @debug "Variant 4.";
+
+                    @each $value-class, $value in $variant {
+                      $rows: append(
+                        $rows,
+                        v-class.set(
+                          $class_property,
+                          $class_property1,
+                          $class_property2,
+                          $property-name2,
+                          $value-class,
+                        ),
+                        v-property.set(
+                          if($property-name, $property-name, $class_property),
+                          property.name(
+                            if($property-name1, $property-name1, $class_property1),
+                            if($property-name2, $property-name2, $class_property2),
+                          ),
+                          $value
+                        ),
+                      );
+                    }
+                  } @else {
+                    // FEATURE: Variant 3.
+                    @debug "Variant 3: (prop: (middle: variant)) (prop: middle: (class: value))";
+                    // @debug "$class-property: " $class_property;
+                    // @debug "$class-property1: " $class_property1;
+                    // @debug "$property-name: " $property-name;
+                    // @debug "$property-name1: " $property-name1;
+                    // @debug "class: " $class_property, $class_property1;
+                    // @debug "property name: " if($property-name, $property-name, $class_property), if($property-name1, $property-name1, $class_property1);
+
+                    $value: $variant;
+                    $rows: append(
+                      $rows,
+                      v-class.set(
+                        $class_property,
+                        $class_property1,
+                        $class_property2,
+                      ),
+                      v-property.set(
+                        if($property-name, $property-name, $class_property),
+                        property.name(
+                          if($property-name1, $property-name1, $class_property1),
+                          $property-name2,
+                        ),
+                        $value
+                      ),
+                    );
+
+
+                  }
+                }
+              }
+            } @else {
+              // FEATURE: Variant 2.
+              @debug "Variant 2: (middle: variant) (middle: (class: value)";
+              // @debug "$class-property: " $class_property;
+              // @debug "$class-property1: " $class_property1;
+              // @debug "$property-name: " $property-name;
+              // @debug "$property-name1: " $property-name1;
+              // @debug "class: " $class_property, $class_property1;
+              // @debug "property name: " if($property-name, $property-name, $class_property), if($property-name1, $property-name1, $class_property1);
+
+              $value: $attribute-variant;
+              $rows: append(
+                $rows,
+                v-class.set(
+                  $class_property,
+                  $class_property1
+                ),
+                v-property.set(
+                  if($property-name, $property-name, $class_property),
+                  if($property-name1, $property-name1, $class_property1),
+                  $value,
+                ),
+              );
+            }
+
+
+          }
+        }
+      } @else {
+        // FEATURE: Variant 1.
+        @debug "Variant 1: (variant) (class: value)";
+        // @debug "$property-name: #{$property-name}";
+        // @debug "$class_property: #{$class_property}";
+
+        $value: $middle_attribute_variant;
+        $rows: append(
+          $rows,
+          v-class.set($class_property),
+          v-property.set(
+            if($property-name, $property-name, $class_property),
+            null,
+            $value,
+          )
+        );
+
+      }
+    }
+  }
+
+  @content($rows);
+}

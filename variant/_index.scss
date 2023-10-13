@@ -1,5 +1,11 @@
+@forward 'class' as class-*;
 @forward 'indicator' as indicator-*;
-@forward 'update' as update-*;
+@forward 'item' as item-*;
+@forward 'property' as property-*;
+@forward 'variant.append.function';
+@forward 'variant.class-property.mixin';
+@forward 'variant.combine-get.function';
 @forward 'variant.create.function';
 @forward 'variant.modify.function';
+@forward 'variant.transform.mixin';
 @forward 'variant.update.function';

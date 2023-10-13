@@ -1,0 +1,28 @@
+// Modules.
+@use '../../list';
+// @use '../../selector';
+@use '../../values';
+// @use '../indicator';
+
+// Status: TODO:
+// The `class.set()` function.
+// @arbitrary `$classes...`
+// @returns
+@function set($names...) {
+  $result: ();
+  @each $class in $names {
+    @if list.separator($class) == comma {
+      $result: values.combine((join: $result), $class);
+    } @else {
+      $result: values.join($result, $class);
+    }
+  }
+  @return $result;
+}
+
+// Examples.
+// @debug set(border);
+// @debug set(border color);
+// @debug set((border, outline));
+// @debug set((border, outline), (top, bottom), color);
+// @debug set((border, outline) top, (color, radius));

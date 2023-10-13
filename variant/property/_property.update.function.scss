@@ -1,0 +1,48 @@
+// Sass.
+@use 'sass:list';
+
+// Modules.
+@use '../../map';
+@use '../../values';
+
+// Property.
+// pre-base, base, middle, attribute, (additional) attribute
+// -, border, start start, radius
+
+// Status: TODO:
+// The `property.update()` function.
+// @param `$property`
+// @param `$modifier`
+// @param `$attribute`
+// @param `$level`
+// @returns
+@function update($property, $modifier, $attribute: null, $level: null) {
+  @if list.separator($property) == comma {
+    $i: 1;
+    @each $base in $property {
+      $property: list.set-nth(
+        $property,
+        $i,
+        values.join(
+          (separator: space),
+          map.get-any($modifier, ($level, property, pre-base), (property, pre-base), ($level, property, prefix), (property, prefix), null),
+          map.get-any($modifier, ($level, property, base), (property, base), ($level, property, name), (property, name), null) or $base,
+          map.get-any($modifier, ($level, property, middle), (property, middle), null),
+          $attribute,
+          map.get-any($modifier, ($level, property, attribute), (property, attribute), ($level, property, end), (property, end), null),
+        )
+      );
+      $i: $i + 1;
+    }
+  } @else {
+    $property: values.join(
+      (separator: space),
+      map.get-any($modifier, ($level, property, pre-base), (property, pre-base), ($level, property, prefix), (property, prefix), null),
+      map.get-any($modifier, ($level, property, base), (property, base), ($level, property, name), (property, name), null) or $property,
+      map.get-any($modifier, ($level, property, middle), (property, middle), null),
+      $attribute,
+      map.get-any($modifier, ($level, property, attribute), (property, attribute), ($level, property, end), (property, end), null),
+    );
+  }
+  @return $property;
+}

@@ -10,6 +10,7 @@
 @function create($value, $modifier: null) {
   $result: ();
   @if type-of($value) == map {
+
     @each $name, $side-variant in $value {
       @if type-of($side-variant) == map {
         @each $side, $variant in $side-variant {
@@ -21,6 +22,9 @@
         $result: map.merge($result, (), (), ($name: $side-variant));
       }
     }
+
+
+
   } @else if not (type-of($value) == map) {
     @each $value in if(list.separator($value) == comma, $value, ($value,)) {
       // Remove !important.
@@ -32,6 +36,18 @@
   }
   @return $result;
 }
+
+// Variant
+// (class+property: property-value)
+// ((class: property-name): property-value)
+
+// (class+property-name: (class: property-value))
+// ((class: property-name): (class: property-value))
+
+// (class+property-name: (class+property-name: (class: property-value)))
+// ((class: property-name): ((class+property-name: class+property-name): (class: property-value)))
+// ((class: property-name): ((class+property-name: class+property-name): (class: (property-name: property-value))))
+
 
 // Examples.
 // string

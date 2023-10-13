@@ -1,0 +1,48 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Modules.
+@use '../../class';
+@use '../../map';
+@use '../../values';
+
+// Status: DONE
+// The `item.update()` function.
+// @param `$item`
+// @param `$class`
+// @param `$property`
+// @param `$key`
+// @returns
+@function update($item, $class: null, $property: null, $key: base) {
+  $result: ();
+  @if type-of($item) == map {
+    @each $-class, $prop in $item {
+      $result: (
+        if(
+          meta.type-of($class) == map,
+          class.affix-add($-class, $class),
+          $-class
+        ): map.get($property, $key, $property) or $prop
+      );
+    }
+  } @else {
+    $class: if(
+      meta.type-of($class) == map,
+      class.affix-add($item, $class),
+      $class or $item
+    );
+    @if $property {
+      $result: (
+        $class: map.get($property, $key, $property)
+      );
+    } @else {
+      @return $class;
+    }
+  }
+  @return $result;
+}
+
+// Examples.
+// @debug item((primary: primary light), (prefix: p, suffix: s));
+// @debug item((primary: primary light), (prefix: spectre, suffix: end));

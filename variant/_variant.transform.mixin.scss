@@ -1,10 +1,9 @@
 // Modules.
-@use '../class';
+@use '../function';
 @use '../list';
 @use '../map';
-@use '../property';
-@use '../selector';
-@use '../values';
+@use '../meta';
+@use '../property/property.name.function' as -property;
 @use 'class' as v-class;
 @use 'indicator';
 @use 'property' as v-property;
@@ -17,123 +16,175 @@
 @use 'variant.class-property.mixin' as *;
 
 // Status: TODO:
-// The `variant.transform()` mixin transforms variant from level 1 - 3 to map and append to rows.
-// @param `$variant`
-// @param `$combine`
-@mixin transform($variant, $combine: false) {
+// The `variant.transform()` mixin transforms variant from level 1 - 4 to map and append to rows.
+// @param `$variant` A `map` type value to append into list row as prepared `map`.
+// @param `$combine` A `list`, `map`, or `bool` value to indicate whether all or selected level is combined variant.
+// @param `$modifier`
+@mixin transform(
+  $variant,
+  $important: false,
+  $combine: false,
+  $modifier: null,
+
+  // function to call
+  $prefix: null,
+  $separator: null,
+  $type-function: null,
+  $functions: null,
+  $execute: true,
+  $arguments: null,
+) {
   $rows: ();
   @each $class-property, $middle_attribute_variant in $variant {
+    // Call function.
+    $class-property: if(
+      meta.type-of($class-property) == list and list.length($class-property) > 1 and function.has($class-property),
+      function.call-arglist($class-property...),
+      $class-property
+    );
+    $middle_attribute_variant: if(
+      meta.type-of($middle_attribute_variant) == list and list.length($middle_attribute_variant) > 1 and function.has($middle_attribute_variant),
+      function.call-arglist($middle_attribute_variant...),
+      $middle_attribute_variant
+    );
+
+    // End call function.
     @include class-property($class-property, combine-get($combine, 1)) using($class_property, $property-name) {
       @if type-of($middle_attribute_variant) == map { // FEATURE: Variant 2
         @each $middle, $attribute-variant in $middle_attribute_variant {
+          // Call function.
+          $middle: if(
+            meta.type-of($middle) == list and list.length($middle) > 1 and function.has($middle),
+            function.call-arglist($middle...),
+            $middle
+          );
+          $attribute-variant: if(
+            meta.type-of($attribute-variant) == list and list.length($attribute-variant) > 1 and function.has($attribute-variant),
+            function.call-arglist($attribute-variant...),
+            $attribute-variant
+          );
+
+          // End call function.
           @include class-property($middle, combine-get($combine, 2)) using($class_property1, $property-name1) {
             @if type-of($attribute-variant) == map { // FEATURE: Variant 3
               @each $attribute, $variant in $attribute-variant {
+                // Call function.
+                $attribute: if(
+                  meta.type-of($attribute) == list and list.length($attribute) > 1 and function.has($attribute),
+                  function.call-arglist($attribute...),
+                  $attribute
+                );
+                $variant: if(
+                  meta.type-of($variant) == list and list.length($variant) > 1 and function.has($variant),
+                  function.call-arglist($variant...),
+                  $variant
+                );
+
+                // End call function.
                 @include class-property($attribute, combine-get($combine, 3)) using($class_property2, $property-name2) {
                   @if type-of($variant) == map { // FEATURE: Variant 4.
                     // FEATURE: Variant 4.
-                    @debug "Variant 4.";
-
+                    // @debug "Variant 4.";
                     @each $value-class, $value in $variant {
-                      $rows: append(
-                        $rows,
-                        v-class.set(
-                          $class_property,
-                          $class_property1,
-                          $class_property2,
-                          $property-name2,
-                          $value-class,
-                        ),
-                        v-property.set(
-                          if($property-name, $property-name, $class_property),
-                          property.name(
-                            if($property-name1, $property-name1, $class_property1),
-                            if($property-name2, $property-name2, $class_property2),
-                          ),
-                          $value
-                        ),
-                      );
+                      @include class-property($value-class, combine-get($combine, 4)) using($class_property3, $property-name3) {
+                        $rows: append(
+                          $rows,
+                          v-class.set((
+                            prefix: map.get-any($modifier, (4, class, prefix), (class, prefix), null),
+                            base: map.get-any($modifier, (4, class, base), (class, base), $class_property),
+                            middle: map.get-any($modifier, (4, class, middle), (class, middle), $class_property1),
+                            pre-attribute: map.get-any($modifier, (4, class, pre-attribute), (class, pre-attribute), null),
+                            attribute: map.get-any($modifier, (4, class, attribute), (class, attribute), $class_property2),
+                            prop-attribute: map.get-any($modifier, (4, class, prop-attribute), (class, prop-attribute), null),
+                            last-attribute: map.get-any($modifier, (4, class, last-attribute), (class, last-attribute), null),
+                            value-class: map.get-any($modifier, (4, class, value-class), (class, value-class), $class_property3),
+                            suffix: map.get-any($modifier, (4, class, suffix), (class, suffix), null),
+                          )),
+                          v-property.set((
+                            pre-base: map.get-any($modifier, (4, property, pre-base), (property, pre-base), null),
+                            base: map.get-any($modifier, (4, property, base), (property, base), $property-name or $class_property),
+                            middle: map.get-any($modifier, (4, property, middle), (property, middle), $property-name1 or $class_property1),
+                            attribute: map.get-any($modifier, (4, property, attribute), (property, attribute), $property-name2 or $class_property2),
+                            prop-attribute: map.get-any($modifier, (4, property, prop-attribute), (property, prop-attribute), $property-name3),
+                            value: map.get-any($modifier, (4, property, value), (property, value), $value),
+                          )),
+                        );
+                      }
                     }
                   } @else {
                     // FEATURE: Variant 3.
-                    @debug "Variant 3: (prop: (middle: variant)) (prop: middle: (class: value))";
-                    // @debug "$class-property: " $class_property;
-                    // @debug "$class-property1: " $class_property1;
-                    // @debug "$property-name: " $property-name;
-                    // @debug "$property-name1: " $property-name1;
-                    // @debug "class: " $class_property, $class_property1;
-                    // @debug "property name: " if($property-name, $property-name, $class_property), if($property-name1, $property-name1, $class_property1);
-
+                    // @debug "Variant 3.";
                     $value: $variant;
                     $rows: append(
                       $rows,
-                      v-class.set(
-                        $class_property,
-                        $class_property1,
-                        $class_property2,
-                      ),
-                      v-property.set(
-                        if($property-name, $property-name, $class_property),
-                        property.name(
-                          if($property-name1, $property-name1, $class_property1),
-                          $property-name2,
-                        ),
-                        $value
-                      ),
+                      v-class.set((
+                        prefix: map.get-any($modifier, (3, class, prefix), (class, prefix), null),
+                        base: map.get-any($modifier, (3, class, base), (class, base), $class_property),
+                        middle: map.get-any($modifier, (3, class, middle), (class, middle), $class_property1),
+                        pre-attribute: map.get-any($modifier, (3, class, pre-attribute), (class, pre-attribute), null),
+                        attribute: map.get-any($modifier, (3, class, attribute), (class, attribute), $class_property2),
+                        suffix: map.get-any($modifier, (3, class, suffix), (class, suffix), null),
+                      )),
+                      v-property.set((
+                        pre-base: map.get-any($modifier, (3, property, pre-base), (property, pre-base), null),
+                        base: map.get-any($modifier, (3, property, base), (property, base), $property-name or $class_property),
+                        middle: map.get-any($modifier, (3, property, middle), (property, middle), $property-name1 or $class_property1),
+                        attribute: map.get-any($modifier, (3, property, attribute), (property, attribute), $property-name2),
+                        prop-attribute: map.get-any($modifier, (3, property, prop-attribute), (property, prop-attribute), null),
+                        value: map.get-any($modifier, (3, property, value), (property, value), $value),
+                      )),
                     );
-
-
                   }
                 }
               }
             } @else {
               // FEATURE: Variant 2.
-              @debug "Variant 2: (middle: variant) (middle: (class: value)";
-              // @debug "$class-property: " $class_property;
-              // @debug "$class-property1: " $class_property1;
-              // @debug "$property-name: " $property-name;
-              // @debug "$property-name1: " $property-name1;
-              // @debug "class: " $class_property, $class_property1;
-              // @debug "property name: " if($property-name, $property-name, $class_property), if($property-name1, $property-name1, $class_property1);
-
+              // @debug "Variant 2.";
               $value: $attribute-variant;
               $rows: append(
                 $rows,
-                v-class.set(
-                  $class_property,
-                  $class_property1
-                ),
-                v-property.set(
-                  if($property-name, $property-name, $class_property),
-                  if($property-name1, $property-name1, $class_property1),
-                  $value,
-                ),
+                v-class.set((
+                  prefix: map.get-any($modifier, (2, class, prefix), (class, prefix), null),
+                  base: map.get-any($modifier, (2, class, base), (class, base), $class_property),
+                  middle: map.get-any($modifier, (2, class, middle), (class, middle), $class_property1),
+                  attribute: map.get-any($modifier, (2, class, attribute), (class, attribute), null),
+                  suffix: map.get-any($modifier, (2, class, suffix), (class, suffix), null),
+                )),
+                v-property.set((
+                  pre-base: map.get-any($modifier, (2, property, pre-base), (property, pre-base), null),
+                  base: map.get-any($modifier, (2, property, base), (property, base), $property-name or $class_property),
+                  middle: map.get-any($modifier, (2, property, middle), (property, middle), $property-name1),
+                  attribute: map.get-any($modifier, (2, property, attribute), (property, attribute), null),
+                  prop-attribute: map.get-any($modifier, (2, property, prop-attribute), (property, prop-attribute), null),
+                  value: map.get-any($modifier, (2, property, value), (property, value), $value),
+                )),
               );
             }
-
-
           }
         }
       } @else {
         // FEATURE: Variant 1.
-        @debug "Variant 1: (variant) (class: value)";
-        // @debug "$property-name: #{$property-name}";
-        // @debug "$class_property: #{$class_property}";
-
+        // @debug "Variant 1.";
         $value: $middle_attribute_variant;
         $rows: append(
           $rows,
-          v-class.set($class_property),
-          v-property.set(
-            if($property-name, $property-name, $class_property),
-            null,
-            $value,
-          )
+          v-class.set((
+            prefix: map.get-any($modifier, (1, class, prefix), (class, prefix), null),
+            base: map.get-any($modifier, (1, class, base), (class, base), $class_property),
+            attribute: map.get-any($modifier, (1, class, attribute), (class, attribute), null),
+            suffix: map.get-any($modifier, (1, class, suffix), (class, suffix), null),
+          )),
+          v-property.set((
+            pre-base: map.get-any($modifier, (1, property, pre-base), (property, pre-base), null),
+            base: map.get-any($modifier, (1, property, base), (property, base), $property-name or $class_property),
+            middle: map.get-any($modifier, (1, property, middle), (property, middle), null),
+            attribute: map.get-any($modifier, (1, property, attribute), (property, attribute), null),
+            prop-attribute: map.get-any($modifier, (1, property, prop-attribute), (property, prop-attribute), null),
+            value: map.get-any($modifier, (1, property, value), (property, value), $value),
+          )),
         );
-
       }
     }
   }
-
   @content($rows);
 }

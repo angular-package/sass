@@ -10,7 +10,7 @@
     @each $class, $property-name in $class-property-name {
       @if list.has-bool($class) {
         $combine: list.bool($class);
-        $class: list.remove-value($class, true, false);
+        $class: list.nth(list.remove-value($class, true, false), 1);
       }
       @if $combine {
         @content($class, $property-name);
@@ -23,7 +23,7 @@
   } @else {
     @if list.has-bool($class-property-name) {
       $combine: list.bool($class-property-name);
-      $class-property-name: list.remove-value($class-property-name, true, false);
+      $class-property-name: list.nth(list.remove-value($class-property-name, true, false), 1);
     }
     @if $combine {
       @content($class-property-name, null);

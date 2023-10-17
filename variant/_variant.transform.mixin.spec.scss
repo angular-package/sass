@@ -35,7 +35,7 @@ function.$functions: map.merge(function.$functions, (variant: meta.module-functi
 
   // TODO: Check.
   // (((basic1, basic2): (border, outline)): (((y1, y2): (top, bottom)): (((color, radius): (start, start)): (((primary, secondary): (color, radius)): 1px solid red))))
-  // ((border, outline): ((top, bottom): (primary: 1px solid red)))
+  ((border, outline): ((top, bottom): (primary: 1px solid red)))
 
   // FEATURE: Variant 2
   // (border: (top: 1px solid red))
@@ -74,27 +74,22 @@ function.$functions: map.merge(function.$functions, (variant: meta.module-functi
 
   // ((border, outline): ((top, bottom): 1px solid red, bottom: 2px solid blue))
   // (((basic1, basic2): border, extended: outline): 1px solid red, outline: 2px solid blue)
-
-,
+  ,
   false false false,
   // (1: (class: (base: bbbb)), class: (prefix: spectre, attribute: color, suffix: end))
 ) using($resolved) {
-  // @debug (variant: (create: meta.get-function(create, false, variant)));
-
   @each $resolved in $resolved {
-    @include class.content(map.get($resolved, (class, name))) {
-      // @debug map.get($resolved, (property, base));
+    @include class.content(
+      map.get($resolved, (class, name)),
+      ':visited',
+      (border: b, basic1: bas),
+    ) {
       @include property.set(
         (map.get($resolved, (property, name)): map.get($resolved, (property, value))),
-        // $important,
+        true,
 
-        // // function to call
-        // $prefix,
-        // $separator,
-        // $type-function,
-        // $functions,
-        // $execute,
-        // $arguments,
+        // function to call
+        $arguments: (dictionary: (border: b, basic1: bas)),
       );
     }
   }

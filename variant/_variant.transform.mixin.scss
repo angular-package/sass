@@ -20,20 +20,7 @@
 // @param `$variant` A `map` type value to append into list row as prepared `map`.
 // @param `$combine` A `list`, `map`, or `bool` value to indicate whether all or selected level is combined variant.
 // @param `$modifier`
-@mixin transform(
-  $variant,
-  $important: false,
-  $combine: false,
-  $modifier: null,
-
-  // function to call
-  $prefix: null,
-  $separator: null,
-  $type-function: null,
-  $functions: null,
-  $execute: true,
-  $arguments: null,
-) {
+@mixin transform($variant, $combine: false, $modifier: null) {
   $rows: ();
   @each $class-property, $middle_attribute_variant in $variant {
     // Call function.
@@ -123,6 +110,7 @@
                         middle: map.get-any($modifier, (3, class, middle), (class, middle), $class_property1),
                         pre-attribute: map.get-any($modifier, (3, class, pre-attribute), (class, pre-attribute), null),
                         attribute: map.get-any($modifier, (3, class, attribute), (class, attribute), $class_property2),
+                        prop-attribute: map.get-any($modifier, (3, class, prop-attribute), (class, prop-attribute), null),
                         suffix: map.get-any($modifier, (3, class, suffix), (class, suffix), null),
                       )),
                       v-property.set((
@@ -148,6 +136,7 @@
                   base: map.get-any($modifier, (2, class, base), (class, base), $class_property),
                   middle: map.get-any($modifier, (2, class, middle), (class, middle), $class_property1),
                   attribute: map.get-any($modifier, (2, class, attribute), (class, attribute), null),
+                  prop-attribute: map.get-any($modifier, (2, class, prop-attribute), (class, prop-attribute), null),
                   suffix: map.get-any($modifier, (2, class, suffix), (class, suffix), null),
                 )),
                 v-property.set((

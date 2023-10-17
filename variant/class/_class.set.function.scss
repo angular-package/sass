@@ -32,6 +32,7 @@
     name(
       map.get-any($class, prefix, null),
       map.get-any($class, base, null),
+      map.get-any($class, pre-middle, null),
       map.get-any($class, middle, null),
       map.get-any($class, pre-attribute, null),
       map.get-any($class, attribute, null),

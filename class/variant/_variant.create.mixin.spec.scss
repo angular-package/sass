@@ -1,0 +1,25 @@
+// Modules.
+@use '../../class';
+@use '../../map';
+
+@include class.variant-create((
+    // FEATURE: Variant 1.
+    // outline: 2px solid blue,
+    // (border, outline): 1px solid yellow,
+
+    // FEATURE: Variant 2.
+    // (border: (top: 10px))
+    // (padding, margin): ((top: top): 10px, (right: right): 20px, (bottom: bottom): 10px),
+
+    // FEATURE: Variant 3.
+    // (border: (start: (start: 10px)))
+
+    // FEATURE: Variant 4.
+    border: (start: (start: ((radius: radius): 10px))),
+  ),
+  false,
+  (),
+  (), // (border: b),
+) using($resolved) {
+  #{map.get($resolved, (property, name))}: map.get($resolved, (property, value));
+};

@@ -1,0 +1,62 @@
+// Modules.
+@use '../class/variant';
+@use '../map';
+@use '../meta';
+@use '../selector';
+
+// Mixins.
+@use '../property/property.set.mixin' as property;
+
+// Status: TODO:
+// The `property.class-variant()` mixin.
+// @param `$variant`
+// @param `$combine`
+// @param `$important`
+// @param `$pseudo-class`
+// @param `$dictionary`
+// @param `$class-function`
+// @param `$prefix`
+// @param `$separator`
+// @param `$type-function`
+// @param `$functions`
+// @param `$execute`
+// @param `$modifier`
+@mixin class-variant(
+  // class, property
+  $variant: (),
+  $combine: false false false,
+  $important: null,
+  // class
+  $pseudo-class: (),
+  // class, value
+  $dictionary: null,
+  // class
+  $class-function: meta.get-function(class, false, selector),
+  // function
+  $prefix: null,
+  $separator: null,
+  $type-function: null,
+  $functions:null,
+  $execute: true,
+  $modifier: null,
+) {
+  @include variant.create(
+    $variant,
+    $combine,
+    $pseudo-class,
+    $dictionary,
+    $class-function,
+    $modifier,
+  ) using($resolved) {
+    @include property.set(
+      (map.get($resolved, (property, name)): map.get($resolved, (property, value))),
+      $important,
+      $prefix,
+      $separator,
+      $type-function,
+      $functions,
+      $execute,
+      (dictionary: $dictionary),
+    );
+  }
+}

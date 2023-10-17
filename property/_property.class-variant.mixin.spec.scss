@@ -1,0 +1,13 @@
+// Mixins.
+@use 'property.class-variant.mixin';
+
+
+@include property.class-variant((
+    border: 1px solid red,
+    (border, outline): 2px solid blue,
+  ),
+  false,
+  false,
+  ':visited',
+  null,
+);

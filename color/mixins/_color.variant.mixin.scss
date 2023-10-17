@@ -43,6 +43,8 @@
   $function: meta.get-function(class),
   $modifier: null,
 ) {
+  @warn "Mixin deprecated, in favor of `color.variant-create()`.";
+
   $variant-property: null;
 
   // FEATURE: Obtain variant property.

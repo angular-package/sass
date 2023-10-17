@@ -1,0 +1,74 @@
+// Sass.
+@use 'sass:list';
+
+// Modules.
+@use '../../class';
+@use '../../list/has';
+@use '../../list/remove';
+@use '../../map';
+@use '../../meta';
+@use '../../property';
+@use '../../selector';
+@use '../../string';
+@use '../../variant';
+
+// Functions.
+@use '../../list/list.each.mixin' as *;
+@use '../../list/list.nth.function' as *;
+
+// Mixins.
+@use 'color.color.mixin' as *;
+
+// Status: TODO:
+// The `color.variant-create()` mixin.
+// @param `$variant`
+// @param `$combine`
+// @param `$hue`
+// @param `$saturation`
+// @param `$lightness`
+// @param `$alpha`
+// @param `$important`
+// @param `$pseudo-class`
+// @param `$dictionary`
+// @param `$property`
+// @param `$function`
+// @param `$modifier`
+@mixin variant-create(
+  $variant,
+  $combine: false false false,
+  $hue: null,
+  $saturation: null,
+  $lightness: null,
+  $alpha: null,
+  $important: false,
+  $pseudo-class: (),
+  $dictionary: (),
+  $function: meta.get-function(class, false, selector),
+  $modifier: null,
+) {
+  $modifier: map.deep-merge((
+    2: (class: (pre-middle: color)),
+    class: (pre-attribute: color),
+    property: (prop-attribute: color),
+  ), $modifier or ());
+  @include class.variant-create(
+    $variant,
+    $combine,
+    $pseudo-class,
+    $dictionary,
+    $function,
+    $modifier,
+  ) using($resolved) {
+    @include color(
+      (map.get($resolved, (property, name)): map.get($resolved, (property, value))),
+      $hue,
+      $saturation,
+      $lightness,
+      $alpha,
+      null,
+      $important,
+      $dictionary: $dictionary,
+    );
+    @content($resolved);
+  }
+}

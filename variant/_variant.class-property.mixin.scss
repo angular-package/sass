@@ -8,7 +8,7 @@
 @mixin class-property($class-property-name, $combine: false) {
   @if type-of($class-property-name) == map {
     @each $class, $property-name in $class-property-name {
-      @if list.has-bool($class) {
+      @if list.length($class) > 0 and list.has-bool($class) {
         $combine: list.bool($class);
         $class: list.nth(list.remove-value($class, true, false), 1);
       }
@@ -21,7 +21,7 @@
       }
     }
   } @else {
-    @if list.has-bool($class-property-name) {
+    @if list.length($class-property-name) > 0 and list.has-bool($class-property-name) {
       $combine: list.bool($class-property-name);
       $class-property-name: list.nth(list.remove-value($class-property-name, true, false), 1);
     }

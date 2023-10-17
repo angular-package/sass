@@ -1,28 +1,44 @@
 // Modules.
-@use '../../list';
-// @use '../../selector';
-@use '../../values';
-// @use '../indicator';
+@use '../../map';
+
+// Functions.
+@use 'class.name.function' as *;
 
 // Status: TODO:
-// The `class.set()` function.
-// @arbitrary `$classes...`
-// @returns
-@function set($names...) {
-  $result: ();
-  @each $class in $names {
-    @if list.separator($class) == comma {
-      $result: values.combine((join: $result), $class);
-    } @else {
-      $result: values.join($result, $class);
-    }
-  }
-  @return $result;
-}
+// The `class.set()` function creates a `map` of class.
+// @param `$class` A class of `map` type with key `name` as built class `name`.
+// @returns The returned value is `map` of class ingredients.
+@function set($class) {
+  @return map.set(
+    map.deep-merge(
+      (
+        // ingredients
+        prefix: null,
+        base: null,
+        middle: null,
+        pre-attribute: null,
+        attribute: null,
+        prop-attribute: null,
+        last-attribute: null,
+        value-class: null,
+        suffix: null,
 
-// Examples.
-// @debug set(border);
-// @debug set(border color);
-// @debug set((border, outline));
-// @debug set((border, outline), (top, bottom), color);
-// @debug set((border, outline) top, (color, radius));
+        // name
+        name: null
+      ),
+      $class
+    ),
+    name,
+    name(
+      map.get-any($class, prefix, null),
+      map.get-any($class, base, null),
+      map.get-any($class, middle, null),
+      map.get-any($class, pre-attribute, null),
+      map.get-any($class, attribute, null),
+      map.get-any($class, prop-attribute, null),
+      map.get-any($class, last-attribute, null),
+      map.get-any($class, value-class, null),
+      map.get-any($class, suffix, null),
+    )
+  );
+}

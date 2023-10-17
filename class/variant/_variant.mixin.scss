@@ -62,11 +62,13 @@
 
       @if type-of($attribute-variant) == map {
         @each $attribute, $variant in $attribute-variant {
-          // TODO: Consider remove.
+          $-attribute: ();
           @if type-of($attribute) == map {
             @each $key, $value in $attribute {
-              $attribute: nest($key, $value);
+              $-attribute: list.join($-attribute, nest($key, $value));
             }
+
+            $attribute: $-attribute;
           } @else if list.length($attribute) > 0 and function.has($attribute) {
             $attribute: function.call-arglist($attribute...);
           }

@@ -1,6 +1,8 @@
+@forward 'property.class-variant.mixin';
 @forward 'property.mixin';
+@forward 'property.name-nest.function';
 @forward 'property.name.function';
 @forward 'property.set.mixin';
 @forward 'property.value.function';
 @forward 'property.variables';
-@forward 'property.variant.mixin';
+@forward 'property.variant.mixin'; // @deprecated in favor of class-variant

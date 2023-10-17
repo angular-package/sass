@@ -1,47 +1,16 @@
 // Modules.
 @use '../list';
-@use '../selector';
 @use '../string';
 
+// Functions.
+@use 'property.name-nest.function' as *;
+
 // Status: DONE
-// The `property.name()` function returns property name or names built from arbitrary `$name`.
+// The `property.name()` function returns property names as list built from arbitrary `$names`.
 // @arbitrary `$names...` The name for property or multiple properties.
-// @returns The return value is a property name or names built from `$name`.
+// @returns The returned value is a property names as list built from `$names`.
 @function name($names...) {
-  // Map.
-  $i: 1;
-  @each $name in $names {
-    @if type-of($name) == map {
-      $-name: ();
-      @each $key, $value in $name {
-        $-name: list.append($-name, $key);
-        @if $value {
-          @if type-of($value) == map {
-            @each $key, $value in $value {
-              $-name: list.append($-name, $key, auto, $value);
-            }
-          } @else {
-            $-name: list.append($-name, $value);
-          }
-        }
-      }
-
-      $names: list.set-nth($names, $i, $-name);
-      $i: $i + 1;
-    }
-  }
-
-  // Arbitrary.
-  $i: 1;
-  @each $name in $names {
-    @if list.has-list($name) and list.separator($name) == space {
-      $names: list.set-nth($names, $i, selector.nest($name...));
-    }
-
-    $i: $i + 1;
-  }
-
-  $names: selector.nest($names...);
+  $names: name-nest($names...);
   @for $i from 1 through list.length($names) {
     $names: list.set-nth(
       $names,
@@ -49,7 +18,5 @@
       string.unquote(string.join('-', list.nth($names, $i))),
     );
   }
-
-  // Returns.
   @return if(list.length($names) == 1, list.nth($names, 1), $names);
 }

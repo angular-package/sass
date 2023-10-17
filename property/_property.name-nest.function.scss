@@ -1,0 +1,43 @@
+// Modules.
+@use '../list';
+@use '../selector';
+@use '../string';
+
+// Status: DONE
+// The `property.name-nest()` function returns property names as list built from arbitrary `$names`.
+// @arbitrary `$names...` The name for property or multiple properties comma-separated.
+// @returns The returned value is a property names as list built from `$names`.
+@function name-nest($names...) {
+  // Map.
+  $i: 1;
+  @each $name in $names {
+    @if type-of($name) == map {
+      $-name: ();
+      @each $key, $value in $name {
+        $-name: list.append($-name, $key);
+        @if $value {
+          @if type-of($value) == map {
+            @each $key, $value in $value {
+              $-name: list.append($-name, $key, auto, $value);
+            }
+          } @else {
+            $-name: list.append($-name, $value);
+          }
+        }
+      }
+
+      $names: list.set-nth($names, $i, $-name);
+      $i: $i + 1;
+    }
+  }
+
+  $i: 1;
+  @each $name in list.remove-value($names, ()) {
+    @if list.has-list($name) and list.separator($name) == space {
+      $names: list.set-nth($names, $i, selector.nest($name...));
+    }
+
+    $i: $i + 1;
+  }
+  @return selector.nest($names...);
+}

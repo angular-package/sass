@@ -79,6 +79,7 @@
                           v-class.set((
                             prefix: map.get-any($modifier, (4, class, prefix), (class, prefix), null),
                             base: map.get-any($modifier, (4, class, base), (class, base), $class_property),
+                            pre-middle: map.get-any($modifier, (4, class, pre-middle), (class, pre-middle), null),
                             middle: map.get-any($modifier, (4, class, middle), (class, middle), $class_property1),
                             pre-attribute: map.get-any($modifier, (4, class, pre-attribute), (class, pre-attribute), null),
                             attribute: map.get-any($modifier, (4, class, attribute), (class, attribute), $class_property2),
@@ -107,6 +108,7 @@
                       v-class.set((
                         prefix: map.get-any($modifier, (3, class, prefix), (class, prefix), null),
                         base: map.get-any($modifier, (3, class, base), (class, base), $class_property),
+                        pre-middle: map.get-any($modifier, (3, class, pre-middle), (class, pre-middle), null),
                         middle: map.get-any($modifier, (3, class, middle), (class, middle), $class_property1),
                         pre-attribute: map.get-any($modifier, (3, class, pre-attribute), (class, pre-attribute), null),
                         attribute: map.get-any($modifier, (3, class, attribute), (class, attribute), $class_property2),
@@ -134,7 +136,9 @@
                 v-class.set((
                   prefix: map.get-any($modifier, (2, class, prefix), (class, prefix), null),
                   base: map.get-any($modifier, (2, class, base), (class, base), $class_property),
+                  pre-middle: map.get-any($modifier, (2, class, pre-middle), (class, pre-middle), null),
                   middle: map.get-any($modifier, (2, class, middle), (class, middle), $class_property1),
+                  pre-attribute: map.get-any($modifier, (2, property, pre-attribute), (property, pre-attribute), null),
                   attribute: map.get-any($modifier, (2, class, attribute), (class, attribute), null),
                   prop-attribute: map.get-any($modifier, (2, class, prop-attribute), (class, prop-attribute), null),
                   suffix: map.get-any($modifier, (2, class, suffix), (class, suffix), null),
@@ -167,6 +171,7 @@
             pre-base: map.get-any($modifier, (1, property, pre-base), (property, pre-base), null),
             base: map.get-any($modifier, (1, property, base), (property, base), $property-name or $class_property),
             middle: map.get-any($modifier, (1, property, middle), (property, middle), null),
+            pre-attribute: map.get-any($modifier, (1, property, pre-attribute), (property, pre-attribute), null),
             attribute: map.get-any($modifier, (1, property, attribute), (property, attribute), null),
             prop-attribute: map.get-any($modifier, (1, property, prop-attribute), (property, prop-attribute), null),
             value: map.get-any($modifier, (1, property, value), (property, value), $value),

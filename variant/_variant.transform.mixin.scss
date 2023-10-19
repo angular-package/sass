@@ -23,7 +23,7 @@
 @mixin transform($variant, $combine: false, $modifier: null) {
   $rows: ();
   @each $class-property, $middle_attribute_variant in $variant {
-    // Call function.
+    // FEATURE: Call function.
     $class-property: if(
       meta.type-of($class-property) == list and list.length($class-property) > 1 and function.has($class-property),
       function.call-arglist($class-property...),
@@ -35,11 +35,26 @@
       $middle_attribute_variant
     );
 
-    // End call function.
+    // End: Call function.
+
+    // FEATURE: + Check Indicator.
+    @if meta.of-type(list string, $class-property) and indicator.index($class-property, '+') {
+      $-property-name: ();
+      @each $value in $class-property {
+        @if indicator.index($value, '+') {
+          $-property-name: list.append($-property-name, indicator.remove($value, '+'));
+        }
+      }
+
+      $class-property: -property.name(indicator.remove($class-property, '+'));
+      $class-property: ($class-property: $-property-name);
+    }
+
+    // End: Check indicator.
     @include class-property($class-property, combine-get($combine, 1)) using($class_property, $property-name) {
       @if type-of($middle_attribute_variant) == map { // FEATURE: Variant 2
         @each $middle, $attribute-variant in $middle_attribute_variant {
-          // Call function.
+          // FEATURE: Call function.
           $middle: if(
             meta.type-of($middle) == list and list.length($middle) > 1 and function.has($middle),
             function.call-arglist($middle...),
@@ -51,11 +66,26 @@
             $attribute-variant
           );
 
-          // End call function.
+          // End: Call function.
+          // FEATURE: + Check Indicator.
+          @if meta.of-type(list string, $middle) and indicator.index($middle, '+') {
+            $-property-name: ();
+            @each $value in $middle {
+              @if indicator.index($value, '+') {
+                $-property-name: list.append($-property-name, indicator.remove($value, '+'));
+              }
+            }
+
+            $middle: -property.name(indicator.remove($middle, '+'));
+            $middle: ($middle: $-property-name);
+          }
+
+          // End: Check indicator.
+
           @include class-property($middle, combine-get($combine, 2)) using($class_property1, $property-name1) {
             @if type-of($attribute-variant) == map { // FEATURE: Variant 3
               @each $attribute, $variant in $attribute-variant {
-                // Call function.
+                // FEATURE: Call function.
                 $attribute: if(
                   meta.type-of($attribute) == list and list.length($attribute) > 1 and function.has($attribute),
                   function.call-arglist($attribute...),
@@ -67,7 +97,21 @@
                   $variant
                 );
 
-                // End call function.
+                // End: Call function.
+                // Check indicator (+color) or (+radius) or (top, bottom) +radius.
+                @if meta.of-type(list string, $attribute) and indicator.index($attribute, '+') {
+                  $-property-name: ();
+                  @each $value in $attribute {
+                    @if indicator.index($value, '+') {
+                      $-property-name: list.append($-property-name, indicator.remove($value, '+'));
+                    }
+                  }
+
+                  $attribute: -property.name(indicator.remove($attribute, '+'));
+                  $attribute: ($attribute: $-property-name);
+                }
+
+                // End: Check indicator.
                 @include class-property($attribute, combine-get($combine, 3)) using($class_property2, $property-name2) {
                   @if type-of($variant) == map { // FEATURE: Variant 4.
                     // FEATURE: Variant 4.
@@ -150,8 +194,8 @@
                   attribute: map.get-any($modifier, (2, property, attribute), (property, attribute), null),
                   prop-attribute: map.get-any($modifier, (2, property, prop-attribute), (property, prop-attribute), null),
                   value: map.get-any($modifier, (2, property, value), (property, value), $value),
-                )),
-              );
+                )
+              ));
             }
           }
         }

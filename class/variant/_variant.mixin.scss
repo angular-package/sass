@@ -36,6 +36,7 @@
   $content-type: list,
   $modifier: null
 ) {
+  @warn "Mixin @deprecated, use `class.variant-create()` instead.";
   @if type-of($variant) == map {
     $content-keys: (
       class,

@@ -46,7 +46,7 @@
   $execute: true,
   $modifier: null
 ) {
-  @warn "Mixin @deprecated, use `property.class-variant()`";
+  @warn "Mixin @deprecated, use `property.class-variant()` with 1 - 4 deep-variant instead.";
   @if type-of($variant) == map {
     $type-function: if($type-function, $type-function, variables.$type-function);
     @include class.variant($variant, $pseudo-class, $dictionary, $class-function, map, $modifier) using($resolved) {

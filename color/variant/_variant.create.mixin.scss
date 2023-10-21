@@ -3,21 +3,16 @@
 
 // Modules.
 @use '../../class';
-@use '../../list/has';
-@use '../../list/remove';
 @use '../../map';
 @use '../../meta';
-@use '../../property';
 @use '../../selector';
-@use '../../string';
-@use '../../variant';
 
 // Functions.
 @use '../../list/list.each.mixin' as *;
 @use '../../list/list.nth.function' as *;
 
 // Mixins.
-@use 'color.color.mixin' as *;
+@use '../mixins/color.color.mixin' as *;
 
 // Status: TODO:
 // The `color.variant-create()` mixin.
@@ -33,9 +28,9 @@
 // @param `$property`
 // @param `$function`
 // @param `$modifier`
-@mixin variant-create(
+@mixin create(
   $variant,
-  $combine: false false false,
+  $combine: false,
   $hue: null,
   $saturation: null,
   $lightness: null,
@@ -47,8 +42,7 @@
   $modifier: null,
 ) {
   $modifier: map.deep-merge((
-    2: (class: (pre-middle: color)),
-    class: (pre-attribute: color),
+    class: (prop-attribute: color),
     property: (prop-attribute: color),
   ), $modifier or ());
   @include class.variant-create(

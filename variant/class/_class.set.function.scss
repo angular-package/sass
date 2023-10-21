@@ -1,0 +1,45 @@
+// Modules.
+@use '../../map';
+
+// Functions.
+@use 'class.name.function' as *;
+
+// Status: TODO:
+// The `class.set()` function creates a `map` of class.
+// @param `$class` A class of `map` type with key `name` as built class `name`.
+// @returns The returned value is `map` of class ingredients.
+@function set($class) {
+  @return map.set(
+    map.deep-merge(
+      (
+        // ingredients
+        prefix: null,
+        base: null,
+        middle: null,
+        pre-attribute: null,
+        attribute: null,
+        prop-attribute: null,
+        last-attribute: null,
+        value-class: null,
+        suffix: null,
+
+        // name
+        name: null
+      ),
+      $class
+    ),
+    name,
+    name(
+      map.get-any($class, prefix, null),
+      map.get-any($class, base, null),
+      map.get-any($class, pre-middle, null),
+      map.get-any($class, middle, null),
+      map.get-any($class, pre-attribute, null),
+      map.get-any($class, attribute, null),
+      map.get-any($class, prop-attribute, null),
+      map.get-any($class, last-attribute, null),
+      map.get-any($class, value-class, null),
+      map.get-any($class, suffix, null),
+    )
+  );
+}

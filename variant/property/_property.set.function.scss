@@ -1,0 +1,29 @@
+// Modules.
+@use '../../map';
+
+// Functions.
+@use '../../property/property.name.function' as *;
+
+// Status: TODO:
+// The `property.set()` function.
+// @param `$property`
+// @returns
+@function set($property) {
+  @return map.set(map.deep-merge((
+    pre-base: null,
+    base: null,
+    middle: null,
+    attribute: null,
+    prop-attribute: null,
+    value: null,
+
+    // -
+    name: null,
+  ), $property), name, name(
+    map.get-any($property, pre-base, null),
+    map.get-any($property, base, null),
+    map.get-any($property, middle, null),
+    map.get-any($property, attribute, null),
+    map.get-any($property, prop-attribute, null),
+  ));
+}

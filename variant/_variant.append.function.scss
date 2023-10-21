@@ -1,0 +1,16 @@
+// Modules.
+@use '../list';
+
+// Status: TODO:
+// The `variant.append()` function appends `$class`, and `$property` as `map` type.
+// @param `$list` List of variants of `map` type.
+// @param `$class` A value related with variant class.
+// @param `$property` Variant property name.
+// @returns The returned value is a `list` of variants.
+@function append($list, $class, $property, $format: map) {
+  @return list.append(
+    if(list.length($list) == 0, list.join((), (), $bracketed: true), $list),
+    (class: $class, property: $property),
+    comma
+  );
+}

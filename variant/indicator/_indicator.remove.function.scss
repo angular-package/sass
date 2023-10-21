@@ -1,0 +1,24 @@
+// Sass.
+@use 'sass:list';
+
+// Modules.
+@use '../../list/remove';
+@use '../../string';
+
+// Status: TODO:
+// The `indicator.remove()` function.
+// @param `$item`
+// @param `$indicator`
+// @returns
+@function remove($item, $indicator) {
+  $i: 1;
+  $item: remove.value($item, '+');
+  @each $value in $item {
+    @if type-of($value) == string {
+      $item: list.set-nth($item, $i, string.replace(#{$value}, all, $indicator, ''));
+    }
+
+    $i: $i + 1;
+  }
+  @return $item;
+}

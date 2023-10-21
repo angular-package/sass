@@ -1,0 +1,262 @@
+// Modules.
+@use '../function';
+@use '../list';
+@use '../map';
+@use '../meta';
+@use '../property/property.name.function' as -property;
+@use 'class' as v-class;
+@use 'indicator';
+@use 'property' as v-property;
+
+// Functions.
+@use 'variant.append.function' as *;
+@use 'variant.combine-get.function' as *;
+@use 'variant.modifier-retrieve.function' as *;
+
+// Mixins.
+@use 'variant.class-property.mixin' as *;
+
+// Status: TODO:
+// The `variant.transform()` mixin transforms variant from level 1 - 4 to map and append to rows.
+// @param `$variant` A `map` type value to append into list row as prepared `map`.
+// @param `$combine` A `list`, `map`, or `bool` value to indicate whether all or selected level is combined variant.
+// @param `$modifier`
+@mixin transform($variant, $combine: false, $modifier: null) {
+  $rows: ();
+  @each $class-property, $middle_attribute_variant in $variant {
+    // FEATURE: Call function.
+    $class-property: if(
+      meta.type-of($class-property) == list and list.length($class-property) > 1 and function.has($class-property),
+      function.call-arglist($class-property...),
+      $class-property
+    );
+    $middle_attribute_variant: if(
+      meta.type-of($middle_attribute_variant) == list and list.length($middle_attribute_variant) > 1 and function.has($middle_attribute_variant),
+      function.call-arglist($middle_attribute_variant...),
+      $middle_attribute_variant
+    );
+
+    // End: Call function.
+
+    // FEATURE: + Check Indicator.
+    @if meta.of-type(list string, $class-property) and indicator.index($class-property, '+') {
+      $-property-name: ();
+      @each $value in $class-property {
+        @if indicator.index($value, '+') {
+          $-property-name: list.append($-property-name, indicator.remove($value, '+'));
+        }
+      }
+
+      $class-property: -property.name(indicator.remove($class-property, '+'));
+      $class-property: ($class-property: $-property-name);
+    }
+
+    // End: Check indicator.
+    @include class-property($class-property, combine-get($combine, 1)) using($class_property, $property-name) {
+      @if type-of($middle_attribute_variant) == map { // FEATURE: Variant 2
+        @each $middle, $attribute-variant in $middle_attribute_variant {
+          // FEATURE: Call function.
+          $middle: if(
+            meta.type-of($middle) == list and list.length($middle) > 1 and function.has($middle),
+            function.call-arglist($middle...),
+            $middle
+          );
+          $attribute-variant: if(
+            meta.type-of($attribute-variant) == list and list.length($attribute-variant) > 1 and function.has($attribute-variant),
+            function.call-arglist($attribute-variant...),
+            $attribute-variant
+          );
+
+          // End: Call function.
+          // FEATURE: + Check Indicator.
+          @if meta.of-type(list string, $middle) and indicator.index($middle, '+') {
+            $-property-name: ();
+            @each $value in $middle {
+              @if indicator.index($value, '+') {
+                $-property-name: list.append($-property-name, indicator.remove($value, '+'));
+              }
+            }
+
+            $middle: -property.name(indicator.remove($middle, '+'));
+            $middle: ($middle: $-property-name);
+          }
+
+          // End: Check indicator.
+
+          @include class-property($middle, combine-get($combine, 2)) using($class_property1, $property-name1) {
+            @if type-of($attribute-variant) == map { // FEATURE: Variant 3
+              @each $attribute, $variant in $attribute-variant {
+                // FEATURE: Call function.
+                $attribute: if(
+                  meta.type-of($attribute) == list and list.length($attribute) > 1 and function.has($attribute),
+                  function.call-arglist($attribute...),
+                  $attribute
+                );
+                $variant: if(
+                  meta.type-of($variant) == list and list.length($variant) > 1 and function.has($variant),
+                  function.call-arglist($variant...),
+                  $variant
+                );
+
+                // End: Call function.
+                // Check indicator (+color) or (+radius) or (top, bottom) +radius.
+                @if meta.of-type(list string, $attribute) and indicator.index($attribute, '+') {
+                  $-property-name: ();
+                  @each $value in $attribute {
+                    @if indicator.index($value, '+') {
+                      $-property-name: list.append($-property-name, indicator.remove($value, '+'));
+                    }
+                  }
+
+                  $attribute: -property.name(indicator.remove($attribute, '+'));
+                  $attribute: ($attribute: $-property-name);
+                }
+
+                // End: Check indicator.
+                @include class-property($attribute, combine-get($combine, 3)) using($class_property2, $property-name2) {
+                  @if type-of($variant) == map { // FEATURE: Variant 4.
+                    // FEATURE: Variant 4.
+                    // @debug "Variant 4.";
+                    @each $value-class, $value in $variant {
+                      @include class-property($value-class, combine-get($combine, 4)) using($class_property3, $property-name3) {
+                        $rows: append(
+                          $rows,
+                          v-class.set(modifier-retrieve(
+                            $modifier,
+                            class,
+                            4,
+                            prefix,
+                            (base, $class_property),
+                            pre-middle,
+                            (middle, $class_property1),
+                            pre-attribute,
+                            (attribute, $class_property2),
+                            prop-attribute,
+                            (value-class, $class_property3),
+                            suffix,
+                          )),
+                          v-property.set(modifier-retrieve(
+                            $modifier,
+                            property,
+                            4,
+                            prefix,
+                            (base, $property-name or $class_property),
+                            (middle, $property-name1 or $class_property1),
+                            pre-attribute,
+                            (attribute, $property-name2 or $class_property2),
+                            (prop-attribute, $property-name3),
+                            (value, $value),
+                          )),
+                        );
+                      }
+                    }
+                  } @else {
+                    // FEATURE: Variant 3.
+                    // @debug "Variant 3.";
+                    $value: $variant;
+                    $rows: append(
+                      $rows,
+                      v-class.set(modifier-retrieve(
+                        $modifier,
+                        class,
+                        3,
+                        prefix,
+                        (base, $class_property),
+                        pre-middle,
+                        (middle, $class_property1),
+                        pre-attribute,
+                        attribute,
+                        prop-attribute,
+                        (value-class, $class_property2),
+                        suffix,
+                      )),
+                      v-property.set(modifier-retrieve(
+                        $modifier,
+                        property,
+                        3,
+                        prefix,
+                        (base, $property-name or $class_property),
+                        (middle, $property-name1 or $class_property1),
+                        pre-attribute,
+                        (attribute, $property-name2),
+                        prop-attribute,
+                        (value, $value),
+                      )),
+                    );
+                  }
+                }
+              }
+            } @else {
+              // FEATURE: Variant 2.
+              // @debug "Variant 2.";
+              $value: $attribute-variant;
+              $rows: append(
+                $rows,
+                v-class.set(modifier-retrieve(
+                  $modifier,
+                  class,
+                  2,
+                  prefix,
+                  (base, $class_property),
+                  pre-middle,
+                  middle,
+                  pre-attribute,
+                  attribute,
+                  prop-attribute,
+                  (value-class, $class_property1),
+                  suffix,
+                )),
+                v-property.set(modifier-retrieve(
+                  $modifier,
+                  property,
+                  2,
+                  prefix,
+                  (base, $property-name or $class_property),
+                  (middle, $property-name1),
+                  pre-attribute,
+                  attribute,
+                  prop-attribute,
+                  (value, $value),
+                ))
+              );
+            }
+          }
+        }
+      } @else {
+        // FEATURE: Variant 1.
+        // @debug "Variant 1.";
+        $value: $middle_attribute_variant;
+        $rows: append(
+          $rows,
+          v-class.set(modifier-retrieve(
+            $modifier,
+            class,
+            1,
+            prefix,
+            (base, $class_property),
+            pre-middle,
+            middle,
+            pre-attribute,
+            attribute,
+            prop-attribute,
+            value-class,
+            suffix,
+          )),
+          v-property.set(modifier-retrieve(
+            $modifier,
+            property,
+            1,
+            prefix,
+            (base, $property-name or $class_property),
+            middle,
+            pre-attribute,
+            attribute,
+            prop-attribute,
+            (value, $value),
+          )),
+        );
+      }
+    }
+  }
+  @content($rows);
+}

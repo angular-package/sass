@@ -1,0 +1,27 @@
+// Modules.
+@use '../map';
+
+// Functions.
+@use '../list/list.nth.function';
+@use '../meta/meta.of-type.function';
+
+// Status: TODO:
+// The `variant.combine-get()` function switches between variant combine levels 1 - 4 (`false`/`true`) if `$combine` is `list` or `map`.
+// @param `$combine` A `list` of `bool`, `map`, or `bool` to indicate variant is combined.
+// @param `$level` Variant level 1 - 4 to get from `$combine` combine status.
+// @returns The returned value is a `bool` indicating whether variant of `$level` is combined.
+@function combine-get($combine, $level) {
+  @if meta.of-type(list map, $combine) {
+    @return if(
+      type-of($combine) == map,
+      map.get($combine, $level),
+      list.nth($combine, $level)
+    );
+  }
+  @return $combine;
+}
+
+// Examples.
+// @debug combine-get(true true true, 1); // true
+// @debug combine-get(false true false, 3); // false
+// @debug combine-get((1: false, 2: true, 3: false), 3); // false

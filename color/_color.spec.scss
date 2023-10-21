@@ -18,3 +18,21 @@
 // @debug color.lightness-level-var(dark); // var(--s-dark-color-l-l)
 // @debug color.name(dark); // dark color
 // @debug color.saturation-var(light); // var(--s-light-color-s)
+
+// color.variant()
+// @include color.variant((border: primary, background: secondary));
+// @include color.variant-create((border: (top: (primary: primary dark))), $modifier: (property: (base: outline)));
+
+// color.variant-create()
+// 1.
+// @include color.variant-create((border: primary dark));
+
+// 2.
+// @include color.variant-create((border: (primary: primary dark)));
+
+// 3.
+// @include color.variant-create((border: (top: (primary: primary dark))));
+
+// 4.
+// @include color.variant-create((border: (top: (left: (primary: primary dark)))));
+// @include color.variant-create((border: (block: ((start, end): (primary: primary dark)))));

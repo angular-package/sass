@@ -1,4 +1,6 @@
 @forward 'functions';
 @forward 'mixins';
-@forward 'scheme' as scheme-*;
 @forward 'sass:color';
+@forward 'scheme' as scheme-*;
+@forward 'variant' as variant-*;
+@forward 'variant/variant.mixin';

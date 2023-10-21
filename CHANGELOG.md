@@ -1,5 +1,40 @@
 # @angular-package/sass changelog
 
+### v0.13.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.13.0-beta)
+
+- **Add** `variant.modifier-retrieve()` function to retrieve modifier settings in `variant.transform()`. [dad3966]
+- Move `variant` mixins to the `color/variant` directory. [a99dcd2]
+- **Add** `color.variant-create()` to replace `color.variant()`. [3083e75]
+- **Add** `class.variant-create()` mixin to replace `class.variant()`. [47e5a29]
+- **Add** `property.class-variant()` as replacement for `property.variant()`. [ceed6b1]
+- Update `property.name()` - move spec to separate file `_property.name.function.spec.scss`, update function to handle multiple `map` in arbitrary arguments, simplify code. [c9332e7]
+- Fix `map.get()` function not returning `false` value. [caf0325]
+- Add `class` and `property` sub modules for `variant.transform()` mixin and `item` as replacement for `update`. [3ac59ae]
+- Add `variant.class-property()` mixin for `variant.transform()` mixin. [3ac59ae]
+- Add `variant.append()` function to append variant to bracketed list(rows) as `map` type. [3ac59ae]
+- **Add** `variant.transform()` mixin to transform variants into rows of `map` type prepared for `class.content()`. [3ac59ae]
+- Update `update.property()` to use `middle` and `pre-base` name and ability to modify  variant item/level 1 - 3. [beabe0c]
+- Update `variant.update()` to add ability to modify variant item/level 1 - 3. [0272f3c]
+- Fix `property.variant()` mixin to use values.combine() instead values.join() to have proper name. Add additional examples. [b58f461]
+- Update `class.variant()` mixin to use `+` indicator, `$modifier` with ability to modify variant 1, 2, 3. Additional property name `middle`, `pre-base`. [6ab09c8]
+- Update `selector.nest()` to remove `null` and empty list `()` before nesting. [942e6b3]
+- Add `variant/indicator` submodule to handle `+` in variants. [9fb0fca]
+
+[dad3966]: https://github.com/angular-package/sass/commit/dad3966a15c4a19c1ef06c6e3f7689704ae18280
+[a99dcd2]: https://github.com/angular-package/sass/commit/a99dcd253bad1fb4c6a3ade149cc3aff198db833
+[ceed6b1]: https://github.com/angular-package/sass/commit/ceed6b1094417fdef9cf2989600fc01daa5c9cff
+[3083e75]: https://github.com/angular-package/sass/commit/3083e75120cedb9daa26408d09db75269249a18f
+[47e5a29]: https://github.com/angular-package/sass/commit/47e5a294027c7d68e8ae3f671bb0209d8737a19c
+[c9332e7]: https://github.com/angular-package/sass/commit/c9332e755c7ec3d65c49a1d6b0120d6494a945a9
+[caf0325]: https://github.com/angular-package/sass/commit/caf0325cad8aa7e5d8827f3400c65d17a5055480
+[3ac59ae]: https://github.com/angular-package/sass/commit/3ac59ae4f6915d37984b334c5e4116bae9076ef2
+[beabe0c]: https://github.com/angular-package/sass/commit/beabe0c14db8eb5b3e84e8a04b54dfff317bf8e6
+[0272f3c]: https://github.com/angular-package/sass/commit/0272f3cd4310fa430fb4ff784f075c342ec1df4d
+[b58f461]: https://github.com/angular-package/sass/commit/b58f461eb40c3827dc3d2f40c6fce41ee52674e6
+[6ab09c8]: https://github.com/angular-package/sass/commit/6ab09c8ec7a7d37335209ba082e26fb805aa4397
+[942e6b3]: https://github.com/angular-package/sass/commit/942e6b36fc6ccbb838603c18300eac1bfd1e3f89
+[9fb0fca]: https://github.com/angular-package/sass/commit/9fb0fca94c96cc441d4a404581a2e024d4594e97
+
 ### v0.12.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.12.0-beta)
 
 - Add [`variant.update()`](https://github.com/angular-package/sass/blob/main/variant/_variant.update.function.scss) to use instead `variant.modify()`. [69af150]

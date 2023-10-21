@@ -12,13 +12,12 @@
 // @param `$fallback` The fallback value if returned is `null`.
 // @return The return value is the value associated with `$key` from the `$map`, if `null` returns `$fallback`.
 @function get($map, $key, $fallback: null) {
-  @return if(
+  $result: if(
     meta.type-of($map) == map and list.length($key) > 0,
     if(list.separator($key) == comma, map.get($map, $key...), map.get($map, $key)),
     $fallback
-  ) or $fallback;
-
-  // @return if(list.separator($key) == comma, map.get($map, $key...), map.get($map, $key)) or $fallback;
+  );
+  @return if($result == null, $fallback, $result);
 }
 
 // Examples.

@@ -5,18 +5,18 @@
 @use '../../map';
 @use '../../values';
 
+// Property.
+// pre-base, base, middle, attribute, (additional) attribute
+// -, border, start start, radius
+
 // Status: TODO:
 // The `update.property()` function.
 // @param `$property`
 // @param `$modifier`
 // @param `$attribute`
+// @param `$level`
 // @returns
-@function property($property, $modifier, $attribute: null) {
-  $property: if(
-    map.has-keys($modifier, (property, middle)),
-    map.get($modifier, (property, middle)),
-    $property
-  );
+@function property($property, $modifier, $attribute: null, $level: null) {
   @if list.separator($property) == comma {
     $i: 1;
     @each $base in $property {
@@ -25,10 +25,11 @@
         $i,
         values.join(
           (separator: space),
-          map.get-any($modifier, (property, base), (property, name), null),
-          $base,
+          map.get-any($modifier, ($level, property, pre-base), (property, pre-base), ($level, property, prefix), (property, prefix), null),
+          map.get-any($modifier, ($level, property, base), (property, base), ($level, property, name), (property, name), null) or $base,
+          map.get-any($modifier, ($level, property, middle), (property, middle), null),
           $attribute,
-          map.get-any($modifier, (property, attribute), (property, end), null),
+          map.get-any($modifier, ($level, property, attribute), (property, attribute), ($level, property, end), (property, end), null),
         )
       );
       $i: $i + 1;
@@ -36,15 +37,12 @@
   } @else {
     $property: values.join(
       (separator: space),
-      map.get-any($modifier, (property, base), (property, name), null),
-      $property,
+      map.get-any($modifier, ($level, property, pre-base), (property, pre-base), ($level, property, prefix), (property, prefix), null),
+      map.get-any($modifier, ($level, property, base), (property, base), ($level, property, name), (property, name), null) or $property,
+      map.get-any($modifier, ($level, property, middle), (property, middle), null),
       $attribute,
-      map.get-any($modifier, (property, attribute), (property, end), null),
+      map.get-any($modifier, ($level, property, attribute), (property, attribute), ($level, property, end), (property, end), null),
     );
   }
   @return $property;
 }
-
-// Examples.
-
-

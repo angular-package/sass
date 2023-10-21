@@ -6,7 +6,7 @@
 @use '../class';
 @use '../map';
 @use '../values';
-@use 'update';
+@use 'item';
 
 // Status: DONE
 // The `variant.update()` function adds property suffix e.g. `color`, `radius` to the variant.
@@ -16,53 +16,70 @@
 @function update($variant, $modifier) {
   $result: ();
   @each $name, $side-variant in $variant {
+    $modified: false;
     @if type-of($side-variant) == map {
       @each $side, $variant in $side-variant {
         @if type-of($variant) == map {
           @each $-class, $value in $variant {
-            @if map.get-any($modifier, class, property, null) {
+            @if map.get-any($modifier, 3, class, property, null) {
+              // use level modifier
+              $-modifier: map.get-any($modifier, 3, null) or $modifier;
               $result: map.deep-merge(
                 $result, (
-                  update.item($name, map.pick(map.get($modifier, class), prefix), map.get($modifier, property)): (
-                    update.item($side, null, map.get($modifier, property), attribute): (
-                      class.affix-add($-class, map.pick(map.get($modifier, class), suffix)): $value
+                  item.update($name, map.pick(map.get($-modifier, class), prefix), map.get($-modifier, property)): (
+                    item.update($side, null, map.get($-modifier, property), attribute): (
+                      class.affix-add($-class, map.pick(map.get($-modifier, class), suffix)): $value
                     )
                   )
                 )
               );
+              $modified: true;
             }
           }
         } @else {
-          @if map.get-any($modifier, class, property, null) {
+          @if map.get-any($modifier, 2, class, property, null) {
+            // use level modifier
+            $-modifier: map.get-any($modifier, 2, null) or $modifier;
             $-class: $side;
+
+            // set proper variable names
             $side: $name;
             $value: $variant;
             $result: map.deep-merge(
               $result, (
-                update.item((), map.pick(map.get($modifier, class), prefix), map.get($modifier, property)): (
-                  update.item($side, null, map.get($modifier, property), attribute): (
-                    class.affix-add($-class, map.pick(map.get($modifier, class), suffix)): $value
+                item.update((), map.pick(map.get($-modifier, class), prefix), map.get($-modifier, property)): (
+                  item.update($side, null, map.get($-modifier, property), attribute): (
+                    class.affix-add($-class, map.pick(map.get($-modifier, class), suffix)): $value
                   )
                 )
               )
             );
+            $modified: true;
           }
         }
       }
     } @else {
-      @if map.get-any($modifier, class, property, null) {
+      @if map.get-any($modifier, 1, class, property, null) {
+        // use level modifier
+        $-modifier: map.get-any($modifier, 1, null) or $modifier;
+
+        // set proper variable names
         $value: $side-variant;
         $value-class: $name;
         $result: map.deep-merge(
           $result, (
-            update.item((), map.pick(map.get($modifier, class), prefix), map.get($modifier, property)): (
-              update.item((), null, map.get($modifier, property), attribute): (
-                class.affix-add($value-class, map.pick(map.get($modifier, class), suffix)): $value
+            item.update((), map.pick(map.get($-modifier, class), prefix), map.get($-modifier, property)): (
+              item.update((), null, map.get($-modifier, property), attribute): (
+                class.affix-add($value-class, map.pick(map.get($-modifier, class), suffix)): $value
               )
             )
           )
         );
+        $modified: true;
       }
+    }
+    @if not $modified {
+      $result: map.deep-merge($result, ($name: $side-variant));
     }
   }
   @return $result;

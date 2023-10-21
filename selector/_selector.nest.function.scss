@@ -3,6 +3,7 @@
 @use 'sass:selector';
 
 // Functions.
+@use '../list/remove/remove.value.function';
 @use 'selector.replace-parent.function' as *;
 
 // Status: DONE
@@ -11,8 +12,15 @@
 // @arbitrary `$selectors...` Selectors also with parent selectors.
 // @returns The return value are selectors built of `$selectors`.
 @function nest($selectors...) {
+  $selectors: remove.value($selectors, null, ());
   @return replace-parent(
-    selector.nest(list.set-nth($selectors, 1, replace-parent(list.nth($selectors, 1), selector))...),
+    selector.nest(
+      list.set-nth(
+        $selectors,
+        1,
+        replace-parent(list.nth($selectors, 1), selector)
+      )...
+    ),
     placeholder
   );
 }
@@ -35,3 +43,7 @@
 
 // @debug nest(card, ('&-header', '&-body', '&-footer')); // card-header, card-body, card-footer
 // @debug nest('&card', ('&-header', '&-body', '&-footer')); // &card-header, &card-body, &card-footer
+
+// remove null, ()
+// @debug nest('&card', ('&-header', '&-body', '&-footer'), null); // &card-header, &card-body, &card-footer
+// @debug nest('&card', (), ('&-header', '&-body', '&-footer'), null); // &card-header, &card-body, &card-footer

@@ -14,7 +14,8 @@
 @use '../selector';
 @use '../values';
 
-// Status: DONE
+// Status: DONE @deprecated
+// INFO: Mixin name will be the same as `property.class-variant()`.
 // Property `property.variant()` mixin sets property variant.
 // @param `$variant` Property variant of `map` type to set. (See examples for map structure)
 // @param `$important` Indicates property is `important`.
@@ -45,14 +46,22 @@
   $execute: true,
   $modifier: null
 ) {
+  @warn "Mixin @deprecated, use `property.class-variant()` with 1 - 4 deep-variant instead.";
   @if type-of($variant) == map {
     $type-function: if($type-function, $type-function, variables.$type-function);
     @include class.variant($variant, $pseudo-class, $dictionary, $class-function, map, $modifier) using($resolved) {
       @if type-of(map.get($resolved, value)) == map {
         @each $attribute, $value in map.get($resolved, value) {
           $name: map.get($resolved, property);
+
+          // FIX
           @if not $modifier {
-            $name: values.join((method: space), map.get($resolved, property), map.get($resolved, attribute), $attribute);
+            $name: values.combine(
+              (method: space),
+              map.get($resolved, property),
+              map.get($resolved, attribute),
+              $attribute
+            );
           }
           @include property.set(
             ($name: $value),
@@ -67,8 +76,13 @@
         }
       } @else {
         $name: map.get($resolved, property);
-        @if not $modifier {
-          $name: values.join(map.get($resolved, property), map.get($resolved, attribute));
+
+        // FIX: Done.
+        @if not $modifier and map.get($resolved, attribute) {
+          $name: values.combine(
+            map.get($resolved, property),
+            map.get($resolved, attribute)
+          );
         }
         @include property.set(
           ($name: map.get($resolved, value)),

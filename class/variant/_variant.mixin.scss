@@ -4,6 +4,7 @@
 
 // Functions.
 @use '../../list/list.to-map.function' as *;
+@use '../../list/remove/remove.value.function';
 @use '../../selector/selector.class.function' as *;
 @use '../../selector/selector.nest.function' as *;
 @use '../../variant/update/update.property.function';
@@ -15,9 +16,11 @@
 // Modules.
 @use '../../function';
 @use '../../map';
+@use '../../string';
 @use '../../values';
+@use '../../variant/indicator';
 
-// Status: DONE
+// Status: TODO: Add +
 // The `class.variant()` mixin sets class `$variant` with `$pseudo-class` translated with `$dictionary`, and called by `$function`.
 // @param `$variant` Class variant with `$pseudo-class` called by `$function`.
 // @param `$pseudo-class` Pseudo class for class `$variant`.
@@ -33,6 +36,7 @@
   $content-type: list,
   $modifier: null
 ) {
+  @warn "Mixin @deprecated, use `class.variant-create()` instead.";
   @if type-of($variant) == map {
     $content-keys: (
       class,
@@ -43,6 +47,7 @@
       variant
     );
     @each $class, $attribute-variant in $variant {
+      // FEATURE: (class: --selector-nest (property))
       $property: null;
       @if type-of($class) == map {
         @each $-class, $-property in $class {
@@ -50,29 +55,38 @@
           $property: $-property;
         }
       }
+
+      // FEATURE: Use function on property name.
+      @if list.length($property) > 0 and function.has($property) {
+        $property: function.call-arglist($property...);
+      }
+
       @if type-of($attribute-variant) == map {
         @each $attribute, $variant in $attribute-variant {
-          // TODO: Remove in future.
+          $-attribute: ();
           @if type-of($attribute) == map {
             @each $key, $value in $attribute {
-              $attribute: nest(if(list.length($key) > 0, ($key, $value), $value)...);
+              $-attribute: list.join($-attribute, nest($key, $value));
             }
+
+            $attribute: $-attribute;
           } @else if list.length($attribute) > 0 and function.has($attribute) {
             $attribute: function.call-arglist($attribute...);
           }
           @include each($class) using($class) {
             @if type-of($variant) == map {
+              // FEATURE: VARIANT 3
               @include each($attribute) using($attribute) {
                 @each $value-class, $value in $variant {
                   @include class.content(
                     values.join(
                       if(&, '&', ()),
-                      map.get($modifier, (class, prefix), null),
+                      map.get-any($modifier, (3, class, prefix), (class, prefix), null),
                       $class,
                       $attribute,
-                      map.get($modifier, (class, attribute), null),
+                      map.get-any($modifier, (3, class, attribute), (class, attribute), null),
                       if(list.separator($value-class) == comma, ($value-class,), $value-class),
-                      map.get($modifier, (class, suffix), null),
+                      map.get-any($modifier, (3, class, suffix), (class, suffix), null),
                     ),
                     $pseudo-class,
                     $dictionary,
@@ -81,7 +95,14 @@
                     // Set property.
                     $-property: $property or $class;
                     @if $modifier {
-                      $-property: update.property($-property, $modifier, $attribute);
+                      // FEATURE: Set attribute as `null`.
+                      @if map.has-keys($modifier, (property, attribute)) or map.has-keys($modifier, (3, property, attribute)) {
+                        @if not map.get-any($modifier, (3, property, attribute), (property, attribute), null) {
+                          $attribute: null;
+                        }
+                      }
+
+                      $-property: update.property($-property, $modifier, $attribute, 3);
                     }
 
                     $values: ($class, $-property, $attribute, $value-class, $value, ($value-class: $value));
@@ -99,17 +120,17 @@
                 }
               }
             } @else {
-              // FEATURE: Works fine.
+              // FEATURE: VARIANT 2
               @include each($variant) using($value) {
                 @include each($attribute) using($value-class) {
                   @include class.content(
                     values.join(
                       if(&, '&', ()),
-                      map.get($modifier, (class, prefix), null),
-                      $class,
-                      map.get($modifier, (class, attribute), null),
+                      map.get-any($modifier, (2, class, prefix), (class, prefix), null),
+                      indicator.remove($class, '+'),
+                      map.get-any($modifier, (2, class, attribute), (class, attribute), null),
                       $value-class,
-                      map.get($modifier, (class, suffix), null),
+                      map.get-any($modifier, (2, class, suffix), (class, suffix), null),
                     ),
                     $pseudo-class,
                     $dictionary,
@@ -117,8 +138,17 @@
                   ) {
                     // Set property.
                     $-property: $property or $class;
+
+                    // Set middle property on '+'.
+                    // $middle: null;
+                    // @if indicator.index($-property, '+')  {
+                    //   $-property: indicator.remove($-property, '+');
+                    //   $middle: map.get-any($modifier, (2, property, middle), null);
+                    //   $modifier: map.deep-merge($modifier, (2: (property: (middle: $-property))));
+                    // }
+
                     @if $modifier {
-                      $-property: update.property($-property, $modifier);
+                      $-property: update.property($-property, $modifier, null, 2);
                     }
 
                     $values: ($class, $-property, null, $value-class, $value, ($value-class: $value));
@@ -132,6 +162,9 @@
                     } @else {
                       @content($arguments);
                     }
+
+                    // Restore.
+                    // $modifier: map.deep-merge($modifier, (2: (property: (middle: $middle))));
                   }
                 }
               }
@@ -139,17 +172,16 @@
           }
         }
       } @else {
-        // FEATURE: Works fine.
-        // `variant.class-value()`
+        // FEATURE: VARIANT 1
         @include each($attribute-variant) using($value) {
           @include each($class) using($class) {
             @include class.content(
               values.join(
                 if(&, '&', ()),
-                map.get($modifier, (class, prefix), null),
-                $class,
-                map.get($modifier, (class, attribute), null),
-                map.get($modifier, (class, suffix), null),
+                map.get-any($modifier, (1, class, prefix), (class, prefix), null),
+                indicator.remove($class, '+'),
+                map.get-any($modifier, (1, class, attribute), (class, attribute), null),
+                map.get-any($modifier, (1, class, suffix), (class, suffix), null),
               ),
               $pseudo-class,
               $dictionary,
@@ -158,9 +190,24 @@
               // Set property.
               $-property: $property or $class;
 
+              // FEATURE: Set middle property on '+'.
+              $middle: null;
+              $modified: false;
+
+              // Find '+'.
+              @if indicator.index($-property, '+') {
+                @if map.has-keys($modifier, (1, property, middle)) {
+                  $middle: map.get-any($modifier, (1, property, middle), null);
+                }
+
+                $-property: indicator.remove($-property, '+');
+                $modifier: map.deep-merge($modifier, (1: (property: (middle: $-property))));
+                $modified: true;
+              }
+
               // Modify property.
               @if $modifier {
-                $-property: update.property($-property, $modifier);
+                $-property: update.property($-property, $modifier, null, 1);
               }
 
               // Set `$arguments` for `@content`.
@@ -173,6 +220,11 @@
                 @content($arguments...);
               } @else {
                 @content($arguments);
+              }
+
+              // Restore previous modifier for variant 1.
+              @if $modified {
+                $modifier: map.deep-merge($modifier, (1: (property: (middle: $middle))));
               }
             }
           }

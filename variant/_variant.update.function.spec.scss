@@ -7,13 +7,40 @@
 // base   side        attribute
 
 // Examples.
+// FEATURE: Variant 1.
+
+// prefix: (1, class, prefix), (class, prefix)
+// base: (1, class, base), (class, base), $class_property)
+// attribute: (1, class, attribute), (class, attribute)
+// suffix: (1, class, suffix), (class, suffix)
+
+// pre-base: (1, property, pre-base), (property, pre-base)
+// base: (1, property, base), (property, base), $property-name or $class_property)
+// middle: (1, property, middle), (property, middle)
+// pre-attribute: (1, property, pre-attribute), (property, pre-attribute)
+// attribute: (1, property, attribute), (property, attribute)
+// prop-attribute: (1, property, prop-attribute), (property, prop-attribute)
+// value: (1, property, value), (property, value)
+
+// @debug variant.update((basic: 1px solid yellow), (property: (base: (border, outline))));
+// @debug variant.update((basic: 1px solid yellow), (class: (prefix: spectre), property: (base: outline)));
+// @debug variant.update((basic: 1px solid yellow), (class: (prefix: spectre, suffix: end), property: (base: outline)));
+// @debug variant.update((basic: 1px solid yellow), (class: (prefix: spectre, suffix: end), property: (middle: (top, bottom))));
+// @debug variant.update((basic: 1px solid yellow), (class: (prefix: spectre, suffix: end), property: (middle: (top, bottom))));
+// @debug variant.update((basic: 1px solid yellow), (class: (base: extended), property: (middle: (top, bottom))));
+
+
+// FEATURE: Variant 2.
+// @debug variant.update((border: (top: 1px solid yellow)), (class: (prefix: a, base: basic, middle: bottom)));
+// @debug variant.update((basic: (top: 1px solid yellow)), (class: (prefix: spectre), property: (attribute: (top, bottom))));
+
 // @include property.variant((
 //   small: 10px solid blue,
 //   medium: 20px solid red,
 //   high: 20px solid red,
 // ), $modifier: (
 //     property: (base: border, middle: null, attribute: radius),
-//     class: (prefix: border radius, suffix: test)
+//     class: (prefix: border radius, suffix: test),
 //   )
 // );
 
@@ -99,3 +126,14 @@
 //   (class: (prefix: border, suffix: test), property: (base: border, attribute: radius))
 // ));
 
+// @debug variant.update(
+//   (
+//     border: (basic: (third: third light, fourth: fourth light)),
+//     basic: (secondary: secondary light, primary: primary light),
+//     primary: primary dark,
+//   ),
+//   (
+//     1: (class: (prefix: border, suffix: test), property: (base: border, attribute: radius)),
+//     2: (class: (prefix: border, suffix: end), property: (middle: null)),
+//   )
+// );

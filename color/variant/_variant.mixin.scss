@@ -9,14 +9,13 @@
 @use '../../list/remove';
 @use '../../map';
 @use '../../property';
-@use '../../string';
 
 // Functions.
 @use '../../list/list.nth.function' as *;
 @use '../../selector/selector.class.function' as *;
 
 // Mixins.
-@use 'color.color.mixin' as *;
+@use '../mixins/color.color.mixin' as *;
 
 // Status: TODO:
 // The `color.variant()` mixin.
@@ -43,6 +42,8 @@
   $function: meta.get-function(class),
   $modifier: null,
 ) {
+  @warn "Mixin deprecated, in favor of `color.variant-create()`.";
+
   $variant-property: null;
 
   // FEATURE: Obtain variant property.

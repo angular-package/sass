@@ -2,6 +2,8 @@
 
 ### v0.13.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.13.0-beta)
 
+- **Add** `variant.modifier-retrieve()` function to retrieve modifier settings in `variant.transform()`. [dad3966]
+- Move `variant` mixins to the `color/variant` directory. [a99dcd2]
 - **Add** `color.variant-create()` to replace `color.variant()`. [3083e75]
 - **Add** `class.variant-create()` mixin to replace `class.variant()`. [47e5a29]
 - **Add** `property.class-variant()` as replacement for `property.variant()`. [ceed6b1]
@@ -18,6 +20,8 @@
 - Update `selector.nest()` to remove `null` and empty list `()` before nesting. [942e6b3]
 - Add `variant/indicator` submodule to handle `+` in variants. [9fb0fca]
 
+[dad3966]: https://github.com/angular-package/sass/commit/dad3966a15c4a19c1ef06c6e3f7689704ae18280
+[a99dcd2]: https://github.com/angular-package/sass/commit/a99dcd253bad1fb4c6a3ade149cc3aff198db833
 [ceed6b1]: https://github.com/angular-package/sass/commit/ceed6b1094417fdef9cf2989600fc01daa5c9cff
 [3083e75]: https://github.com/angular-package/sass/commit/3083e75120cedb9daa26408d09db75269249a18f
 [47e5a29]: https://github.com/angular-package/sass/commit/47e5a294027c7d68e8ae3f671bb0209d8737a19c

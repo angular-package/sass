@@ -11,6 +11,7 @@
 // Functions.
 @use 'variant.append.function' as *;
 @use 'variant.combine-get.function' as *;
+@use 'variant.modifier-retrieve.function' as *;
 
 // Mixins.
 @use 'variant.class-property.mixin' as *;
@@ -120,25 +121,31 @@
                       @include class-property($value-class, combine-get($combine, 4)) using($class_property3, $property-name3) {
                         $rows: append(
                           $rows,
-                          v-class.set((
-                            prefix: map.get-any($modifier, (4, class, prefix), (class, prefix), null),
-                            base: map.get-any($modifier, (4, class, base), (class, base), $class_property),
-                            pre-middle: map.get-any($modifier, (4, class, pre-middle), (class, pre-middle), null),
-                            middle: map.get-any($modifier, (4, class, middle), (class, middle), $class_property1),
-                            pre-attribute: map.get-any($modifier, (4, class, pre-attribute), (class, pre-attribute), null),
-                            attribute: map.get-any($modifier, (4, class, attribute), (class, attribute), $class_property2),
-                            prop-attribute: map.get-any($modifier, (4, class, prop-attribute), (class, prop-attribute), null),
-                            last-attribute: map.get-any($modifier, (4, class, last-attribute), (class, last-attribute), null),
-                            value-class: map.get-any($modifier, (4, class, value-class), (class, value-class), $class_property3),
-                            suffix: map.get-any($modifier, (4, class, suffix), (class, suffix), null),
+                          v-class.set(modifier-retrieve(
+                            $modifier,
+                            class,
+                            4,
+                            prefix,
+                            (base, $class_property),
+                            pre-middle,
+                            (middle, $class_property1),
+                            pre-attribute,
+                            (attribute, $class_property2),
+                            prop-attribute,
+                            (value-class, $class_property3),
+                            suffix,
                           )),
-                          v-property.set((
-                            pre-base: map.get-any($modifier, (4, property, pre-base), (property, pre-base), null),
-                            base: map.get-any($modifier, (4, property, base), (property, base), $property-name or $class_property),
-                            middle: map.get-any($modifier, (4, property, middle), (property, middle), $property-name1 or $class_property1),
-                            attribute: map.get-any($modifier, (4, property, attribute), (property, attribute), $property-name2 or $class_property2),
-                            prop-attribute: map.get-any($modifier, (4, property, prop-attribute), (property, prop-attribute), $property-name3),
-                            value: map.get-any($modifier, (4, property, value), (property, value), $value),
+                          v-property.set(modifier-retrieve(
+                            $modifier,
+                            property,
+                            4,
+                            prefix,
+                            (base, $property-name or $class_property),
+                            (middle, $property-name1 or $class_property1),
+                            pre-attribute,
+                            (attribute, $property-name2 or $class_property2),
+                            (prop-attribute, $property-name3),
+                            (value, $value),
                           )),
                         );
                       }
@@ -149,23 +156,31 @@
                     $value: $variant;
                     $rows: append(
                       $rows,
-                      v-class.set((
-                        prefix: map.get-any($modifier, (3, class, prefix), (class, prefix), null),
-                        base: map.get-any($modifier, (3, class, base), (class, base), $class_property),
-                        pre-middle: map.get-any($modifier, (3, class, pre-middle), (class, pre-middle), null),
-                        middle: map.get-any($modifier, (3, class, middle), (class, middle), $class_property1),
-                        pre-attribute: map.get-any($modifier, (3, class, pre-attribute), (class, pre-attribute), null),
-                        attribute: map.get-any($modifier, (3, class, attribute), (class, attribute), $class_property2),
-                        prop-attribute: map.get-any($modifier, (3, class, prop-attribute), (class, prop-attribute), null),
-                        suffix: map.get-any($modifier, (3, class, suffix), (class, suffix), null),
+                      v-class.set(modifier-retrieve(
+                        $modifier,
+                        class,
+                        3,
+                        prefix,
+                        (base, $class_property),
+                        pre-middle,
+                        (middle, $class_property1),
+                        pre-attribute,
+                        attribute,
+                        prop-attribute,
+                        (value-class, $class_property2),
+                        suffix,
                       )),
-                      v-property.set((
-                        pre-base: map.get-any($modifier, (3, property, pre-base), (property, pre-base), null),
-                        base: map.get-any($modifier, (3, property, base), (property, base), $property-name or $class_property),
-                        middle: map.get-any($modifier, (3, property, middle), (property, middle), $property-name1 or $class_property1),
-                        attribute: map.get-any($modifier, (3, property, attribute), (property, attribute), $property-name2),
-                        prop-attribute: map.get-any($modifier, (3, property, prop-attribute), (property, prop-attribute), null),
-                        value: map.get-any($modifier, (3, property, value), (property, value), $value),
+                      v-property.set(modifier-retrieve(
+                        $modifier,
+                        property,
+                        3,
+                        prefix,
+                        (base, $property-name or $class_property),
+                        (middle, $property-name1 or $class_property1),
+                        pre-attribute,
+                        (attribute, $property-name2),
+                        prop-attribute,
+                        (value, $value),
                       )),
                     );
                   }
@@ -177,25 +192,33 @@
               $value: $attribute-variant;
               $rows: append(
                 $rows,
-                v-class.set((
-                  prefix: map.get-any($modifier, (2, class, prefix), (class, prefix), null),
-                  base: map.get-any($modifier, (2, class, base), (class, base), $class_property),
-                  pre-middle: map.get-any($modifier, (2, class, pre-middle), (class, pre-middle), null),
-                  middle: map.get-any($modifier, (2, class, middle), (class, middle), $class_property1),
-                  pre-attribute: map.get-any($modifier, (2, property, pre-attribute), (property, pre-attribute), null),
-                  attribute: map.get-any($modifier, (2, class, attribute), (class, attribute), null),
-                  prop-attribute: map.get-any($modifier, (2, class, prop-attribute), (class, prop-attribute), null),
-                  suffix: map.get-any($modifier, (2, class, suffix), (class, suffix), null),
+                v-class.set(modifier-retrieve(
+                  $modifier,
+                  class,
+                  2,
+                  prefix,
+                  (base, $class_property),
+                  pre-middle,
+                  middle,
+                  pre-attribute,
+                  attribute,
+                  prop-attribute,
+                  (value-class, $class_property1),
+                  suffix,
                 )),
-                v-property.set((
-                  pre-base: map.get-any($modifier, (2, property, pre-base), (property, pre-base), null),
-                  base: map.get-any($modifier, (2, property, base), (property, base), $property-name or $class_property),
-                  middle: map.get-any($modifier, (2, property, middle), (property, middle), $property-name1),
-                  attribute: map.get-any($modifier, (2, property, attribute), (property, attribute), null),
-                  prop-attribute: map.get-any($modifier, (2, property, prop-attribute), (property, prop-attribute), null),
-                  value: map.get-any($modifier, (2, property, value), (property, value), $value),
-                )
-              ));
+                v-property.set(modifier-retrieve(
+                  $modifier,
+                  property,
+                  2,
+                  prefix,
+                  (base, $property-name or $class_property),
+                  (middle, $property-name1),
+                  pre-attribute,
+                  attribute,
+                  prop-attribute,
+                  (value, $value),
+                ))
+              );
             }
           }
         }
@@ -205,20 +228,31 @@
         $value: $middle_attribute_variant;
         $rows: append(
           $rows,
-          v-class.set((
-            prefix: map.get-any($modifier, (1, class, prefix), (class, prefix), null),
-            base: map.get-any($modifier, (1, class, base), (class, base), $class_property),
-            attribute: map.get-any($modifier, (1, class, attribute), (class, attribute), null),
-            suffix: map.get-any($modifier, (1, class, suffix), (class, suffix), null),
+          v-class.set(modifier-retrieve(
+            $modifier,
+            class,
+            1,
+            prefix,
+            (base, $class_property),
+            pre-middle,
+            middle,
+            pre-attribute,
+            attribute,
+            prop-attribute,
+            value-class,
+            suffix,
           )),
-          v-property.set((
-            pre-base: map.get-any($modifier, (1, property, pre-base), (property, pre-base), null),
-            base: map.get-any($modifier, (1, property, base), (property, base), $property-name or $class_property),
-            middle: map.get-any($modifier, (1, property, middle), (property, middle), null),
-            pre-attribute: map.get-any($modifier, (1, property, pre-attribute), (property, pre-attribute), null),
-            attribute: map.get-any($modifier, (1, property, attribute), (property, attribute), null),
-            prop-attribute: map.get-any($modifier, (1, property, prop-attribute), (property, prop-attribute), null),
-            value: map.get-any($modifier, (1, property, value), (property, value), $value),
+          v-property.set(modifier-retrieve(
+            $modifier,
+            property,
+            1,
+            prefix,
+            (base, $property-name or $class_property),
+            middle,
+            pre-attribute,
+            attribute,
+            prop-attribute,
+            (value, $value),
           )),
         );
       }

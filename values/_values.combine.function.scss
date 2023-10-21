@@ -3,13 +3,14 @@
 @use 'sass:meta';
 
 // Functions.
+@use '../list/list.append.function' as *;
 @use '../list/list.has.function' as *;
 @use '../list/list.join.function' as *;
 
 // Modules.
 @use '../map';
 
-// Status: DONE
+// Status: TODO: join on if
 // The `values.combine()` function combines multiple `$values` into the list. By default, the function use append method
 // to combine `$values`. The parameters of the list (bracketed, delimiter, method, null, separator) can be changed by
 // providing map value eg. (method: join).

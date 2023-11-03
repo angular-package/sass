@@ -14,7 +14,7 @@
 // @return The return value is not `null` value associated with `$key` or any of `$keys` from the `$map`, if `null` returns fallback value.
 @function get-any($map, $key, $keys...) {
   $i: 1;
-  @each $key in append((), $key, auto, $keys...) {
+  @each $key in append((), $key, comma, $keys...) {
     @if not ($i == list.length(append((), $key, comma, $keys...))) {
       $result: map.get($map, $key, null);
       @if $result {

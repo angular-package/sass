@@ -1,19 +1,24 @@
 // Sass.
 @use 'sass:list';
 @use 'sass:map';
+@use 'sass:meta';
+
+// Functions.
+@use '../../list/list.append.function' as *;
 
 // Status: DONE
 // The `pick.value-type()` function picks the properties with values of the specified `$types`.
 // @param `$map` A map from which properties with values of a certain `$types` are picked.
-// @arbitrary `$types...` The `bool`, `calculation`, `color`, `function`, `list`, `map`, `null`, `number` or `string` types
-// of the property values to pick from `$map`.
-// @return The return value is a copy of `$map` with values associated with `$types`.
-@function value-type($map, $types...) {
+// @param `$type` The required `bool`, `calculation`, `color`, `function`, `list`, `map`, `null`, `number` or `string` type
+// of the property value to pick from `$map`.
+// @arbitrary `$types...` Additional value types to pick from `$map`.
+// @return The return value is a copy of `$map` with values associated with `$type`,  `$types`.
+@function value-type($map, $type, $types...) {
   $result: ();
-  @each $type in $types {
+  @each $type in append((), $type, comma, $types...) {
     @if list.index(bool calculation color function list map null number string, $type) {
       @each $key, $value in $map {
-        @if type-of($value) == $type or (not $type and type-of($type) == type-of($value)) {
+        @if meta.type-of($value) == $type or (not $type and type-of($type) == type-of($value)) {
           $result: map.deep-merge($result, ($key: $value));
         }
       }

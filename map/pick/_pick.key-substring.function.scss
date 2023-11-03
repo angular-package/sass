@@ -4,14 +4,18 @@
 // Modules.
 @use '../../string';
 
+// Functions.
+@use '../../list/list.append.function' as *;
+
 // Status: DONE
 // The `pick.key-substring()` function returns a copy of `$map` with keys of `$substrings`.
 // @param `$map` A map from which keys of `$substrings` are picked.
-// @arbitrary `$substrings...` Substrings of keys to pick from a `$map`.
+// @param `$substring` Substring of key to pick from `$map`.
+// @arbitrary `$substrings...` Substrings of keys to pick from `$map`.
 // @return The return value is a copy of `$map` with keys associated with `$substrings`.
-@function key-substring($map, $substrings...) {
+@function key-substring($map, $substring, $substrings...) {
   $result: ();
-  @each $substring in $substrings {
+  @each $substring in append((), $substring, comma, $substrings...) {
     @if type-of($substring) == string {
       @each $key in map.keys($map) {
         @if type-of($key) == string and string.index($key, $substring) {

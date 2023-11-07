@@ -20,7 +20,11 @@
   $result: ();
   @each $pattern in append((), $pattern, comma, $patterns...) {
     @if type-of($pattern) == string {
-      @if string.index($pattern, '*') {
+      @if list.index(string.index($pattern, '^', '$'), 1) {
+        $position: string.slice($pattern, 1, 1);
+        $pattern: string.replace($pattern, first, $position, '');
+        $result: map.deep-merge($result, key-substring($map, ($position: $pattern)));
+      } @else if string.index($pattern, '*') {
         $result: map.deep-merge($result, key-substring($map, string.replace($pattern, first, '*', '')));
       } @else if string.index($pattern, 'value:') or string.index($pattern, 'key:') {
         $result: map.deep-merge($result, type($map, $pattern));
@@ -47,6 +51,18 @@
 //     ),
 //   ),
 //   basic: (
+//     '9971test': 1,
+//     '2test': 2,
+//     '3test': 3,
+//     '4test': 4,
+//     '5test': 5,
+
+//     'test9971': 1,
+//     'test2': 2,
+//     'test3': 3,
+//     'test4': 4,
+//     'test5': 5,
+
 //     'default.palette': (),
 
 //     'palette.gray': (
@@ -133,3 +149,6 @@
 // @debug pattern(map.get($-theme, basic), 'value:string,list');
 // @debug pattern(map.get($-theme, basic), 'key:string,list');
 // @debug pattern(map.get($-theme, basic), 'key,value:list,string'); // TODO
+
+// @debug pattern(map.get($-theme, basic), '^test');
+// @debug pattern(map.get($-theme, basic), '$test');

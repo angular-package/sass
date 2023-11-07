@@ -1,0 +1,183 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Modules.
+@use 'pattern';
+@use 'pick';
+
+// Functions.
+@use '../list/list.append.function' as *;
+@use '../list/list.join.function' as *;
+@use '../list/list.range.function' as *;
+@use '../list/remove/remove.nth.function' as remove;
+@use '../map/map.get.function' as *;
+@use '../map/map.has-keys.function' as *;
+
+// Status: DONE
+// The `map.keys-pattern()` function retrieves keys of `$key-pattern` or/and `$keys-pattern` with pattern.
+// @param `$map` A map to retrieve `$key-pattern` or `$keys-pattern`.
+// @param `$key-pattern` Required key or nested key with pattern where '*' is substring, '^' is start, and '$' is end of `string`.
+// @arbitrary `$keys-pattern...` Additional keys or nested keys with pattern to retrieve from `$map`.
+// @returns The returned value is a list of keys with pattern.
+@function keys-pattern($map, $key-pattern, $keys-pattern...) {
+  $keys-pattern: append((), $key-pattern, comma, $keys-pattern...);
+  $result: ();
+  @if list.length($keys-pattern) > 0 {
+    @each $key in $keys-pattern {
+      // Check whether pattern exists.
+      $pattern-index: null;
+      $i: 1;
+      @each $k in $key {
+        @if pattern.is($k) {
+          $pattern-index: $i;
+        }
+
+        $i: $i + 1;
+      }
+
+      // If pattern exists retrieve key to `map.get()`.
+      @if $pattern-index {
+        $resolved-key: range($key, 1, $pattern-index - 1);
+        @if $resolved-key {
+          $resolved-keys: null;
+          @if list.length($key) == 1 {
+            $resolved-keys: map.keys(pick.pattern($map, $resolved-key));
+          } @else {
+            $resolved-keys: map.keys(pick.pattern(get($map, $resolved-key), list.nth($key, $pattern-index)));
+            $i: 1;
+            @each $k in $resolved-keys {
+              $append: if(
+                list.length($key) > $pattern-index,
+                ($resolved-key, $k, comma, range($key, $pattern-index + 1, list.length($key))),
+                ($resolved-key, $k, comma),
+              );
+              $resolved-keys: list.set-nth(
+                $resolved-keys,
+                $i,
+                if(list.length($key) == 1, $k, append($append...))
+              );
+              $i: $i + 1;
+            }
+          }
+
+          // Map has keys.
+          @if $resolved-keys {
+            $result: join($result, $resolved-keys);
+          }
+
+          // Check whether map has keys.
+          @if list.length($key) > $pattern-index {
+            $i: 1;
+            $-result: ();
+            @each $key in $result {
+              @if has-keys($map, $key) {
+                $-result: list.append($-result, $key, comma);
+              }
+
+              $i: $i + 1;
+            }
+
+            $result: $-result;
+          }
+        }
+      }
+    }
+  }
+  @return $result;
+}
+
+// Examples.
+// $-map: (
+//   key: (
+//     key1: 1,
+//     config: (
+//       config1: 1,
+//       setting1: 1,
+//       config2: 2,
+//       setting2: 2,
+//       config3: (
+//         pattern1: 1,
+//         test1: (),
+//         pattern2: 2,
+//         test2: (),
+//         pattern3: 3,
+//         test3: (),
+//         pattern4: 4,
+//         test4: (),
+//         pattern5: 5,
+//       ),
+//       setting3: 3,
+//       config4: 4,
+//       setting4: 4,
+//       config5: 5,
+//       setting5: 5,
+//     ),
+//     test1: 1,
+//     1test: 1,
+//     key2: 2,
+//     config3: (
+//       display: true
+//     ),
+//     test2: 2,
+//     2test: 2,
+//     key3: 3,
+//     config4: (
+//       display4: true
+//     ),
+//     test3: 3,
+//     3test: 3,
+//     key4: 4,
+//     config1: (
+//       display1: true
+//     ),
+//     test4: (
+//       settings1: (
+//         platform1: 1,
+//         platform2: 2,
+//       ),
+//       settings2: (
+//         platform3: 1,
+//         platform4: 2,
+//       ),
+//     ),
+//     4test: (
+//       settings3: (
+//         platform5: 5,
+//         platform6: 6,
+//       ),
+//       settings4: (
+//         platform7: 7,
+//         platform8: 8,
+//       ),
+//     ),
+//     key5: 5,
+//     test5: 5,
+//     5test: 5,
+//     config2: (
+//       display2: true
+//     ),
+//   ),
+//   list1: (),
+//   list2: (),
+//   a b c d e f: value,
+//   a: (b: (c: (d: e))),
+//   any: true,
+//   all: false,
+//   separator: auto,
+//   bracketed: false,
+//   method: join,
+//   null: false
+// );
+
+// @debug keys-pattern($-map, '*key');
+// @debug keys-pattern($-map, '*list');
+// @debug keys-pattern($-map, '*key', '*list');
+// @debug keys-pattern($-map, (key, config, '*config'), (key, '*test'));
+
+// Key between
+// @debug keys-pattern($-map, (key, '*config', display)); // ((key, config3, display),)
+// @debug keys-pattern($-map, (key, '^test')); // (key, test1), (key, test2), (key, test3), (key, test4), (key, test5)
+// @debug keys-pattern($-map, (key, '$test')); // (key, 1test), (key, 2test), (key, 3test), (key, 4test), (key, 5test)
+
+// @debug keys-pattern($-map, (key, '*config', display), (key, '^test', settings2)); // (key, config3, display), (key, test4, settings2)

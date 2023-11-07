@@ -5,6 +5,8 @@
 @forward 'map.get.function';
 @forward 'map.has-keys.function';
 @forward 'map.key-replace.function';
+@forward 'map.keys-pattern.function';
+@forward 'map.keys.function';
 @forward 'map.merge-allowed.function';
 @forward 'map.pick.function';
 @forward 'map.remove-type.function';
@@ -14,4 +16,4 @@
 @forward 'map.update.function';
 @forward 'map.values.function';
 @forward 'pick' as pick-*;
-@forward 'sass:map' hide deep-merge, get, remove, set, values;
+@forward 'sass:map' hide deep-merge, get, keys, remove, set, values;

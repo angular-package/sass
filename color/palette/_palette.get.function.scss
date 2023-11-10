@@ -1,0 +1,12 @@
+// Sass.
+@use '../../map';
+
+// Status: DONE
+// The `palette.get()` function.
+// @param `$palette`
+// @param `$name`
+// @param `$color`
+// @returns
+@function get($palette, $name, $color: null) {
+  @return if($color, map.get($palette, ($name, $color)), map.get($palette, $name));
+}

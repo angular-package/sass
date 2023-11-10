@@ -1,53 +1,9 @@
-// Modules.
-@use '../../function';
-@use '../../list';
-@use '../../map';
-@use '../../meta';
-@use '../../variant';
-
 // Functions.
-@use '../functions/color.name-nest.function' as *;
-@use '../functions/color.name.function' as *;
-
-// Add.
-function.$functions: map.set(function.$functions, color, name, meta.get-function(name));
+@use 'palette.create.function';
 
 // Status: DONE
-// NOTE: consider adding bracketed adjust
 // The `palette.create()` function.
 // @arbitrary `$values...`
 @mixin create($values...) {
-  $palette: ();
-  @each $name-color in $values {
-    @each $name, $color in $name-color {
-      $nested: variant.indicator-index($name, '+');
-      $name: if($nested, variant.indicator-remove($name, '+'), $name);
-
-      // Palette name.
-      @include list.each($name) using($name, $i) {
-        // Color.
-        @include list.each($color) using($color, $j) {
-          @if list.has-list($color) and list.separator($color) == space {
-            $color: name-nest(if($nested, $name, null), $color...);
-          } @else {
-            $color: name-nest(if($nested, $name, null), ($color,));
-          }
-
-          $variant: variant.create($color);
-
-          // TODO: Check.
-          // @each $class, $color in $variant {
-          //   @if list.index($class, color) and list.length($class) > 1 {
-          //     $variant: map.key-replace($variant, $class, list.remove-value($class, color));
-          //   }
-          // }
-
-          $palette: map.deep-merge($palette, (
-            $name: $variant
-          ));
-        }
-      }
-    }
-  }
-  @content($palette);
+  @content(palette.create($values...));
 }

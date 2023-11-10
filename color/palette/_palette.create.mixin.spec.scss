@@ -77,7 +77,7 @@
   // gray: ('gray' (color, dark, light)),
 
   // core: (dark, light, accent, (primary (color, dark, light)), (secondary (color, dark, light))),
-  // (+bg, +border): (color, dark, light)
+  (+bg, +border): (color, dark, light)
 )) using($palette) {
   @debug $palette;
 

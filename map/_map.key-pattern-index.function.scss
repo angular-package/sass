@@ -1,0 +1,35 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Variables.
+@use 'pattern/pattern.variables' as *;
+
+// Modules.
+@use '../string';
+
+// Functions.
+@use 'pattern/pattern.is.function' as *;
+
+// Status: DONE
+// The `map.key-pattern-index()` function retrieves index of pattern in `$list`.
+// @param `$list` A list to find index of pattern '*', '^', '$'.
+// @param `$pattern` A list of patterns to check.
+// @return The returned value is index list of pattern.
+@function key-pattern-index($list, $pattern: map.values($pattern)) {
+  $index: 1;
+  @each $element in $list {
+    @if is($element) {
+      @return $index;
+    }
+
+    $index: $index + 1;
+  }
+  @return null;
+}
+
+// Examples.
+// @debug key-pattern-index(('*.palette')); // 1
+// @debug key-pattern-index(('', '*.palette')); // 2
+// @debug key-pattern-index(('2', '3', '^test')); // 3
+// @debug key-pattern-index(('a', 'b', '$test')); // 3

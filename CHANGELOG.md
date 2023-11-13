@@ -1,5 +1,52 @@
 # @angular-package/sass changelog
 
+### v0.14.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.14.0-beta)
+
+- **Update** `palette.create()` - remove color indicator from map key. [2f9d8b8]
+- **Fix** `variant.class-property()` - add `$index` to `list.each()`. [6b113c5]
+- **Update** `variant/indicator` `remove()` function - remove indicator from nested lists. [9acd4a3]
+- **Update** `map.keys()` by adding `keys-pattern()` - function to result. [2d90fbd]
+- **Add** theme module to handle color themes. [178141f]
+- **Add** `color/palette` - module to create color palette. [1025ed5] [fcdf0c9]
+- **Update** `map.pick()` - add required `$key` argument, and ability to pick key with last element as pattern. [e66cea2]
+- **Add** `map.key-pattern-index()` - function to get index of pattern `'*'`, `'^'`, `'$'`. [011e574]
+- **Add** `map.keys()` function to retrieve keys or keys with pattern. [60c8ef5]
+- **Update** `map.pick-pattern()` - add `'^'` start and `'$'` end string pattern to pick values. [1100a95]
+- **Update** `map.pick-key-substring()` - add `'^'` start and `'$'` end `string` pattern to pick values. [a603ea4]
+- **Add** `map.keys-pattern()` function that returns keys / nested keys with pattern where `'*'` is substring, `'^'` is start, and `'$'` is end of `string`, add patterns to variables. [0d90f5d]
+- **Update** `pick.pattern()` - add `$pattern` argument and `by-pattern()` alias name. [35e3547]
+- **Update** `map` module - add required `$key` argument `map.deep-merge-key()` `map.has-keys()` `map.remove()`. Add required `$type` argument, and change `auto` separator to `comma`. Add required `$substring` argument to `key-substring()`, `$type` argument to `key-type()` `value-type()`. Add `$field-types` arbitrary argument to `type()`. [a634e46]
+- **Update** `color.name()` - add `$hue` `$saturation` `$lightness` `$alpha` `$shade` arguments to define color name. [e7fcb16]
+- **Update** `color.set-hsla-color()` retrieve color name from `$name`. [59da59e]
+- **Add** `color.name-nest()` function to nest color name with adjustments. [1210a86]
+- **Add** `list.invert()` function to invert elements. [11f6dcf]
+- **Update** `list.each()` - add `$index` argument of `$list`. [9a121bb]
+- **Add** `name` and `tag()` function to `selector` module. [2a77e6b]
+- **Add** `map.depth()` function to determine map depth. [41276b1]
+
+[2f9d8b8]: https://github.com/angular-package/sass/commit/2f9d8b8d1b41989ba40796175b09a579a0d97fd7
+[6b113c5]: https://github.com/angular-package/sass/commit/6b113c5284c065868e8e5036d398ba43f8e6a15e
+[9acd4a3]: https://github.com/angular-package/sass/commit/9acd4a37ab5f85686a7bdd6b4833120af5651deb
+[2d90fbd]: https://github.com/angular-package/sass/commit/2d90fbdc25d84fb38c70ac1eaa7a15addd1d99ec
+[178141f]: https://github.com/angular-package/sass/commit/178141f420083cc390b3b1a15ba399ee24f83b92
+[fcdf0c9]: https://github.com/angular-package/sass/commit/fcdf0c96126d8dc34ee4e7ce785aaf12a0464a4a
+[1025ed5]: https://github.com/angular-package/sass/commit/1025ed52caeef1d2d82cd2d74277e7d16971fff7
+[e66cea2]: https://github.com/angular-package/sass/commit/e66cea2ef7f40f81579d9d3997d6491124c8d280
+[011e574]: https://github.com/angular-package/sass/commit/011e574e3f26313bad7d5a7ad38a1fb430166f44
+[60c8ef5]: https://github.com/angular-package/sass/commit/60c8ef507fd43f1c4e1a79d794e5fc607baddd13
+[1100a95]: https://github.com/angular-package/sass/commit/1100a958236a8acf730c8926c1b582f9c7aa488b
+[a603ea4]: https://github.com/angular-package/sass/commit/a603ea4b000f1f669b4130f40a2fb5532293cf4e
+[0d90f5d]: https://github.com/angular-package/sass/commit/0d90f5d0d6d923060453f2ea1ee43c77c0c1090c
+[35e3547]: https://github.com/angular-package/sass/commit/35e35476b010ae468eaa29bbb0d0af57227df72d
+[a634e46]: https://github.com/angular-package/sass/commit/a634e46b7cc0fab1569943d6782773deaac25290
+[e7fcb16]: https://github.com/angular-package/sass/commit/e7fcb1611cfe035251af920f90969edf6e6cfdea
+[59da59e]: https://github.com/angular-package/sass/commit/59da59e8a512f4a72c235fcca0baa53b9e78e820
+[1210a86]: https://github.com/angular-package/sass/commit/1210a8676aa7fd152b5ef1e4eab8642f101d4ae5
+[11f6dcf]: https://github.com/angular-package/sass/commit/11f6dcf623947a3b80dd9eed8bfce140e61d3d1e
+[9a121bb]: https://github.com/angular-package/sass/commit/9a121bba33d89c9ba4de02f838e800a2f8a2f900
+[2a77e6b]: https://github.com/angular-package/sass/commit/2a77e6b0b2cdf2f655dc05308a16548800d919ae
+[41276b1]: https://github.com/angular-package/sass/commit/41276b1df455f6ff453322a6e70150c838740855
+
 ### v0.13.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.13.0-beta)
 
 - **Add** `variant.modifier-retrieve()` function to retrieve modifier settings in `variant.transform()`. [dad3966]

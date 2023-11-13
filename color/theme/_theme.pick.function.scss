@@ -1,0 +1,64 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Modules.
+@use '../../map';
+@use '../../string';
+
+// Functions.
+@use '../../list/list.append.function' as *;
+@use 'theme.get.function' as scheme;
+
+// Status: DONE
+// The `color.theme-pick()` function.
+// @param `$theme`
+// @param `$key`
+// @arbitrary `$keys...`
+// @returns
+@function pick($theme, $key, $keys...) {
+  $keys: append((), $key, comma, $keys...);
+  $result: ();
+  @each $scheme, $palettes in $theme {
+    @each $key in $keys {
+      $append: false;
+      @if type-of($key) == list and list.separator($key) == comma {
+        // FEATURE: Scheme
+        $scheme-name: list.nth($key, 1);
+        $palette-name: list.nth($key, 2);
+        @if $scheme == $scheme-name {
+          // FEATURE: Palette
+          @each $name, $palette in $palettes {
+            $append: false;
+            @each $palette-name in if(list.separator($palette-name) == comma, $palette-name, ($palette-name,)) {
+              @if (
+                type-of($name) == list and
+                list.separator($name) == comma and
+                list.index($name, $palette-name)
+              ) or $name == $palette-name {
+                $result: map.deep-merge($result, ($scheme: ($palette-name: $palette)));
+                $append: true;
+              }
+            }
+          }
+
+          // FEATURE:
+          @if not $append {
+            @each $palette-name in if(list.separator($palette-name) == comma, $palette-name, ($palette-name,)) {
+              @if map.pattern-is($palette-name) {
+                $result: map.deep-merge($result, ($scheme: map.pick($palettes, $palette-name)));
+                $append: true;
+              }
+            }
+          }
+        }
+
+      // FEATURE: Pick scheme.
+      } @else if $key == $scheme {
+        $result: map.deep-merge($result, ($scheme: $palettes));
+        $append: true;
+      }
+    }
+  }
+  @return $result;
+}

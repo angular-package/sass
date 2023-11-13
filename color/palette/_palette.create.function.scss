@@ -38,11 +38,11 @@ function.$functions: map.set(function.$functions, color, name, meta.get-function
           $variant: variant.create($color);
 
           // TODO: Check.
-          // @each $class, $color in $variant {
-          //   @if list.index($class, color) and list.length($class) > 1 {
-          //     $variant: map.key-replace($variant, $class, list.remove-value($class, color));
-          //   }
-          // }
+          @each $class, $color in $variant {
+            @if list.index($class, color) and list.length($class) > 1 {
+              $variant: map.key-replace($variant, $class, list.remove-value($class, color));
+            }
+          }
 
           $palette: map.deep-merge($palette, (
             $name: $variant

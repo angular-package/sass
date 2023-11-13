@@ -16,5 +16,6 @@
 @forward 'map.set.function';
 @forward 'map.update.function';
 @forward 'map.values.function';
+@forward 'pattern' as pattern-*;
 @forward 'pick' as pick-*;
 @forward 'sass:map' hide deep-merge, get, keys, remove, set, values;

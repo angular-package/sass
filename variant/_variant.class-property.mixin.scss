@@ -15,7 +15,7 @@
       @if $combine {
         @content($class, $property-name);
       } @else {
-        @include list.each($class) using($class) {
+        @include list.each($class) using($class, $index) {
           @content($class, $property-name);
         }
       }
@@ -28,7 +28,7 @@
     @if $combine {
       @content($class-property-name, null);
     } @else {
-      @include list.each($class-property-name) using($class-property-name) {
+      @include list.each($class-property-name) using($class-property-name, $index) {
         @content($class-property-name, null);
       }
     }

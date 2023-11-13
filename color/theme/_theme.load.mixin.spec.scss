@@ -1,4 +1,8 @@
+// Sass.
+@use 'sass:map';
+
 // Modules.
+@use '../../color';
 @use 'theme.load.mixin' as *;
 
 // TODO: Check dark word.
@@ -100,9 +104,7 @@ $-theme: (
   )
 ) !default;
 
-
-@include load($-theme, dark) using ($color-scheme, $palette, $variant) {
-  // @debug $color-scheme;
-  // @debug $palette;
-  // @debug $variant;
+// Load theme.
+@include load($-theme, dark) using($color-scheme, $palette-name, $variant) {
+  @include color.variant-create((background: $variant));
 }

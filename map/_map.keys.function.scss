@@ -1,4 +1,5 @@
 // Sass.
+@use 'sass:list';
 @use 'sass:map';
 
 // Functions.
@@ -11,7 +12,14 @@
 // @param `$patterns...` Additional keys to check whether `$maps` contains them.
 // @returns The returned value is a list of all keys or keys of `$patterns`.
 @function keys($map, $patterns...) {
-  @return join(map.keys($map), keys-pattern($map, $patterns...));
+  @return join(
+    map.keys($map),
+    if(
+      list.length($patterns) > 0,
+      keys-pattern($map, $patterns...),
+      ()
+    )
+  );
 }
 
 // Examples.

@@ -2,14 +2,18 @@
 @use 'sass:list';
 @use 'sass:map';
 
+// Functions.
+@use '../../list/list.append.function' as *;
+
 // Status: DONE
 // The `pick.key-type()` function returns a map with values of `$types`.
 // @param `$map` A map from which keys of values of `$types` are picked.
-// @arbitrary `$types...` Types of the values to pick from a `$map`.
+// @param `$type` Required type of the value to pick from `$map`.
+// @arbitrary `$types...` Types of the values to pick from `$map`.
 // @return The return value is a copy of `$map` with a values of types associated with `$types`.
-@function key-type($map, $types...) {
+@function key-type($map, $type, $types...) {
   $result: ();
-  @each $type in $types {
+  @each $type in append((), $type, comma, $types...) {
     @if list.index(bool calculation color function list map null number string, $type) {
       @each $key, $value in $map {
         @if type-of($key) == $type or (not $type and type-of($type) == type-of($key)) {

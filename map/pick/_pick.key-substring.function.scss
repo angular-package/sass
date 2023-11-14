@@ -1,21 +1,51 @@
 // Sass.
+@use 'sass:list';
 @use 'sass:map';
 
 // Modules.
+@use '../../meta';
 @use '../../string';
+
+// Functions.
+@use '../../list/list.append.function' as *;
 
 // Status: DONE
 // The `pick.key-substring()` function returns a copy of `$map` with keys of `$substrings`.
 // @param `$map` A map from which keys of `$substrings` are picked.
-// @arbitrary `$substrings...` Substrings of keys to pick from a `$map`.
+// @param `$substring` Substring of key to pick from `$map`.
+// @arbitrary `$substrings...` Substrings of keys to pick from `$map`.
 // @return The return value is a copy of `$map` with keys associated with `$substrings`.
-@function key-substring($map, $substrings...) {
+@function key-substring($map, $substring, $substrings...) {
   $result: ();
-  @each $substring in $substrings {
-    @if type-of($substring) == string {
+  @each $substring in append((), $substring, comma, $substrings...) {
+    @if type-of($substring) == string or type-of($substring) == map {
       @each $key in map.keys($map) {
-        @if type-of($key) == string and string.index($key, $substring) {
-          $result: map.deep-merge($result, ($key: map.get($map, $key)));
+        $key: if(meta.of-type(color number string, $key), #{$key}, $key);
+        @if type-of($key) == string {
+          @if type-of($substring) == map {
+            $position: map.keys($substring); // Get substring position.
+            $-substring: list.nth(map.values($substring), 1);
+
+            // Substring start.
+            @if list.index($position, start) or list.index($position, '^') {
+              @if string.index($key, $-substring) == 1 {
+                $result: map.deep-merge($result, ($key: map.get($map, $key)));
+              }
+
+            // Substring end.
+            } @else if list.index($position, end) or list.index($position, '$') {
+              @if string.index($key, $-substring) {
+                $true: (string.index($key, $-substring) - 1) + string.length($-substring) == string.length($key);
+                @if $true {
+                  $result: map.deep-merge($result, ($key: map.get($map, $key)));
+                }
+              }
+            }
+          } @else {
+            @if string.index($key, $substring) {
+              $result: map.deep-merge($result, ($key: map.get($map, $key)));
+            }
+          }
         }
       }
     }
@@ -35,6 +65,18 @@
 //     ),
 //   ),
 //   basic: (
+//     '9971test': 1,
+//     '2test': 2,
+//     '3test': 3,
+//     '4test': 4,
+//     '5test': 5,
+
+//     'test9971': 1,
+//     'test2': 2,
+//     'test3': 3,
+//     'test4': 4,
+//     'test5': 5,
+
 //     'default.palette': (),
 
 //     'gray.palette': (
@@ -105,5 +147,15 @@
 //   )
 // );
 
+// FEATURE:
 // @debug key-substring(map.get($-theme, basic), '.palette'); // ("default.palette": (), "gray.palette": ("gray": "gray" color, "gray" dark: "gray" dark, "gray" light: "gray" light), "bg.palette": (bg: bg color, bg dark: bg dark, bg light: bg light))
 // @debug key-substring(map.get($-theme, basic), 'key1'); // (key1: primary)
+
+// FEATURE: key as map where (position: name)
+// @debug key-substring(map.get($-theme, basic), (start: 'test'));
+// @debug key-substring(map.get($-theme, basic), (end: 'test'));
+// @debug key-substring(map.get($-theme, basic), (start: 'test'), (end: 'test'));
+
+// @debug key-substring(map.get($-theme, basic), ('^': 'test'));
+// @debug key-substring(map.get($-theme, basic), ('$': 'test'));
+// @debug key-substring(map.get($-theme, basic), ('^': 'test'), ('$': 'test'));

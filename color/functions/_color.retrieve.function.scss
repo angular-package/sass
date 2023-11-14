@@ -30,12 +30,16 @@
 }
 
 // Examples.
+// defined by the LVHA-order: :link — :visited — :hover — :active.
+
 // @debug retrieve(primary); // (name: primary)
 // @debug retrieve(primary dark); // (name: primary dark)
 
 // comma separator
 // length 1 lightness
 // @debug retrieve((primary dark, 50%)); // (name: primary dark, lightness: 50%)
+// @debug retrieve((primary dark, 50% 60%)); // (name: primary dark, lightness: 50% 60%) // :link 50%, :visited 50%, :hover 60%
+// @debug retrieve((primary dark, 50% 40% 70% 60%)); // (name: primary dark, lightness: 50%) :link 50% :visited 40% :hover 70% :active 60%
 
 // length 2 lightness, alpha
 // @debug retrieve((primary dark, 50%, 0.5)); // (name: primary dark, lightness: 50%, alpha: 0.5)

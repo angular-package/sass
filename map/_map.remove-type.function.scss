@@ -2,13 +2,17 @@
 @use 'sass:list';
 @use 'sass:map';
 
+// Functions.
+@use '../list/list.append.function' as *;
+
 // Status: DONE
 // The`map.remove-type()` function removes the properties from `$map` where values are of `$types`.
 // @param `$map` A map from which the values of type from `$types` are removed.
+// @param `$type` Required type of value to remove from `$map`.
 // @arbitrary `$types...` The types of values in `$map` to remove .
 // @return The return value is a copy of `$map` without the values associated with `$types`.
-@function remove-type($map, $types...) {
-  @each $type in $types {
+@function remove-type($map, $type, $types...) {
+  @each $type in append((), $type, comma, $types...) {
     @if list.index(number string color list map calculation bool null function, $type) {
       @each $key, $value in $map {
         @if type-of($value) == $type or (not $type and type-of($type) == type-of($value)) {

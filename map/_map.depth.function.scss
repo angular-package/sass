@@ -1,0 +1,52 @@
+// Modules.
+@use 'map.get.function' as *;
+@use 'map.pick.function' as *;
+
+// Status: DONE
+// The `map.depth()` function determines the map depth.
+// @param `$map` Map to check depth.
+// @param `$key` Optional key to determine depth.
+// @returns The returned value is map depth of `number`.
+@function depth($map, $key: null) {
+  $max-depth: 0;
+  @each $key, $value in if($key, pick($map, $key), $map) {
+    $current-depth: 1;
+    @if type-of($value) == map {
+      $current-depth: 1 + depth($value);
+    }
+    @if $current-depth > $max-depth {
+      $max-depth: $current-depth;
+    }
+  }
+  @return $max-depth;
+}
+
+// Examples.
+// $-map: (
+//   key-3: (
+//     key-2-4: 42,
+//     key3: (
+//       key-4: 100,
+//       key5: 200
+//     ),
+//     key6: (
+//       key7: (
+//         key8: 300
+//       ),
+//       key9: (
+//         key10: (
+//           key11: 400
+//         )
+//       ),
+//     )
+//   ),
+// );
+
+// @debug depth($-map); // 5
+
+// key
+// @debug depth($-map, key-3); // 5
+
+// Nested key
+// @debug depth($-map, (key-3, key3)); // 2
+// @debug depth($-map, (key-3, key6)); // 4

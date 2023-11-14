@@ -16,6 +16,14 @@
   @each $value in $item {
     @if type-of($value) == string {
       $item: list.set-nth($item, $i, string.replace(#{$value}, all, $indicator, ''));
+    } @else if type-of($value) == list {
+      $j: 1;
+      @each $v in $value {
+        $value: list.set-nth($value, $j, string.replace(#{$v}, all, $indicator, ''));
+        $j: $j + 1;
+      }
+
+      $item: list.set-nth($item, $i, $value);
     }
 
     $i: $i + 1;

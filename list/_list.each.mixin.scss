@@ -5,9 +5,12 @@
 // The `list.each()` mixin uses flow control `@each` to iterate `$list`.
 // @param `$list` A list to iterate.
 // @param `$comma` If `true` then force to iterate comma-separated list, by adding space-separated list into comma-separated.
-@mixin each($list, $comma: true) {
+// @param `$index`
+@mixin each($list, $comma: true, $index: 1) {
   @each $element in if($comma, if(list.separator($list) == space, ($list,), $list), $list) {
-    @content($element);
+    @content($element, $index);
+
+    $index: $index + 1;
   }
 }
 

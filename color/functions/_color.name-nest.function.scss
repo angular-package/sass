@@ -1,0 +1,59 @@
+// Modules.
+@use '../../list';
+@use '../../map';
+@use '../../selector';
+
+// Functions.
+@use 'color.name.function' as *;
+@use 'color.retrieve.function' as *;
+
+// Status: DONE
+// The `color.name-nest()` function nest color names(variant) to create color list.
+// @arbitrary `$name...` The name to nest.
+// @returns The returned value are nested color names.
+@function name-nest($name...) {
+  $nested: ();
+  $retrieved: ();
+  $i: 1;
+  @each $-name in $name {
+    @if type-of($-name) == list {
+      $j: 1;
+      @each $value in $-name {
+        $retrieved: list.append($retrieved, retrieve($value), comma);
+        $-name: list.set-nth(
+          $-name,
+          $j,
+          map.get(retrieve($value), name)
+        );
+        $j: $j + 1;
+      }
+
+      $name: list.set-nth($name, $i, $-name);
+    }
+
+    $i: $i + 1;
+  }
+
+  $nested: selector.nest($name...);
+  $name: $nested;
+  $i: 1;
+  @each $value in $name {
+    $name: list.set-nth(
+      $name,
+      $i,
+      name(
+        $value,
+        $hue: map.get(list.nth($retrieved, $i), hue),
+        $saturation: map.get(list.nth($retrieved, $i), saturation),
+        $lightness: map.get(list.nth($retrieved, $i), lightness),
+        $alpha: map.get(list.nth($retrieved, $i), alpha),
+      )
+    );
+    $i: $i + 1;
+  }
+  @return $name;
+}
+
+// Examples.
+// @debug name-nest(secondary, (color, dark, light)); // secondary color, secondary color dark, secondary color light
+// @debug name-nest(secondary, (color, (ultra dark, -30%), (mega light, 60%))); // secondary color, (secondary ultra color dark, -30%), (secondary mega color light, 60%)

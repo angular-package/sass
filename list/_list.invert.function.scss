@@ -1,0 +1,19 @@
+// Sass.
+@use 'sass:list';
+
+// Status: DONE
+// The `list.invert()` function invert `$list` elements.
+// @param `$list` The list to invert elements.
+// @returns The returned value is a copy of `$list` with inverted elements.
+@function invert($list) {
+  $inverted: ();
+  @for $i from list.length($list) through 1 {
+    $inverted: list.append($inverted, list.nth($list, $i), list.separator($list));
+  }
+  @return $inverted;
+}
+
+// Examples.
+// $-list: ('a', 'b', c, d, 2, 4, 5, (a: 1));
+
+// @debug invert($-list);

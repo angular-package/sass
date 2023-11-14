@@ -1,0 +1,9 @@
+// Functions.
+@use 'palette.create.function';
+
+// Status: DONE
+// The `palette.create()` function.
+// @arbitrary `$values...`
+@mixin create($values...) {
+  @content(palette.create($values...));
+}

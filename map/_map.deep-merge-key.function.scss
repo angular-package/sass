@@ -2,16 +2,18 @@
 @use 'sass:map';
 
 // Functions.
+@use '../list/list.append.function' as *;
 @use 'map.get.function' as *;
 
 // Status: DONE
 // The `map.deep-merge-key()` function merges `$map` with retrieved values from `$keys` of this `$map`.
 // The properties under `$keys` are removed.
 // @param `$map` A map to merge with retrieved value from `$keys` of this map.
+// @param `$key` Required key to merge with `$map`.
 // @arbitrary `$keys...` The keys to get the values to merge with `$map`.
 // @return The return value is a map merged with the values retrieved from `$keys`.
-@function deep-merge-key($map, $keys...) {
-  @each $key in $keys {
+@function deep-merge-key($map, $key, $keys...) {
+  @each $key in append((), $key, comma, $keys...) {
     $map: map.deep-remove(map.deep-merge($map, get($map, $key, ())), $key...);
   }
   @return $map;

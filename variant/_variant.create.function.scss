@@ -1,6 +1,7 @@
 // Modules.
 @use '../list';
 @use '../map';
+@use '../selector';
 
 // Status: DONE
 // The `variant.create()` creates a variant built from `$value`.
@@ -10,7 +11,6 @@
 @function create($value, $modifier: null) {
   $result: ();
   @if type-of($value) == map {
-
     @each $name, $side-variant in $value {
       @if type-of($side-variant) == map {
         @each $side, $variant in $side-variant {
@@ -22,15 +22,22 @@
         $result: map.merge($result, (), (), ($name: $side-variant));
       }
     }
-
-
-
   } @else if not (type-of($value) == map) {
+    // @if list.separator($value) == space and list.has-list($value) {
+    //   $value: selector.nest($value...);
+    // }
     @each $value in if(list.separator($value) == comma, $value, ($value,)) {
-      // Remove !important.
-      $key: list.remove-value($value, !important);
+      $key: $value;
+      @if type-of($value) == list {
+        // Remove !important.
+        $key: list.remove-value($key, !important);
+        @if list.separator($key) == comma {
+          $key: list.nth($key, 1);
+        } @else if list.separator($key) == space and list.has-list($key) {
+          $key: list.remove-list($key);
+        }
+      }
 
-      // Set variant.
       $result: map.merge($result, ($key: $value));
     }
   }
@@ -60,8 +67,22 @@
 // @debug create((right, left)); // (right: right, left: left)
 
 //
-// @debug create((right ('+' 15), left)); // (right: right, left: left)
+// @debug create((right ('+' 15), left)); // (right: right ("+" 15), left: left)
+// @debug create((right ('+' 15) !important, left)); // (right: right ("+" 15) !important, left: left)
+
+//
+// @debug create((color, (primary dark, -30%), (secondary light, 60%)));
+// @debug create((color, (primary dark 30, -30%), (secondary light 60, 60%)));
+
+// TODO:
+// @debug create((color, (ultra color dark, -30%), (mega color light, 60%)));
+// @debug create((secondary (color, dark, light)));
+// @debug create((secondary (color '!important', dark, light)));
+// @debug create((secondary (color, (dark, -30%), (light, 60%))));
 
 //
 // @debug create((medium: 1px solid red, large: 2px solid blue)); // ((): ((): (medium: 1px solid red)))
 // @debug create(((top, right): (medium: 1px solid red, large: 2px solid blue))); // ((): ((top, right): (medium: 1px solid red, large: 2px solid blue)))
+
+//
+// @debug create((((disabled, 15%), (disabled, 5%)), error));

@@ -29,7 +29,7 @@
   @include variant.transform($variant, $combine, $modifier) using($resolved) {
     @each $resolved in $resolved {
       @include class.content(
-        map.get($resolved, (class, name)),
+        join(if(&, '&', ()), map.get($resolved, (class, name))),
         $pseudo-class,
         $dictionary,
         $function,

@@ -22,37 +22,38 @@ function.$functions: map.set(function.$functions, color, name, meta.get-function
     @each $name, $color in $name-color {
       $nested: variant.indicator-index($name, '+');
       $name: if($nested, variant.indicator-remove($name, '+'), $name);
-
-      // Palette name.
-      $i: 1;
-      @each $name in if(list.separator($name) == space, ($name,), $name) {
-        // Color.
-        $j: 1;
-        @each $color in if(list.separator($color) == space, ($color,), $color) {
-          @if list.has-list($color) and list.separator($color) == space {
-            $color: name-nest(if($nested, $name, null), $color...);
-          } @else {
-            $color: name-nest(if($nested, $name, null), ($color,));
-          }
-
-          $variant: variant.create($color);
-
-          // TODO: Check.
-          @each $class, $color in $variant {
-            @if list.index($class, color) and list.length($class) > 1 {
-              $variant: map.key-replace($variant, $class, list.remove-value($class, color));
+      @if not (type-of($color) == map) {
+        // Palette name.
+        $i: 1;
+        @each $name in if(list.separator($name) == space, ($name,), $name) {
+          // Color.
+          $j: 1;
+          @each $color in if(list.separator($color) == space, ($color,), $color) {
+            @if list.has-list($color) and list.separator($color) == space {
+              $color: name-nest(if($nested, $name, null), $color...);
+            } @else {
+              $color: name-nest(if($nested, $name, null), ($color,));
             }
+
+            $variant: variant.create($color);
+
+            // TODO: Check.
+            @each $class, $color in $variant {
+              @if list.index($class, color) and list.length($class) > 1 {
+                $variant: map.key-replace($variant, $class, list.remove-value($class, color));
+              }
+            }
+
+            $palette: map.deep-merge($palette, ($name: $variant));
           }
 
-          $palette: map.deep-merge($palette, (
-            $name: $variant
-          ));
+          $j: $j + 1;
         }
 
-        $j: $j + 1;
+        $i: $i + 1;
+      } @else {
+        $palette: map.deep-merge($palette, ($name: $color));
       }
-
-      $i: $i + 1;
     }
   }
   @return $palette;

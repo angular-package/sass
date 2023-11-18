@@ -165,6 +165,40 @@ $-basic: (
   )
 );
 
+//
+$normal: (
+  // Core colors.
+  core: (dark, light, accent, (primary (color, dark, light)), (secondary (color, dark, light))),
+
+  // Gray colors.
+  +gray: (color, dark, light),
+
+  // Bg colors.
+  +bg: (color, dark, light),
+
+  // Border colors.
+  +border: (color, dark, light),
+
+  // Link colors.
+  +link: (color, dark, light),
+
+  // Control colors.
+  control: (disabled, error, info, success, warning),
+
+  // Body colors.
+  +body: (bg, font),
+
+  // Other colors.
+  other: (
+    code: code,
+    highlight: highlight,
+  )
+);
+
+
+@debug build($normal, other);
+
+
 // input data
 // [bracketed list] - build color variant
 // '*' - all from the given theme

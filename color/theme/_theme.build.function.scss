@@ -19,12 +19,12 @@
     @if list.length($pick) > 0 {
       @each $pick in $pick {
         @each $name, $palette in pick($theme, $pick) {
-          $result: map.deep-merge($result, ($name: palette.create($palette)));
+          $result: map.deep-merge($result, palette.create(($name: $palette)));
         }
       }
     } @else {
       @each $name, $palette in $theme {
-        $result: map.deep-merge($result, ($name: palette.create($palette)));
+        $result: map.deep-merge($result, palette.create(($name: $palette)));
       }
     }
   }

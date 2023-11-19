@@ -80,8 +80,7 @@
     if(map.get($color, color), math.calculate(map.get($color, alpha) '+' $alpha) or map.get($color, alpha) or $alpha, null),
     $dictionary
   );
-
-  @include var.set((name($resolved-name): color(($name: hsla))));
+  @include var.set((name($resolved-name): color(($name: hsla), $dictionary: $dictionary)), $dictionary: $dictionary);
 }
 
 // Examples.

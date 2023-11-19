@@ -1,5 +1,19 @@
 # @angular-package/sass changelog
 
+### v0.15.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.15.0-beta)
+
+- **Add** [`variant.nest()`](https://github.com/angular-package/sass/blob/develop/variant/_variant.nest.function.scss) - add function to nest variant of `map` or `list` type. [2ed7089]
+- **Fix** [`color.palette-create()`](https://github.com/angular-package/sass/blob/develop/color/palette/_palette.create.mixin.scss) - add `deep-merge()` if `$color` is not `map`. [3c3482d]
+- **Fix** [`color.theme-build()`](https://github.com/angular-package/sass/blob/develop/color/theme/_theme.build.function.scss) add `$name` to `$palette` as `map` and update spec. [7189d9e]
+- **Fix** [`color.set-hsla-color`](https://github.com/angular-package/sass/blob/develop/color/mixins/set/_color.set-hsla-color.mixin.scss) mixin to use `$dictionary`. [727798d]
+- **Update** [`class.variant-create()`](https://github.com/angular-package/sass/blob/develop/class/variant/_variant.create.mixin.scss) function to use relative `&` to class and update spec. [8ce0b5d]
+
+[2ed7089]: https://github.com/angular-package/sass/commit/2ed708992081514bf9b269f84fa68bb537bfee22
+[3c3482d]: https://github.com/angular-package/sass/commit/3c3482dd243396f420988ada47196256a1b2ea8d
+[7189d9e]: https://github.com/angular-package/sass/commit/7189d9eeba1ceb2a949e67ccd1e0aaa85b4a65c6
+[727798d]: https://github.com/angular-package/sass/commit/727798dfa5ea666082e35bd6fc6bac5d0e9f138d
+[8ce0b5d]: https://github.com/angular-package/sass/commit/8ce0b5d724abda449491ac91bf2d7bd8fdce1f7f
+
 ### v0.14.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.14.0-beta)
 
 - **Update** `palette.create()` - remove color indicator from map key. [2f9d8b8]

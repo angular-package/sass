@@ -9,11 +9,12 @@
 // @param `$theme`
 // @arbitrary `$pick`
 // @returns
-@mixin load($theme, $pick...) {
-  @each $theme, $palette in build($theme, $pick...) {
-    @include media.color-scheme-content($theme) {
-      @each $palette, $variant in $palette {
-        @content(($theme, $palette, $variant)...);
+@mixin load($theme, $detect: false, $pick...) {
+  // $theme or $color-scheme
+  @each $theme, $palettes in build($theme, $pick...) {
+    @include media.color-scheme-content($theme, $detect) {
+      @each $name, $variant in $palettes {
+        @content(($theme, $name, $variant)...);
       }
     }
   }

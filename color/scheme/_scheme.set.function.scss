@@ -1,0 +1,26 @@
+// Sass.
+@use 'sass:list';
+
+// Variables.
+@use 'scheme.variables' as variables;
+
+// Status: DONE
+// The `scheme.set()` function .
+// @param `$color-scheme`
+// @returns
+@function set($color-scheme) {
+  $allowed: (normal, light, dark, light dark, only light);
+  @if list.index($allowed, $color-scheme) {
+    variables.$color-scheme: $color-scheme;
+  } @else {
+    @warn "Allowed values: #{$allowed}";
+  }
+  @return variables.$color-scheme;
+}
+
+// Examples.
+// allowed
+// @debug set(light dark);
+
+// not allowed
+// @debug set(light dark test);

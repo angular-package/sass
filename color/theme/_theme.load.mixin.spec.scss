@@ -104,7 +104,101 @@ $-theme: (
   )
 ) !default;
 
+//
+$-dark-1: (
+  dark: (
+    // Core colors variant.
+    core: (dark, light, accent, (primary (color, dark, light)), (secondary (color, dark, light))),
+
+    // Gray colors.
+    +gray: (color, dark, light),
+
+    // Bg colors.
+    +bg: ((color, 15%), dark, light),
+
+    // Border colors.
+    +border: (dark, light),
+
+    // Link colors.
+    +link: (color, dark, light),
+
+    // Control colors.
+    control: (
+      disabled: disabled,
+      error: error,
+      info: info,
+      success: success,
+      warning: warning
+    ),
+
+    // Body colors.
+    +body: (bg, font),
+
+    // Other colors.
+    other: (
+      code: code,
+      highlight: highlight
+    )
+  )
+) !default;
+
+//
+$-dark-2: (
+  // Core colors variant.
+  core: (dark, light, accent, (primary (color, dark, light)), (secondary (color, dark, light))),
+
+  // Gray colors.
+  +gray: (color, dark, light),
+
+  // Bg colors.
+  +bg: ((color, 15%), dark, light),
+
+  // Border colors.
+  +border: (dark, light),
+
+  // Link colors.
+  +link: (color, dark, light),
+
+  // Control colors.
+  control: (
+    disabled: disabled,
+    error: error,
+    info: info,
+    success: success,
+    warning: warning
+  ),
+
+  // Body colors.
+  +body: (bg, font),
+
+  // Other colors.
+  other: (
+    code: code,
+    highlight: highlight
+  )
+) !default;
+
 // Load theme.
-@include load($-theme, dark) using($color-scheme, $palette-name, $variant) {
-  @include color.variant-create((background: $variant));
-}
+// @include load($-dark-1, false) using($color-scheme, $palette-name, $variant) {
+//   @include color.variant-create((background: $variant));
+// }
+
+// @include load($-dark-1, false, dark) using($color-scheme, $palette-name, $variant) {
+//   @include color.variant-create((background: $variant));
+// }
+
+// @include load($-dark-1, false, (dark, +bg)) using($color-scheme, $palette-name, $variant) {
+//   @include color.variant-create((background: $variant));
+// }
+
+// @include load($-dark-1, false, (dark, +bg), (dark, +gray)) using($color-scheme, $palette-name, $variant) {
+//   @include color.variant-create((background: $variant));
+// }
+
+// @include load($-dark-1, false, (dark, (+bg, +gray))) using($color-scheme, $palette-name, $variant) {
+//   @include color.variant-create((background: $variant));
+// }
+
+// @include load($-dark-2) using($color-scheme, $palette-name, $variant) {
+//   @include color.variant-create((background: $variant));
+// }

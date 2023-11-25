@@ -1,11 +1,13 @@
 // Sass.
 @use 'sass:list';
-@use 'sass:map';
 
 // Modules.
+@use '../../map';
+@use '../../string';
 @use '../palette';
 
 // Functions.
+@use '../../list/list.range.function' as *;
 @use 'theme.pick.function' as *;
 
 // Status: DONE
@@ -18,13 +20,17 @@
   @if type-of($theme) == map {
     @if list.length($pick) > 0 {
       @each $pick in $pick {
-        @each $name, $palette in pick($theme, $pick) {
-          $result: map.deep-merge($result, palette.create(($name: $palette)));
+        @each $theme, $palettes in pick($theme, $pick) {
+          @each $name, $variant in $palettes {
+            $result: map.deep-merge($result, ($theme: palette.create(($name: $variant))));
+          }
         }
       }
     } @else {
-      @each $name, $palette in $theme {
-        $result: map.deep-merge($result, palette.create(($name: $palette)));
+      @each $theme, $palettes in $theme {
+        @each $name, $variant in $palettes {
+          $result: map.deep-merge($result, ($theme: palette.create(($name: $variant))));
+        }
       }
     }
   }

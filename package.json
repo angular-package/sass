@@ -1,9 +1,26 @@
 {
   "name": "@angular-package/sass",
   "description": "Extension for sass modules and new modules.",
-  "version": "0.15.0-beta",
+  "version": "0.16.0-beta",
   "main": "./index.scss",
-  "funding": "https://github.com/sponsors/angular-package",
+  "funding": [
+    {
+      "type": "individual",
+      "url": "https://business.revolut.com/angular-package"
+    },
+    {
+      "type": "individual",
+      "url": "https://docs.angular-package.dev/donate/cryptocurrency"
+    },
+    {
+      "type": "patreon",
+      "url": "https://www.patreon.com/angularpackage"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/angular-package"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/angular-package/sass"

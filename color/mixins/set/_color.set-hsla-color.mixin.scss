@@ -1,4 +1,5 @@
 // Sass.
+@use 'sass:list' as -list;
 @use 'sass:meta';
 
 // Modules.
@@ -35,7 +36,11 @@
   $color: null,
   $dictionary: ()
 ) {
-  $resolved-name: list.to-map($name, (name: string list));
+  $resolved-name: if(
+    -list.separator($name) == comma or meta.type-of($name) == string,
+    list.to-map($name, (name: string list)),
+    $name
+  );
   @if type-of($resolved-name) == map {
     $resolved-name: map.get($resolved-name, name);
   }

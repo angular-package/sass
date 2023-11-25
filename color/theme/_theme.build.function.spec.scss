@@ -1,5 +1,6 @@
 // Functions.
 @use 'theme.build.function' as *;
+@use 'theme.load.mixin' as *;
 
 // Dark theme
 $-dark: (
@@ -195,9 +196,11 @@ $normal: (
   )
 );
 
+// @debug build($normal, bg);
 
-@debug build($normal, other);
-
+@include load($normal, bg) using($resolved...) {
+  @debug $resolved;
+}
 
 // input data
 // [bracketed list] - build color variant

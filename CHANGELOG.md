@@ -1,6 +1,6 @@
 # @angular-package/sass changelog
 
-### v0.15.1-beta [#](https://github.com/angular-package/sass/releases/tag/v0.15.1-beta)
+### v0.16.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.16.0-beta)
 
 - **Update** `indicator.remove()` - remove indicator from `string`. [30bdf0a]
 - **Fix** `color.theme-load()` - add `$detect` argument and update spec. [5d095fe]
@@ -9,10 +9,10 @@
 - **Update** `palette.create()` - first check type of `$color`, should be `map`. [0e7dafc]
 - **Fix** `color.set-hsla-color()` - change the way to resolve `$name` - check the separator `comma` and type-of `string`. [331ff42]
 
+[9e5f583]: https://github.com/angular-package/sass/commit/9e5f583e83bba383f8c72e33e672989670296f5c
 [30bdf0a]: https://github.com/angular-package/sass/commit/30bdf0a699c6cf88d6a4c2031b9e4846b06a1bda
 [5d095fe]: https://github.com/angular-package/sass/commit/5d095fe14009e4d40f3264ebb4f668ea3bb4945b
 [48e2bf8]: https://github.com/angular-package/sass/commit/48e2bf84815151505d4c2e66aabbea0d366b1c77
-[9e5f583]: https://github.com/angular-package/sass/commit/9e5f583e83bba383f8c72e33e672989670296f5c
 [0e7dafc]: https://github.com/angular-package/sass/commit/0e7dafcca93c301867ec2fdb9605fd787f6d99b1
 [331ff42]: https://github.com/angular-package/sass/commit/331ff428221f0cbddd52e8a602ba8438d8020127
 

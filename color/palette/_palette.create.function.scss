@@ -22,7 +22,9 @@ function.$functions: map.set(function.$functions, color, name, meta.get-function
     @each $name, $color in $name-color {
       $nested: variant.indicator-index($name, '+');
       $name: if($nested, variant.indicator-remove($name, '+'), $name);
-      @if not (type-of($color) == map) {
+      @if type-of($color) == map {
+        $palette: map.deep-merge($palette, ($name: $color));
+      } @else {
         // Palette name.
         $i: 1;
         @each $name in if(list.separator($name) == space, ($name,), $name) {
@@ -51,8 +53,6 @@ function.$functions: map.set(function.$functions, color, name, meta.get-function
         }
 
         $i: $i + 1;
-      } @else {
-        $palette: map.deep-merge($palette, ($name: $color));
       }
     }
   }

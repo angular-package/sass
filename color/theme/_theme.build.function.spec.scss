@@ -168,39 +168,59 @@ $-basic: (
 
 //
 $normal: (
-  // Core colors.
-  core: (dark, light, accent, (primary (color, dark, light)), (secondary (color, dark, light))),
+  normal: (
+    // Core colors.
+    core: (dark, light, accent, (primary (color, dark, light)), (secondary (color, dark, light))),
 
-  // Gray colors.
-  +gray: (color, dark, light),
+    // Gray colors.
+    +gray: (color, dark, light),
 
-  // Bg colors.
-  +bg: (color, dark, light),
+    // Bg colors.
+    +bg: (color, dark, light),
 
-  // Border colors.
-  +border: (color, dark, light),
+    // Border colors.
+    +border: (color, dark, light),
 
-  // Link colors.
-  +link: (color, dark, light),
+    // Link colors.
+    +link: (color, dark, light),
 
-  // Control colors.
-  control: (disabled, error, info, success, warning),
+    // Control colors.
+    control: (disabled, error, info, success, warning),
 
-  // Body colors.
-  +body: (bg, font),
+    // Body colors.
+    +body: (bg, font),
 
-  // Other colors.
-  other: (
-    code: code,
-    highlight: highlight,
+    // Other colors.
+    other: (
+      code: code,
+      highlight: highlight,
+    ),
+
+    // optional
+    // optional: (
+    //   status: ((link, visited, hover): accent, active: accent dark)
+    // ),
+
+    +optional: (accent ((basic color, 25%) (test dark, -50%) (), light), primary dark, secondary light)
+    // +optional: (accent ((link: (color, 20%), hover: (dark, -50%)), light), primary)
+    // +optional: (accent ((background: (color, 20%), color: (dark, -50%)), light), primary)
+
+    // optional: (
+    //   status: (background: accent, color: accent dark)
+    // )
   )
 );
 
 // @debug build($normal, bg);
+// @include load($normal, false, bg) using($resolved...) {
+//   @debug $resolved;
+// }
 
-@include load($normal, bg) using($resolved...) {
+
+@include load($normal, false, (normal, +optional)) using($resolved...) {
   @debug $resolved;
 }
+
 
 // input data
 // [bracketed list] - build color variant

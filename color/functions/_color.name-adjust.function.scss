@@ -1,0 +1,39 @@
+// Modules.
+@use '../../list';
+@use '../../map';
+@use '../../meta';
+
+// Functions.
+@use 'color.name.function' as *;
+
+// Status: DONE
+// The `color.name-adjust()` function adjusts single/multiple color `$name`.
+// @param `$name` The `string` or `list` name to adjust.
+// @param `$adjust` The `list` or `map` type to adjust.
+// @returns The returned value is a list of adjusted color name(s).
+@function name-adjust($name, $adjust) {
+  $i: 1;
+  $name: if(list.separator($name) == space, ($name,), $name);
+  @each $value in $name {
+    $adjustment: if(meta.type-of($adjust) == map, $adjust, list.nth($adjust, $i));
+    $name: list.set-nth(
+      $name,
+      $i,
+      name(
+        $value,
+        $hue: map.get($adjustment, hue),
+        $saturation: map.get($adjustment, saturation),
+        $lightness: map.get($adjustment, lightness),
+        $alpha: map.get($adjustment, alpha),
+      )
+    );
+    $i: $i + 1;
+  }
+  @return $name;
+}
+
+// Examples.
+// @debug name-adjust(accent test1, (lightness: 3%)); // (accent test1 color, 3%)
+// @debug name-adjust(accent test1, ((lightness: 3%),)); // (accent test1 color, 3%)
+// @debug name-adjust((accent test1, primary test2, secondary test3), ((lightness: 3%),)); // (accent test1 color, 3%), primary test2 color, secondary test3 color
+// @debug name-adjust((accent test1, primary test2, secondary test3), (lightness: 3%)); // (accent test1 color, 3%), (primary test2 color, 3%), (secondary test3 color, 3%)

@@ -1,11 +1,13 @@
 // Modules.
-@use '../../list';
+@use '../../../list';
+@use '../../../map';
 
 // Status: DONE
-// The `color.retrieve()` function returns a map with attributes obtained from `$name`.
+// The `color.name-retrieve()` function returns a map with attributes obtained from `$name`.
 // @param `$name` Color name of `list` type.
+// @param `$model` If `name` then retrieved color attributes are set to key of color name.
 // @returns The returned value is a map of attributes obtained from `$name`.
-@function retrieve($name) {
+@function retrieve($name, $model: default) {
   $attributes: ();
   @if not (list.separator($name) == comma) and not (type-of(list.nth($name, 1)) == list) {
     $name: ($name,);
@@ -22,11 +24,19 @@
   @if list.length($name) > 4 {
     $attributes: list.insert-nth($attributes, 2, (saturation: number list, (saturation lightness alpha: number list): map));
   }
-  @return list.to-map(
+
+  // Create map from `$attributes`.
+  $map: list.to-map(
     $name,
     (name: list string),
     $attributes...
   );
+
+  // If `$model` is set to name set retrieved adjustment to key of color name.
+  @if $model == name {
+    $map: (map.get($map, name): map.remove($map, name));
+  }
+  @return $map;
 }
 
 // Examples.
@@ -43,6 +53,7 @@
 
 // length 2 lightness, alpha
 // @debug retrieve((primary dark, 50%, 0.5)); // (name: primary dark, lightness: 50%, alpha: 0.5)
+// @debug retrieve((primary dark, 50%, 0.5), name); // (primary dark: (lightness: 50%, alpha: 0.5))
 
 // length > 2
 // @debug retrieve((primary dark, 50deg, 5%, 3%)); // (name: primary dark, hue: 50deg, saturation: 5%, lightness: 3%)

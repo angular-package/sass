@@ -1,0 +1,21 @@
+// Modules.
+@use '../../../list';
+@use '../../../map';
+
+// Functions.
+@use '../color.name.function' as *;
+
+// Status: DONE
+// The `color.name-adjust()` function adjusts `$name` with `$adjust`.
+// @param `$name`
+// @param `$adjust`
+// @returns
+@function adjust($name, $adjust) {
+  @return name(
+    $name,
+    $hue: map.get($adjust, hue),
+    $saturation: map.get($adjust, saturation),
+    $lightness: map.get($adjust, lightness),
+    $alpha: map.get($adjust, alpha),
+  );
+}

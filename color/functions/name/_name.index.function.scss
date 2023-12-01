@@ -1,0 +1,20 @@
+// Modules.
+@use '../../../list';
+
+// Status: DONE
+// The `color.name-index()` function checks whether `$name` contains `$search`.
+// @param `$name` Color name of `string` or `list` type.
+// @param `$search` Parts of color name to find in `$name`.
+// @returns The returned value is index, list of indexes or `null`.
+@function index($name, $search) {
+  $found: list.index($name, $search...);
+  @if $found and (list.length($found) == list.length($search)) {
+    @return $found;
+  }
+  @return null;
+}
+
+// Examples.
+// @debug index(primary, primary); // 1
+// @debug index(primary, primary dark); // null
+// @debug index(primary color dark, primary dark); // 1, 3

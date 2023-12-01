@@ -12,10 +12,8 @@
 // @return The return value is an index or list of indexes of the given values.
 @function index($list, $value, $values...) {
   $result: ();
-  @if type-of($list) == list {
-    @each $value in append((), $value, auto, $values...) {
-      $result: if(list.index($list, $value), append($result, list.index($list, $value), comma), $result);
-    }
+  @each $value in append((), $value, auto, $values...) {
+    $result: if(list.index($list, $value), append($result, list.index($list, $value), comma), $result);
   }
   @return if(list.length($result) > 0, if(list.length($result) == 1, list.nth($result, 1), $result), null);
 }

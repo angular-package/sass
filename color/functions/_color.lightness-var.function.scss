@@ -28,16 +28,12 @@
   $suffix: null,
 ) {
   @return var.get(
-    name(
-      $name,
-      lightness,
-      map.get($dictionary, map.get(variables.$name-configuration, delimiter)) or $delimiter
-    ),
+    name($name, lightness),
     $adjust,
     null,
     $fallback,
     $dictionary,
-    $delimiter,
+    map.get($dictionary, map.get(variables.$name-configuration, delimiter), $delimiter),
     $prefix,
     $suffix
   );

@@ -4,11 +4,17 @@
 // Variables.
 @use '../../var/var.variables' as variables;
 
-// Functions.
+// Modules.
 @use '../../list';
 @use '../../math';
 @use '../../meta';
 @use '../../string';
+
+// Functions.
+@use 'name/name.add-indicator.function' as *;
+@use 'name/name.adjust.function' as *;
+@use 'name/name.create.function' as *;
+@use 'name/name.retrieve.function' as *;
 
 // Status: DONE
 // The `color.name()` function returns color name of `list` type built from `$name` and `$type` ready for translation.
@@ -16,6 +22,12 @@
 // @param `$name` Color name of `string` or `list` type. String type is being split by `$delimiter`.
 // @param `$type` Color type e.g. `hue`, `alpha`, `saturation`, `lightness`, `rgb`.
 // @param `$delimiter` Delimiter to split `$name` and `$type` of `string` type into `list`.
+// @param `$hue` Add hue adjustment.
+// @param `$saturation` Add saturation adjustment.
+// @param `$lightness` Add lightness adjustment.
+// @param `$alpha` Add alpha adjustment.
+// @param `$shade` (dark, light)
+// @param `$separator` Separator space/comma for color name with adjustment.
 // @returns The returned value is a color name of `list` type in format `[name][delimiter][color][delimiter][shade][delimiter][type]`.
 @function name(
   $name,
@@ -25,69 +37,32 @@
   $saturation: null,
   $lightness: null,
   $alpha: null,
-  $shade: (dark, light)
+  $shade: (dark, light),
+  $separator: list.separator($name)
 ) {
-  @if type-of($name) == string {
-    $name: if($delimiter and string.length($delimiter) > 0, string.split($name, $delimiter), ($name,));
-  }
-  @if type-of($type) == string {
-    $type: if($delimiter and string.length($delimiter) > 0, string.split($type, $delimiter), ($type,));
-  }
+  // Retrieve adjustment.
+  $adjustment: retrieve($name);
 
-  // Get last shade index if exists.
-  $shade-index: 0;
-  $shades: ();
-  @each $value in if(list.separator($shade) == comma, $shade, ($shade,)) {
-    $result: if(meta.type-of($value) == list, list.index($name, $value...), list.index($name, $value));
-    @if $result {
-      $shades: append($shades, $result, comma);
-    }
-  }
+  // Set color name from `$adjustment`.
+  $name: map.get($adjustment, name);
 
-  // Get start of shade.
-  $i: 1;
-  @each $shade in $shades {
-    @if type-of($shade) == list {
-      $shades: list.set-nth($shades, $i, math.min($shade...));
-    }
+  // Create.
+  $name: create($name, $type, $delimiter, $shade);
 
-    $i: $i + 1;
-  }
-  @if list.length($shades) > 0 {
-    $shade-index: math.max($shades...);
-  }
-
-  // Add color suffix to the name.
-  @if not list.index($name, color) {
-    // FEATURE: primary or test primary
-    @if list.length($name) == 1 or $shade-index == 0 {
-      $name: list.join($name, color);
-    }
-
-    // FEATURE: Add color to dark or light shade.
-    @else if $shade-index {
-      $name: list.insert-nth($name, $shade-index, color);
-    }
-  }
-
-  $name: if($type, list.join($name, $type, space), list.join((), $name, space));
-
-  // Add hue, saturation, lightness or alpha to color name.
-  @if not ($hue and $saturation) {
-    @if $lightness {
-      $name: list.append(($name,), $lightness);
-      @if $alpha {
-        $name: list.append($name, $alpha);
-      }
-    }
-  } @else {
-    $name: list.append(($name,), $hue, auto, $saturation, $lightness, $alpha);
-  }
-  @return $name;
+  // Adjust and return.
+  @return adjust(
+    $name,
+    $adjustment,
+    $hue,
+    $saturation,
+    $lightness,
+    $alpha,
+    $separator,
+  );
 }
 
 // Examples.
-// $-delimiter: '-';
+$-delimiter: '-';
 
 // string
 // @debug name(color, $delimiter: $-delimiter); // color
@@ -136,3 +111,23 @@
 // Add hue, saturation, lightness and alpha
 // @debug name(primary basic dark, null, $-delimiter, $hue: 20deg, $saturation: 5%, $lightness: 15%, $alpha: 0.5); //
 // @debug name(primary basic dark light, null, $-delimiter, $hue: 20deg, $saturation: 5%, $lightness: 15%, $alpha: 0.5); //
+
+// Adjustments.
+// lightness
+// @debug name((primary basic dark, 15%));
+// @debug name((primary basic dark) 15%);
+
+// lightness + alpha
+// @debug name((primary basic dark, 15%));
+// @debug name((primary basic dark) 15% 0.1);
+
+// hue + saturation + lightness + alpha
+// @debug name((primary basic dark, 15deg, 1%, 5%, 0.1));
+// @debug name((primary basic dark) 15deg 1% 5% 0.1);
+
+// @debug name((primary basic dark, 15deg, 1%, 5%, 0.1), $hue: 20deg, $saturation: 5%, $lightness: 15%, $alpha: 0.5);
+// @debug name((primary basic dark) 15deg 1% 5% 0.1, $hue: 20deg, $saturation: 5%, $lightness: 15%, $alpha: 0.5);
+
+//
+// @debug name((primary basic dark, 5%), null, $-delimiter, $hue: 20deg, $saturation: 5%, $lightness: 15%, $alpha: 0.5); // primary basic color dark, 20deg, 5%, 20%, 0.5
+// @debug name((primary basic dark, 5%), null, $-delimiter, $hue: 20deg, $saturation: 5%, $lightness: 15%, $alpha: 0.5, $separator: space); // (primary basic color dark) 20deg 5% 20% 0.5

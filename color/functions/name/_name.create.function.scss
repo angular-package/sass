@@ -1,0 +1,53 @@
+// Variables.
+@use '../../../var/var.variables' as variables;
+
+// Modules.
+@use '../../../list';
+@use '../../../map';
+@use '../../../string';
+
+// Functions.
+@use 'name.add-indicator.function' as *;
+
+// Status: DONE
+// The `color.name-create()` function creates color name with `color` indicator and `$shade`.
+// @param `$name`
+// @param `$type`
+// @param `$delimiter`
+// @param `$shade` (dark, light)
+// @returns
+@function create(
+  $name,
+  $type,
+  $delimiter: map.get(variables.$var, delimiter),
+  $shade: (dark, light),
+) {
+  // Remove `$delimiter` if `$name` is `string` type.
+  @if type-of($name) == string {
+    $name: if($delimiter and string.length($delimiter) > 0, string.split($name, $delimiter), ($name,));
+    $name: list.join((), $name, space);
+  }
+  @if type-of($type) == string {
+    $type: if($delimiter and string.length($delimiter) > 0, string.split($type, $delimiter), ($type,));
+  }
+
+  // Add color indicator to `$name`.
+  $name: add-indicator($name, $shade);
+
+  // Add type to `$name`.
+  $name: if($type, list.join($name, $type, space), list.join((), $name, space));
+
+  // Returns.
+  @return $name;
+}
+
+// Examples.
+// @debug create(primary dark, hue); // primary color dark hue
+
+// @debug create(secondary light dark, saturation); // secondary light color dark saturation
+// @debug create(secondary dark light, saturation); // secondary dark color light saturation
+
+// @debug create(primary-dark, hue, '-'); // primary color dark hue
+// @debug create(secondary-dark-light, saturation, '-'); // secondary dark color light saturation
+
+// @debug create(primary-dark, hue, '-');

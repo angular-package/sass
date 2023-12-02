@@ -1,0 +1,24 @@
+// Modules.
+@use '../../../list';
+
+// Functions.
+@use 'name.index.function' as *;
+
+// Status:
+// The `color.name-remove()` function.
+// @param `$names`
+// @arbitrary `$remove...`
+// @returns
+@function remove($names, $remove...) {
+  @for $i from 1 through list.length($names) {
+    @for $j from 1 through list.length($remove) {
+      @if index(list.nth($names, $i), list.nth($remove, $j)) {
+        $remove: list.set-nth($remove, $j, $i);
+      }
+    }
+  }
+  @return list.remove-nth($names, $remove...);
+}
+
+// Examples.
+// @debug remove((accent color, primary color, secondary color dark), secondary, primary);

@@ -6,8 +6,10 @@
 @use 'color.alpha-var.function' as *;
 @use 'color.hue-var.function' as *;
 @use 'color.lightness-var.function' as *;
-@use 'color.retrieve.function' as *;
 @use 'color.saturation-var.function' as *;
+
+// Modules.
+@use 'name';
 
 // Status: DONE
 // The function `color.hsla-color()` returns color in `hsla()` if adjusted or the CSS variable `var()` from of `$name`.
@@ -32,7 +34,7 @@
   $delimiter: null,
   $prefix: null,
   $suffix: null,
-  $color: retrieve($name),
+  $color: name.retrieve($name),
 ) {
   @return hsla(
     hue-var(map.get($color, name), map.get($color, hue, $hue), null, $dictionary, $delimiter, $prefix, $suffix),

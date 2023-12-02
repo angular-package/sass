@@ -13,16 +13,24 @@
     $name: ($name,);
   }
   @if list.length($name) > 1 {
-    $attributes: list.append($attributes, (lightness: number list, (hue saturation lightness alpha: number list): map), comma);
+    @if list.has-number(list.nth($name, 2)) {
+      $attributes: list.append($attributes, (lightness: number list, (hue saturation lightness alpha: number list): map), comma);
+    }
   }
   @if list.length($name) > 2 {
-    $attributes: list.append($attributes, (alpha: number list, (alpha hue saturation: number list): map));
+    @if list.has-number(list.nth($name, 3)) {
+      $attributes: list.append($attributes, (alpha: number list, (alpha hue saturation: number list): map));
+    }
   }
   @if list.length($name) > 3 {
-    $attributes: list.insert-nth($attributes, 1, (hue: number list, (hue saturation lightness alpha: number list): map));
+    @if list.has-number(list.nth($name, 4)) {
+      $attributes: list.insert-nth($attributes, 1, (hue: number list, (hue saturation lightness alpha: number list): map));
+    }
   }
   @if list.length($name) > 4 {
-    $attributes: list.insert-nth($attributes, 2, (saturation: number list, (saturation lightness alpha: number list): map));
+    @if list.has-number(list.nth($name, 5)) {
+      $attributes: list.insert-nth($attributes, 2, (saturation: number list, (saturation lightness alpha: number list): map));
+    }
   }
 
   // Create map from `$attributes`.

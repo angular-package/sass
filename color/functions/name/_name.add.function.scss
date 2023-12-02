@@ -1,0 +1,26 @@
+// Modules.
+@use '../../../list';
+
+// Functions.
+@use '../color.name.function' as *;
+@use 'name.index.function' as *;
+
+// Status: DONE
+// The `color.name-add()` function.
+// @param `$names`
+// @arbitrary `$colors...`
+// @returns
+@function add($names, $colors...) {
+  @each $name in $colors {
+    @if not list.index($name, color) {
+      $name: name($name);
+    }
+
+    $names: list.append($names, $name, list.separator($names))
+  }
+  @return $names;
+}
+
+// Examples.
+// @debug add((accent color, primary color, secondary color dark), secondary light, primary dark);
+// @debug add((accent color, primary color, secondary color dark), secondary light, (primary dark, 5%));

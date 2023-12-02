@@ -3,19 +3,59 @@
 @use '../../../map';
 
 // Functions.
-@use '../color.name.function' as *;
+@use 'name.retrieve.function' as *;
 
 // Status: DONE
 // The `color.name-adjust()` function adjusts `$name` with `$adjust`.
 // @param `$name`
 // @param `$adjust`
+// @param `$hue`
+// @param `$saturation`
+// @param `$lightness`
+// @param `$alpha`
+// @param `$separator`
 // @returns
-@function adjust($name, $adjust) {
-  @return name(
-    $name,
-    $hue: map.get($adjust, hue),
-    $saturation: map.get($adjust, saturation),
-    $lightness: map.get($adjust, lightness),
-    $alpha: map.get($adjust, alpha),
-  );
+@function adjust(
+  $name,
+  $adjust: null,
+  $hue: null,
+  $saturation: null,
+  $lightness: null,
+  $alpha: null,
+  $separator: list.separator($name),
+) {
+  $adjustment: retrieve($name);
+
+  // FEATURE: Calculate adjustments.
+  @if $hue or map.get($adjustment, hue) or map.get($adjust, hue) {
+    $hue: calc(if($hue, $hue, 0deg) + map.get($adjustment, hue, 0deg) + map.get($adjust, hue, 0deg));
+  }
+  @if $saturation or map.get($adjustment, saturation) or map.get($adjust, saturation) {
+    $saturation: calc(if($saturation, $saturation, 0%) + map.get($adjustment, saturation, 0%) + map.get($adjust, saturation, 0%));
+  }
+  @if $lightness or map.get($adjustment, lightness) or map.get($adjust, lightness) {
+    $lightness: calc(if($lightness, $lightness, 0%) + map.get($adjustment, lightness, 0%) + map.get($adjust, lightness, 0%));
+  }
+  @if $alpha or map.get($adjustment, alpha) or map.get($adjust, alpha) {
+    $alpha: calc(if($alpha, $alpha, 0) + map.get($adjustment, alpha, 0) + map.get($adjust, alpha, 0));
+  }
+
+  // Add hue, saturation, lightness or alpha to color name.
+  @if not ($hue and $saturation) {
+    @if $lightness {
+      $name: list.append(($name,), $lightness, $separator);
+      @if $alpha {
+        $name: list.append($name, $alpha, $separator);
+      }
+    }
+  } @else {
+    $name: list.append(($name,), $hue, $separator, $saturation, $lightness, $alpha);
+  }
+  @return $name;
 }
+
+// Examples.
+// @debug adjust(primary, (alpha: 0.1)); // primary color
+// @debug adjust((primary color, 15%), (alpha: 0.1));
+// @debug adjust((primary color, 15%), (hue: 15deg));
+// @debug adjust((primary color, 15%), (hue: 15deg));

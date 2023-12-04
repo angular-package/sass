@@ -68,15 +68,15 @@
 // @debug adjust-multiple(accent test1, primary test2, secondary test3, (primary test2: (lightness: 3%), secondary test3: (lightness: 15%, alpha: 0.5)));
 
 // adjust color names
-// @debug adjust-multiple(accent test1, primary test2, secondary test3, (lightness: 3%));
+// @debug adjust-multiple(accent test1, primary test2, secondary test3, (lightness: 3%, separator: comma)); // (accent test1, 3%), (primary test2, 3%), (secondary test3, 3%)
 
 // multiple adjustments as list
-// @debug adjust-multiple(accent test1, primary test2, secondary test3, ((lightness: 3%, alpha: 5%), (), (lightness: 10%),));
-// @debug adjust-multiple(accent test1, primary test2, secondary test3, ((lightness: 3%, alpha: 5%), (), (), (lightness: 10%),));
-// @debug adjust-multiple(accent test1, primary test2, secondary test3, ((lightness: 3%, alpha: 5%), (lightness: 10%),));
-// @debug adjust-multiple(accent test1, primary test2, secondary test3, ((lightness: 3%, alpha: 5%), (lightness: 10%), (lightness: 13%)));
+// @debug adjust-multiple(accent test1, primary test2, secondary test3, ((lightness: 3%, alpha: 0.5), (), (lightness: 10%),));
+// @debug adjust-multiple(accent test1, primary test2, secondary test3, ((lightness: 3%, alpha: 0.5), (), (), (lightness: 10%),));
+// @debug adjust-multiple(accent test1, primary test2, secondary test3, ((lightness: 3%, alpha: 0.5), (lightness: 10%),));
+// @debug adjust-multiple(accent test1, primary test2, secondary test3, ((lightness: 3%, alpha: 0.1), (lightness: 10%), (lightness: 13%)));
 
-// @debug adjust-multiple(accent test1, primary test2, secondary test3, ((lightness: 3%, alpha: 0.5), (lightness: 10%), (lightness: 13%)));
+// @debug adjust-multiple(accent test1, primary test2, secondary test3, ((lightness: 3%, alpha: 0.5), (lightness: 10%), (lightness: 13%))); // (accent test1) 3% 0.5, (primary test2) 10%, (secondary test3) 13%
 
 // adjust
 // @debug adjust-multiple(accent test1, primary test2, secondary test3, ((name: secondary test3, lightness: 3%, alpha: 0.5), ()));

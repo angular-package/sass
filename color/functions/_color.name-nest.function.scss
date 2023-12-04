@@ -2,10 +2,10 @@
 @use '../../list';
 @use '../../map';
 @use '../../selector';
+@use 'name';
 
 // Functions.
 @use 'color.name.function' as *;
-@use 'color.retrieve.function' as *;
 
 // Status: @deprecated
 // The `color.name-nest()` function nest color names(variant) to create color list.
@@ -21,11 +21,11 @@
     @if type-of($-name) == list {
       $j: 1;
       @each $value in $-name {
-        $retrieved: list.append($retrieved, retrieve($value), comma);
+        $retrieved: list.append($retrieved, name.retrieve($value), comma);
         $-name: list.set-nth(
           $-name,
           $j,
-          map.get(retrieve($value), name)
+          map.get(name.retrieve($value), name)
         );
         $j: $j + 1;
       }

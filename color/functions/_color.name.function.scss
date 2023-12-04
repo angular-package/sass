@@ -64,6 +64,31 @@
 // Examples.
 $-delimiter: '-';
 
+// INFO: Name form.
+// (color name) lightness
+// (primary dark) 15%
+
+// (color name) lightness alpha
+// (primary dark) 15% 0.1
+
+// (color name) hue lightness alpha
+// (primary dark) 15deg 15% 0.1
+
+// (color name) hue saturation lightness alpha
+// (primary dark) 15deg 5% 15% 0.1
+
+// (color name, lightness)
+// (primary dark, 15%)
+
+// (color name, lightness, alpha)
+// (primary dark, 15%, 0.1)
+
+// (color name, hue, lightness, alpha)
+// (primary dark, 15deg, 15%, 0.1)
+
+// (color name, hue, saturation, lightness, alpha)
+// (primary dark, 15deg, 5%, 15%, 0.1)
+
 // string
 // @debug name(color, $delimiter: $-delimiter); // color
 // @debug name("color", $delimiter: $-delimiter); // color

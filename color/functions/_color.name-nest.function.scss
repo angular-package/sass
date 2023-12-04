@@ -7,11 +7,13 @@
 @use 'color.name.function' as *;
 @use 'color.retrieve.function' as *;
 
-// Status: DONE
+// Status: @deprecated
 // The `color.name-nest()` function nest color names(variant) to create color list.
 // @arbitrary `$name...` The name to nest.
 // @returns The returned value are nested color names.
 @function name-nest($name...) {
+  @warn "Function deprecated in favor of `name.nest()`";
+
   $nested: ();
   $retrieved: ();
   $i: 1;

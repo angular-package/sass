@@ -1,4 +1,5 @@
 // Functions.
+@use 'palette.create.function' as palette;
 @use 'palette.create.mixin' as *;
 @use 'palette.get.function' as *;
 
@@ -162,3 +163,10 @@
 // lightness and alpha adjust
 // @debug create((control: ((disabled, 15%), (error, 15% 0.5), info, success, warning))); // (control: ("disabled": (disabled color, 15%), "error": (error color, 15% 0.5), "info": info color, "success": success color, "warning": warning color))
 // @debug create((footer large: outline (disabled, error, info, success, warning)));
+
+
+// TODO: Check.
+// @debug palette.create((primary: (
+//   ((link, visited, hover): secondary (color, dark, light), active: primary (color, dark, light)),
+//   primary (color, dark, light),
+// )));

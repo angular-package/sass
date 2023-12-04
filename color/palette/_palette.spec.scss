@@ -1,11 +1,20 @@
 // Functions.
-@use 'palette.create.function' as *;
-@use 'palette.get.function' as *;
-@use 'palette.remove.function' as *;
-@use 'palette.set.function' as *;
+@use '../palette';
 
 // Examples.
-// $palette: create((primary: (primary, primary dark, secondary, accent)), (core: (disabled, active, error, highlight dark)));
+$-palette: (
+  accent: (
+    accent color: (accent basic color, 3%),
+    accent color dark: (accent basic color, 5%),
+    accent color light: (accent basic color, 5%),
+  ),
+
+  primary: (
+    primary color: (primary basic color, 3%),
+    primary color dark: (primary basic color, 5%),
+    primary color light: (primary basic color, 15%),
+  ),
+);
 
 // get
 // @debug get($palette, core); // ("disabled": disabled color, "active": active color, "error": error color, highlight dark: highlight color dark)
@@ -18,3 +27,20 @@
 // remove
 // $palette: remove($palette, (core: (highlight dark, error), primary: (primary dark,)));
 // @debug get($palette, core);
+
+// FEATURE: palette.create()
+// $palette: palette.create((+accent: (basic 3% 0.5, dark)));
+// $palette: palette.create((+accent: (color, (basic 3% 0.5), light, dark)));
+// $palette: palette.create(((+accent, primary): (color, ((basic dark) 3% 0.5) (light, 10%) (dark, 5%), light, dark)));
+
+// @debug palette.color-add($palette, accent, basic dark, auto, (secondary dark, 5%));
+// @debug $palette;
+
+// FEATURE: other
+// @debug color-add($-palette, accent, dark, auto, (secondary color light, 5%));
+// $colors: palette.color-add($-palette, primary, dark, comma, (secondary color light, 5%), (accent color, 15%));
+
+// @debug $colors;
+// @debug palette.color-remove($colors, primary, dark, space, accent, secondary);
+
+// $palette: create((primary: (primary, primary dark, secondary, accent)), (core: (disabled, active, error, highlight dark)));

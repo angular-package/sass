@@ -4,10 +4,11 @@
 @use '../../map';
 @use '../../meta';
 @use '../../variant';
+@use '../functions/name';
 
 // Functions.
-@use '../functions/color.name-nest.function' as *;
 @use '../functions/color.name.function' as *;
+@use 'palette.color-add.function' as *;
 
 // Add.
 function.$functions: map.set(function.$functions, color, name, meta.get-function(name));
@@ -16,45 +17,65 @@ function.$functions: map.set(function.$functions, color, name, meta.get-function
 // NOTE: consider adding bracketed adjust
 // The `palette.create()` function.
 // @arbitrary `$values...`
+// @returns
 @function create($values...) {
   $palette: ();
-  @each $name-color in $values {
-    @each $name, $color in $name-color {
-      $nested: variant.indicator-index($name, '+');
-      $name: if($nested, variant.indicator-remove($name, '+'), $name);
-      @if type-of($color) == map {
-        $palette: map.deep-merge($palette, ($name: $color));
-      } @else {
-        // Palette name.
-        $i: 1;
-        @each $name in if(list.separator($name) == space, ($name,), $name) {
-          // Color.
-          $j: 1;
-          @each $color in if(list.separator($color) == space, ($color,), $color) {
-            @if list.has-list($color) and list.separator($color) == space {
-              $color: name-nest(if($nested, $name, null), $color...);
-            } @else {
-              $color: name-nest(if($nested, $name, null), ($color,));
-            }
+  $variant-colors: ();
 
-            $variant: variant.create($color);
-
-            // TODO: Check.
-            @each $class, $color in $variant {
-              @if list.index($class, color) and list.length($class) > 1 {
-                $variant: map.key-replace($variant, $class, list.remove-value($class, color));
-              }
-            }
-
-            $palette: map.deep-merge($palette, ($name: $variant));
-          }
-
-          $j: $j + 1;
+  // FEATURE: Get additional colors.
+  $i: 1;
+  @each $variant in $values {
+    @each $name, $colors in $variant {
+      $j: 1;
+      @each $color in $colors {
+        @if list.has-list($color) and list.length($color) > 1 {
+          $variant-color: name.retrieve(list.nth($color, 1));
+          $variant-colors: map.deep-merge(
+            $variant-colors,
+            ($name: (map.get($variant-color, name): list.range($color, 2)))
+          );
+          $color: list.nth($color, 1);
+          $colors: list.set-nth($colors, $j, $color);
         }
 
+        $j: $j + 1;
+      }
+
+      $variant: map.deep-merge($variant, ($name: $colors));
+    }
+
+    $values: list.set-nth($values, $i, $variant);
+    $i: $i + 1;
+  }
+
+  // Nest values.
+  $variant: variant.nest($values...);
+
+  // FEATURE: Add variant.
+  @each $name, $color in $variant {
+    @if type-of($color) == list {
+      $i: 1;
+      @each $c in $color {
+        $color: list.set-nth($color, $i, name.add-indicator($c));
         $i: $i + 1;
+      }
+
+      $palette: map.set($palette, $name, variant.create($color, $type: color));
+    }
+  }
+
+  // FEATURE: Add additional colors to variant.
+  @each $name, $variant in $variant-colors {
+    @each $name in if(list.separator($name) == space, ($name,), $name) {
+      $name: variant.indicator-remove($name, '+');
+      @each $class, $colors in $variant {
+        $palette: color-add($palette, $name, $class, auto, $colors...);
       }
     }
   }
   @return $palette;
 }
+
+// Examples.
+// @debug create(((+accent, primary): (color, ((basic dark) 3% 0.5) (light, 10%) (dark, 5%), light, dark)));
+

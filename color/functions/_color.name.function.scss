@@ -11,10 +11,9 @@
 @use '../../string';
 
 // Functions.
-@use 'name/name.add-indicator.function' as *;
-@use 'name/name.adjust.function' as *;
-@use 'name/name.create.function' as *;
-@use 'name/name.retrieve.function' as *;
+@use '../name/name.adjust.function' as *;
+@use '../name/name.create.function' as *;
+@use '../name/name.retrieve.function' as *;
 
 // Status: DONE
 // The `color.name()` function returns color name of `list` type built from `$name` and `$type` ready for translation.

@@ -1,13 +1,11 @@
 // Variables.
-@use '../../../var/var.variables' as variables;
+@use '../../var/var.variables' as variables;
 
 // Modules.
-@use '../../../list';
-@use '../../../map';
-@use '../../../string';
-
-// Functions.
-@use 'name.add-indicator.function' as *;
+@use '../../list';
+@use '../../map';
+@use '../../string';
+@use 'indicator';
 
 // Status: DONE
 // The `color.name-create()` function creates color name with `color` indicator and `$shade`.
@@ -32,7 +30,7 @@
   }
 
   // Add color indicator to `$name`.
-  $name: add-indicator($name, $shade);
+  $name: indicator.add($name, $shade);
 
   // Add type to `$name`.
   $name: if($type, list.join($name, $type, space), list.join((), $name, space));

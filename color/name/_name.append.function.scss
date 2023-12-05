@@ -1,9 +1,10 @@
 // Modules.
-@use '../../../list';
-@use '../../../meta';
+@use '../../list';
+@use '../../meta';
+@use 'indicator';
 
 // Functions.
-@use '../color.name.function' as *;
+@use '../functions/color.name.function' as *;
 @use 'name.add-indicator-multiple.function' as *;
 @use 'name.index.function' as *;
 

@@ -1,5 +1,5 @@
 // Modules.
-@use '../../../list';
+@use '../../list';
 
 // Status: DONE
 // The `color.name-index()` function checks whether `$name` contains `$search`.
@@ -21,6 +21,7 @@
 // Examples.
 // @debug index(primary, primary); // 1
 // @debug index(primary, primary dark); // null
+// @debug index(primary dark, primary dark); // 1, 2
 // @debug index(primary color dark, primary dark); // 1, 3
 
 // adjusted

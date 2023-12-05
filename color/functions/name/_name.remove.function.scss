@@ -4,21 +4,24 @@
 // Functions.
 @use 'name.index.function' as *;
 
-// Status:
-// The `color.name-remove()` function.
-// @param `$names`
-// @arbitrary `$remove...`
-// @returns
-@function remove($names, $remove...) {
-  @for $i from 1 through list.length($names) {
-    @for $j from 1 through list.length($remove) {
-      @if index(list.nth($names, $i), list.nth($remove, $j)) {
-        $remove: list.set-nth($remove, $j, $i);
+// Status: TODO: Check exact name of color name.
+// The `color.name-remove()` function removes searched part of name or name from `$names`.
+// @param `$names` List of names.
+// @param `$color-name` Required name or part of name to remove from `$names`.
+// @arbitrary `$color-names...` Part of names or names to remove from `$names`.
+// @returns The returned value is `$names` with removed names of required `$color-name` and optional `$color-names`.
+@function remove($names, $color-name, $color-names...) {
+  $color-names: list.append((), $color-name, comma, $color-names...);
+  @for $j from 1 through list.length($color-names) {
+    @for $i from 1 through list.length($names) {
+      @if index(list.nth($names, $i), list.nth($color-names, $j)) {
+        $names: list.remove-nth($names, $i);
       }
     }
   }
-  @return list.remove-nth($names, $remove...);
+  @return $names;
 }
 
 // Examples.
-// @debug remove((accent color, primary color, secondary color dark), secondary, primary);
+// @debug remove((accent color, primary color, secondary color dark), secondary, primary); // (accent color,)
+// @debug remove((accent color, (primary, 1%), (secondary dark, 3%)), secondary, primary); // (accent color,)

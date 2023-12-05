@@ -69,7 +69,7 @@ function.$functions: map.set(function.$functions, color, name, meta.get-function
     @each $name in if(list.separator($name) == space, ($name,), $name) {
       $name: variant.indicator-remove($name, '+');
       @each $class, $colors in $variant {
-        $palette: color-add($palette, $name, $class, auto, $colors...);
+        $palette: color-add($palette, $name, $class, space, $colors...);
       }
     }
   }
@@ -78,4 +78,3 @@ function.$functions: map.set(function.$functions, color, name, meta.get-function
 
 // Examples.
 // @debug create(((+accent, primary): (color, ((basic dark) 3% 0.5) (light, 10%) (dark, 5%), light, dark)));
-

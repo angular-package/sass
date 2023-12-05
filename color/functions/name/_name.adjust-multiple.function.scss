@@ -24,10 +24,12 @@
   @each $adjust in if(type-of($adjustment) == map, ($adjustment,), $adjustment) {
     @if type-of($adjustment) == map {
       // FEATURE: Adjust all names.
-      @if list.index(map.keys($adjust), hue, saturation, lightness, alpha) and not list.index($adjusted, $i) {
+      @if list.index(map.keys($adjust), hue, saturation, lightness, alpha) {
         @for $i from 1 through list.length($names) {
-          $names: list.set-nth($names, $i, adjust(list.nth($names, $i), $adjust));
-          $adjusted: list.append($adjusted, $i);
+          @if not list.index($adjusted, $i) {
+            $names: list.set-nth($names, $i, adjust(list.nth($names, $i), $adjust));
+            $adjusted: list.append($adjusted, $i);
+          }
         }
       } @else {
         // FEATURE: Adjust names by color name.
@@ -66,7 +68,8 @@
 // adjust color name
 // @debug adjust-multiple(accent test1, (lightness: 3%)); // ((accent test1 color, 3%),)
 // @debug adjust-multiple(accent test1, (lightness: 3%, alpha: 0.1)); // ((accent test1 color, 3%, 0.1),)
-// @debug adjust-multiple(accent test1, (lightness: 3%, hue: 20deg, saturation: 15%, alpha: 0.1)); // ((accent test1 color, 20deg, 15%, 3%, 0.1),)
+// @debug adjust-multiple(accent test1, (lightness: 3%, hue: 20deg, saturation: 15%, alpha: 0.1)); // ((accent test1) 20deg 15% 3% 0.1,)
+// @debug adjust-multiple(accent test1, (lightness: 3%, hue: 20deg, saturation: 15%, alpha: 0.1, separator: comma));
 
 // adjust color name by name
 // @debug adjust-multiple(accent test1, primary test2, secondary test3, (primary test2: (lightness: 3%)));

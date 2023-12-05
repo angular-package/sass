@@ -5,17 +5,17 @@
 @use '../../../meta';
 
 // Functions.
-@use 'name.adjust.function' as *;
-@use 'name.retrieve.function' as *;
+@use '../name.adjust.function' as *;
+@use '../name.retrieve.function' as *;
 
 // Status:
-// The `color.name-add-indicator()` function adds `color` indicator to `$name`.
+// The `color.name-indicator-add()` function adds `color` indicator to `$name`.
 // @param `$name`
 // @param `$shade`
 // @param `$indicator`
 // @param `$separator`
 // @returns The returned value.
-@function add-indicator(
+@function add(
   $name,
   $shade: (dark, light),
   $indicator: color,
@@ -60,10 +60,10 @@
 }
 
 // Examples.
-// @debug add-indicator(primary dark);
-// @debug add-indicator(primary basic light dark);
-// @debug add-indicator(primary basic dark light);
+// @debug add(primary dark);
+// @debug add(primary basic light dark);
+// @debug add(primary basic dark light);
 
 // Adjusted.
-// @debug add-indicator((primary dark, 3%)); // primary color dark, 3%
-// @debug add-indicator((primary dark) 3%); // (primary color dark) 3%
+// @debug add((primary dark, 3%)); // primary color dark, 3%
+// @debug add((primary dark) 3%); // (primary color dark) 3%

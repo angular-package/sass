@@ -15,10 +15,25 @@
 @function color-add($palette, $name, $class, $separator, $color-name, $color-names...) {
   @each $variant-class, $variant-color in map.get($palette, $name) {
     @if name.index($variant-class, $class) {
+      @if list.has-number($variant-color) {
+        @if list.separator($variant-color) == space {
+          $variant-color: list.append((), $variant-color, space);
+        } @else if list.separator($variant-color) == comma {
+          $variant-color: ($variant-color,);
+        }
+      }
+
       $palette: map.merge(
         $palette,
         $name,
-        ($variant-class: name.append($variant-color, $separator, $color-name, $color-names...))
+        (
+          $variant-class: name.append(
+            $variant-color,
+            $separator,
+            $color-name,
+            $color-names...
+          )
+        )
       );
     }
   }

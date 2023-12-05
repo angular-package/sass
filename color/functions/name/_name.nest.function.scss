@@ -59,4 +59,5 @@
 // nest multiple colors
 // @debug nest(accent test, extended ver, (basic color, extended dark, primary light));
 
-// @debug nest(basic, (color, (test dark, 3%, 0.5), light)); // TODO:
+// @debug nest(basic, (color, (test dark, 3%, 0.5), light)); // basic color, (basic test dark, 3%, 0.5), basic light
+// @debug nest(basic, (color, ((test dark) 3% 0.5), light)); // basic color, (basic test dark) 3% 0.5, basic light

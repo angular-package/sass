@@ -9,7 +9,7 @@
 @use 'color.saturation-var.function' as *;
 
 // Modules.
-@use 'name';
+@use '../name';
 
 // Status: DONE
 // The function `color.hsla-color()` returns color in `hsla()` if adjusted or the CSS variable `var()` from of `$name`.

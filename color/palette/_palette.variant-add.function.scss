@@ -1,7 +1,8 @@
 // Modules.
 @use '../../list';
 @use '../../map';
-@use '../functions' as color;
+@use '../name';
+@use 'variant';
 
 // Functions.
 @use 'palette.color-add.function' as *;
@@ -12,22 +13,33 @@
 // @param `$name`
 // @param `$class`
 // @param `$separator`
+// @param `$color-name`
 // @arbitrary `$color-names...`
 // @returns
 @function variant-add($palette, $name, $class, $separator, $color-name, $color-names...) {
-  @each $palette-name, $palette-variant in $palette {
-    @if color.name-index($palette-name, $name) {
-      $palette: map.deep-merge($palette, ($name: ($class: ())));
+  @if not variant.exists($palette, $name, $class) {
+    $palette: map.deep-merge($palette, ($name: ($class: ())));
+    @if $color-name {
+      $palette: color-add($palette, $name, $class, $separator, $color-name, $color-names...);
     }
-  }
-  @if $color-name {
-    $palette: color-add($palette, $name, $class, $separator, $color-name, $color-names...);
   }
   @return $palette;
 }
 
 // Examples.
-// $-palette: (s
+// $-palette: (
+//   accent: (
+//     accent color: (accent basic color, 3%),
+//     accent color dark: (accent basic color, 5%),
+//     accent color light: (accent basic color, 5%),
+//   ),
+
+//   primary: (
+//     primary color: (primary basic color, 3%),
+//     primary color dark: (primary basic color, 5%),
+//     primary color light: (primary basic color, 15%),
+//   ),
+// );
 
 // @debug variant-add($-palette, primary, primary dark, auto, (primary dark) 15%);
 // @debug variant-add($-palette, primary, primary dark, space, (primary dark, 15%));

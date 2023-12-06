@@ -3,11 +3,6 @@
 @use '../../meta';
 @use 'indicator';
 
-// Functions.
-@use '../functions/color.name.function' as *;
-@use 'name.add-indicator-multiple.function' as *;
-@use 'name.index.function' as *;
-
 // Status: DONE
 // The `color.name-append()` function appends color name from `$color-name` to `$names`.
 // @param `$names` `String` or `list` type to append.
@@ -16,7 +11,7 @@
 // @arbitrary `$color-names...` Arbitrary color names to append.
 // @returns The returned value is list of color names with `$color-name` and `$color-names`.
 @function append($names, $separator, $color-name, $color-names...) {
-  $names: add-indicator-multiple(
+  $names: indicator.add-multiple(
     list.append(
       $names,
       $color-name,

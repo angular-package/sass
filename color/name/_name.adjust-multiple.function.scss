@@ -1,9 +1,9 @@
 // Modules.
-@use '../../../list';
-@use '../../../map';
+@use '../../list';
+@use '../../map';
 
 // Functions.
-@use '../color.name.function' as *;
+@use '../functions/color.name.function' as *;
 @use 'name.adjust.function' as *;
 @use 'name.index.function' as *;
 
@@ -69,7 +69,7 @@
 // @debug adjust-multiple(accent test1, (lightness: 3%)); // ((accent test1 color, 3%),)
 // @debug adjust-multiple(accent test1, (lightness: 3%, alpha: 0.1)); // ((accent test1 color, 3%, 0.1),)
 // @debug adjust-multiple(accent test1, (lightness: 3%, hue: 20deg, saturation: 15%, alpha: 0.1)); // ((accent test1) 20deg 15% 3% 0.1,)
-@debug adjust-multiple(accent test1, (lightness: 3%, hue: 20deg, saturation: 15%, alpha: 0.1, separator: comma));
+// @debug adjust-multiple(accent test1, (lightness: 3%, hue: 20deg, saturation: 15%, alpha: 0.1, separator: comma));
 
 // adjust color name by name
 // @debug adjust-multiple(accent test1, primary test2, secondary test3, (primary test2: (lightness: 3%)));

@@ -1,11 +1,11 @@
 // Modules.
 @use '../../list';
 @use '../../map';
-@use '../functions/name';
+@use '../name';
 
 // Status: TODO:
 // The `color.palette-color-remove()` function.
-// @param `$palette` 
+// @param `$palette`
 // @param `$name`
 // @param `$class`
 // @param `$separator`
@@ -34,4 +34,4 @@
 //   )
 // );
 
-// @debug color-remove($-palette, accent, dark, (secondary color light, 5%));
+// @debug color-remove($-palette, accent, dark, auto, (secondary color light, 5%));

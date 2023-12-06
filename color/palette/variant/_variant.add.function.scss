@@ -1,11 +1,11 @@
 // Modules.
-@use '../../list';
-@use '../../map';
-@use '../name';
-@use 'variant';
+@use '../../../list';
+@use '../../../map';
+@use '../../name';
 
 // Functions.
 @use '../palette.color-add.function' as *;
+@use 'variant.exists.function' as *;
 
 // Status:
 // The `color.palette-variant-add()` function .
@@ -17,7 +17,7 @@
 // @arbitrary `$color-names...`
 // @returns
 @function add($palette, $name, $class, $separator, $color-name, $color-names...) {
-  @if not variant.exists($palette, $name, $class) {
+  @if not exists($palette, $name, $class) {
     $palette: map.deep-merge($palette, ($name: ($class: ())));
     @if $color-name {
       $palette: color-add($palette, $name, $class, $separator, $color-name, $color-names...);

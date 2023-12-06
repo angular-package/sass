@@ -2,6 +2,9 @@
 @use '../../list';
 @use '../../map';
 
+// Functions.
+@use 'name.has-adjustment.function' as *;
+
 // Status: DONE
 // The `color.name-retrieve()` function returns a map with attributes obtained from `$name`.
 // @param `$name` Color name of `list` type.
@@ -13,26 +16,18 @@
   $attributes: ();
   $result: ();
   $separator: list.separator($name);
-  @if list.has-number($name) {
-    @if list.length($name) > 1 {
-      @if list.has-number(list.nth($name, 2)) {
-        $attributes: list.append($attributes, (lightness: number list, (hue saturation lightness alpha: number list): map), comma);
-      }
+  @if has-adjustment($name) {
+    @if list.length($name) > 1 and list.has-number(list.nth($name, 2)) {
+      $attributes: list.append($attributes, (lightness: number list, (hue saturation lightness alpha: number list): map), comma);
     }
-    @if list.length($name) > 2 {
-      @if list.has-number(list.nth($name, 3)) {
-        $attributes: list.append($attributes, (alpha: number list, (alpha hue saturation: number list): map));
-      }
+    @if list.length($name) > 2 and list.has-number(list.nth($name, 3)) {
+      $attributes: list.append($attributes, (alpha: number list, (alpha hue saturation: number list): map));
     }
-    @if list.length($name) > 3 {
-      @if list.has-number(list.nth($name, 4)) {
-        $attributes: list.insert-nth($attributes, 1, (hue: number list, (hue saturation lightness alpha: number list): map));
-      }
+    @if list.length($name) > 3 and list.has-number(list.nth($name, 4)) {
+      $attributes: list.insert-nth($attributes, 1, (hue: number list, (hue saturation lightness alpha: number list): map));
     }
-    @if list.length($name) > 4 {
-      @if list.has-number(list.nth($name, 5)) {
-        $attributes: list.insert-nth($attributes, 2, (saturation: number list, (saturation lightness alpha: number list): map));
-      }
+    @if list.length($name) > 4 and list.has-number(list.nth($name, 5)) {
+      $attributes: list.insert-nth($attributes, 2, (saturation: number list, (saturation lightness alpha: number list): map));
     }
 
     // Create map from `$attributes`.
@@ -84,3 +79,14 @@
 // @debug retrieve((primary dark, ('*' 50%), ('/' 0.5))); // (name: primary dark, lightness: "*" 50%, alpha: "/" 0.5)
 // @debug retrieve((primary dark, ('*' 5deg), ('*' 2%), ('*' 1))); // (name: primary dark, hue: "*" 5deg, lightness: "*" 2%, alpha: "*" 1)
 // @debug retrieve((primary dark, ('*' 5deg), ('*' 2%), ('*' 15%), ('*' 0.5))); // (name: primary dark, hue: "*" 5deg, saturation: "*" 2%, lightness: "*" 15%, alpha: "*" 0.5)
+
+// @debug retrieve((primary dark, '*' 5%, '-' 0.2)); // (name: primary dark, lightness: "*" 5%, alpha: "-" 0.2, separator: comma)
+
+// `$get`
+// @debug retrieve((primary dark, '*' 5%, '-' 0.2), $get: lightness); // "*" 5%
+
+// `$pick`
+// @debug retrieve((primary dark, '*' 5%, '-' 0.2), $pick: lightness); // (lightness: "*" 5%)
+
+// `$model`
+// @debug retrieve((primary dark, '*' 5%, '-' 0.2), $model: name); // (primary dark: (lightness: "*" 5%, alpha: "-" 0.2, separator: comma))

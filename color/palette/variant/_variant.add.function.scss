@@ -5,7 +5,7 @@
 @use 'variant';
 
 // Functions.
-@use 'palette.color-add.function' as *;
+@use '../palette.color-add.function' as *;
 
 // Status:
 // The `color.palette-variant-add()` function .
@@ -16,7 +16,7 @@
 // @param `$color-name`
 // @arbitrary `$color-names...`
 // @returns
-@function variant-add($palette, $name, $class, $separator, $color-name, $color-names...) {
+@function add($palette, $name, $class, $separator, $color-name, $color-names...) {
   @if not variant.exists($palette, $name, $class) {
     $palette: map.deep-merge($palette, ($name: ($class: ())));
     @if $color-name {

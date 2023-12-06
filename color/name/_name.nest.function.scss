@@ -1,10 +1,10 @@
 // Modules.
-@use '../../../list';
-@use '../../../map';
-@use '../../../selector';
+@use '../../list';
+@use '../../map';
+@use '../../selector';
 
 // Functions.
-@use '../color.name.function' as *;
+@use '../functions/color.name.function' as *;
 @use 'name.adjust-multiple.function' as *;
 @use 'name.retrieve.function' as *;
 

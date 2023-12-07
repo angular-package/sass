@@ -1,0 +1,23 @@
+// Modules.
+@use '../name';
+
+// Status: DONE
+// The `color.palette-each()` or `palette.each()` mixin.
+// @param `$palette`
+// @param `$name`
+// @param `$class`
+@mixin each($palette, $name, $class: null) {
+  @each $palette-name, $variant in $palette {
+    @if name.index($palette-name, $name) {
+      @each $variant-class, $variant-color in $variant {
+        @if $class {
+          @if name.index($variant-class, $class) {
+            @content($palette-name, $variant-class, $variant-color);
+          }
+        } @else {
+          @content($palette-name, $variant-class, $variant-color);
+        }
+      }
+    }
+  }
+}

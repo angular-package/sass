@@ -1,0 +1,31 @@
+// Sass.
+@use 'sass:list';
+
+// Modules.
+@use 'adjustment.operator-get.function' as *;
+@use 'adjustment.operator-remove.function' as *;
+
+// Status: DONE
+// The `adjustment.calculate()` function.
+// @param `$value1`
+// @param `$value2`
+// @param `$value3`
+// @param `$fallback`
+// @returns The returned value is.
+@function calculate($value1, $value2, $value3, $fallback) {
+  @if $value1 or $value2 or $value3 {
+    $operator: operator-get(if($value1, $value1, $fallback), $value2 or $fallback, $value3 or $fallback);
+    $value: operator-remove(if($value1, $value1, $fallback) , $value2 or $fallback, $value3 or $fallback);
+    $value: calc(list.nth($value, 1) + list.nth($value, 2) + list.nth($value, 3));
+    @if $operator {
+      $value: list.join($operator, $value, space);
+    }
+    @return $value;
+  }
+  @return $fallback;
+}
+
+// Examples.
+// @debug calculate(15%, -5%, 3%, 0%);
+// @debug calculate(15%, null, 3%, 0%);
+// @debug calculate(15%, -5%, null, 0%);

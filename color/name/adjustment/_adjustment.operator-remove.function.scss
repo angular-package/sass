@@ -1,0 +1,25 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../../../list/list.append.function' as *;
+@use '../../../list/get/get.number.function' as get;
+
+// Status:
+// The `adjustment.operator-remove()` function.
+// @param `$adjustment`
+// @arbitrary `$adjustments...`
+// @returns
+@function operator-remove($adjustment, $adjustments...) {
+  $adjustments: append((), $adjustment, comma, $adjustments...);
+  @for $i from 1 through list.length($adjustments) {
+    @if get.number(list.nth($adjustments, $i)) {
+      $adjustments: list.set-nth($adjustments, $i, get.number(list.nth($adjustments, $i)));
+    }
+  }
+  @return if(list.length($adjustments) == 1, list.nth($adjustments, 1), $adjustments);;
+}
+
+// Examples.
+// @debug operator-remove(('-' 15%));
+// @debug operator-remove(('-' 15%), ('*' 15%),  ('/' 0.5));

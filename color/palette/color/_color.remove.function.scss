@@ -1,7 +1,7 @@
 // Modules.
-@use '../../list';
-@use '../../map';
-@use '../name';
+@use '../../../list';
+@use '../../../map';
+@use '../../name';
 
 // Status: TODO:
 // The `color.palette-color-remove()` function.
@@ -12,7 +12,7 @@
 // @param `$color-name`
 // @arbitrary `$color-names...`
 // @returns
-@function color-remove($palette, $name, $class, $separator, $color-name, $color-names...) {
+@function remove($palette, $name, $class, $separator, $color-name, $color-names...) {
   @each $variant-class, $variant-color in map.get($palette, $name) {
     @if name.index($variant-class, $class) {
       $palette: map.merge(

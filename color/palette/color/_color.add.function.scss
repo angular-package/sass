@@ -1,7 +1,7 @@
 // Modules.
-@use '../../list';
-@use '../../map';
-@use '../name';
+@use '../../../list';
+@use '../../../map';
+@use '../../name';
 
 // Status: DONE
 // The `color.palette-color-add()` function add `$color-name` and/or `$color-names` to `$palette`.
@@ -12,7 +12,7 @@
 // @param `$color-name` Required color name to add.
 // @arbitrary `$color-names...` Additional color names to add.
 // @returns The returned value is list of color names with added `$color-name` and/or `$color-names`.
-@function color-add($palette, $name, $class, $separator, $color-name, $color-names...) {
+@function add($palette, $name, $class, $separator, $color-name, $color-names...) {
   @each $palette-name, $variant in $palette {
     @if name.index($palette-name, $name) {
       @each $variant-class, $variant-color in $variant {

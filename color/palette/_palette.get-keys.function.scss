@@ -1,0 +1,60 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use '../../list/remove';
+@use '../../map/map.get.function' as *;
+@use '../name/name.index.function' as name;
+
+// Status: DONE
+// The `palette.get-keys()` function returns palette variant.
+// @param `$palette` Color palettes to get variant or variant color.
+// @param `$key`
+// @arbitrary `$keys...`
+// @returns The returned value is palette variants or variant colors .
+@function get-keys($palette, $key, $keys...) {
+  @if $key {
+    @each $current-key, $value in $palette {
+      @if index($current-key, $key) {
+        @if type-of($value) == map {
+          $value: map.set(
+            $value,
+            result,
+            list.append(get($palette, result, get($value, result) or ()), $current-key)
+          );
+        }
+        @if list.length($keys) > 0 {
+          @return get-keys($value, list.nth($keys, 1), remove.nth($keys, 1)...);
+        } @else {
+          @return map.get($value, result);
+        }
+      }
+    }
+  }
+  @return $palette;
+}
+
+// Examples.
+$example: (
+  test basic: (
+    basic two: (
+      hue saturation: (
+        lightness alpha: hsla(15deg, 30%, 35%, 1)
+      )
+    ),
+
+    extended: (
+      accent: (
+        secondary: ()
+      )
+    )
+  )
+);
+
+// nested 2
+// @debug get-keys($example, test, two); // (test basic) (basic two)
+// @debug get-keys($example, basic, extended); // (test basic) extended
+
+// nested 3
+// @debug get-keys($example, test, two, saturation);

@@ -13,28 +13,33 @@
 // @arbitrary `$color-names...` Additional color names to add.
 // @returns The returned value is list of color names with added `$color-name` and/or `$color-names`.
 @function color-add($palette, $name, $class, $separator, $color-name, $color-names...) {
-  @each $variant-class, $variant-color in map.get($palette, $name) {
-    @if name.index($variant-class, $class) {
-      @if list.length($variant-color) > 0 and list.has-number($variant-color) {
-        @if list.separator($variant-color) == space {
-          $variant-color: list.append((), $variant-color, space);
-        } @else if list.separator($variant-color) == comma {
-          $variant-color: ($variant-color,);
+  @each $palette-name, $variant in $palette {
+    @if name.index($palette-name, $name) {
+      @each $variant-class, $variant-color in $variant {
+        @if name.index($variant-class, $class) {
+          @if list.length($variant-color) > 0 {
+            @if list.separator($variant-color) == space {
+              $variant-color: list.append((), $variant-color, space);
+            } @else if list.separator($variant-color) == comma {
+              $variant-color: ($variant-color,);
+            }
+          }
+
+          $palette: map.merge(
+            $palette,
+            $palette-name,
+            (
+              $variant-class: name.append(
+                $variant-color,
+                $separator,
+                $color-name,
+                $color-names...
+              )
+            )
+          );
+
         }
       }
-
-      $palette: map.merge(
-        $palette,
-        $name,
-        (
-          $variant-class: name.append(
-            $variant-color,
-            $separator,
-            $color-name,
-            $color-names...
-          )
-        )
-      );
     }
   }
   @return $palette;

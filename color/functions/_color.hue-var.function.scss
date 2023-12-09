@@ -1,8 +1,10 @@
+// Sass.
+@use 'sass:map';
+
 // Variables.
 @use '../../variables';
 
 // Modules.
-@use '../../map';
 @use '../../var';
 
 // Functions.
@@ -33,7 +35,7 @@
     null,
     $fallback,
     $dictionary,
-    map.get($dictionary, map.get(variables.$name-configuration, delimiter), $delimiter),
+    map.get($dictionary, map.get(variables.$name-configuration, delimiter)) or $delimiter,
     $prefix,
     $suffix
   );

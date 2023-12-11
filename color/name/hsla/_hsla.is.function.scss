@@ -1,0 +1,28 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use '../../../list/has/has.value.function' as list-has-value;
+@use '../adjustment/adjustment.has.function';
+
+// Status: DONE
+// The `color.name-hsla-is()` function .
+// @param `$name` The `map`, `string`, `list` type to check whether it is hsla name.
+// @returns The returned value is a `bool` indicating whether it's a hsla color name.
+@function is($name) {
+  @return
+    adjustment.has($name) or
+    list-has-value.value($name, any, '==', [hsla]) or
+    list-has-value.value($name, any, '~=', ':hsla') or
+    (type-of($name) == map and if(list.index(map.values($name), hsla), true, false));
+}
+
+// Examples.
+// @debug is('dark:hsla');
+// @debug is((primary dark) ':hsla');
+// @debug is((primary dark) [hsla]);
+// @debug is((primary dark: hsla));
+// @debug is((primary dark) 15deg 5% 15% 0.1);
+// @debug is((primary dark) ('*' 5deg) ('/' 5%) ('*' 15%) ('*' 0.2));
+// @debug is((primary dark, 15deg, 5%, 15%, 0.1));

@@ -1,0 +1,45 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Variables.
+@use '../../var/var.variables' as variables;
+
+// Modules.
+@use 'adjustment';
+
+// Module functions.
+@use 'name.create.function' as *;
+
+// Status: DONE
+// The `color.name-update()` function updates color name with `color` indicator and `$shade`.
+// @param `$name`
+// @param `$update`
+// @param `$type`
+// @param `$delimiter`
+// @param `$shade` (dark, light)
+// @returns
+@function update(
+  $name,
+  $update,
+  $type,
+  $delimiter: map.get(variables.$var, delimiter),
+  $shade: (dark, light),
+) {
+  @return if(
+    adjustment.has($name),
+    list.set-nth($name, 1, create($update, $type, $delimiter, $shade)),
+    create($update, $type, $delimiter, $shade)
+  );
+}
+
+// Examples.
+// @debug update(primary, secondary light, lightness); // secondary color light lightness
+// @debug update(primary dark, secondary light, lightness); // secondary color light lightness
+
+// adjustment
+// @debug update((primary,) 15% 0.1, secondary light, lightness); // (secondary color light lightness) 15% 0.1
+
+// comma adjustment
+// @debug update((primary dark) 15% 0.1, secondary light, lightness); // (secondary color light lightness) 15% 0.1
+// @debug update((primary dark, 15deg, 15%, 0.1), secondary light, lightness); // secondary color light lightness, 15deg, 15%, 0.1

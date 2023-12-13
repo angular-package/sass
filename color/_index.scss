@@ -1,6 +1,7 @@
 @forward 'sass:color';
 @forward 'functions';
 @forward 'mixins';
+@forward 'name' as name-*;
 @forward 'palette' as palette-*;
 @forward 'scheme' as scheme-*;
 @forward 'theme' as theme-*;

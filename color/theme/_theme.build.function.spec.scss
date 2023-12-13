@@ -12,8 +12,8 @@ $-dark: (
 
   dark rusty: (
     core: ((dark, 15%), light, accent, primary, primary dark, primary light, ),
-    ('+gray', +secondary, +primary large): (xs (color, dark, light)),
-    +secondary small: (xs (color, dark, light)),
+    ('+gray', +secondary, +primary large): (+xs (color, dark, light),),
+    +secondary small: (+xs (color, dark, light),),
   ),
 
   light: (
@@ -217,9 +217,9 @@ $normal: (
 // }
 
 
-@include load($normal, false, (normal, +optional)) using($resolved...) {
-  @debug $resolved;
-}
+// @include load($normal, false, (normal, +optional)) using($resolved...) {
+//   @debug $resolved;
+// }
 
 
 // input data
@@ -233,7 +233,7 @@ $normal: (
 // @debug build($-basic);
 
 // List
-// @debug build($-dark, dark rusty);
+@debug build($-dark, dark rusty);
 // @debug build($-basic, normal);
 // @debug build($-light, light);
 

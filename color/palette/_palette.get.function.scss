@@ -1,12 +1,14 @@
 // Sass.
 @use '../../map';
 
-// Status: DONE
+// Status: @deprecated
 // The `palette.get()` function.
 // @param `$palette`
 // @param `$name`
 // @param `$color`
 // @returns
 @function get($palette, $name, $color: null) {
+  @warn "Function deprecated. Use `palette.get()` directly from `get.new`.";
+
   @return if($color, map.get($palette, ($name, $color)), map.get($palette, $name));
 }

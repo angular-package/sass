@@ -4,9 +4,9 @@
 @use '../selector';
 
 // Functions.
-@use '../color/functions/name/name.retrieve.function' as *;
+@use '../color/name/name.retrieve.function' as *;
 
-// Status: DONE
+// Status: TODO:
 // The `variant.create()` creates a variant built from `$value`.
 // @param `$value` A list or string type to create a variant.
 // @param `$modifier`

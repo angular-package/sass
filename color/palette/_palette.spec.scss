@@ -4,29 +4,32 @@
 // Examples.
 $-palette: (
   accent: (
-    accent color: (accent basic color, 3%),
-    accent color dark: (accent basic color, 5%),
-    accent color light: (accent basic color, 5%),
+    accent: (accent basic color, 3%),
+    accent dark: (accent color dark, 5%) (accent color light, 10%),
+    accent light: (accent color light, 5%),
+  ),
+
+  basic accent: (
+    accent: (accent basic color, 3%),
+    accent dark: (accent color dark, 5%) (accent color light, 10%),
+    accent light: (accent color light, 5%),
   ),
 
   primary: (
-    primary color: (primary basic color, 3%),
-    primary color dark: (primary basic color, 5%),
-    primary color light: (primary basic color, 15%),
+    primary: (primary basic color, 3%),
+    primary dark: (primary color dark, 5%),
+    primary light: (primary color light, 15%),
   ),
 );
 
-// get
-// @debug get($palette, core); // ("disabled": disabled color, "active": active color, "error": error color, highlight dark: highlight color dark)
-// @debug get($palette, core, disabled); // disabled color
+// @debug palette.get($-palette, accent); // (accent color: (accent basic color, 3%), accent color dark: (accent basic color, 5%), accent color light: (accent basic color, 5%))
+// @debug palette.get($-palette, primary, primary dark); // primary color dark, 3%
 
-// set
-// $palette: set($palette, (core: (active: active dark)));
-// @debug get($palette, core, active); // active color dark
-
-// remove
-// $palette: remove($palette, (core: (highlight dark, error), primary: (primary dark,)));
-// @debug get($palette, core);
+// palette.remove()
+// @debug palette.remove($-palette, accent);
+// @debug palette.remove($-palette, accent, accent dark);
+// @debug palette.remove($-palette, accent, accent dark, accent light);
+// @debug palette.remove($-palette, accent, accent dark, auto, accent light, accent dark);
 
 // FEATURE: palette.create()
 // $palette: palette.create((+accent: (basic 3% 0.5, dark)));
@@ -43,4 +46,15 @@ $-palette: (
 // @debug $colors;
 // @debug palette.color-remove($colors, primary, dark, space, accent, secondary);
 
-// $palette: create((primary: (primary, primary dark, secondary, accent)), (core: (disabled, active, error, highlight dark)));
+// $palette: palette.create((primary: (primary, primary dark, secondary, accent)), (core: (disabled, active, error, highlight dark)));
+
+// @debug $palette;
+
+// palette.each()
+// @include palette.each($-palette, accent) using($resolved...) {
+//   @debug $resolved;
+// }
+
+// @include palette.each($-palette, accent, accent dark) using($resolved...) {
+//   @debug $resolved;
+// }

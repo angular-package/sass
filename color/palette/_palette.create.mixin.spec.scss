@@ -25,61 +25,64 @@
 
 @include create((
   // FEATURE: Single color in color variant
-  // primary: color,
-  // primary: primary,
-  // outline primary: primary,
+  // primary: color, // (primary: (color: color))
+  // outline primary: primary, // (outline primary: (primary: primary color))
 
   // FEATURE: Multiple colors in palette
-  // core: (disabled, error,),
+  // core: (disabled, error,), // (core: (disabled: disabled color, error: error color))
 
   // FEATURE: Multiple palettes with color variant
-  // (primary, secondary): primary,
+  // (primary, secondary): primary, // (primary: (primary: primary color), secondary: (primary: primary color))
 
   // FEATURE: Multiple palettes with color variants
-  // (primary, secondary): (primary, secondary),
+  // (primary, secondary): (primary, secondary), // (primary: (primary: primary color, secondary: secondary color), secondary: (primary: primary color, secondary: secondary color))
 
   // FEATURE: Modified lightness of color variant
-  // control: ((disabled, 15%), error,), // 15% lightness
-  // control: ((disabled, 15% 5%), error,), // 15% lightness (link,visited,active), 5% (hover)
-  // control: ((disabled, '*' 15%, '-' 0.2), error,),
-  // control: ((disabled, 15%, 0.5), error,),
-  // control: ((disabled, 20deg, 30%, 15%, 0.5), error,),
+  // control: ((disabled, 15%), error,), // 15% lightness // (control: (disabled: (disabled color, 15%), error: error color))
+  // control: ((disabled, 15%, 0.1), error,), // 15% lightness (link,visited,active), TODO: 5% (hover)
+  // control: ((disabled, '*' 15%, -0.2), error,), // (control: (disabled: (disabled color, "*" 15%, -0.2), error: error color))
+  // control: ((disabled, 15%, 0.5), error,), // (control: (disabled: (disabled color, 15%, 0.5), error: error color))
+  // control: ((disabled, 20deg, 30%, 15%, 0.5), error,), // (control: (disabled: (disabled color, 20deg, 30%, 15%, 0.5), error: error color))
 
   // FEATURE:
-  // core: (secondary, (primary (color, dark, light))),
-  // core: ((primary dark, primary light), error, ), // TODO:
-  // core: (((primary dark, 15%), (primary light, 5%)), error, ), // TODO:
+  // core: (secondary, (+primary (color, dark, light))), // DONE
+  // +core: ((primary) (secondary) (), error, ), // DONE
+  // +core: ((primary dark) (primary light) (), error, ), // DONE
+  // +core: (color, ((primary dark) 15%) ((primary light) 5%) (), error,), // DONE
+  // +core: (color, (primary dark, 15%) (primary light, 5%) (), error, ), // DONE
 
   // FEATURE: Multiple colors in variant
-  // core: ((primary dark, secondary dark), error), // TODO:
+  // core: ((primary dark) (secondary dark) (), error), // DONE
 
   // FEATURE: Color names
-  // control: (disabled, error, info, success, warning),
-  // +control: (disabled, error, info, success, warning),
-  // +outline primary: primary,
+  // control: (disabled, error, info, success, warning), // (control: (disabled: disabled color, error: error color, info: info color, success: success color, warning: warning color))
+  // +control: (disabled, error, info, success, warning), // (control: (control disabled: control disabled color, control error: control error color, control info: control info color, control success: control success color, control warning: control warning color))
+  // +outline primary: primary, // (outline primary: (outline primary primary: outline primary primary color))
 
   // FEATURE: Shades
-  // primary: (color, dark, light),
-  // (primary small, secondary large): (color, dark, light),
+  // primary: (color, dark, light), // (primary: (color: color, dark: dark color, light: light color))
+  // (primary small, secondary large): (color, dark, light), // (primary small: (color: color, dark: dark color, light: light color), secondary large: (color: color, dark: dark color, light: light color))
 
   // FEATURE: + indicator
-  // +primary: color,
-  // +primary: (color, dark, light),
-  // (primary, +secondary): (color, dark, light),
-  // (primary, +secondary): (top (color, dark, light)),
-  // (primary, +secondary): ((top, bottom) (color, dark, light)),
-  // +core: (secondary, (primary (color, dark, light))),
-  // +core: ((secondary, 10%), (primary ((color, 5%), (dark, 1%), (light, 9%)))), // TODO:
-  // (+basic, +core): (secondary, (primary (color, dark, light))),
+  // +primary: color, // (primary: (primary color: primary color))
+  // +primary: primary, // (primary: (primary primary: primary primary color))
+  // +primary: (color, dark, light), // (primary: (color: color, dark: dark color, light: light color))
+  // (primary, +secondary): (color, dark, light), // (primary: (color: color, dark: dark color, light: light color), secondary: (secondary color: secondary color, secondary dark: secondary color dark, secondary light: secondary color light))
+  // (primary, +secondary): (+top (color, dark, light),), //
+  // (primary, +secondary): ((top, bottom) (color, dark, light)), // TODO:
+  // +core: (secondary, (+primary (color, dark, light))), // DONE
+  // +core: (secondary, +primary basic (color, (dark, 15%), (light, 3%))), // DONE
+  // +core: ((secondary, 10%), (+primary ((color, 5%), (dark, 1%), (light, 9%)))), // DONE
+  // (+basic, +core): (secondary, (+primary (color, dark, light))),
 
   // FEATURE: Nest name + shade
-  // secondary: (secondary (color, (dark, -30%), (light, 60%))),
-  // secondary: (secondary (color, (ultra dark, -30%), (mega light, 60%)),),
-  // gray: ('gray' (color, dark, light)),
+  // secondary: (+secondary (color, (dark, -30%), (light, 60%)),),
+  // secondary: (+secondary (color, (ultra dark, -30%), (mega light, 60%)),),
+  // gray: ('+gray' (color, dark, light),),
 
-  // core: (dark, light, accent, (primary (color, dark, light)), (secondary (color, dark, light))),
+  // core: (dark, light, accent, (+primary (color, dark, light)), (+secondary (color, dark, light))),
   // (+bg, +border): (color, dark, light),
-  // ('+gray', +secondary, +primary large): (xs (color, dark, light))
+  // ('+gray', +secondary, +primary large): (+xs (color, dark, light),) // REVIEW: Check.
 
 )) using($palette) {
   @debug $palette;

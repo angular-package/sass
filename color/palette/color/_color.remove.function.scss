@@ -1,6 +1,7 @@
-// Modules.
-@use '../../../list';
-@use '../../../map';
+// Sass.
+@use 'sass:map';
+
+// Functions.
 @use '../../name';
 
 // Status: TODO:
@@ -13,13 +14,17 @@
 // @arbitrary `$color-names...`
 // @returns
 @function remove($palette, $name, $class, $separator, $color-name, $color-names...) {
-  @each $variant-class, $variant-color in map.get($palette, $name) {
-    @if name.index($variant-class, $class) {
-      $palette: map.merge(
-        $palette,
-        $name,
-        ($variant-class: name.remove($variant-color, $color-name, $color-names...))
-      );
+  @each $palette-name, $variant in $palette {
+    @if name.index($palette-name, $name) {
+      @each $variant-class, $variant-color in $variant {
+        @if name.index($variant-class, $class) {
+          $palette: map.merge(
+            $palette,
+            $palette-name,
+            ($variant-class: name.remove($variant-color, $color-name, $color-names...))
+          );
+        }
+      }
     }
   }
   @return $palette;
@@ -34,4 +39,4 @@
 //   )
 // );
 
-// @debug color-remove($-palette, accent, dark, auto, (secondary color light, 5%));
+// @debug remove($-palette, accent, dark, auto, (secondary color light, 5%));

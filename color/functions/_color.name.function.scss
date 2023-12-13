@@ -1,14 +1,9 @@
 // Sass.
+@use 'sass:list';
 @use 'sass:map';
 
 // Variables.
 @use '../../var/var.variables' as variables;
-
-// Modules.
-@use '../../list';
-@use '../../math';
-@use '../../meta';
-@use '../../string';
 
 // Functions.
 @use '../name/name.adjust.function' as *;
@@ -25,8 +20,10 @@
 // @param `$saturation` Add saturation adjustment.
 // @param `$lightness` Add lightness adjustment.
 // @param `$alpha` Add alpha adjustment.
-// @param `$shade` (dark, light)
+// @param `$shade` Shade of color, by default dark or light.
+// @param `$indicator` Color indicator to add if missing in `$name`, by default `color`.
 // @param `$separator` Separator space/comma for color name with adjustment.
+// @param `$color` Retrieved color from `$name`.
 // @returns The returned value is a color name of `list` type in format `[name][delimiter][color][delimiter][shade][delimiter][type]`.
 @function name(
   $name,
@@ -37,21 +34,13 @@
   $lightness: null,
   $alpha: null,
   $shade: (dark, light),
-  $separator: list.separator($name)
+  $indicator: color,
+  $separator: list.separator($name),
+  $color: retrieve($name),
 ) {
-  // Retrieve adjustment.
-  $adjustment: retrieve($name);
-
-  // Set color name from `$adjustment`.
-  $name: map.get($adjustment, name);
-
-  // Create.
-  $name: create($name, $type, $delimiter, $shade);
-
-  // Adjust and return.
   @return adjust(
-    $name,
-    $adjustment,
+    create(map.get($color, name), $type, $delimiter, $shade, $indicator),
+    $color,
     $hue,
     $saturation,
     $lightness,
@@ -61,7 +50,7 @@
 }
 
 // Examples.
-$-delimiter: '-';
+// $-delimiter: '-';
 
 // INFO: Name form.
 // (color name) lightness
@@ -155,3 +144,6 @@ $-delimiter: '-';
 //
 // @debug name((primary basic dark, 5%), null, $-delimiter, $hue: 20deg, $saturation: 5%, $lightness: 15%, $alpha: 0.5); // primary basic color dark, 20deg, 5%, 20%, 0.5
 // @debug name((primary basic dark, 5%), null, $-delimiter, $hue: 20deg, $saturation: 5%, $lightness: 15%, $alpha: 0.5, $separator: space); // (primary basic color dark) 20deg 5% 20% 0.5
+
+// indicator
+// @debug name(gray, $indicator: clr); // gray clr

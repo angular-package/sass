@@ -11,6 +11,8 @@
 // OPTIMIZE:
 // TODO:
 
+// Mixins.
+@use 'variant.mixin' as *;
 
 // @include variant(((class: border outline): ((top, right): (primary dark:  primary dark, secondary light: secondary light))), $property: (suffix: color));
 // @include variant(((class: border outline): ((top, right): (primary dark:  primary dark, secondary light: secondary light))));
@@ -18,10 +20,6 @@
 // (class+property: (class+property_side: (class: value)))
 // (class+property: (class+property_side: (suffix: (class: value)))
 // ((class: property): ((class: property_side): ((class: suffix): value)))
-
-
-// Mixins.
-@use 'variant.mixin' as *;
 
 // TODO: hsla
 // @include variant((border color: primary 'hsla'));

@@ -16,7 +16,7 @@
 
 // ((border, outline): (primary: primary dark)), $property: (attribute: color)
 
-// @include variant-create(
+// @include create(
 //   ((border, outline): ((top, bottom): (primary: primary dark, secondary: secondary light))),
 //   // ((border, outline): ((top, bottom): (primary: primary dark))),
 //   // ((basic: (border, outline)): ((top, bottom): (primary: primary dark))),
@@ -33,43 +33,43 @@
 //   // @debug $resolved;
 // }
 
-// @include variant-create((border: (top: (primary: primary dark))), $modifier: (property: (base: outline)));
+// @include create((border: (top: (primary: primary dark))), $modifier: (property: (base: outline)));
 
-// @include variant-create(((basic (border, outline)): ((top, bottom): (primary: primary dark))));
+// @include create(((basic (border, outline)): ((top, bottom): (primary: primary dark))));
 
-// @include variant-create(((basic: (border, outline) top): ((top, bottom): (primary: (primary dark), secondary: secondary light))));
+// @include create(((basic: (border, outline) top): ((top, bottom): (primary: (primary dark), secondary: secondary light))));
 
-// @include variant-create((border: (top: (primary: primary dark))));
+// @include create((border: (top: (primary: primary dark))));
 
-// @include variant-create((border: ((top, bottom): (primary: primary dark))));
+// @include create((border: ((top, bottom): (primary: primary dark))));
 
-// @include variant-create(((basic: (border, outline) start): ((start, end): (primary: primary dark))));
+// @include create(((basic: (border, outline) start): ((start, end): (primary: primary dark))));
 
-// @include variant-create(
+// @include create(
 //   ((basic: (border top, outline)): (color: (primary dark: ((background, border top): primary dark, outline: (secondary dark: hsla)), secondary: (secondary light: hsla, third: hsla)))),
 //   $property: (middle: aaa)
 // );
 
 // TODO: hsla
-// @include variant-create((border color: primary ':hsla'));
-// @include variant-create((primary: primary, secondary: secondary));
+// @include create((border color: primary ':hsla'));
+// @include create((primary: primary, secondary: secondary));
 
 // Examples.
 // FEATURE: (class + property: color)
-// @include variant-create((color: primary dark));
+// @include create((color: primary dark));
 // .color {
 //   color: var(--primarycolordark);
 // }
 
 // FEATURE: (class + properties: color)
-// @include variant-create(((background color: (background, color)): primary dark));
+// @include create(((background color: (background, color)): primary dark));
 // .background-color {
 //   background: var(--primarycolordark);
 //   color: var(--primarycolordark);
 // }
 
 // FEATURE: separate variants ((class + properties, class + properties): color)
-// @include variant-create(((background color, color): primary dark));
+// @include create(((background color, color): primary dark));
 // .background-color {
 //   background: var(--primarycolordark);
 //   color: var(--primarycolordark);
@@ -79,18 +79,18 @@
 // }
 
 // FEATURE: (class + property: variant)
-// @include variant-create((color: (primary dark: primary dark)));
+// @include create((color: (primary dark: primary dark)));
 // .color-primary-dark {
 //   color: var(--primarycolordark);
 // }
 
-// @include variant-create((background color: (primary dark: primary dark, secondary: secondary light)));
+// @include create((background color: (primary dark: primary dark, secondary: secondary light)));
 // .background-color-secondary {
 //   background: var(--secondarycolorlight);
 //   color: var(--secondarycolorlight);
 // }
 
-// @include variant-create(((background, color): (primary dark: primary dark, secondary: secondary light)));
+// @include create(((background, color): (primary dark: primary dark, secondary: secondary light)));
 // .background-primary-dark {
 //   background: var(--primarycolordark);
 // }
@@ -104,7 +104,7 @@
 //   color: var(--secondarycolorlight);
 // }
 
-// @include variant-create((border: ((): (primary dark: primary dark, secondary: secondary light))));
+// @include create((border: ((): (primary dark: primary dark, secondary: secondary light))));
 // .border-primary-dark {
 //   border: var(--primarycolordark);
 // }
@@ -112,7 +112,7 @@
 //   border: var(--secondarycolorlight);
 // }
 
-// @include variant-create((border outline: ((): (primary dark: primary dark, secondary: secondary light))));
+// @include create((border outline: ((): (primary dark: primary dark, secondary: secondary light))));
 // .border-outline-primary-dark {
 //   border: var(--primarycolordark);
 //   outline: var(--primarycolordark);
@@ -122,7 +122,7 @@
 //   outline: var(--secondarycolorlight);
 // }
 
-// @include variant-create(((border, outline): ((): (primary dark: primary dark, secondary: secondary light))));
+// @include create(((border, outline): ((): (primary dark: primary dark, secondary: secondary light))));
 // .border-primary-dark {
 //   border: var(--primarycolordark);
 // }
@@ -136,7 +136,7 @@
 //   outline: var(--secondarycolorlight);
 // }
 
-// @include variant-create(((border outline, color): ((): (primary dark: primary dark, secondary: secondary light))));
+// @include create(((border outline, color): ((): (primary dark: primary dark, secondary: secondary light))));
 // .border-outline-primary-dark {
 //   border: var(--primarycolordark);
 //   outline: var(--primarycolordark);
@@ -152,7 +152,7 @@
 //   color: var(--secondarycolorlight);
 // }
 
-// @include variant-create((border: (color: (primary dark: primary dark, secondary: secondary light))));
+// @include create((border: (color: (primary dark: primary dark, secondary: secondary light))));
 // .border-color-primary-dark {
 //   border-color: var(--primarycolordark);
 // }
@@ -160,7 +160,7 @@
 //   border-color: var(--secondarycolorlight);
 // }
 
-// @include variant-create(((basic: border): ((): (primary dark: primary dark, secondary: secondary light))));
+// @include create(((basic: border): ((): (primary dark: primary dark, secondary: secondary light))));
 // .basic-color-primary-dark {
 //   border-color: var(--primarycolordark);
 // }
@@ -168,7 +168,7 @@
 //   border-color: var(--secondarycolorlight);
 // }
 
-// @include variant-create(((basic: border): (top: (primary dark: primary dark, secondary: secondary light))));
+// @include create(((basic: border): (top: (primary dark: primary dark, secondary: secondary light))));
 // .basic-top-color-primary-dark {
 //   border-top-color: var(--primarycolordark);
 // }
@@ -176,7 +176,7 @@
 //   border-top-color: var(--secondarycolorlight);
 // }
 
-// @include variant-create(((basic: border): ((bottom, top): (primary dark: primary dark, secondary: secondary light))));
+// @include create(((basic: border): ((bottom, top): (primary dark: primary dark, secondary: secondary light))));
 // .basic-bottom-color-primary-dark {
 //   border-bottom-color: var(--primarycolordark);
 // }
@@ -190,7 +190,7 @@
 //   border-top-color: var(--secondarycolorlight);
 // }
 
-// @include variant-create(((border basic: border): (((bottom, top, right, left)): (primary dark: primary dark, secondary: secondary light))));
+// @include create(((border basic: border): (((bottom, top, right, left)): (primary dark: primary dark, secondary: secondary light))));
 // .border-basic-bottom-color-primary-dark {
 //   border-bottom-color: var(--primarycolordark);
 // }
@@ -216,7 +216,7 @@
 //   border-left-color: var(--secondarycolorlight);
 // }
 
-// @include variant-create(((basic: (border, outline)): ((): (primary dark: primary dark, secondary: secondary light))));
+// @include create(((basic: (border, outline)): ((): (primary dark: primary dark, secondary: secondary light))));
 // .basic-color-primary-dark {
 //   border-color: var(--primarycolordark);
 // }
@@ -224,7 +224,7 @@
 //   outline-color: var(--secondarycolorlight);
 // }
 
-// @include variant-create(((border, outline): ((): (primary dark: primary dark, secondary: secondary light))));
+// @include create(((border, outline): ((): (primary dark: primary dark, secondary: secondary light))));
 // .border-color-primary-dark {
 //   border-color: var(--primarycolordark);
 // }
@@ -238,7 +238,7 @@
 //   outline-color: var(--secondarycolorlight);
 // }
 
-// @include variant-create(((border, outline): ((top, bottom): (primary dark: primary dark))));
+// @include create(((border, outline): ((top, bottom): (primary dark: primary dark))));
 // .border-top-primary-dark {
 //   border-top: var(--primarycolordark);
 // }
@@ -252,7 +252,7 @@
 //   outline-bottom: var(--primarycolordark);
 // }
 
-// @include variant-create(((basic: (border, outline)): (((bottom, top, right, left)): (primary dark: primary dark, secondary: secondary light))));
+// @include create(((basic: (border, outline)): (((bottom, top, right, left)): (primary dark: primary dark, secondary: secondary light))));
 // .basic-bottom-color-primary-dark {
 //   border-bottom-color: var(--primarycolordark);
 //   outline-bottom-color: var(--primarycolordark);
@@ -286,7 +286,7 @@
 //   outline-left-color: var(--secondarycolorlight);
 // }
 
-// @include variant-create(((basic: border): ((top, bottom): (primary dark: ((background, border) color: primary dark, outline color: accent), secondary: secondary light))));
+// @include create(((basic: border): ((top, bottom): (primary dark: ((background, border) color: primary dark, outline color: accent), secondary: secondary light))));
 // .basic-top-color-primary-dark {
 //   background-color: var(--primarycolordark);
 //   border-color: var(--primarycolordark);
@@ -304,16 +304,16 @@
 //   border-bottom-color: var(--secondarycolorlight);
 // }
 
-// @include variant-create(((basic: (border top, outline)): (color: (primary dark: ((background, border top): primary dark, outline: (secondary dark: hsla)), secondary: (secondary light: hsla)))));
+// @include create(((basic: (border top, outline)): (color: (primary dark: ((background, border top): primary dark, outline: (secondary dark: hsla)), secondary: (secondary light: hsla)))));
 
 
 
 
 
-// @include variant-create(((border, outline): ((top, bottom) (color,): (primary dark: primary dark))));
-// @include variant-create(((border, outline): (color: (primary dark: primary dark, secondary: secondary light))));
-// @include variant-create((border: (color: (primary dark: primary dark, secondary: secondary light))));
-// @include variant-create((border: (top: (primary dark: primary dark, secondary: secondary light))));
+// @include create(((border, outline): ((top, bottom) (color,): (primary dark: primary dark))));
+// @include create(((border, outline): (color: (primary dark: primary dark, secondary: secondary light))));
+// @include create((border: (color: (primary dark: primary dark, secondary: secondary light))));
+// @include create((border: (top: (primary dark: primary dark, secondary: secondary light))));
 
 
 
@@ -321,9 +321,9 @@
 
 
 
-// @include variant-create((color: primary dark));
+// @include create((color: primary dark));
 
-// @include variant-create(((primary: color): primary dark));
+// @include create(((primary: color): primary dark));
 // .primary {
 //   color: var(--primarycolordark);
 // }
@@ -339,15 +339,15 @@
 
 
 
-// @include variant-create((primary dark: primary dark));
-// @include variant-create((primary: primary dark));
-// @include variant-create(((border: test): (primary: primary dark)));
-// @include variant-create(((aaa: bbb): ((border: test): (primary: primary dark))));
+// @include create((primary dark: primary dark));
+// @include create((primary: primary dark));
+// @include create(((border: test): (primary: primary dark)));
+// @include create(((aaa: bbb): ((border: test): (primary: primary dark))));
 
 
 
 
-// @include variant-create((border: primary, background: secondary));
+// @include create((border: primary, background: secondary));
 // .border {
 //   border: var(--primarycolor);
 // }
@@ -355,12 +355,12 @@
 //   background: var(--secondarycolor);
 // }
 
-// @include variant-create(((border, outline) color: primary));
+// @include create(((border, outline) color: primary));
 // .border-color, .outline-color {
 //   color: var(--primarycolor);
 // }
 
-// @include variant-create((border color: primary, background color: secondary));
+// @include create((border color: primary, background color: secondary));
 // .border-color {
 //   border: var(--primarycolor);
 //   color: var(--primarycolor);
@@ -370,7 +370,7 @@
 //   color: var(--secondarycolor);
 // }
 
-// @include variant-create((border color: primary dark, background color: secondary dark));
+// @include create((border color: primary dark, background color: secondary dark));
 // .border-color {
 //   border: var(--primarycolordark);
 //   color: var(--primarycolordark);
@@ -381,7 +381,7 @@
 // }
 
 // different property
-// @include variant-create((border-color: (primary dark: primary dark, secondary light: secondary light)));
+// @include create((border-color: (primary dark: primary dark, secondary light: secondary light)));
 // .border-color-primary-dark {
 //   border-color: var(--primarycolordark);
 // }
@@ -390,7 +390,7 @@
 // }
 
 
-// @include variant-create((primary dark:  primary dark, secondary light: secondary light), $property: border-color);
+// @include create((primary dark:  primary dark, secondary light: secondary light), $property: border-color);
 // .primary-dark {
 //   border-color: var(--primarycolordark);
 // }
@@ -400,7 +400,7 @@
 
 
 // TODO: (primary light: primary light, secondary dark: secondary dark)
-// @include variant-create((primary light: primary light, secondary dark: secondary dark), $property: (name: property, suffix: color));
+// @include create((primary light: primary light, secondary dark: secondary dark), $property: (name: property, suffix: color));
 // .primary-light {
 //   property-color: var(--primarycolorlight);
 // }
@@ -409,7 +409,7 @@
 // }
 
 // TODO: (border: (primary dark:  primary dark, secondary light: secondary light))
-// @include variant-create((border: (primary dark:  primary dark, secondary light: secondary light)), $property: (suffix: color));
+// @include create((border: (primary dark:  primary dark, secondary light: secondary light)), $property: (suffix: color));
 // .border-primary-dark {
 //   border-color: var(--primarycolordark);
 // }
@@ -419,7 +419,7 @@
 
 
 // TODO: (border: ((top, right): (primary dark:  primary dark, secondary light: secondary light)))
-// @include variant-create((border: ((top, right): (primary dark:  primary dark, secondary light: secondary light))), $property: (name: border, suffix: color));
+// @include create((border: ((top, right): (primary dark:  primary dark, secondary light: secondary light))), $property: (name: border, suffix: color));
 // .border-top-primary-dark {
 //   border-top-color: var(--primarycolordark);
 // }
@@ -435,7 +435,7 @@
 
 
 // TODO: (border: ((top, right) color: (primary dark:  primary dark, secondary light: secondary light)))
-// @include variant-create((border: ((top, right) color: (primary dark:  primary dark, secondary light: secondary light))), $property: (name: border));
+// @include create((border: ((top, right) color: (primary dark:  primary dark, secondary light: secondary light))), $property: (name: border));
 // .border-top-color-primary-dark, .border-right-color-primary-dark {
 //   border-top-color: var(--primarycolordark);
 //   border-right-color: var(--primarycolordark);
@@ -446,7 +446,7 @@
 // }
 
 // TODO: (border basic: (((left, top): color): (primary dark:  primary dark, secondary light: secondary light)))
-// @include variant-create((border basic: (((left, top): color): (primary dark:  primary dark, secondary light: secondary light))), $property: (name: border));
+// @include create((border basic: (((left, top): color): (primary dark:  primary dark, secondary light: secondary light))), $property: (name: border));
 // .border-basic-left-color-primary-dark {
 //   border-left-color: var(--primarycolordark);
 // }
@@ -463,7 +463,7 @@
 
 // multiple properties in one
 // TODO: (border-color background: (primary dark:  primary dark, secondary light: secondary light))
-// @include variant-create(((border background: (border, background)): (primary dark:  primary dark, secondary light: secondary light)));
+// @include create(((border background: (border, background)): (primary dark:  primary dark, secondary light: secondary light)));
 // .border-color-background-primary-dark {
 //   border-color: var(--primarycolordark);
 //   background: var(--primarycolordark);
@@ -475,7 +475,7 @@
 
 
 // TODO: (border background (color,): (primary dark:  primary dark, secondary light: secondary light))
-// @include variant-create(((border background: (border, background)): (primary dark:  primary dark, secondary light: secondary light)));
+// @include create(((border background: (border, background)): (primary dark:  primary dark, secondary light: secondary light)));
 // .border-background-color-primary-dark {
 //   border: var(--primarycolordark);
 //   background: var(--primarycolordark);
@@ -487,7 +487,7 @@
 
 
 // TODO: (border background (color,): (primary dark:  primary dark, secondary light: secondary light))
-// @include variant-create(((border background: (border, background)): (primary dark:  primary dark, secondary light: secondary light)));
+// @include create(((border background: (border, background)): (primary dark:  primary dark, secondary light: secondary light)));
 // .border-background-color-primary-dark {
 //   border-color: var(--s-primary-color-dark);
 //   background-color: var(--s-primary-color-dark);
@@ -498,7 +498,7 @@
 // }
 
 // TODO: (border background (xs, xl): (dark primary: primary dark, secondary: secondary light))
-// @include variant-create(((border background (xs, xl): (border, background)): (dark primary: primary dark, secondary: secondary light)));
+// @include create(((border background (xs, xl): (border, background)): (dark primary: primary dark, secondary: secondary light)));
 // .border-background-xs-dark-primary, .border-background-xl-dark-primary {
 //   border: var(--s-primary-color-dark);
 //   background: var(--s-primary-color-dark);
@@ -509,7 +509,7 @@
 // }
 
 // TODO: ((basic,) border background: (primary dark:  primary dark, secondary light: secondary light))
-// @include variant-create(((basic border background: (border, background)): (primary dark:  primary dark, secondary light: secondary light)));
+// @include create(((basic border background: (border, background)): (primary dark:  primary dark, secondary light: secondary light)));
 // .basic-border-background-primary-dark {
 //   border: var(--s-primary-color-dark);
 //   background: var(--s-primary-color-dark);
@@ -521,9 +521,9 @@
 
 // multiple properties separately
 // TODO: ((border, background): (primary dark:  primary dark, secondary light: secondary light))
-// @include variant-create(((border, background): (primary dark:  primary dark, secondary light: secondary light)));
+// @include create(((border, background): (primary dark:  primary dark, secondary light: secondary light)));
 // TODO: (border: (primary dark:  primary dark, secondary light: secondary light), background: (primary dark:  primary dark, secondary light: secondary light))
-// @include variant-create((border: (primary dark:  primary dark, secondary light: secondary light), background: (primary dark:  primary dark, secondary light: secondary light)));
+// @include create((border: (primary dark:  primary dark, secondary light: secondary light), background: (primary dark:  primary dark, secondary light: secondary light)));
 // .border-primary-dark {
 //   border: var(--s-primary-color-dark);
 // }
@@ -539,7 +539,7 @@
 
 // multiple properties each separately
 // TODO: ((border background, outline caret): (primary dark:  primary dark, secondary light: secondary light))
-// @include variant-create(((border background, outline caret): (primary dark:  primary dark, secondary light: secondary light)));
+// @include create(((border background, outline caret): (primary dark:  primary dark, secondary light: secondary light)));
 // .border-background-primary-dark {
 //   border: var(--s-primary-color-dark);
 //   background: var(--s-primary-color-dark);
@@ -558,7 +558,7 @@
 // }
 
 // TODO: (((basic,) border background, outline caret (color,)): (primary dark:  primary dark, secondary light: secondary light)), $property: (suffix: color)
-// @include variant-create((((basic border background: (outline, caret))): (primary dark:  primary dark, secondary light: secondary light)));
+// @include create((((basic border background: (outline, caret))): (primary dark:  primary dark, secondary light: secondary light)));
 // .basic-border-background-primary-dark {
 //   border-color: var(--s-primary-color-dark);
 //   background-color: var(--s-primary-color-dark);
@@ -578,7 +578,7 @@
 
 // class name separately from properties
 // TODO: (border basic: border): (primary dark:  primary dark, secondary light: secondary light))
-// @include variant-create(((border basic: border): (primary dark:  primary dark, secondary light: secondary light)));
+// @include create(((border basic: border): (primary dark:  primary dark, secondary light: secondary light)));
 // .border-basic-primary-dark {
 //   border: var(--s-primary-color-dark);
 // }
@@ -587,8 +587,8 @@
 // }
 
 // TODO: (((border basic, border extended): border): (primary dark:  primary dark, secondary light: secondary light))
-// @include variant-create((((border basic, border extended): border): (primary dark:  primary dark, secondary light: secondary light)));
-// @include variant-create((
+// @include create((((border basic, border extended): border): (primary dark:  primary dark, secondary light: secondary light)));
+// @include create((
 //   (border basic: border): (primary dark:  primary dark, secondary light: secondary light),
 //   (border extended: border): (primary dark:  primary dark, secondary light: secondary light)
 // ));
@@ -606,7 +606,7 @@
 // }
 
 // TODO: (((background basic, border extended): (border-color background-color)): (primary dark:  primary dark, secondary light: secondary light))
-// @include variant-create((((background basic, border extended): (border, background)): (primary dark:  primary dark, secondary light: secondary light)));
+// @include create((((background basic, border extended): (border, background)): (primary dark:  primary dark, secondary light: secondary light)));
 // .background-basic-primary-dark {
 //   border-color: var(--s-primary-color-dark);
 //   background-color: var(--s-primary-color-dark);
@@ -625,7 +625,7 @@
 // }
 
 // TODO: (((background basic, border extended): (border-color, background-color)): (primary dark:  primary dark, secondary light: secondary light))
-// @include variant-create((((background basic, border extended): (border, background)): (primary dark:  primary dark, secondary light: secondary light)));
+// @include create((((background basic, border extended): (border, background)): (primary dark:  primary dark, secondary light: secondary light)));
 // .background-basic-primary-dark {
 //   border-color: var(--s-primary-color-dark);
 // }
@@ -641,7 +641,7 @@
 
 // multiple properties multiple sides
 // TODO: (border: ((inline end color, inline start color): (primary dark:  primary dark, secondary light: secondary light)))
-// @include variant-create((border: ((inline end, inline start): (primary dark:  primary dark, secondary light: secondary light))));
+// @include create((border: ((inline end, inline start): (primary dark:  primary dark, secondary light: secondary light))));
 // .border-inline-end-color-primary-dark {
 //   border-inline-end-color: var(--s-primary-color-dark);
 // }
@@ -656,7 +656,7 @@
 // }
 
 // TODO: (border (basic,): ((inline end, inline start) color: (primary dark:  primary dark, secondary light: secondary light)))
-// @include variant-create(((border basic: border): ((inline end, inline start): (primary dark:  primary dark, secondary light: secondary light))));
+// @include create(((border basic: border): ((inline end, inline start): (primary dark:  primary dark, secondary light: secondary light))));
 // .border-basic-inline-end-color-primary-dark, .border-basic-inline-start-color-primary-dark {
 //   border-inline-end-color: var(--s-primary-color-dark);
 //   border-inline-start-color: var(--s-primary-color-dark);
@@ -667,7 +667,7 @@
 // }
 
 // TODO: (border (basic,): ((inline end color, inline start color): (primary dark:  primary dark, secondary light: secondary light)))
-// @include variant-create(((border basic: border): ((inline end, inline start): (primary dark:  primary dark, secondary light: secondary light))));
+// @include create(((border basic: border): ((inline end, inline start): (primary dark:  primary dark, secondary light: secondary light))));
 // .border-basic-inline-end-color-primary-dark {
 //   border-inline-end-color: var(--s-primary-color-dark);
 // }
@@ -682,7 +682,7 @@
 // }
 
 // TODO: ((border (basic,): border): ((left color, right color): (primary dark:  primary dark, secondary light: secondary light)))
-// @include variant-create(((border basic: border): ((left, right): (primary dark:  primary dark, secondary light: secondary light))));
+// @include create(((border basic: border): ((left, right): (primary dark:  primary dark, secondary light: secondary light))));
 // .border-basic-left-color-primary-dark {
 //   border-left-color: var(--s-primary-color-dark);
 // }
@@ -699,9 +699,9 @@
 
 // FEATURE: (class: value) and (property: variant).
 // TODO: (color primary dark: primary dark, color secondary dark: secondary dark)
-// @include variant-create((color primary dark: primary dark, color secondary dark: secondary dark));
+// @include create((color primary dark: primary dark, color secondary dark: secondary dark));
 // TODO: (color: (primary dark: primary dark, secondary dark: secondary dark))
-// @include variant-create((color: (primary dark: primary dark, secondary dark: secondary dark)));
+// @include create((color: (primary dark: primary dark, secondary dark: secondary dark)));
 // .color-primary-dark {
 //   color: var(--s-primary-color-dark);
 // }
@@ -711,7 +711,7 @@
 
 // FEATURE: variant + adjust.
 // TODO: (color primary dark: primary dark, color secondary dark: secondary dark)
-// @include variant-create((color primary dark: primary dark, color secondary dark: secondary dark), $hue: 15deg, $saturation: '/' 2, $lightness: '*' 5%, $alpha: 0.5);
+// @include create((color primary dark: primary dark, color secondary dark: secondary dark), $hue: 15deg, $saturation: '/' 2, $lightness: '*' 5%, $alpha: 0.5);
 // .color-primary-dark {
 //   color: hsla(calc(var(--s-primary-color-dark-h) + 15deg), calc(var(--s-primary-color-dark-s) / 2), calc(var(--s-primary-color-dark-l) * 5%), calc(var(--s-primary-color-dark-a) + 0.5));
 // }
@@ -719,7 +719,7 @@
 //   color: hsla(calc(var(--s-secondary-color-dark-h) + 15deg), calc(var(--s-secondary-color-dark-s) / 2), calc(var(--s-secondary-color-dark-l) * 5%), calc(var(--s-secondary-color-dark-a) + 0.5));
 // }
 
-// @include variant-create((color primary dark: (primary dark) 15deg 5% 15% 0.5, color secondary dark: (secondary dark) 10% 0.9));
+// @include create((color primary dark: (primary dark) 15deg 5% 15% 0.5, color secondary dark: (secondary dark) 10% 0.9));
 // .color-primary-dark {
 //   color: hsla(calc(var(--s-primary-color-dark-h) + 15deg), calc(var(--s-primary-color-dark-s) + 5%), calc(var(--s-primary-color-dark-l) + 15%), calc(var(--s-primary-color-dark-a) + 0.5));
 // }
@@ -728,7 +728,7 @@
 // }
 
 // FEATURE: variant + adjust + dictionary.
-// @include variant-create((color primary dark: primary dark, color secondary dark: secondary dark), 15deg, '/' 2, '*' 5%, 0.5, false, '&:hover', (primary: p));
+// @include create((color primary dark: primary dark, color secondary dark: secondary dark), 15deg, '/' 2, '*' 5%, 0.5, false, '&:hover', (primary: p));
 // .color-p-dark:hover {
 //   color: hsla(calc(var(--s-primary-color-dark-h) + 15deg), calc(var(--s-primary-color-dark-s) / 2), calc(var(--s-primary-color-dark-l) * 5%), calc(var(--s-primary-color-dark-a) + 0.5));
 // }
@@ -738,7 +738,7 @@
 
 // FEATURE: variant + important.
 // TODO: (color primary dark: primary dark, color secondary dark: secondary dark)
-// @include variant-create((color primary dark: primary dark, color secondary dark: secondary dark), $important: true);
+// @include create((color primary dark: primary dark, color secondary dark: secondary dark), $important: true);
 // .color-primary-dark {
 //   color: var(--s-primary-color-dark) !important;
 // }
@@ -748,8 +748,8 @@
 
 // FEATURE: variant + properties and (property: variant).
 // TODO: (color primary dark: primary dark, color secondary dark: secondary dark)
-// @include variant-create((color primary dark: primary dark, color secondary dark: secondary dark), $property: background background-color);
-// @include variant-create((color: (primary dark: primary dark, secondary dark: secondary dark)), $property: background background-color);
+// @include create((color primary dark: primary dark, color secondary dark: secondary dark), $property: background background-color);
+// @include create((color: (primary dark: primary dark, secondary dark: secondary dark)), $property: background background-color);
 // .color-primary-dark {
 //   background: var(--s-primary-color-dark);
 //   background-color: var(--s-primary-color-dark);
@@ -760,7 +760,7 @@
 // }
 
 // TODO: (border-color background-color: (primary dark: primary dark, secondary dark: secondary dark))
-// @include variant-create((border-color background-color: (primary dark: primary dark, secondary dark: secondary dark)));
+// @include create((border-color background-color: (primary dark: primary dark, secondary dark: secondary dark)));
 // .background-background-color-primary-dark {
 //   border-color: var(--s-primary-color-dark);
 //   background-color: var(--s-primary-color-dark);
@@ -771,7 +771,7 @@
 // }
 
 // TODO: (bg primary dark: primary dark, bg secondary dark: secondary dark)
-// @include variant-create((bg primary dark: primary dark, bg secondary dark: secondary dark), $property: background);
+// @include create((bg primary dark: primary dark, bg secondary dark: secondary dark), $property: background);
 // .bg-primary-dark {
 //   background: var(--s-primary-color-dark);
 // }
@@ -780,7 +780,7 @@
 // }
 
 // TODO: (bg primary dark: primary dark, bg secondary dark: secondary dark)
-// @include variant-create((bg primary dark: primary dark, bg secondary dark: secondary dark), $property: (background, color));
+// @include create((bg primary dark: primary dark, bg secondary dark: secondary dark), $property: (background, color));
 // .bg-primary-dark {
 //   background: var(--s-primary-color-dark);
 //   color: var(--s-primary-color-dark);
@@ -791,7 +791,7 @@
 // }
 
 // TODO: (background: (primary dark: primary dark, secondary dark: secondary dark))
-// @include variant-create((background: (primary dark: primary dark, secondary dark: secondary dark)));
+// @include create((background: (primary dark: primary dark, secondary dark: secondary dark)));
 // .background-primary-dark {
 //   background: var(--s-primary-color-dark);
 // }
@@ -801,7 +801,7 @@
 
 // FEATURE: (property: variant)
 // TODO: (background color: ( primary dark: primary dark, secondary dark: secondary dark))
-// @include variant-create((background color: ( primary dark: primary dark, secondary dark: secondary dark)));
+// @include create((background color: ( primary dark: primary dark, secondary dark: secondary dark)));
 // .background-color-primary-dark {
 //   background: var(--s-primary-color-dark);
 //   color: var(--s-primary-color-dark);
@@ -813,7 +813,7 @@
 
 // FEATURE: (property (class,): variant)
 // TODO: (background (basic,): (primary dark: primary dark, secondary dark: secondary dark))
-// @include variant-create((background (basic,): (primary dark: primary dark, secondary dark: secondary dark)));
+// @include create((background (basic,): (primary dark: primary dark, secondary dark: secondary dark)));
 // .background-basic-primary-dark {
 //   background: var(--s-primary-color-dark);
 // }
@@ -823,7 +823,7 @@
 
 // FEATURE: ((property, property): variant)
 // TODO: ((background, color): ( primary dark: primary dark, secondary dark: secondary dark))
-// @include variant-create(((background, color): ( primary dark: primary dark, secondary dark: secondary dark)));
+// @include create(((background, color): ( primary dark: primary dark, secondary dark: secondary dark)));
 // .background-primary-dark {
 //   background: var(--s-primary-color-dark);
 // }
@@ -839,7 +839,7 @@
 
 // FEATURE: (property/class: ((+property/class, +property/class): variant))
 // TODO: ((background color): ((dark, light): ( primary dark: primary dark, secondary dark: secondary dark)))
-// @include variant-create(((background color): ((dark, light): ( primary dark: primary dark, secondary dark: secondary dark))), $pseudo-class: '&:hover');
+// @include create(((background color): ((dark, light): ( primary dark: primary dark, secondary dark: secondary dark))), $pseudo-class: '&:hover');
 // .background-color-dark-primary-dark:hover {
 //   background-dark: var(--s-primary-color-dark);
 //   color-dark: var(--s-primary-color-dark);
@@ -859,7 +859,7 @@
 
 // FEATURE: ((property/class, property/class): ((+property/class, +property/class): variant))).
 // TODO: ((background, color): ((dark, light): ( primary dark: primary dark, secondary dark: secondary dark)))
-// @include variant-create(((background, color): ((dark, light): ( primary dark: primary dark, secondary dark: secondary dark))), $pseudo-class: '&:hover');
+// @include create(((background, color): ((dark, light): ( primary dark: primary dark, secondary dark: secondary dark))), $pseudo-class: '&:hover');
 // .background-dark-primary-dark:hover {
 //   background-dark: var(--s-primary-color-dark);
 // }
@@ -889,7 +889,7 @@
 
 // dictionary
 // TODO: ((background: (primary dark: primary dark, secondary dark: secondary dark)))
-// @include variant-create(((background: (primary dark: primary dark, secondary dark: secondary dark))), $dictionary: (background: bg));
+// @include create(((background: (primary dark: primary dark, secondary dark: secondary dark))), $dictionary: (background: bg));
 // .bg-primary-dark {
 //   background: var(--s-primary-color-dark);
 // }
@@ -898,7 +898,7 @@
 // }
 
 // FEATURE: (property/class: ((+property/class, +property/class): variant))).
-// @include variant-create((border: (
+// @include create((border: (
 //   (block start color, block end color): (
 //     primary: primary color,
 //     primary dark: primary color dark,
@@ -925,7 +925,7 @@
 // }
 
 // FEATURE: (class: (+class: (class: (property: value)))).
-// @include variant-create((border: (
+// @include create((border: (
 //   (block start end color): (
 //     primary: (
 //       (border-color, color): primary,
@@ -952,7 +952,7 @@
 // }
 
 // FEATURE: (class: ((+class, +class) +class: (class: (property: value)))).
-// @include variant-create((border: (
+// @include create((border: (
 //   (left, right) color: (
 //     primary: (
 //       (border-left-color, border-right-color): primary,
@@ -979,7 +979,7 @@
 // }
 
 // FEATURE: (property/class: ((+property/class, +property/class): (class: value)))).
-// @include variant-create((border: ((left-color, right-color): ( primary dark: primary dark, secondary dark: secondary dark))));
+// @include create((border: ((left-color, right-color): ( primary dark: primary dark, secondary dark: secondary dark))));
 // .border-left-color-primary-dark {
 //   border-left-color: var(--s-primary-color-dark);
 // }
@@ -993,7 +993,7 @@
 //   border-right-color: var(--s-secondary-color-dark);
 // }
 
-// @include variant-create((( border background ): ((left-color, right-color ): ( primary dark: primary dark, secondary dark: secondary dark))));
+// @include create((( border background ): ((left-color, right-color ): ( primary dark: primary dark, secondary dark: secondary dark))));
 // .border-background-left-color-primary-dark {
 //   border-left-color: var(--s-primary-color-dark);
 //   background-left-color: var(--s-primary-color-dark);
@@ -1011,7 +1011,7 @@
 //   background-right-color: var(--s-secondary-color-dark);
 // }
 
-// @include variant-create(((border, background): ((left-color, right-color): ( primary dark: primary dark, secondary dark: secondary dark))));
+// @include create(((border, background): ((left-color, right-color): ( primary dark: primary dark, secondary dark: secondary dark))));
 // .border-left-color-primary-dark {
 //   border-left-color: var(--s-primary-color-dark);
 // }
@@ -1037,7 +1037,7 @@
 //   background-right-color: var(--s-secondary-color-dark);
 // }
 
-// @include variant-create(((variant (basic,): (property1, property2)): ((top left color, bottom right color): (value class one: value one, value class two: value two))));
+// @include create(((variant (basic,): (property1, property2)): ((top left color, bottom right color): (value class one: value one, value class two: value two))));
 // .variant-basic-top-left-color-value-class-one {
 //   property1-top-left-color: var(--s-value-one-color);
 // }
@@ -1051,7 +1051,7 @@
 //   property2-bottom-right-color: var(--s-value-two-color);
 // }
 
-// @include variant-create(((variant (basic,): (property1, property2)): (((top left, bottom right): color): (value class one: value one, value class two: value two))));
+// @include create(((variant (basic,): (property1, property2)): (((top left, bottom right): color): (value class one: value one, value class two: value two))));
 // .variant-basic-top-left-color-value-class-one {
 //   property1-top-left-color: var(--s-value-one-color);
 // }
@@ -1066,22 +1066,22 @@
 // }
 
 // REVIEW:
-// @include variant-create(((border (basic, outline), (test 1, test 2) padding margin): ((top left, bottom right): (primary dark: primary dark, secondary dark: secondary dark))));
-// @include variant-create(((border (basic more,)): ((top left, bottom right): (primary dark: primary dark, secondary dark: secondary dark))));
-// @include variant-create(((border (basic more,), margin (basic)): ((top left, bottom right): (primary dark: primary dark, secondary dark: secondary dark))));
-// @include variant-create(((border, margin) (basic more,): ((top left, bottom right): (primary dark: primary dark, secondary dark: secondary dark))));
-// @include variant-create(((border (basic, outline), padding margin): ((top left, bottom right): (primary dark: primary dark, secondary dark: secondary dark))));
-// @include variant-create((border (top, bottom) color: (primary dark: primary dark, secondary dark: secondary dark)));
-// @include variant-create((border (left, top) color: (primary dark: primary dark, secondary dark: secondary dark)));
-// @include variant-create((border block (start, end) color: (primary dark: primary dark, secondary dark: secondary dark)));
-// @include variant-create((test (padding, margin) top: (primary dark: primary dark, secondary dark: secondary dark)));
-// @include variant-create((test: ((padding, margin): (primary dark: primary dark, secondary dark: secondary dark))));
-// @include variant-create(((): ((): (primary dark: primary dark, secondary dark: secondary dark))), $property: color);
-// @include variant-create(((border basic, margin basic): ((left color, top color): (primary dark: primary dark, secondary dark: secondary dark))));
-// @include variant-create(((border, margin): ((left, top) color: (primary dark: primary dark, secondary dark: secondary dark))));
-// @include variant-create(((padding margin): ((left top, right bottom): (primary dark: primary dark, secondary dark: secondary dark))));
-// @include variant-create(((border basic large: (border, margin)): ((left color, top color): (primary dark: primary dark, secondary dark: secondary dark))));
-// @include variant-create((((border, margin) basic): ((left color, top color): (primary dark: primary dark, secondary dark: secondary dark))));
+// @include create(((border (basic, outline), (test 1, test 2) padding margin): ((top left, bottom right): (primary dark: primary dark, secondary dark: secondary dark))));
+// @include create(((border (basic more,)): ((top left, bottom right): (primary dark: primary dark, secondary dark: secondary dark))));
+// @include create(((border (basic more,), margin (basic)): ((top left, bottom right): (primary dark: primary dark, secondary dark: secondary dark))));
+// @include create(((border, margin) (basic more,): ((top left, bottom right): (primary dark: primary dark, secondary dark: secondary dark))));
+// @include create(((border (basic, outline), padding margin): ((top left, bottom right): (primary dark: primary dark, secondary dark: secondary dark))));
+// @include create((border (top, bottom) color: (primary dark: primary dark, secondary dark: secondary dark)));
+// @include create((border (left, top) color: (primary dark: primary dark, secondary dark: secondary dark)));
+// @include create((border block (start, end) color: (primary dark: primary dark, secondary dark: secondary dark)));
+// @include create((test (padding, margin) top: (primary dark: primary dark, secondary dark: secondary dark)));
+// @include create((test: ((padding, margin): (primary dark: primary dark, secondary dark: secondary dark))));
+// @include create(((): ((): (primary dark: primary dark, secondary dark: secondary dark))), $property: color);
+// @include create(((border basic, margin basic): ((left color, top color): (primary dark: primary dark, secondary dark: secondary dark))));
+// @include create(((border, margin): ((left, top) color: (primary dark: primary dark, secondary dark: secondary dark))));
+// @include create(((padding margin): ((left top, right bottom): (primary dark: primary dark, secondary dark: secondary dark))));
+// @include create(((border basic large: (border, margin)): ((left color, top color): (primary dark: primary dark, secondary dark: secondary dark))));
+// @include create((((border, margin) basic): ((left color, top color): (primary dark: primary dark, secondary dark: secondary dark))));
 
 // Structure.
 // (class: value)
@@ -1089,11 +1089,11 @@
 // (property: (attribute: (class: value)))
 // ((property1, property2): ())
 
-// @include variant-create(((name one, name two) property (name one, name two): ((xl, xs) class one: value one, class two (xl, xs): value two)));
-// @include variant-create((((class1, class2): property): (((top, right): color): ((xl, xs): value one))));
+// @include create(((name one, name two) property (name one, name two): ((xl, xs) class one: value one, class two (xl, xs): value two)));
+// @include create((((class1, class2): property): (((top, right): color): ((xl, xs): value one))));
 
 // variant: ((class,): value, (class) class: value)
-// @include variant-create(((class1, class2): value1, (class3, class4) class: value2));
+// @include create(((class1, class2): value1, (class3, class4) class: value2));
 // .class1 {
 //   color: var(--s-value1-color);
 // }
@@ -1105,7 +1105,7 @@
 // }
 
 // variant: (property: (class: value), (class) class: value)
-// @include variant-create((property: (class: value), (class3, class4) class: value2));
+// @include create((property: (class: value), (class3, class4) class: value2));
 // .property-class {
 //   property: var(--s-value-color);
 // }
@@ -1113,7 +1113,7 @@
 //   color: var(--s-value2-color);
 // }
 
-// @include variant-create(((property1, property2): (class: value)));
+// @include create(((property1, property2): (class: value)));
 // .property1-class {
 //   property1: var(--s-value-color);
 // }
@@ -1121,7 +1121,7 @@
 //   property2: var(--s-value-color);
 // }
 
-// @include variant-create(((property1, property2): ((class1, class2): value)));
+// @include create(((property1, property2): ((class1, class2): value)));
 // .property1-class1 {
 //   property1: var(--s-value-color);
 // }
@@ -1135,7 +1135,7 @@
 //   property2: var(--s-value-color);
 // }
 
-// @include variant-create((
+// @include create((
 //     border: (
 //       (top left, bottom right): (
 //         third: black
@@ -1152,7 +1152,7 @@
 //   // )
 // );
 
-// @include variant-create((
+// @include create((
 //     primary: primary dark,
 //     secondary: secondary dark
 //   ),

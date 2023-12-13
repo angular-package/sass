@@ -2,7 +2,7 @@
 @use 'sass:list';
 @use 'sass:meta';
 
-// Status: DONE
+// Status: TODO: add multiple calculations.
 // The `math.calculate()` function performs value and operand calculation by using a given operator `+` addition, `-` subtraction,
 // `*` multiplication, `/` division of `string` type.
 // @arbitrary `$operations...` Arbitrary values in order (value, operator, operand) to perform calculation.

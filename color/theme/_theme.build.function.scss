@@ -1,26 +1,27 @@
 // Sass.
 @use 'sass:list';
+@use 'sass:map';
 
 // Modules.
-@use '../../map';
-@use '../../string';
-@use '../palette';
+@use '../palette/palette.create.function';
 
 // Functions.
 @use '../../list/list.range.function' as *;
-@use 'theme.pick.function' as *;
+
+// Module functions.
+@use 'theme.pick.function';
 
 // Status: DONE
 // The `color.theme-build()` function.
 // @param `$theme`
-// @arbitrary `$pick...`
-// @returns The returned value is a map built from `$pick...`.
-@function build($theme, $pick...) {
+// @arbitrary `$picks...`
+// @returns The returned value is a map built from `$picks...`.
+@function build($theme, $picks...) {
   $result: ();
   @if type-of($theme) == map {
-    @if list.length($pick) > 0 {
-      @each $pick in $pick {
-        @each $theme, $palettes in pick($theme, $pick) {
+    @if list.length($picks) > 0 {
+      @each $pick in $picks {
+        @each $theme, $palettes in theme.pick($theme, $pick) {
           @each $name, $variant in $palettes {
             $result: map.deep-merge($result, ($theme: palette.create(($name: $variant))));
           }

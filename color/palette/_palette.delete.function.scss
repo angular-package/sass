@@ -1,0 +1,46 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../../map/map.remove.function';
+
+// Module functions.
+@use '../name/name.index.function';
+@use 'color/color.remove.function';
+
+// Status: DONE
+// The `color.palette-delete()` or `palette.delete()` function.
+// @param `$palette` Color palettes of `map` type.
+// @param `$name` Palette name or its part of `string` or `list` type.
+// @param `$class` Variant class name or its part of `string` or `list` type.
+// @param `$separator` Separator between `$colors`.
+// @arbitrary `$colors...` Colors to remove from palette variant.
+// @returns The returned value is `$palette`.
+@function delete($palette, $name, $class: null, $separator: null, $colors...) {
+  // FEATURE: Remove colors.
+  @if list.length($colors) > 0 {
+    $palette: color.remove($palette, $name, $class, $separator, $colors...);
+  } @else {
+    @each $palette-name, $variant in $palette {
+      @if name.index($palette-name, $name) {
+        // FEATURE: Remove variant.
+        @if $class {
+          @each $variant-class, $variant-color in $variant {
+            @if name.index($variant-class, $class) {
+              $palette: map.remove($palette, ($name, $class));
+            }
+          }
+        } @else {
+          // FEATURE: Remove palette.
+          $palette: map.remove($palette, $name);
+        }
+      }
+    }
+  }
+  @return $palette;
+}
+
+// Alias name for `delete`.
+// @function remove($palette, $name, $class: null, $separator: null, $colors...) {
+//   @return delete($palette, $name, $class, $separator, $colors...);
+// }

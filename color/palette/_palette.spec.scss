@@ -26,10 +26,10 @@ $-palette: (
 // @debug palette.get($-palette, primary, primary dark); // primary color dark, 3%
 
 // palette.remove()
-// @debug palette.remove($-palette, accent);
-// @debug palette.remove($-palette, accent, accent dark);
-// @debug palette.remove($-palette, accent, accent dark, accent light);
-// @debug palette.remove($-palette, accent, accent dark, auto, accent light, accent dark);
+// @debug palette.delete($-palette, accent);
+// @debug palette.delete($-palette, accent, accent dark);
+// @debug palette.delete($-palette, accent, accent dark, accent light);
+// @debug palette.delete($-palette, accent, accent dark, auto, accent light, accent dark);
 
 // FEATURE: palette.create()
 // $palette: palette.create((+accent: (basic 3% 0.5, dark)));

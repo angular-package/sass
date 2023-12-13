@@ -1,12 +1,14 @@
 // Sass.
 @use 'sass:map';
 
-// Status: DONE
+// Status: @deprecated
 // The `palette.remove()` function.
 // @param `$palette`
 // @param `$name-color`
 // @returns
 @function remove($palette, $name-color) {
+  @warn "Function deprecated. Use `palette.delete()` instead. This function name will be an alias for it.";
+
   $result: ();
   @each $key, $value in $palette {
     @each $name, $color in $name-color {

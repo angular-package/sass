@@ -1,14 +1,23 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
 // Modules.
 @use '../../function';
-@use '../../list';
-@use '../../map';
 @use '../../meta';
 @use '../../variant';
-@use '../functions/name';
+@use '../name';
+@use 'color';
 
 // Functions.
+@use '../../list/get/get.list.function' as list-get-list;
+@use '../../list/list.insert-nth.function' as list-insert-nth;
+@use '../../list/list.invert.function' as list-invert;
+@use '../../list/list.range.function' as list-range;
+@use '../../list/remove/remove.nth.function' as list-remove-nth;
+
+// Module functions.
 @use '../functions/color.name.function' as *;
-@use 'palette.color-add.function' as *;
 
 // Add.
 function.$functions: map.set(function.$functions, color, name, meta.get-function(name));
@@ -20,56 +29,78 @@ function.$functions: map.set(function.$functions, color, name, meta.get-function
 // @returns
 @function create($values...) {
   $palette: ();
-  $variant-colors: ();
 
   // FEATURE: Get additional colors.
+  $variant-colors: ();
   $i: 1;
   @each $variant in $values {
-    @each $name, $colors in $variant {
-      $j: 1;
-      @each $color in $colors {
-        @if list.has-list($color) and list.length($color) > 1 {
-          $variant-color: name.retrieve(list.nth($color, 1));
-          $variant-colors: map.deep-merge(
-            $variant-colors,
-            ($name: (map.get($variant-color, name): list.range($color, 2)))
-          );
-          $color: list.nth($color, 1);
-          $colors: list.set-nth($colors, $j, $color);
+    @if type-of($variant) == map {
+      @each $class, $colors in $variant {
+        $j: 1;
+        @each $color in $colors {
+          // FEATURE: Nest colors.
+          @if variant.indicator-index($color, '+') {
+            $indicator-index: variant.indicator-index($color, '+');
+            $color: list.set-nth(
+              $color,
+              $indicator-index,
+              variant.indicator-remove(list.nth($color, $indicator-index), '+')
+            );
+            $nested-colors: list-invert.invert(name.nest($color...));
+            @each $nested-color in $nested-colors {
+              $colors: list-insert-nth.insert-nth($colors, $j, $nested-color);
+            }
+
+            $colors: list-remove-nth.nth($colors, $j + list.length($nested-colors));
+          }
+
+          // FEATURE: Get additional colors.
+          @else if list.separator($color) == space and list.length($color) > 1 and list.length(list-get-list.list($color, last)) == 0 {
+            $variant-color: name.retrieve(list.nth($color, 1));
+            $variant-colors: map.deep-merge(
+              $variant-colors,
+              ($class: (map.get($variant-color, name): list-range.range($color, 2)))
+            );
+            $color: list.nth($color, 1);
+            $colors: list.set-nth($colors, $j, $color);
+          }
+
+          $j: $j + 1;
         }
 
-        $j: $j + 1;
+        $variant: map.deep-merge($variant, ($class: $colors));
       }
 
-      $variant: map.deep-merge($variant, ($name: $colors));
+      $values: list.set-nth($values, $i, $variant);
+      $i: $i + 1;
     }
-
-    $values: list.set-nth($values, $i, $variant);
-    $i: $i + 1;
   }
 
   // Nest values.
   $variant: variant.nest($values...);
 
-  // FEATURE: Add variant.
-  @each $name, $color in $variant {
-    @if type-of($color) == list {
-      $i: 1;
-      @each $c in $color {
-        $color: list.set-nth($color, $i, name.add-indicator($c));
-        $i: $i + 1;
-      }
+  // FEATURE: Create variant from list.
+  @each $class, $color in $variant {
+    @if type-of($color) == list or type-of($color) == string {
+      $palette: map.set($palette, $class, variant.create($color, $type: color));
+    }
+  }
 
-      $palette: map.set($palette, $name, variant.create($color, $type: color));
+  // FEATURE: Add indicator.
+  @each $name, $variant in $palette {
+    @each $class, $color in $variant {
+      $palette: map.deep-merge($palette, ($name: ($class: name.indicator-add($color))));
     }
   }
 
   // FEATURE: Add additional colors to variant.
-  @each $name, $variant in $variant-colors {
-    @each $name in if(list.separator($name) == space, ($name,), $name) {
-      $name: variant.indicator-remove($name, '+');
-      @each $class, $colors in $variant {
-        $palette: color-add($palette, $name, $class, space, $colors...);
+  @if list.length($variant-colors) > 0 {
+    @each $name, $variant in $variant-colors {
+      @each $name in if(list.separator($name) == space, ($name,), $name) {
+        $name: variant.indicator-remove($name, '+');
+        @each $class, $colors in $variant {
+          $palette: color.add($palette, $name, $class, space, $colors...);
+        }
       }
     }
   }
@@ -77,4 +108,24 @@ function.$functions: map.set(function.$functions, color, name, meta.get-function
 }
 
 // Examples.
-// @debug create(((+accent, primary): (color, ((basic dark) 3% 0.5) (light, 10%) (dark, 5%), light, dark)));
+// default variant.
+// @debug create((primary: (primary: primary color, primary dark: primary color dark)));
+
+//
+// @debug create((control: (disabled, error, warning))); // (control: (disabled color: disabled color, error color: error color, warning color: warning color))
+
+//
+// @debug create((control: (disabled, error, warning), core: (primary, secondary))); // (control: (disabled: disabled color, error: error color, warning: warning color), core: (primary: primary color, secondary: secondary color))
+
+//
+// @debug create((+control: (disabled, error, warning), +primary: (basic color, extended dark, minimum light))); // (control: (control disabled: control disabled color, control error: control error color, control warning: control warning color), primary: (primary basic color: primary basic color, primary extended dark: primary extended color dark, primary minimum light: primary minimum color light))
+// @debug create(((+primary, +secondary): (color, dark, light))); // (primary: (primary color: primary color, primary dark: primary color dark, primary light: primary color light), secondary: (secondary color: secondary color, secondary dark: secondary color dark, secondary light: secondary color light))
+
+//
+// @debug create((+primary: (color, ((basic dark) 3% 0.5), dark, light)));
+
+//
+// @debug create(((+accent, primary): (color, ((basic dark) 3% 0.5) (light, 10%) (dark, 5%) (), light, dark)));
+
+// Multiple colors
+// @debug create(((+accent, primary): (color, ((basic dark) 3% 0.5) (light, 10%) (dark, 5%) (), light, dark)));

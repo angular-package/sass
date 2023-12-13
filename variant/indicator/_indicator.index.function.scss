@@ -1,17 +1,22 @@
 // Modules.
 @use '../../string';
 
-// Status: DONE
+// Status: TODO: Consider use `list.indexes()`.
 // The `indicator.index()` function.
 // @param `$item`
 // @param `$indicator`
 // @returns
 @function index($item, $indicator) {
   @each $value in $item {
-    $index: string.index(#{$value}, $indicator);
-    @if $index {
-      @return $index > 0;
+    @if type-of($value) == string {
+      $index: string.index(#{$value}, $indicator);
+      @if $index and $index > 0 {
+        @return $index;
+      }
     }
   }
-  @return false;
+  @return null;
 }
+
+// Examples.
+// @debug index(+primary test, '+');

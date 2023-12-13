@@ -1,24 +1,29 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
 // Variables.
 @use '../../var/var.variables' as variables;
 
 // Modules.
-@use '../../list';
-@use '../../map';
 @use '../../string';
 @use 'indicator';
 
 // Status: DONE
 // The `color.name-create()` function creates color name with `color` indicator and `$shade`.
-// @param `$name`
-// @param `$type`
-// @param `$delimiter`
+// @param `$name` Color name of `string` or `list` type.
+// @param `$type` Indicates type of color
+// @param `$delimiter` String type delimiter to split `$name` and `$type`.
 // @param `$shade` (dark, light)
-// @returns
+// @param `$indicator`
+// @param `$separator`
+// @returns The return value is color name with `.
 @function create(
   $name,
   $type,
   $delimiter: map.get(variables.$var, delimiter),
   $shade: (dark, light),
+  $indicator: color,
 ) {
   // Remove `$delimiter` if `$name` is `string` type.
   @if type-of($name) == string {
@@ -30,7 +35,7 @@
   }
 
   // Add color indicator to `$name`.
-  $name: indicator.add($name, $shade);
+  $name: indicator.add($name, $shade, $indicator);
 
   // Add type to `$name`.
   $name: if($type, list.join($name, $type, space), list.join((), $name, space));
@@ -40,12 +45,17 @@
 }
 
 // Examples.
+// $-delimiter: '-';
+
 // @debug create(primary dark, hue); // primary color dark hue
 
 // @debug create(secondary light dark, saturation); // secondary light color dark saturation
 // @debug create(secondary dark light, saturation); // secondary dark color light saturation
 
-// @debug create(primary-dark, hue, '-'); // primary color dark hue
-// @debug create(secondary-dark-light, saturation, '-'); // secondary dark color light saturation
+// delimiter
+// @debug create(primary-dark, hue, $-delimiter); // primary color dark hue
+// @debug create(secondary-dark-light, saturation, $-delimiter); // secondary dark color light saturation
+// @debug create(primary-dark, hue, $-delimiter);
 
-// @debug create(primary-dark, hue, '-');
+// multiple usage
+// @debug create(create(primary-dark, hue, $-delimiter), hue, $-delimiter); // primary color dark hue hue

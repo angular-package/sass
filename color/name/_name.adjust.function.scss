@@ -1,8 +1,15 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
 // Modules.
-@use '../../list';
-@use '../../map';
+@use 'adjustment';
 
 // Functions.
+@use '../../list/list.append.function' as list-append;
+@use '../../list/list.insert-nth.function' as list-insert-nth;
+
+// Module functions.
 @use 'name.retrieve.function' as *;
 
 // Status: DONE
@@ -22,35 +29,26 @@
   $saturation: null,
   $lightness: null,
   $alpha: null,
-  $separator: map.get($adjust, separator, list.separator($name)) ,
+  $separator: map.get($adjust, separator) or list.separator($name),
+  $adjustment: retrieve($name)
 ) {
-  // Retrieve adjustment.
-  $adjustment: retrieve($name);
   $name: map.get($adjustment, name);
 
   // FEATURE: Calculate adjustments.
-  @if $lightness or map.get($adjustment, lightness) or map.get($adjust, lightness) {
-    $lightness: calc(if($lightness, $lightness, 0%) + map.get($adjustment, lightness, 0%) + map.get($adjust, lightness, 0%));
-  }
-  @if $alpha or map.get($adjustment, alpha) or map.get($adjust, alpha) {
-    $alpha: calc(if($alpha, $alpha, 0) + map.get($adjustment, alpha, 0) + map.get($adjust, alpha, 0));
-  }
-  @if $hue or map.get($adjustment, hue) or map.get($adjust, hue) {
-    $hue: calc(if($hue, $hue, 0deg) + map.get($adjustment, hue, 0deg) + map.get($adjust, hue, 0deg));
-  }
-  @if $saturation or map.get($adjustment, saturation) or map.get($adjust, saturation) {
-    $saturation: calc(if($saturation, $saturation, 0%) + map.get($adjustment, saturation, 0%) + map.get($adjust, saturation, 0%));
-  }
+  $lightness: adjustment.calculate($lightness, map.get($adjustment, lightness), map.get($adjust, lightness), 0%);
+  $alpha: adjustment.calculate($alpha, map.get($adjustment, alpha), map.get($adjust, alpha), 0);
+  $hue: adjustment.calculate($hue, map.get($adjustment, hue), map.get($adjust, hue), 0deg);
+  $saturation: adjustment.calculate($saturation, map.get($adjustment, saturation), map.get($adjust, saturation), 0%);
 
   // Add hue, saturation, lightness or alpha to color name.
-  @if $lightness {
-    $name: list.append(($name,), $lightness, $separator);
-    @if $alpha {
-      $name: list.append($name, $alpha, $separator);
-      @if $hue {
-        $name: list.insert-nth($name, 2, $hue);
-        @if $saturation {
-          $name: list.insert-nth($name, 3, $saturation);
+  @if $lightness and $lightness > 0% {
+    $name: list-append.append(($name,), $lightness, $separator);
+    @if $alpha and $alpha > 0 {
+      $name: list-append.append($name, $alpha, $separator);
+      @if $hue and $hue > 0deg {
+        $name: list-insert-nth.insert-nth($name, 2, $hue);
+        @if $saturation and $saturation > 0% {
+          $name: list-insert-nth.insert-nth($name, 3, $saturation);
         }
       }
     }

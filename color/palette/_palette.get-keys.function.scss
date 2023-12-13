@@ -3,9 +3,8 @@
 @use 'sass:map';
 
 // Functions.
-@use '../../list/remove';
-@use '../../map/map.get.function' as *;
-@use '../name/name.index.function' as name;
+@use '../../list/remove/remove.nth.function' as list-remove-nth;
+@use '../name/name.index.function';
 
 // Status: DONE
 // The `palette.get-keys()` function returns palette variant.
@@ -16,16 +15,16 @@
 @function get-keys($palette, $key, $keys...) {
   @if $key {
     @each $current-key, $value in $palette {
-      @if index($current-key, $key) {
+      @if name.index($current-key, $key) {
         @if type-of($value) == map {
           $value: map.set(
             $value,
             result,
-            list.append(get($palette, result, get($value, result) or ()), $current-key)
+            list.append(map.get($palette, result) or map.get($value, result) or (), $current-key)
           );
         }
         @if list.length($keys) > 0 {
-          @return get-keys($value, list.nth($keys, 1), remove.nth($keys, 1)...);
+          @return get-keys($value, list.nth($keys, 1), list-remove-nth.nth($keys, 1)...);
         } @else {
           @return map.get($value, result);
         }
@@ -57,4 +56,4 @@ $example: (
 // @debug get-keys($example, basic, extended); // (test basic) extended
 
 // nested 3
-// @debug get-keys($example, test, two, saturation);
+// @debug get-keys($example, test, two, saturation); // (test basic) (basic two) (hue saturation)

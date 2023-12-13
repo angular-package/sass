@@ -1,10 +1,12 @@
-// Modules.
-@use '../../list';
-@use '../../map';
-@use '../../selector';
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
 
 // Functions.
-@use '../functions/color.name.function' as *;
+@use '../../list/has/has.number.function' as list-has-number;
+@use '../../selector/selector.nest.function' as selector-nest;
+
+// Module.
 @use 'name.adjust-multiple.function' as *;
 @use 'name.retrieve.function' as *;
 
@@ -18,7 +20,7 @@
   @for $i from 1 through list.length($selectors) {
     $name: list.nth($selectors, $i);
     @if type-of($name) == list and list.separator($name) == comma {
-      @if list.has-number($name) {
+      @if list-has-number.number($name) {
         $retrieved: list.append($retrieved, retrieve($name));
         $selectors: list.set-nth($selectors, $i, map.get(retrieve($name), name));
       } @else  {
@@ -31,7 +33,7 @@
       }
     }
   }
-  @return adjust-multiple(list.append(selector.nest($selectors...), $retrieved)...);
+  @return adjust-multiple(list.append(selector-nest.nest($selectors...), $retrieved)...);
 }
 
 // Examples.

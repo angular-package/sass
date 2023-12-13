@@ -1,14 +1,15 @@
 // Sass.
 @use 'sass:list';
+@use 'sass:map';
 @use 'sass:meta';
 
 // Modules.
-@use '../../map';
-@use '../../string';
+@use '../../map/map.pick.function' as map-pick;
+@use '../../map/pattern/pattern.is.function' as map-pattern-is;
 
 // Functions.
-@use '../../list/list.append.function' as *;
-@use 'theme.get.function' as scheme;
+@use '../../list/list.append.function' as list-append;
+@use 'theme.get.function';
 
 // Status: DONE
 // The `color.theme-pick()` function.
@@ -17,7 +18,7 @@
 // @arbitrary `$keys...`
 // @returns
 @function pick($theme, $key, $keys...) {
-  $keys: append((), $key, comma, $keys...);
+  $keys: list-append.append((), $key, comma, $keys...);
   $result: ();
   @each $scheme, $palettes in $theme {
     @each $key in $keys {
@@ -45,8 +46,8 @@
           // FEATURE:
           @if not $append {
             @each $palette-name in if(list.separator($palette-name) == comma, $palette-name, ($palette-name,)) {
-              @if map.pattern-is($palette-name) {
-                $result: map.deep-merge($result, ($scheme: map.pick($palettes, $palette-name)));
+              @if map-pattern-is.is($palette-name) {
+                $result: map.deep-merge($result, ($scheme: map-pick.pick($palettes, $palette-name)));
                 $append: true;
               }
             }

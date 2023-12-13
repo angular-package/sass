@@ -1,10 +1,16 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
 // Modules.
-@use '../../../list';
-@use '../../../map';
 @use '../../../math';
-@use '../../../meta';
 
 // Functions.
+@use '../../../list/list.index.function' as list-index;
+@use '../../../list/list.insert-nth.function' as list-insert-nth;
+
+// Module functions.
 @use '../name.adjust.function' as *;
 @use '../name.retrieve.function' as *;
 
@@ -28,7 +34,7 @@
   $shade-index: 0;
   $shades: ();
   @each $value in if(list.separator($shade) == comma, $shade, ($shade,)) {
-    $result: if(meta.type-of($value) == list, list.index($name, $value...), list.index($name, $value));
+    $result: if(meta.type-of($value) == list, list-index.index($name, $value...), list-index.index($name, $value));
     @if $result {
       $shades: list.append($shades, $result, comma);
     }
@@ -48,12 +54,12 @@
   }
 
   // Add color indicator.
-  @if not list.index($name, $indicator) {
+  @if not list-index.index($name, $indicator) {
     @if list.length($name) == 1 or $shade-index == 0 {
       $name: list.join($name, $indicator);
     }
     @else if $shade-index {
-      $name: list.insert-nth($name, $shade-index, $indicator);
+      $name: list-insert-nth.insert-nth($name, $shade-index, $indicator);
     }
   }
   @return adjust($name, $adjustment, $separator: $separator);

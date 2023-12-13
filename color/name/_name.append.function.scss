@@ -1,7 +1,11 @@
+// Sass.
+@use 'sass:list';
+
 // Modules.
-@use '../../list';
-@use '../../meta';
 @use 'indicator';
+
+// Functions.
+@use '../../list/list.append.function' as list-append;
 
 // Status: DONE
 // The `color.name-append()` function appends color name from `$color-name` to `$names`.
@@ -12,7 +16,7 @@
 // @returns The returned value is list of color names with `$color-name` and `$color-names`.
 @function append($names, $separator, $color-name, $color-names...) {
   $names: indicator.add-multiple(
-    list.append(
+    list-append.append(
       $names,
       $color-name,
       $separator or list.separator($names),

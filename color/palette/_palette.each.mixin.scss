@@ -1,5 +1,5 @@
 // Modules.
-@use '../name';
+@use '../name/name.index.function';
 
 // Status: DONE
 // The `color.palette-each()` or `palette.each()` mixin.
@@ -21,3 +21,28 @@
     }
   }
 }
+
+// Examples.
+// $-palette: (
+//   accent: (
+//     accent: (accent basic color, 3%),
+//     accent dark: (accent color dark, 5%) (accent color light, 10%),
+//     accent light: (accent color light, 5%),
+//   ),
+
+//   basic accent: (
+//     accent: (accent basic color, 3%),
+//     accent dark: (accent color dark, 5%) (accent color light, 10%),
+//     accent light: (accent color light, 5%),
+//   ),
+
+//   primary: (
+//     primary: (primary basic color, 3%),
+//     primary dark: (primary color dark, 5%),
+//     primary light: (primary color light, 15%),
+//   ),
+// );
+
+// @include each($-palette, accent, accent dark) using($resolved...) {
+//   @debug $resolved;
+// }

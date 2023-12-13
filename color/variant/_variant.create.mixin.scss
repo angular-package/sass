@@ -1,15 +1,14 @@
 // Sass.
 @use 'sass:list';
+@use 'sass:map';
 
 // Modules.
-@use '../../class';
-@use '../../map';
 @use '../../meta';
-@use '../../selector';
 
 // Functions.
-@use '../../list/list.each.mixin' as *;
-@use '../../list/list.nth.function' as *;
+@use '../../class/variant/variant.create.mixin' as class-variant-create;
+@use '../../map/map.get.function' as map-get;
+@use '../../selector/selector.class.function';
 
 // Mixins.
 @use '../mixins/color.color.mixin' as *;
@@ -45,7 +44,7 @@
     class: (prop-attribute: color),
     property: (prop-attribute: color),
   ), $modifier or ());
-  @include class.variant-create(
+  @include class-variant-create.create(
     $variant,
     $combine,
     $pseudo-class,
@@ -54,7 +53,7 @@
     $modifier,
   ) using($resolved) {
     @include color(
-      (map.get($resolved, (property, name)): map.get($resolved, (property, value))),
+      (map-get.get($resolved, (property, name)): map-get.get($resolved, (property, value))),
       $hue,
       $saturation,
       $lightness,

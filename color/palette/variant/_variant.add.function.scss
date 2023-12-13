@@ -1,10 +1,10 @@
+// Sass.
+@use 'sass:map';
+
 // Modules.
-@use '../../../list';
-@use '../../../map';
-@use '../../name';
+@use '../color';
 
 // Functions.
-@use '../palette.color-add.function' as *;
 @use 'variant.exists.function' as *;
 
 // Status:
@@ -20,7 +20,7 @@
   @if not exists($palette, $name, $class) {
     $palette: map.deep-merge($palette, ($name: ($class: ())));
     @if $color-name {
-      $palette: color-add($palette, $name, $class, $separator, $color-name, $color-names...);
+      $palette: color.add($palette, $name, $class, $separator, $color-name, $color-names...);
     }
   }
   @return $palette;
@@ -41,15 +41,15 @@
 //   ),
 // );
 
-// @debug variant-add($-palette, primary, primary dark, auto, (primary dark) 15%);
-// @debug variant-add($-palette, primary, primary dark, space, (primary dark, 15%));
-// @debug variant-add($-palette, primary, primary dark, comma, (primary dark, 15%));
+// @debug add($-palette, primary, primary dark, auto, (primary dark) 15%);
+// @debug add($-palette, primary, primary dark, space, (primary dark, 15%));
+// @debug add($-palette, primary, primary dark, comma, (primary dark, 15%));
 
 // multiple colors
-// @debug variant-add($-palette, primary, primary dark, auto, (primary dark) 15%, (primary light) 15%);
-// @debug variant-add($-palette, primary, primary dark, space, (primary dark) 15%, (primary light) 15%);
-// @debug variant-add($-palette, primary, primary dark, comma, (primary dark) 15%, (primary light) 15%);
+// @debug add($-palette, primary, primary dark, auto, (primary dark) 15%, (primary light) 15%);
+// @debug add($-palette, primary, primary dark, space, (primary dark) 15%, (primary light) 15%);
+// @debug add($-palette, primary, primary dark, comma, (primary dark) 15%, (primary light) 15%);
 
-// @debug variant-add($-palette, primary, primary dark, auto, (primary dark, 15%), (primary light, 15%));
-// @debug variant-add($-palette, primary, primary dark, space, (primary dark, 15%), (primary light, 15%));
-// @debug variant-add($-palette, primary, primary dark, comma, (primary dark, 15%), (primary light, 15%));
+// @debug add($-palette, primary, primary dark, auto, (primary dark, 15%), (primary light, 15%));
+// @debug add($-palette, primary, primary dark, space, (primary dark, 15%), (primary light, 15%));
+// @debug add($-palette, primary, primary dark, comma, (primary dark, 15%), (primary light, 15%));

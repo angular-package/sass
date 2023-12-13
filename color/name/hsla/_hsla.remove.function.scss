@@ -1,12 +1,9 @@
 // Sass.
 @use 'sass:meta';
 
-// Modules.
-@use '../../../string/string.replace.function';
-
-
 // Functions.
 @use '../../../list/remove/remove.value.function' as list-remove-value;
+@use '../../../string/string.replace.function';
 
 // Status: DONE
 // The `color.name-hsla-remove()` function removes hsla indicator from `$name`.

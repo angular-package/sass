@@ -1,8 +1,12 @@
-// Modules.
-@use '../../../list';
+// Sass.
+@use 'sass:list';
 
 // Functions.
-@use '../name.index.function' as *;
+@use '../../../list/list.last.function' as list-last;
+@use '../../../list/remove/remove.nth.function' as list-remove-nth;
+@use '../name.index.function';
+
+// Module functions.
 @use 'indicator.add.function' as *;
 
 // Status: DONE
@@ -11,16 +15,16 @@
 // @returns The returned value is `$names` with added `color` indicator.
 @function add-multiple($names...) {
   // Prepare variables.
-  $options: list.last($names);
+  $options: list-last.last($names);
   @if type-of($options) == map {
-    $names: list.remove-nth($names, -1);
+    $names: list-remove-nth.nth($names, -1);
   } @else {
     $options: ();
   }
 
   // Add `color` indicator to `$names`.
   @for $i from 1 through list.length($names) {
-    @if not index(list.nth($names, $i), color) {
+    @if list.length(list.nth($names, $i)) > 0 and not name.index(list.nth($names, $i), color) {
       $names: list.set-nth($names, $i, add(list.nth($names, $i), $options...));
     }
   }

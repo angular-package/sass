@@ -1,5 +1,9 @@
-// Modules.
-@use '../../list';
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../../list/has/has.number.function' as list-has-number;
+@use '../../list/list.index.function' as list-index;
 
 // Status: DONE
 // The `color.name-index()` function checks whether `$name` contains `$search`.
@@ -7,11 +11,11 @@
 // @param `$search` Parts of color name to find in `$name`.
 // @returns The returned value is index, list of indexes or `null`.
 @function index($name, $search) {
-  @if list.has-number($name) {
+  @if list-has-number.number($name) {
     $name: list.nth($name, 1);
   }
 
-  $found: list.index($name, $search...);
+  $found: list-index.index($name, $search...);
   @if $found and (list.length($found) == list.length($search)) {
     @return $found;
   }

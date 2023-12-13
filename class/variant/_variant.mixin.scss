@@ -73,10 +73,10 @@
           } @else if list.length($attribute) > 0 and function.has($attribute) {
             $attribute: function.call-arglist($attribute...);
           }
-          @include each($class) using($class) {
+          @include each($class) using($class, $index) {
             @if type-of($variant) == map {
               // FEATURE: VARIANT 3
-              @include each($attribute) using($attribute) {
+              @include each($attribute) using($attribute, $index) {
                 @each $value-class, $value in $variant {
                   @include class.content(
                     values.join(
@@ -121,8 +121,8 @@
               }
             } @else {
               // FEATURE: VARIANT 2
-              @include each($variant) using($value) {
-                @include each($attribute) using($value-class) {
+              @include each($variant) using($value, $index) {
+                @include each($attribute) using($value-class, $index) {
                   @include class.content(
                     values.join(
                       if(&, '&', ()),
@@ -173,8 +173,8 @@
         }
       } @else {
         // FEATURE: VARIANT 1
-        @include each($attribute-variant) using($value) {
-          @include each($class) using($class) {
+        @include each($attribute-variant) using($value, $index) {
+          @include each($class) using($class, $index) {
             @include class.content(
               values.join(
                 if(&, '&', ()),

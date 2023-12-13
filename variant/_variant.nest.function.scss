@@ -6,7 +6,7 @@
 
 // Functions.
 @use '../color/functions/color.name.function' as *;
-@use '../color/functions/name';
+@use '../color/name';
 
 // Status: DONE
 // The `variant.nest()` nest indicated by '+' variant of `list` or `map` type.
@@ -15,22 +15,22 @@
 @function nest($variants...) {
   $result: ();
   @each $variant in $variants {
-    @each $name, $resolved-value in $variant {
-      $-resolved-value: $resolved-value;
+    @each $name, $class-color in $variant {
       @each $name in if(list.separator($name) == comma, $name, ($name,)) {
         $nested: indicator.index($name, '+');
+        $variant-nested: null;
         @if $nested {
           $name: if($nested, indicator.remove($name, '+'), $name);
-          @if type-of($resolved-value) == map {
-            @each $key, $v in $resolved-value {
-              $resolved-value: map.key-replace($resolved-value, $key, list.nth(selector.nest($name, $key), 1));
+          @if type-of($class-color) == map {
+            @each $key, $v in $class-color {
+              $class-color: map.key-replace($class-color, $key, list.nth(selector.nest($name, $key), 1));
             }
           } @else {
-            $resolved-value: name.nest($name, $resolved-value);
+            $variant-nested: name.nest($name, $class-color);
           }
         }
 
-        $result: map.deep-merge($result, ($name: if($nested, $resolved-value, $-resolved-value)));
+        $result: map.deep-merge($result, ($name: if($nested, $variant-nested, $class-color)));
       }
     }
   }

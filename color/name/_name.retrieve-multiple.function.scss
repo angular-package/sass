@@ -1,8 +1,12 @@
-// Modules.
-@use '../../list';
-@use '../../map';
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
 
 // Functions.
+@use '../../list/list.last.function' as list-last;
+@use '../../list/remove/remove.nth.function' as list-remove-nth;
+
+// Module.
 @use 'name.retrieve.function' as *;
 
 // Status: TODO: retrieve to map
@@ -11,16 +15,16 @@
 // @param `$model` If `name` then retrieved color attributes are set to key of color name.
 // @returns The returned value is a map of attributes obtained from `$name`.
 @function retrieve-multiple($names...) {
-  $options: list.last($names);
+  $options: list-last.last($names);
   @if type-of($options) == map {
-    $names: list.remove-nth($names, -1);
+    $names: list-remove-nth.nth($names, -1);
   } @else {
     $options: null;
   }
   @for $i from 1 through list.length($names) {
     $retrieved: retrieve(list.nth($names, $i));
-    @if $options {
-      $retrieved: map.get(retrieve(list.nth($names, $i)), map.get($options, field));
+    @if $options and $retrieved {
+      $retrieved: map.get($retrieved, map.get($options, field));
     }
 
     $names: list.set-nth($names, $i, $retrieved);
@@ -50,4 +54,4 @@
 // @debug retrieve-multiple((primary dark, ('*' 5deg), ('*' 2%), ('*' 15%), ('*' 0.5))); // (name: primary dark, hue: "*" 5deg, saturation: "*" 2%, lightness: "*" 15%, alpha: "*" 0.5)
 
 // Options.
-// @debug retrieve-multiple((primary dark, 50%), (secondary light, 15%), (field: name));
+// @debug retrieve-multiple((primary dark, 50%), (secondary light, 15%), (field: name)); // primary dark, secondary light

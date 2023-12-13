@@ -6,6 +6,7 @@
 
 // Modules.
 @use '../../var';
+@use '../name';
 
 // Functions.
 @use 'color.name.function' as *;
@@ -19,6 +20,8 @@
 // @param `$delimiter` Separator between each element in name of returned CSS variable.
 // @param `$prefix` Prefix in `$name`. By default, it uses `prefix` of `$var` sass variable.
 // @param `$suffix` Suffix in `$name`. By default, it uses `suffix` of `$var` sass variable.
+// @param `$shade` Shade of color, by default dark or light.
+// @param `$color` Retrieved color from `$name`.
 // @returns The returned value is CSS variable that indicates lightness of color.
 @function lightness-var(
   $name,
@@ -28,16 +31,18 @@
   $delimiter: null,
   $prefix: null,
   $suffix: null,
+  $shade: (dark, light),
+  $color: name.retrieve($name),
 ) {
   @return var.get(
-    name($name, lightness),
-    $adjust,
+    name(map.get($color, name), lightness, $delimiter, $shade: $shade),
+    name.adjustment-calculate(map.get($color, lightness), $adjust, 0%),
     null,
     $fallback,
     $dictionary,
     map.get($dictionary, map.get(variables.$name-configuration, delimiter)) or $delimiter,
     $prefix,
-    $suffix
+    $suffix,
   );
 }
 
@@ -53,3 +58,6 @@
 
 // dictionary
 // @debug lightness-var(primary, 1%, 30%, (prefix: spectre, suffix: basic)); // calc(var(--spectre-primary-color-lightness-basic, 30%) + 1%)
+
+// adjustment in name
+// @debug lightness-var((primary-dark, 15%, 0.1), 5%, $delimiter: '-'); // calc(var(--primary-color-dark-lightness) + 20%)

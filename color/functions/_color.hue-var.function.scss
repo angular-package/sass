@@ -6,6 +6,7 @@
 
 // Modules.
 @use '../../var';
+@use '../name';
 
 // Functions.
 @use 'color.name.function' as *;
@@ -19,6 +20,8 @@
 // @param `$delimiter` Separator between each element in name of returned CSS variable.
 // @param `$prefix` Prefix in `$name`. By default, it uses `prefix` of `$var` sass variable.
 // @param `$suffix` Suffix in `$name`. By default, it uses `suffix` of `$var` sass variable.
+// @param `$shade` Shade of color, by default dark or light.
+// @param `$color` Retrieved color from `$name`.
 // @returns The returned value is CSS variable that indicates hue of color.
 @function hue-var(
   $name,
@@ -28,10 +31,12 @@
   $delimiter: null,
   $prefix: null,
   $suffix: null,
+  $shade: (dark, light),
+  $color: name.retrieve($name),
 ) {
   @return var.get(
-    name($name, hue),
-    $adjust,
+    name(map.get($color, name), hue, $delimiter, $shade: $shade),
+    name.adjustment-calculate(map.get($color, hue), $adjust, 0deg),
     null,
     $fallback,
     $dictionary,
@@ -64,3 +69,6 @@
 // @debug hue-var(primary, 1deg, 30deg, (hue: hue, prefix: spectre)); // calc(var(--spectre-primary-color-hue, 30deg) + 1deg)
 // @debug hue-var(primary, 1deg, 30deg, (suffix: basic)); // calc(var(--s-primary-color-hue-basic, 30deg) + 1deg)
 // @debug hue-var(primary, 1deg, 30deg, (prefix: spectre, suffix: basic)); // calc(var(--spectre-primary-color-hue-basic, 30deg) + 1deg)
+
+// adjustment in name
+// @debug hue-var((primary-dark, 15deg, 15%, 0.1), 5deg, $delimiter: '-'); // calc(var(--primary-color-dark-hue) + 20deg)

@@ -6,4 +6,7 @@
 @forward 'scheme' as scheme-*;
 @forward 'theme' as theme-*;
 @forward 'variant' as variant-*;
+
+// Files.
 @forward 'variant/variant.mixin';
+@forward 'name/name.retrieve.function'; // TODO: Remove in stable version.

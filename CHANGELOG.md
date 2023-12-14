@@ -1,5 +1,76 @@
 # @angular-package/sass changelog
 
+### v0.17.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.17.0-beta)
+
+- **Update** `color/functions` - calculate using adjustment (from name too) all hsla values and move retrieve color to each hsla functions.
+  Add `$shade` with `dark` and `light` by default and `$color` with retrieve arguments in each hsla functions.
+  Add `$shade` also to `hsla-color()` function. [69010c0]
+- **Fix** `color.alpha-var()` `color.hue-var()` `color.saturation-var()` `color.lightness-var()` use `$delimiter` in `var.get()` instead of `name()`. [341a929]
+- **Fix** `class/variant` - add `$index` to `each()`. [b60fd3a]
+- **Add** `palette.delete()` function to delete by palette name, variant class and its colors from palettes. [871103c]
+- **Fix** `variant.nest()` - use `$variant-nested` instead of `$resolved-value` and change name of `$resolved-value` to intuitive `$class-color`. [5ae508a]
+- **Add** `color.palette-get()` - add updated `get()` function to use instead of old get function. [72d34cc]
+- **Add** `color.name-update()` - add function to update name especially with adjustment. [7ca383a]
+- **Add** `name/hsla` module to check and remove hsla indicator. [080e37e]
+- **Add** `name/adjustment` module with - function to `get()` and `remove()` operator from name adjustment and `calculate()`. [1bb2397]
+- **Add** `color.palette-get-keys()` function to find keys using `name.index()`. [a7c63cf]
+- **Add** `map.get-index()` - add function to get value based on key checked by `list.index()`. [e1459b9]
+- **Add** `palette.each()` - add mixin to iterate palette. [8ac459b]
+- **Update** `variant.create()` - add `$type` argument to retrieve from color name to set key. [30e19ae]
+- **Remove** `color.name-nest()` function from index. [22fb98c]
+- **Add** `palette.color-add()` check type of variant color and append or join into the list. [937586c]
+- **Update** `variant.nest()` function to use nest from color. [d423b7c]
+- **Update** `color.palette-create()` function to handle creation of multiple colors in variant. [d880d60]
+- **Add** `color.palette-color-add()` function to add color to variant. [bd5ec62]
+- **Add** `color.palette-color-remove()` to remove color from variant, `color.palette-variant-add()` to add variant. [2e53679]
+- **Update** Set `color.name-nest()` as deprecated. [fa25fcb]
+- **Add** `color.name-add-indicator-multiple()` function to add indicator(`color`) to multiple names. [d26d365]
+- **Update** `color.name()` - use `name` module. [829a614]
+- **Update** `color.name-adjust()` - add `$hue` `$saturation` `$lightness` `$alpha` `$separator` arguments. [8124aa0]
+- **Update** `color.name-retrieve()` - check whether each attribute has number. [5d872b8]
+- **Add** `color.name-append()` function to add color name to list of colors. [d1d571b] [3815399]
+- **Add** `color.name-remove()` function to remove color from list of color names. [79ac36b]
+- **Add** `color.name-create()` function to create color name with `color` indicator. [2897f63]
+- **Add** `color.name-add-indicator()` function to `name` module to add `color` indicator including shades. [653b1b5]
+- **Fix**  fix `list.index()` function - remove checking type of `$list`. [bece908]
+- **Add** submodule `name` and add `color.name-adjust-multiple()` to adjust multiple color names, `color.name-index()` function to find `index` of specific name. [6587c4d] [e5fc8d6] [b15c567]
+- **Add** `color.name-adjust()` to adjust `hsla` color attributes in name. [7699304]
+
+[69010c0]: https://github.com/angular-package/sass/commit/69010c0361a75dceb42531a7f95d035137e417a4
+[341a929]: https://github.com/angular-package/sass/commit/341a9299bf8ba73a7091f02b827e66e88aaf4c60
+[b60fd3a]: https://github.com/angular-package/sass/commit/b60fd3a92f66027e5b77fb50d67b3336de42fd3a
+[871103c]: https://github.com/angular-package/sass/commit/871103c30b050b43753a4eac8a9f8eb4f3b50d03
+[5ae508a]: https://github.com/angular-package/sass/commit/5ae508a5f5b1934c61d1e2a3a39a998cda53319c
+[72d34cc]: https://github.com/angular-package/sass/commit/72d34cc46a914618fe8e65e326182f67ca7d7a9e
+[7ca383a]: https://github.com/angular-package/sass/commit/7ca383a582a53e0197d9866df17c13309a80eb90
+[080e37e]: https://github.com/angular-package/sass/commit/080e37e0a088c1f6e2f464d4926081f097846dd0
+[1bb2397]: https://github.com/angular-package/sass/commit/1bb2397abe6f43691f5ad92750a0cbe5c25ff501
+[a7c63cf]: https://github.com/angular-package/sass/commit/a7c63cf45001c2765bc84511135552eb4cd4fba0
+[e1459b9]: https://github.com/angular-package/sass/commit/e1459b9f59051db335d8c86349bbc14edaf80be6
+[8ac459b]: https://github.com/angular-package/sass/commit/8ac459b410a021fe139e6d6f0c7c992ad5cd2f0c
+[30e19ae]: https://github.com/angular-package/sass/commit/30e19ae629b8246f21936de20f89b02cd4cfeab5
+[22fb98c]: https://github.com/angular-package/sass/commit/22fb98c9821f43b1bc2a9ad9eccd0aa24bb61ecd
+[937586c]: https://github.com/angular-package/sass/commit/937586c5aec38f01e0e3c34e4e93521cf3d51cf1
+[d423b7c]: https://github.com/angular-package/sass/commit/d423b7c6d585c170466840365d668561db9cf6fc
+[d880d60]: https://github.com/angular-package/sass/commit/d880d60774d703abebcd96fdf5ca2e100365db8a
+[bd5ec62]: https://github.com/angular-package/sass/commit/bd5ec621fed90830fa2b990b4871b937aa00da0e
+[2e53679]: https://github.com/angular-package/sass/commit/2e53679636e120110e51e61cd3d91570ece151ec
+[fa25fcb]: https://github.com/angular-package/sass/commit/fa25fcb2185c3d33e76cff098cb9df9b03c8f64d
+[d26d365]: https://github.com/angular-package/sass/commit/d26d3659c7e2e4c34bf0752b6d39f2da26aab4ea
+[829a614]: https://github.com/angular-package/sass/commit/829a614780119f17e2170ce1e90dd5eb2b57ac10
+[8124aa0]: https://github.com/angular-package/sass/commit/8124aa0fb9e15cb91a93621673adc43bc23d491a
+[5d872b8]: https://github.com/angular-package/sass/commit/5d872b82e39c862dc869ca5d5c237203f8d23c30
+[3815399]: https://github.com/angular-package/sass/commit/38153994f181c65f76b37238598e3927c831aee7
+[d1d571b]: https://github.com/angular-package/sass/commit/d1d571bcba3a2f2bf1b2b0a336422cbdf05e95f5
+[79ac36b]: https://github.com/angular-package/sass/commit/79ac36bfd37a55f0195efdc525dc1aa1611c46a4
+[2897f63]: https://github.com/angular-package/sass/commit/2897f637583aaa7c66fb98091f83a6db713771dc
+[653b1b5]: https://github.com/angular-package/sass/commit/653b1b5aaac1677e5f606b17f28a38eea8600271
+[bece908]: https://github.com/angular-package/sass/commit/bece9088dd3d28ab24164a16cc9a4d3b56adc82f
+[b15c567]: https://github.com/angular-package/sass/commit/b15c567fe572165f1f15bf78cddc5bd8400f4da4
+[e5fc8d6]: https://github.com/angular-package/sass/commit/e5fc8d670936f29ad158f494058339a26809d502
+[6587c4d]: https://github.com/angular-package/sass/commit/6587c4d46bfb890617d59fa9a879e5ce75b59a20
+[7699304]: https://github.com/angular-package/sass/commit/76993048381f7aea18f913fc037e3e5f7c8c82c5
+
 ### v0.16.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.16.0-beta)
 
 - **Update** `indicator.remove()` - remove indicator from `string`. [30bdf0a]

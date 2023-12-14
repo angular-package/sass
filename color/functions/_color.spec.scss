@@ -89,3 +89,30 @@ var.$var: map.deep-merge(var.$var, (
 
 // map modifiers
 // @debug color.hsla-color((primary light) (lightness: 1%, alpha: 0.95, hue: 20deg), $lightness: 3%); // hsla(calc(var(--s-primary-color-light-hue) + 20deg), var(--s-primary-color-light-saturation), calc(var(--s-primary-color-light-lightness) + 4%), calc(var(--s-primary-color-light-alpha) + 0.95))
+
+// palette-create()
+// FEATURE:
+// basic test (color, dark, light)
+// (basic color) (extended dark)
+
+// third color 1%
+// (third color) 1%
+// (test dark) 3% 0.5, (third color) 1%
+// test dark, 3%, 0.5, third color, 1%
+// , '+', third color 1%
+// @debug color.palette-create((
+//   +accent: (basic (color, ((test dark) 3% 0.5), light), dark),
+// ));
+
+// @debug color.palette-create((+accent acc: (basic test (color, dark, light), )));
+
+// @debug color.palette-create((+accent: (basic (color, (dark, 3%), light), dark)));
+// @debug color.palette-create((+accent: (basic test (basic, extended), )));
+// @debug color.palette-create((+accent: ((basic color) (extended dark), )));
+
+// @debug color.palette-create((+accent: ((basic color, 3%) (extended dark, 5%), primary light)));
+// @debug color.palette-create((+accent: ([(light, 30%), (dark, 50%)], dark, light)));
+
+// @debug color.palette-create((+accent: (color, ((test dark) 3% 0.5) (secondary light, 13%) (primary light, 15%), light, dark),));
+// @debug color.palette-create((+accent: (color, ((test dark) 3% 0.5) ((secondary light) 13%) ((primary light) 15%), light, dark),));
+// @debug color.palette-create((+accent: (color, (test dark, 3%, 0.5) (secondary light, 13%) (primary light, 15%), light, dark),));

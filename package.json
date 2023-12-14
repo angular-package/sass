@@ -1,12 +1,12 @@
 {
   "name": "@angular-package/sass",
   "description": "Extension for sass modules and new modules.",
-  "version": "0.16.0-beta",
+  "version": "0.17.0-beta",
   "main": "./index.scss",
   "funding": [
     {
       "type": "individual",
-      "url": "https://business.revolut.com/angular-package"
+      "url": "https://business.revolut.com/revolutme/angularpackage"
     },
     {
       "type": "individual",

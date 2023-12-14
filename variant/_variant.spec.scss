@@ -1,0 +1,21 @@
+// Modules.
+@use '../color';
+@use '../variant';
+
+// Examples.
+// @debug variant.nest(((+secondary, primary): (color, dark, light)));
+// $variant: variant.nest(((+secondary, primary): (color, (ultra dark, -30%), (mega light, 60%))));
+
+$variant: variant.nest((+secondary: (color, (ultra dark, -30%), (mega light, 60%))));
+
+@debug $variant;
+
+@each $name, $variant in $variant {
+  $palette: ($name: variant.create($variant));
+
+  @debug $palette;
+
+  $palette: color.palette-color-add($palette, secondary, secondary color, auto, (third color, 15%));
+
+  @debug $palette;
+}

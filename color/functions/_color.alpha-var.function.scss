@@ -1,9 +1,12 @@
+// Sass.
+@use 'sass:map';
+
 // Variables.
 @use '../../variables';
 
 // Modules.
-@use '../../map';
 @use '../../var';
+@use '../name';
 
 // Functions.
 @use 'color.name.function' as *;
@@ -17,6 +20,8 @@
 // @param `$delimiter` Separator between each element in name of returned CSS variable.
 // @param `$prefix` Prefix in `$name`. By default, it uses `prefix` of `$var` sass variable.
 // @param `$suffix` Suffix in `$name`. By default, it uses `suffix` of `$var` sass variable.
+// @param `$shade` Shade of color, by default dark or light.
+// @param `$color` Retrieved color from `$name`.
 // @returns The returned value is CSS variable that indicates alpha of color.
 @function alpha-var(
   $name,
@@ -26,24 +31,24 @@
   $delimiter: null,
   $prefix: null,
   $suffix: null,
+  $shade: (dark, light),
+  $color: name.retrieve($name),
 ) {
   @return var.get(
-    name(
-      $name,
-      alpha,
-      map.get($dictionary, map.get(variables.$name-configuration, delimiter)) or $delimiter
-    ),
-    $adjust,
+    name(map.get($color, name), alpha, $delimiter, $shade: $shade),
+    name.adjustment-calculate(map.get($color, alpha), $adjust, 0),
     null,
     $fallback,
     $dictionary,
-    $delimiter,
+    map.get($dictionary, map.get(variables.$name-configuration, delimiter)) or $delimiter,
     $prefix,
     $suffix,
   );
 }
 
 // Examples.
+// $-delimiter: '-';
+
 // @debug alpha-var(primary); // var(--s-primary-color-alpha)
 
 // delimiter in dictionary
@@ -63,3 +68,6 @@
 // adjusted + fallback + dictionary
 // @debug alpha-var(primary, 0.9, 0.5, (primary: p)); // calc(var(--s-p-color-alpha, 0.5) + 0.9)
 // @debug alpha-var(primary, 0.9, 0.5, (primary: spectre, suffix: basic)); // calc(var(--spectre-primary-color-alpha-basic, 0.5) + 0.9)
+
+// adjustment in name
+// @debug alpha-var((primary-dark, 15%, -0.2), '-' 0.9, $delimiter: $-delimiter); // calc(var(--primary-color-dark-alpha) - 0.7)

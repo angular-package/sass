@@ -1,0 +1,36 @@
+// Sass.
+@use 'sass:list';
+
+// Modules.
+@use 'indicator';
+
+// Functions.
+@use '../../list/list.append.function' as list-append;
+
+// Status: DONE
+// The `color.name-append()` function appends color name from `$color-name` to `$names`.
+// @param `$names` `String` or `list` type to append.
+// @param `$separator` Separator between `$names`.
+// @param `$color-name` Required color name to append.
+// @arbitrary `$color-names...` Arbitrary color names to append.
+// @returns The returned value is list of color names with `$color-name` and `$color-names`.
+@function append($names, $separator, $color-name, $color-names...) {
+  $names: indicator.add-multiple(
+    list-append.append(
+      $names,
+      $color-name,
+      $separator or list.separator($names),
+      $color-names...
+    )...
+  );
+  @return $names;
+}
+
+// Examples.
+// @debug append(accent, comma, secondary light, primary dark); // accent color, secondary color light, primary color dark
+// @debug append(primary light, comma, secondary light, primary dark); // primary color, light color, secondary color light, primary color dark
+// @debug append((accent, primary, secondary dark), auto, secondary light, primary dark); // accent color, primary color, secondary color dark, secondary color light, primary color dark
+// @debug append((accent color, primary color, secondary color dark), auto, secondary light, primary dark); // accent color, primary color, secondary color dark, secondary color light, primary color dark
+
+// adjusted
+// @debug append((accent color, primary color, secondary color dark), auto, secondary light, (primary dark, 5%)); //  accent color, primary color, secondary color dark, secondary color light, (primary color dark, 5%)

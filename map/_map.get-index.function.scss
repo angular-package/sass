@@ -1,0 +1,39 @@
+// Sass.
+@use 'sass:list';
+
+// Modules.
+@use '../list/list.index.function' as *;
+
+// Status: DONE
+// The `map.get-index()` function returns value from `$key` and `$keys`.
+// @param `$map` A map to get value.
+// @param `$key` Required key to `index()` map.
+// @arbitrary `$keys...` Optional nested keys.
+// @returns The returned value is value of `$key` and/or `$keys`.
+@function get-index($map, $key, $keys...) {
+  @if $key {
+    @each $key-list, $value in $map {
+      @if index($key-list, $key) {
+        @if list.length($keys) > 0 {
+          @return get-index($value, list.nth($keys, 1), list.remove-nth($keys, 1)...);
+        } @else {
+          @return $value;
+        }
+      }
+    }
+  }
+  @return $map;
+}
+
+// Examples.
+// $example: (
+//   test basic: (
+//     basic two: (
+//       hue saturation: (
+//         lightness alpha: hsla(15deg, 30%, 35%, 1)
+//       )
+//     )
+//   )
+// );
+
+// @debug get-index($example, test, two, hue, alpha); // hsl(15deg, 30%, 35%)

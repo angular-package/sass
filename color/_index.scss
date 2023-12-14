@@ -1,7 +1,12 @@
+@forward 'sass:color';
 @forward 'functions';
 @forward 'mixins';
-@forward 'sass:color';
+@forward 'name' as name-*;
+@forward 'palette' as palette-*;
 @forward 'scheme' as scheme-*;
 @forward 'theme' as theme-*;
 @forward 'variant' as variant-*;
+
+// Files.
 @forward 'variant/variant.mixin';
+@forward 'name/name.retrieve.function'; // TODO: Remove in stable version.

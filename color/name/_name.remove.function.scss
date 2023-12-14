@@ -1,0 +1,35 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../../list/list.append.function' as list-append;
+@use '../../list/remove/remove.nth.function' as list-remove-nth;
+
+// Module functions.
+@use 'name.index.function' as *;
+
+// Status: DONE
+// The `color.name-remove()` function removes searched part of name or name from `$names`.
+// @param `$names` List of names.
+// @param `$color-name` Required name or part of name to remove from `$names`.
+// @arbitrary `$color-names...` Part of names or names to remove from `$names`.
+// @returns The returned value is `$names` with removed names of required `$color-name` and optional `$color-names`.
+@function remove($names, $color-name, $color-names...) {
+  $color-names: list-append.append((), $color-name, comma, $color-names...);
+  $remove: ();
+  @for $j from 1 through list.length($color-names) {
+    @for $i from 1 through list.length($names) {
+      @if index(list.nth($names, $i), list.nth($color-names, $j)) {
+        $remove: list-append.append($remove, $i);
+      }
+    }
+  }
+  @return if(list.length($remove) > 0, list-remove-nth.nth($names, $remove...), $names);
+}
+
+// Examples.
+// @debug remove((accent color, primary color, secondary color dark), secondary, primary); // (accent color,)
+// @debug remove((accent color, (primary, 1%), (secondary dark, 3%)), secondary, primary); // (accent color,)
+
+// nothing to remove
+// @debug remove((accent color, primary color, secondary color dark), test);

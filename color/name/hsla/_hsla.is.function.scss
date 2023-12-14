@@ -1,0 +1,43 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
+// Functions.
+@use '../../../list/get/get.map.function' as list-get-map;
+@use '../../../list/has/has.value.function' as list-has-value;
+
+// Module functions.
+@use '../adjustment/adjustment.has.function';
+
+// Status: DONE
+// The `color.name-hsla-is()` function .
+// @param `$name` The `map`, `string`, `list` type to check whether it is hsla name.
+// @returns The returned value is a `bool` indicating whether it's a hsla color name.
+@function is($name) {
+  @return
+    adjustment.has($name) or
+    list-has-value.value($name, any, '==', [hsla]) or
+    list-has-value.value($name, any, '~=', ':hsla') or
+    (type-of($name) == map and if(list.index(map.values($name), hsla), true, false)) or
+    (meta.type-of(list-get-map.map($name)) == map and list-has-value.value(map.values(list-get-map.map($name)), any, ':==', number));
+}
+
+// Examples.
+// hsla
+// @debug is('dark:hsla');
+// @debug is((primary dark) ':hsla');
+// @debug is((primary dark) [hsla]);
+// @debug is((primary dark: hsla));
+
+// adjustment
+// @debug is((primary dark) 15deg 5% 15% 0.1);
+// @debug is((primary dark, 15deg, 5%, 15%, 0.1));
+
+// operator
+// @debug is((primary dark) ('*' 5deg) ('/' 5%) ('*' 15%) ('*' 0.2));
+
+// map
+// @debug is(secondary (saturation: '*' 10%, hue: 5deg));
+// @debug is(secondary light (saturation: '*' 10%, hue: 5deg));
+// @debug is((secondary light) (saturation: '*' 10%, hue: 5deg));

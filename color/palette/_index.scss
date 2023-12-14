@@ -1,4 +1,9 @@
+@forward 'color' as color-*;
+@forward 'variant' as variant-*;
 @forward 'palette.create.function';
 @forward 'palette.create.mixin';
+@forward 'palette.delete.function';
+@forward 'palette.each.mixin';
+@forward 'palette.get-keys.function';
 @forward 'palette.get.function';
 @forward 'palette.remove.function';

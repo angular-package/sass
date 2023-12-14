@@ -1,0 +1,122 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
+// Functions.
+@use '../../list/get/get.map.function' as list-get-map;
+@use '../../list/has/has.number.function' as list-has-number;
+@use '../../list/list.first.function' as list-first;
+@use '../../list/list.insert-nth.function' as list-insert-nth;
+@use '../../list/list.to-map.function' as list-to-map;
+@use '../../list/remove/remove.map.function' as list-remove-map;
+@use '../../map/map.pick.function' as map-pick;
+
+// Module functions.
+@use 'adjustment/adjustment.has.function';
+
+// Status: DONE
+// The `color.name-retrieve()` function returns a map with attributes obtained from `$name`.
+// @param `$name` Color name of `list` type.
+// @param `$get` Get attribute from retrieved color name.
+// @param `$pick` Pick attribute(s) from retrieved color name.
+// @param `$model` If `name` then retrieved color attributes are set to key of color name.
+// @returns The returned value is a map of attributes obtained from `$name`.
+@function retrieve($name, $get: null, $pick: null, $model: default) {
+  $attributes: ();
+  $result: ();
+  $separator: list.separator($name);
+
+  // Check whether `$name` contains adjustment.
+  @if adjustment.has($name) {
+    // Get `map` from `$name`.
+    $map-adjustment: list-get-map.map($name);
+
+    // Adjustment in `map`.
+    @if $map-adjustment {
+      // Remove `map` adjustment.
+      $name: list-remove-map.map($name);
+
+      // Set `$name` to first nth.
+      $name: if(meta.type-of($name) == list and list.length($name) == 1, list-first.first($name), $name);
+
+      // Separate `$name` with adjustment.
+      $result: map.merge((name: $name, separator: $separator), $map-adjustment);
+
+    // Adjustments in comma/space separated `list`.
+    } @else {
+      @if list.length($name) > 1 and list-has-number.number(list.nth($name, 2)) {
+        $attributes: list.append($attributes, (lightness: number list, (hue saturation lightness alpha: number list): map), comma);
+      }
+      @if list.length($name) > 2 and list-has-number.number(list.nth($name, 3)) {
+        $attributes: list.append($attributes, (alpha: number list, (alpha hue saturation: number list): map));
+      }
+      @if list.length($name) > 3 and list-has-number.number(list.nth($name, 4)) {
+        $attributes: list-insert-nth.insert-nth($attributes, 1, (hue: number list, (hue saturation lightness alpha: number list): map));
+      }
+      @if list.length($name) > 4 and list-has-number.number(list.nth($name, 5)) {
+        $attributes: list-insert-nth.insert-nth($attributes, 2, (saturation: number list, (saturation lightness alpha: number list): map));
+      }
+
+      // Create map from `$attributes`.
+      $result: map.set(list-to-map.to-map($name, (name: list string), $attributes...), separator, $separator);
+    }
+
+  // No adjustments.
+  } @else {
+    $result: (name: $name, separator: $separator);
+  }
+
+  // If `$model` is set to name set retrieved adjustment to key of color name.
+  @if $model == name {
+    @return (map.get($result, name): map.remove($result, name));
+  }
+  @return if($get, map.get($result, $get), if($pick, map-pick.pick($result, $pick), $result));
+}
+
+// Examples.
+// defined by the LVHA-order: :link — :visited — :hover — :active.
+
+// @debug retrieve(primary); // (name: primary)
+// @debug retrieve(primary dark); // (name: primary dark)
+// @debug retrieve(basic 3% 0.5);
+// @debug retrieve(accent color);
+
+// comma separator
+// length 1 lightness
+// @debug retrieve((primary dark, 50%)); // (name: primary dark, lightness: 50%)
+// @debug retrieve((primary dark, 50% 60%)); // (name: primary dark, lightness: 50% 60%) // :link 50%, :visited 50%, :hover 60%
+// @debug retrieve((primary dark, 50% 40% 70% 60%)); // (name: primary dark, lightness: 50%) :link 50% :visited 40% :hover 70% :active 60%
+
+// length 2 lightness, alpha
+// @debug retrieve((primary dark, 50%, 0.5)); // (name: primary dark, lightness: 50%, alpha: 0.5)
+// @debug retrieve((primary dark, 50%, 0.5), name); // (primary dark: (lightness: 50%, alpha: 0.5))
+
+// length > 2
+// @debug retrieve((primary dark, 50deg, 5%, 0.1)); // (name: primary dark, hue: 50deg, lightness: 5%, alpha: 0.1)
+// @debug retrieve((primary dark, 50deg, 5%, 3%, 0.9)); // (name: primary dark, hue: 50deg, saturation: 5%, lightness: 3%, alpha: 0.9)
+
+// without comma separator
+// @debug retrieve((primary dark) 50%); // (name: primary dark, lightness: 50%)
+// @debug retrieve((primary dark) 50% 0.5); // (name: primary dark, lightness: 50%, alpha: 0.5)
+// @debug retrieve((primary dark) 50deg 5% 0.1); // (name: primary dark, hue: 50deg, lightness: 5%, alpha: 0.1)
+// @debug retrieve((primary dark) 50deg 5% 3% 0.9); // (name: primary dark, hue: 50deg, saturation: 5%, lightness: 3%, alpha: 0.9)
+
+// @debug retrieve((primary dark) ('*' 50%)); // (name: primary dark, lightness: "*" 50%)
+// @debug retrieve((primary dark, ('*' 50%), ('/' 0.5))); // (name: primary dark, lightness: "*" 50%, alpha: "/" 0.5)
+// @debug retrieve((primary dark, ('*' 5deg), ('*' 2%), ('*' 1))); // (name: primary dark, hue: "*" 5deg, lightness: "*" 2%, alpha: "*" 1)
+// @debug retrieve((primary dark, ('*' 5deg), ('*' 2%), ('*' 15%), ('*' 0.5))); // (name: primary dark, hue: "*" 5deg, saturation: "*" 2%, lightness: "*" 15%, alpha: "*" 0.5)
+
+// @debug retrieve((primary dark, '*' 5%, '-' 0.2)); // (name: primary dark, lightness: "*" 5%, alpha: "-" 0.2, separator: comma)
+
+// map
+// @debug retrieve((secondary light) (saturation: '*' 10%, hue: 5deg)); // (name: (secondary light), separator: space, saturation: "*" 10%, hue: 5deg)
+
+// `$get`
+// @debug retrieve((primary dark, '*' 5%, '-' 0.2), $get: lightness); // "*" 5%
+
+// `$pick`
+// @debug retrieve((primary dark, '*' 5%, '-' 0.2), $pick: lightness); // (lightness: "*" 5%)
+
+// `$model`
+// @debug retrieve((primary dark, '*' 5%, '-' 0.2), $model: name); // (primary dark: (lightness: "*" 5%, alpha: "-" 0.2, separator: comma))

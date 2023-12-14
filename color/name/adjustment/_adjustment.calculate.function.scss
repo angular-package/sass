@@ -1,0 +1,53 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../../../list/list.append.function' as list-append;
+@use '../../../list/list.last.function' as list-last;
+@use '../../../list/remove/remove.nth.function' as list-remove-nth;
+
+// Module Functions.
+@use 'adjustment.operator-get.function' as *;
+@use 'adjustment.operator-remove.function' as *;
+
+// Status: TODO: Use multiple calculations.
+// The `adjustment.calculate()` function.
+// @param `$value1`
+// @param `$value2`
+// @arbitrary `$values..., $fallback, $operator`
+// @returns The returned value is.
+@function calculate($value1, $value2, $values...) {
+  $values: list-append.append((), $value1, comma, $value2, $values...);
+  $fallback: list-last.last($values);
+  $values: list-remove-nth.nth($values, -1);
+
+  // Make calculations.
+  @if list.length($values) > 0 {
+    // Get operator from `$values`.
+    $operator: operator-get($values...);
+
+    // Remove operator from `$values` for calculate.
+    $values: operator-remove($values...);
+
+    // Set `$result` to `$fallback` and make calculation.
+    $result: $fallback;
+    @each $value in $values {
+      $value: $value or $fallback;
+      $result: calc($result + $value);
+    }
+
+    // If `$operator` then add it.
+    @if $operator {
+      $result: list.join($operator, $result, space);
+    }
+    @return $result;
+  }
+  @return null;
+}
+
+// Examples.
+// @debug calculate(15%, -5%, 3%, 0%); // 13%
+// @debug calculate(15%, null, 3%, 0%); // 18%
+// @debug calculate(15%, -5%, null, 0%); // 10%
+
+// @debug calculate(('-' 15%), ('*' 15%), ('/' 0.5%), 0%); // "-" 30.5%

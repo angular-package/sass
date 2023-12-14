@@ -1,0 +1,48 @@
+// Modules.
+@use '../name/name.index.function';
+
+// Status: DONE
+// The `color.palette-each()` or `palette.each()` mixin.
+// @param `$palette`
+// @param `$name`
+// @param `$class`
+@mixin each($palette, $name, $class: null) {
+  @each $palette-name, $variant in $palette {
+    @if name.index($palette-name, $name) {
+      @each $variant-class, $variant-color in $variant {
+        @if $class {
+          @if name.index($variant-class, $class) {
+            @content($palette-name, $variant-class, $variant-color);
+          }
+        } @else {
+          @content($palette-name, $variant-class, $variant-color);
+        }
+      }
+    }
+  }
+}
+
+// Examples.
+// $-palette: (
+//   accent: (
+//     accent: (accent basic color, 3%),
+//     accent dark: (accent color dark, 5%) (accent color light, 10%),
+//     accent light: (accent color light, 5%),
+//   ),
+
+//   basic accent: (
+//     accent: (accent basic color, 3%),
+//     accent dark: (accent color dark, 5%) (accent color light, 10%),
+//     accent light: (accent color light, 5%),
+//   ),
+
+//   primary: (
+//     primary: (primary basic color, 3%),
+//     primary dark: (primary color dark, 5%),
+//     primary light: (primary color light, 15%),
+//   ),
+// );
+
+// @include each($-palette, accent, accent dark) using($resolved...) {
+//   @debug $resolved;
+// }

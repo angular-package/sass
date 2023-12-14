@@ -1,0 +1,75 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
+// Modules.
+@use '../../../math';
+
+// Functions.
+@use '../../../list/list.index.function' as list-index;
+@use '../../../list/list.insert-nth.function' as list-insert-nth;
+
+// Module functions.
+@use '../name.adjust.function' as *;
+@use '../name.retrieve.function' as *;
+
+// Status:
+// The `color.name-indicator-add()` function adds `color` indicator to `$name`.
+// @param `$name`
+// @param `$shade`
+// @param `$indicator`
+// @param `$separator`
+// @returns The returned value.
+@function add(
+  $name,
+  $shade: (dark, light),
+  $indicator: color,
+  $separator: list.separator($name)
+) {
+  $adjustment: retrieve($name);
+  $name: map.get($adjustment, name);
+
+  // Shade.
+  $shade-index: 0;
+  $shades: ();
+  @each $value in if(list.separator($shade) == comma, $shade, ($shade,)) {
+    $result: if(meta.type-of($value) == list, list-index.index($name, $value...), list-index.index($name, $value));
+    @if $result {
+      $shades: list.append($shades, $result, comma);
+    }
+  }
+
+  // Get start of shade.
+  $i: 1;
+  @each $shade in $shades {
+    @if type-of($shade) == list {
+      $shades: list.set-nth($shades, $i, math.min($shade...));
+    }
+
+    $i: $i + 1;
+  }
+  @if list.length($shades) > 0 {
+    $shade-index: math.max($shades...);
+  }
+
+  // Add color indicator.
+  @if not list-index.index($name, $indicator) {
+    @if list.length($name) == 1 or $shade-index == 0 {
+      $name: list.join($name, $indicator);
+    }
+    @else if $shade-index {
+      $name: list-insert-nth.insert-nth($name, $shade-index, $indicator);
+    }
+  }
+  @return adjust($name, $adjustment, $separator: $separator);
+}
+
+// Examples.
+// @debug add(primary dark);
+// @debug add(primary basic light dark);
+// @debug add(primary basic dark light);
+
+// Adjusted.
+// @debug add((primary dark, 3%)); // primary color dark, 3%
+// @debug add((primary dark) 3%); // (primary color dark) 3%

@@ -1,0 +1,39 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../../../list/list.last.function' as list-last;
+@use '../../../list/remove/remove.nth.function' as list-remove-nth;
+@use '../name.index.function';
+
+// Module functions.
+@use 'indicator.add.function' as *;
+
+// Status: DONE
+// The `color.indicator-add-multiple()` function adds `color` indicator each `$names`.
+// @arbitrary `$names...` String or list color name to add `color` indicator.
+// @returns The returned value is `$names` with added `color` indicator.
+@function add-multiple($names...) {
+  // Prepare variables.
+  $options: list-last.last($names);
+  @if type-of($options) == map {
+    $names: list-remove-nth.nth($names, -1);
+  } @else {
+    $options: ();
+  }
+
+  // Add `color` indicator to `$names`.
+  @for $i from 1 through list.length($names) {
+    @if list.length(list.nth($names, $i)) > 0 and not name.index(list.nth($names, $i), color) {
+      $names: list.set-nth($names, $i, add(list.nth($names, $i), $options...));
+    }
+  }
+  @return $names;
+}
+
+// Examples.
+// @debug add-multiple(accent, primary, secondary  dark, secondary light, primary dark);
+// @debug add-multiple((accent, 3%), (primary, 1%), secondary dark, secondary light, (primary dark, 5%));
+
+// indicator options
+// @debug add-multiple(accent, primary, secondary  dark, secondary light, primary dark, (shade: (dark, light), indicator: test,));

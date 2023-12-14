@@ -2,15 +2,15 @@
 @use 'sass:list';
 @use 'sass:map';
 
+// Modules.
+@use '../../media';
+
 // Functions.
 @use '../../functions/important.function' as *;
+@use '../../list/has/has.string.function' as list-has-string;
 
 // Mixins.
 @use 'color.property-color.mixin' as *;
-
-// Modules.
-@use '../../list/has';
-@use '../../media';
 
 // Status: REVIEW:
 // The `color.scheme-color()` mixin.
@@ -35,7 +35,7 @@
   $property: color,
 ) {
   @if type-of($scheme-color) == map {
-    @if not has.string(map.keys($scheme-color), any, '==', dark, light, normal) {
+    @if not list-has-string.string(map.keys($scheme-color), any, '==', dark, light, normal) {
       @each $-property, $-scheme-color in $scheme-color {
         $property: $-property;
         $scheme-color: $-scheme-color;

@@ -1,0 +1,26 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../../../list/get/get.string.function' as list-get-string;
+@use '../../../list/list.append.function' as list-append;
+@use '../../../list/list.first.function' as list-first;
+
+// Status: DONE
+// The `adjustment.operator-get()` function.
+// @param `$adjustment`
+// @arbitrary `$adjustments...`
+// @returns
+@function operator-get($adjustment, $adjustments...) {
+  $adjustments: list-append.append((), $adjustment, comma, $adjustments...);
+  @for $i from 1 through list.length($adjustments) {
+    @if list-get-string.string(list.nth($adjustments, $i)) {
+      $adjustments: list.set-nth($adjustments, $i, list-get-string.string(list.nth($adjustments, $i)));
+    }
+  }
+  @return if(list.length($adjustments) == 1, list-first.first($adjustments), list-get-string.string($adjustments));
+}
+
+// Examples.
+// @debug operator-get(('-' 15%)); // -
+// @debug operator-get(('-' 15%), ('*' 15%),  ('/' 0.5)); // -

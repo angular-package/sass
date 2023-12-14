@@ -1,0 +1,23 @@
+// Functions.
+@use '../name/name.index.function';
+
+// Status: DONE
+// The `palette.get()` function returns palette variant of `$name` or colors from variant `$class`.
+// @param `$palette` Color palettes to get variant or variant color.
+// @param `$name` Palette name or its part of `string` or `list` type to get from `$palette`.
+// @param `$class` Variant class name or its part of `string` or `list` type to get from palette.
+// @returns The returned value is palette variants or variant colors .
+@function get($palette, $name, $class: null) {
+  @if $name {
+    @each $key, $value in $palette {
+      @if name.index($key, $name) {
+        @if $class {
+          @return get($value, $class);
+        } @else {
+          @return $value;
+        }
+      }
+    }
+  }
+  @return null;
+}

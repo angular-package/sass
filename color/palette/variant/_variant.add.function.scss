@@ -1,0 +1,55 @@
+// Sass.
+@use 'sass:map';
+
+// Modules.
+@use '../color';
+
+// Functions.
+@use 'variant.exists.function' as *;
+
+// Status:
+// The `color.palette-variant-add()` function .
+// @param `$palette`
+// @param `$name`
+// @param `$class`
+// @param `$separator`
+// @param `$color-name`
+// @arbitrary `$color-names...`
+// @returns
+@function add($palette, $name, $class, $separator, $color-name, $color-names...) {
+  @if not exists($palette, $name, $class) {
+    $palette: map.deep-merge($palette, ($name: ($class: ())));
+    @if $color-name {
+      $palette: color.add($palette, $name, $class, $separator, $color-name, $color-names...);
+    }
+  }
+  @return $palette;
+}
+
+// Examples.
+// $-palette: (
+//   accent: (
+//     accent color: (accent basic color, 3%),
+//     accent color dark: (accent basic color, 5%),
+//     accent color light: (accent basic color, 5%),
+//   ),
+
+//   primary: (
+//     primary color: (primary basic color, 3%),
+//     primary color dark: (primary basic color, 5%),
+//     primary color light: (primary basic color, 15%),
+//   ),
+// );
+
+// @debug add($-palette, primary, primary dark, auto, (primary dark) 15%);
+// @debug add($-palette, primary, primary dark, space, (primary dark, 15%));
+// @debug add($-palette, primary, primary dark, comma, (primary dark, 15%));
+
+// multiple colors
+// @debug add($-palette, primary, primary dark, auto, (primary dark) 15%, (primary light) 15%);
+// @debug add($-palette, primary, primary dark, space, (primary dark) 15%, (primary light) 15%);
+// @debug add($-palette, primary, primary dark, comma, (primary dark) 15%, (primary light) 15%);
+
+// @debug add($-palette, primary, primary dark, auto, (primary dark, 15%), (primary light, 15%));
+// @debug add($-palette, primary, primary dark, space, (primary dark, 15%), (primary light, 15%));
+// @debug add($-palette, primary, primary dark, comma, (primary dark, 15%), (primary light, 15%));

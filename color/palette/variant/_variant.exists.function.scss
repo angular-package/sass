@@ -1,0 +1,45 @@
+// Modules.
+@use '../../name';
+
+// Status: DONE
+// The `color.palette-variant-exists()` function .
+// @param `$palette`
+// @param `$name`
+// @param `$class`
+// @returns
+@function exists($palette, $name, $class) {
+  @each $palette-name, $variant in $palette {
+    @if name.index($palette-name, $name) {
+      @each $variant-class, $color in $variant {
+        @if name.index($variant-class, $class) {
+          @return true;
+        }
+      }
+    }
+  }
+  @return false;
+}
+
+// Examples.
+// $-palette: (
+//   accent: (
+//     accent: (accent basic color, 3%),
+//     accent dark: (accent basic color, 5%),
+//     accent light: (accent basic color, 5%),
+//   ),
+
+//   primary: (
+//     primary: (primary basic color, 3%),
+//     primary dark: (primary basic color, 5%),
+//     primary light: (primary basic color, 15%),
+//     dark: (primary dark, 1%),
+//     test dark: (test dark, 1%)
+//   ),
+// );
+
+// @debug exists($-palette, accent, accent); // true
+// @debug exists($-palette, accent, dark); // true
+// @debug exists($-palette, accent, light); // true
+
+// @debug exists($-palette, accent, none); // true
+// @debug exists($-palette, primary, primary dark); // true

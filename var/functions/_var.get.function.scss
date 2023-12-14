@@ -1,14 +1,22 @@
 // Sass.
+@use 'sass:list';
 @use 'sass:map';
 
 // Variables.
 @use '../var.variables';
 
 // Modules.
-@use '../../list';
+@use '../../list/get/get.bool.function' as list-get-bool;
+@use '../../list/get/get.list.function' as list-get-list;
+@use '../../list/get/get.map.function' as list-get-map;
+@use '../../list/list.index.function' as list-index;
+@use '../../list/remove/remove.type.function' as list-remove-type;
+@use '../../list/remove/remove.value.function' as list-remove-value;
 
 // Functions.
 @use '../../functions/important.function' as *;
+
+// Module functions.
 @use 'var.adjust.function' as *;
 @use 'var.css.function' as *;
 @use 'var.negative.function' as *;
@@ -42,13 +50,13 @@
     @return $name;
   }
 
-  $modifiers: list.get-map($name) or ();
-  $important: if(list.index($name, any, '==', '!important'), true, false);
-  $adjust: list.get-list($name) or map.get($modifiers, adjust) or $adjust;
+  $modifiers: list-get-map.map($name) or ();
+  $important: if(list-index.index($name, any, '==', '!important'), true, false);
+  $adjust: list-get-list.list($name) or map.get($modifiers, adjust) or $adjust;
   $fallback: map.get($modifiers, fallback) or $fallback;
-  $negative: not (list.index($name, any, '==', '!') == null) or map.get($modifiers, negative);
-  $unit: list.get-bool($name) or map.get($modifiers, unit) or $unit;
-  $name: list.remove-type(list.remove-value($name, '!', '!important'), list, bool);
+  $negative: not (list-index.index($name, any, '==', '!') == null) or map.get($modifiers, negative);
+  $unit: list-get-bool.bool($name) or map.get($modifiers, unit) or $unit;
+  $name: list-remove-type.type(list-remove-value.value($name, '!', '!important'), list, bool);
 
   // adjust
   $name: adjust(unit(css(

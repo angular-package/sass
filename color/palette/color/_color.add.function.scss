@@ -1,0 +1,68 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Modules.
+@use '../../name';
+
+// Status: DONE
+// The `color.palette-color-add()` function add `$color-name` and/or `$color-names` to `$palette`.
+// @param `$palette` Palette of `map` type.
+// @param `$name` Exact palette name to add color.
+// @param `$class` Variant class name.
+// @param `$separator` Separator for color names.
+// @param `$color-name` Required color name to add.
+// @arbitrary `$color-names...` Additional color names to add.
+// @returns The returned value is list of color names with added `$color-name` and/or `$color-names`.
+@function add($palette, $name, $class, $separator, $color-name, $color-names...) {
+  @each $palette-name, $variant in $palette {
+    @if name.index($palette-name, $name) {
+      @each $variant-class, $variant-color in $variant {
+        @if name.index($variant-class, $class) {
+          @if list.length($variant-color) > 0 {
+            @if list.separator($variant-color) == space {
+              $variant-color: list.append((), $variant-color, space);
+            } @else if list.separator($variant-color) == comma {
+              $variant-color: ($variant-color,);
+            }
+          }
+
+          $palette: map.merge(
+            $palette,
+            $palette-name,
+            (
+              $variant-class: name.append(
+                $variant-color,
+                $separator,
+                $color-name,
+                $color-names...
+              )
+            )
+          );
+
+        }
+      }
+    }
+  }
+  @return $palette;
+}
+
+// Examples.
+// $-palette: (
+//   accent: (
+//     accent color: (accent basic color, 3%),
+//     accent color dark: (accent basic color, 5%),
+//     accent color light: (accent basic color, 5%),
+//   ),
+
+//   primary: (
+//     primary color: (primary basic color, 3%),
+//     primary color dark: (primary basic color, 5%),
+//     primary color light: (primary basic color, 15%),
+//   ),
+// );
+
+// @debug color-add($-palette, accent, dark, auto, (secondary color light, 5%));
+// @debug color-add($-palette, primary, dark, space, (secondary color light, 5%), (accent color, 15%));
+// @debug color-add($-palette, primary, dark, auto, (secondary color light, 5%), (accent color, 15%));
+// @debug color-add($-palette, primary, dark, comma, (secondary color light, 5%), (accent color, 15%));

@@ -1,0 +1,42 @@
+// Sass.
+@use 'sass:map';
+
+// Functions.
+@use '../../name';
+
+// Status: TODO:
+// The `color.palette-color-remove()` function.
+// @param `$palette`
+// @param `$name`
+// @param `$class`
+// @param `$separator`
+// @param `$color-name`
+// @arbitrary `$color-names...`
+// @returns
+@function remove($palette, $name, $class, $separator, $color-name, $color-names...) {
+  @each $palette-name, $variant in $palette {
+    @if name.index($palette-name, $name) {
+      @each $variant-class, $variant-color in $variant {
+        @if name.index($variant-class, $class) {
+          $palette: map.merge(
+            $palette,
+            $palette-name,
+            ($variant-class: name.remove($variant-color, $color-name, $color-names...))
+          );
+        }
+      }
+    }
+  }
+  @return $palette;
+}
+
+// Examples.
+// $-palette: (
+//   accent: (
+//     accent color: (accent basic color, 3%),
+//     accent color dark: (accent basic color, 5%),
+//     accent color light: (accent basic color, 5%),
+//   )
+// );
+
+// @debug remove($-palette, accent, dark, auto, (secondary color light, 5%));

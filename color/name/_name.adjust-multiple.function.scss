@@ -1,0 +1,93 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use '../../list/list.index.function' as list-index;
+@use '../../list/list.last.function' as list-last;
+@use '../../list/remove/remove.nth.function' as list-remove-nth;
+
+// Module functions.
+@use 'name.adjust.function' as *;
+@use 'name.index.function' as *;
+
+// Status: DONE
+// The `color.adjust-multiple()` function.
+// @arbitrary `$names..., $adjust` List of names to append `$adjustments`, respective adjustments to adjust color `$names`.
+// @returns The returned value.
+@function adjust-multiple($names...) {
+  // Prepare variables.
+  $adjustment: list-last.last($names);
+  $names: list-remove-nth.nth($names, -1);
+  $adjusted: ();
+
+  // Adjustments.
+  $result: ();
+  $index: 1;
+  @each $adjust in if(type-of($adjustment) == map, ($adjustment,), $adjustment) {
+    @if type-of($adjustment) == map {
+      // FEATURE: Adjust all names.
+      @if list-index.index(map.keys($adjust), hue, saturation, lightness, alpha) {
+        @for $i from 1 through list.length($names) {
+          @if not list-index.index($adjusted, $i) {
+            $names: list.set-nth($names, $i, adjust(list.nth($names, $i), $adjust));
+            $adjusted: list.append($adjusted, $i);
+          }
+        }
+      } @else {
+        // FEATURE: Adjust names by color name.
+        @each $adjusted-name, $adjust in $adjust {
+          @for $i from 1 through list.length($names) {
+            @if index(list.nth($names, $i), $adjusted-name) and not list-index.index($adjusted, $i) {
+              $names: list.set-nth($names, $i, adjust(list.nth($names, $i), $adjust));
+              $adjusted: list.append($adjusted, $i);
+            }
+          }
+        }
+      }
+    } @else {
+      // FEATURE: Adjustments as list.
+      @for $i from 1 through list.length($names) {
+        @if map.get($adjust, name) {
+          @if index(list.nth($names, $i), map.get($adjust, name)) and not list-index.index($adjusted, $i) {
+            $names: list.set-nth($names, $i, adjust(list.nth($names, $i), $adjust));
+            $adjusted: list.append($adjusted, $i);
+          }
+        } @else {
+          @if $i == $index and not list.index($adjusted, $i) {
+            $names: list.set-nth($names, $i, adjust(list.nth($names, $i), $adjust));
+            $adjusted: list.append($adjusted, $i);
+          }
+        }
+      }
+    }
+
+    $index: $index + 1;
+  }
+  @return $names;
+}
+
+// Examples.
+// adjust color name
+// @debug adjust-multiple(accent test1, (lightness: 3%)); // ((accent test1 color, 3%),)
+// @debug adjust-multiple(accent test1, (lightness: 3%, alpha: 0.1)); // ((accent test1 color, 3%, 0.1),)
+// @debug adjust-multiple(accent test1, (lightness: 3%, hue: 20deg, saturation: 15%, alpha: 0.1)); // ((accent test1) 20deg 15% 3% 0.1,)
+// @debug adjust-multiple(accent test1, (lightness: 3%, hue: 20deg, saturation: 15%, alpha: 0.1, separator: comma));
+
+// adjust color name by name
+// @debug adjust-multiple(accent test1, primary test2, secondary test3, (primary test2: (lightness: 3%)));
+// @debug adjust-multiple(accent test1, primary test2, secondary test3, (primary test2: (lightness: 3%), secondary test3: (lightness: 15%, alpha: 0.5)));
+
+// adjust color names
+// @debug adjust-multiple(accent test1, primary test2, secondary test3, (lightness: 3%, separator: comma)); // (accent test1, 3%), (primary test2, 3%), (secondary test3, 3%)
+
+// multiple adjustments as list
+// @debug adjust-multiple(accent test1, primary test2, secondary test3, ((lightness: 3%, alpha: 0.5), (), (lightness: 10%),));
+// @debug adjust-multiple(accent test1, primary test2, secondary test3, ((lightness: 3%, alpha: 0.5), (), (), (lightness: 10%),));
+// @debug adjust-multiple(accent test1, primary test2, secondary test3, ((lightness: 3%, alpha: 0.5), (lightness: 10%),));
+// @debug adjust-multiple(accent test1, primary test2, secondary test3, ((lightness: 3%, alpha: 0.1), (lightness: 10%), (lightness: 13%)));
+
+// @debug adjust-multiple(accent test1, primary test2, secondary test3, ((lightness: 3%, alpha: 0.5), (lightness: 10%), (lightness: 13%))); // (accent test1) 3% 0.5, (primary test2) 10%, (secondary test3) 13%
+
+// adjust
+// @debug adjust-multiple(accent test1, primary test2, secondary test3, ((name: secondary test3, lightness: 3%, alpha: 0.5), ()));

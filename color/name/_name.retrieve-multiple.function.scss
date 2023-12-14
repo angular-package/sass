@@ -1,0 +1,57 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use '../../list/list.last.function' as list-last;
+@use '../../list/remove/remove.nth.function' as list-remove-nth;
+
+// Module.
+@use 'name.retrieve.function' as *;
+
+// Status: TODO: retrieve to map
+// The `color.name-retrieve-multiple()` function returns a map with attributes obtained from `$name`.
+// @param `$name` Color name of `list` type.
+// @param `$model` If `name` then retrieved color attributes are set to key of color name.
+// @returns The returned value is a map of attributes obtained from `$name`.
+@function retrieve-multiple($names...) {
+  $options: list-last.last($names);
+  @if type-of($options) == map {
+    $names: list-remove-nth.nth($names, -1);
+  } @else {
+    $options: null;
+  }
+  @for $i from 1 through list.length($names) {
+    $retrieved: retrieve(list.nth($names, $i));
+    @if $options and $retrieved {
+      $retrieved: map.get($retrieved, map.get($options, field));
+    }
+
+    $names: list.set-nth($names, $i, $retrieved);
+  }
+  @return $names;
+}
+
+// Examples.
+// comma separator
+// @debug retrieve-multiple((primary dark, 50%)); // ((name: primary dark, lightness: 50%),)
+// @debug retrieve-multiple((primary dark, 50% 60%)); // ((name: primary dark, lightness: 50% 60%),) // :link 50%, :visited 50%, :hover 60%
+// @debug retrieve-multiple((primary dark, 50% 40% 70% 60%)); // ((name: primary dark, lightness: 50% 40% 70% 60%),) :link 50% :visited 40% :hover 70% :active 60%
+
+// @debug retrieve-multiple((primary dark, 50%, 0.5)); // ((name: primary dark, lightness: 50%, alpha: 0.5),)
+// @debug retrieve-multiple((primary dark, 50deg, 5%, 3%)); // (name: primary dark, hue: 50deg, saturation: 5%, lightness: 3%)
+// @debug retrieve-multiple((primary dark, 50deg, 5%, 3%, 0.9)); // (name: primary dark, hue: 50deg, saturation: 5%, lightness: 3%, alpha: 0.9)
+
+// without comma separator
+// @debug retrieve-multiple((primary dark) 50%); // ((name: primary dark, lightness: 50%),)
+// @debug retrieve-multiple((primary dark) 50% 0.5); // (name: primary dark, lightness: 50%, alpha: 0.5)
+// @debug retrieve-multiple((primary dark) 50deg 5% 3%); // (name: primary dark, hue: 50deg, saturation: 5%, lightness: 3%)
+// @debug retrieve-multiple((primary dark) 50deg 5% 3% 0.9); // (name: primary dark, hue: 50deg, saturation: 5%, lightness: 3%, alpha: 0.9)
+
+// @debug retrieve-multiple((primary dark) ('*' 50%)); // ((name: primary dark, lightness: "*" 50%),)
+// @debug retrieve-multiple((primary dark, ('*' 50%), ('/' 0.5))); // (name: primary dark, lightness: "*" 50%, alpha: "/" 0.5)
+// @debug retrieve-multiple((primary dark, ('*' 5deg), ('*' 2%), ('*' 15%))); // (name: primary dark, hue: "*" 5deg, saturation: "*" 2%, lightness: "*" 15%)
+// @debug retrieve-multiple((primary dark, ('*' 5deg), ('*' 2%), ('*' 15%), ('*' 0.5))); // (name: primary dark, hue: "*" 5deg, saturation: "*" 2%, lightness: "*" 15%, alpha: "*" 0.5)
+
+// Options.
+// @debug retrieve-multiple((primary dark, 50%), (secondary light, 15%), (field: name)); // primary dark, secondary light

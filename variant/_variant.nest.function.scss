@@ -6,59 +6,31 @@
 
 // Functions.
 @use '../color/functions/color.name.function' as *;
-@use '../color/functions/color.retrieve.function' as *;
+@use '../color/name';
 
 // Status: DONE
 // The `variant.nest()` nest indicated by '+' variant of `list` or `map` type.
-// @arbitrary `$values...`
+// @arbitrary `$variants...`
 // @returns The returned value is nested `list` or `map`.
-@function nest($values...) {
+@function nest($variants...) {
   $result: ();
-  @each $value in $values {
-    @each $name, $resolved-value in $value {
-      $-resolved-value: $resolved-value;
+  @each $variant in $variants {
+    @each $name, $class-color in $variant {
       @each $name in if(list.separator($name) == comma, $name, ($name,)) {
         $nested: indicator.index($name, '+');
+        $variant-nested: null;
         @if $nested {
           $name: if($nested, indicator.remove($name, '+'), $name);
-          @if type-of($resolved-value) == map {
-            @each $key, $v in $resolved-value {
-              $resolved-value: map.key-replace($resolved-value, $key, list.nth(selector.nest($name, $key), 1));
+          @if type-of($class-color) == map {
+            @each $key, $v in $class-color {
+              $class-color: map.key-replace($class-color, $key, list.nth(selector.nest($name, $key), 1));
             }
-
-            $result: map.deep-merge($result, ($name: $resolved-value));
           } @else {
-            $retrieved: ();
-            $i: 1;
-            @each $-name in $resolved-value {
-              $retrieved: list.append($retrieved, retrieve($-name), comma);
-              $resolved-value: list.set-nth($resolved-value, $i, map.get(retrieve($-name), name));
-              $i: $i + 1;
-            }
-
-            $resolved-value: selector.nest($name, $resolved-value);
-            @if list.length($retrieved) > 0 {
-              $i: 1;
-              @each $value in $resolved-value {
-                @if list.length(map.keys(list.nth($retrieved, $i))) > 1 {
-                  $resolved-value: list.set-nth($resolved-value, $i, name(
-                    $value,
-                    $hue: map.get(list.nth($retrieved, $i), hue),
-                    $saturation: map.get(list.nth($retrieved, $i), saturation),
-                    $lightness: map.get(list.nth($retrieved, $i), lightness),
-                    $alpha: map.get(list.nth($retrieved, $i), alpha),
-                  ));
-                }
-
-                $i: $i + 1;
-              }
-            }
-
-            $result: map.deep-merge($result, ($name: $resolved-value));
+            $variant-nested: name.nest($name, $class-color);
           }
-        } @else {
-          $result: map.deep-merge($result, ($name: $-resolved-value));
         }
+
+        $result: map.deep-merge($result, ($name: if($nested, $variant-nested, $class-color)));
       }
     }
   }
@@ -69,4 +41,7 @@
 // @debug nest((control: (disabled, error, info, success, warning)));
 // @debug nest((+control: (disabled, error, info, success, warning)));
 // @debug nest((+primary: (color: #aaa, dark: #bbb, light: #ccc)));
+
+// nest color variant
+// @debug nest(((+secondary, primary): (color, dark, light)));
 // @debug nest(((+secondary, primary): (color, (ultra dark, -30%), (mega light, 60%))));

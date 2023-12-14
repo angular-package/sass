@@ -1,0 +1,65 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use '../../list/has/has.number.function' as list-has-number;
+@use '../../selector/selector.nest.function' as selector-nest;
+
+// Module.
+@use 'name.adjust-multiple.function' as *;
+@use 'name.retrieve.function' as *;
+
+// Status: DONE
+// The `color.name-nest()` function nest color names(variant) to create color list.
+// @arbitrary `$selectors...` The name to nest.
+// @returns The returned value are nested color names.
+@function nest($selectors...) {
+  $result: ();
+  $retrieved: ();
+  @for $i from 1 through list.length($selectors) {
+    $name: list.nth($selectors, $i);
+    @if type-of($name) == list and list.separator($name) == comma {
+      @if list-has-number.number($name) {
+        $retrieved: list.append($retrieved, retrieve($name));
+        $selectors: list.set-nth($selectors, $i, map.get(retrieve($name), name));
+      } @else  {
+        @for $j from 1 through list.length($name) {
+          $retrieved: list.append($retrieved, retrieve(list.nth($name, $j)));
+          $name: list.set-nth($name, $j, map.get(retrieve(list.nth($name, $j)), name));
+        }
+
+        $selectors: list.set-nth($selectors, $i, $name);
+      }
+    }
+  }
+  @return adjust-multiple(list.append(selector-nest.nest($selectors...), $retrieved)...);
+}
+
+// Examples.
+// string
+// @debug nest(secondary, (color, dark, light)); // secondary color, secondary color dark, secondary color light
+// @debug nest(secondary, (color, (ultra dark, -30%), (mega light, 60%))); // secondary color, (secondary ultra color dark, -30%), (secondary mega color light, 60%)
+
+// list
+// @debug nest(accent test, (basic color, extended dark, primary light)); // accent test basic color, accent test extended color dark, accent test primary color light
+
+// multiple names
+// @debug nest(accent test, ((basic color, 20%), primary light)); // (accent test basic color, 20%), accent test primary color light
+// @debug nest(accent test, ((basic #{magenta}, 15deg, 5%, 1%, 2%), (extended color, 3deg), primary light), hue);
+
+// multiple prefixes
+// @debug nest((accent test1, primary test2, secondary test3), ((basic color, 20%), dark, (light, 3%))); //
+// @debug nest(accent test1, ((primary test2, 20%), secondary test3)); //
+// @debug nest((accent test1, (primary test2, 3%), secondary test3), (basic color, dark, light)); //
+
+// with suffix
+// @debug nest(accent test, ((basic color, 20%), primary light));
+// @debug nest(accent test, ((basic color, 20%), primary light), hue);
+// @debug nest(accent test, ((basic color, 20%), primary light), (hue, lightness)); // (accent test basic color hue, 20%), accent test primary color light hue
+
+// nest multiple colors
+// @debug nest(accent test, extended ver, (basic color, extended dark, primary light));
+
+// @debug nest(basic, (color, (test dark, 3%, 0.5), light)); // basic color, (basic test dark, 3%, 0.5), basic light
+// @debug nest(basic, (color, ((test dark) 3% 0.5), light)); // basic color, (basic test dark) 3% 0.5, basic light

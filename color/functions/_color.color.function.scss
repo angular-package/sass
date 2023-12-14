@@ -4,14 +4,15 @@
 @use 'sass:meta';
 
 // Modules.
-@use '../../list/get';
-@use '../../list/has';
-@use '../../list/remove';
-@use '../../string';
+@use '../name/hsla';
 
 // Functions.
-@use '../../var/functions/var.get.function' as var;
+@use '../../list/get/get.list.function' as list-get-list;
+@use '../../list/has/has.value.function' as list-has-value;
+@use '../../var/functions/var.get.function' as var-get;
 @use '../functions/color.name.function' as *;
+
+// Module functions.
 @use 'color.hsla-color.function' as *;
 
 // Status: DONE
@@ -40,30 +41,17 @@
   $suffix: null,
 ) {
   @if not (type-of($name) == map) {
-    $name: if(
-      $hue or $saturation or $lightness or $alpha or
-      has.value($name, any, '==', [hsla]) or
-      has.value($name, any, '~=', ':hsla') or
-      has.value($name, any, ':==', number) or
-      (meta.type-of(get.map($name)) == map and has.value(map.values(get.map($name)), any, ':==', number)) or
-      has.value(get.list($name, all), any, ':==', number),
-      ($name: hsla),
-      $name
-    );
+    $name: if(hsla.is($name), ($name: hsla), $name);
   }
   @each $name, $type in if(type-of($name) == map, $name, ($name: var)) {
-    $name: if(
-      meta.type-of($name) == string,
-      string.replace($name, first, ':hsla', ''),
-      remove.value($name, ':hsla', '[hsla]')
-    );
+    $name: hsla.remove($name);
     @if $name == currentcolor or type-of($name) == color {
       @return $name;
     }
     @if $type == hsla {
       @return hsla-color($name, $hue, $saturation, $lightness, $alpha, $dictionary, $delimiter, $prefix, $suffix);
     } @else if $type == var {
-      @return var.get(name($name), null, null, $fallback, $dictionary, $delimiter, $prefix, $suffix);
+      @return var-get.get(name($name), null, null, $fallback, $dictionary, $delimiter, $prefix, $suffix);
     }
   }
 }
@@ -114,3 +102,9 @@
 
 // dictionary
 // @debug color('accent:hsla', $dictionary: (accent: a)); // hsla(var(--s-a-color-hue), var(--s-a-color-saturation), var(--s-a-color-lightness), var(--s-a-color-alpha))
+
+// other
+// @debug color(secondary (saturation: '*' 10%, hue: 5deg));
+// @debug color(secondary light (saturation: '*' 10%, hue: 5deg));
+// @debug color((secondary light) (saturation: '*' 10%, hue: 5deg));
+// @debug color((secondary light) (saturation: '*' 10%, hue: 5deg));

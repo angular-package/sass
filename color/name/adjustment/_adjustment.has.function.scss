@@ -1,0 +1,45 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../../../list/get/get.map.function' as list-get-map;
+@use '../../../list/has/has.number.function' as list-has-number;
+@use '../../../list/list.append.function' as list-append;
+@use '../../../list/list.first.function' as list-first;
+
+// Status: DONE
+// The `color.name-adjustment-has()` function checks whether `$name` and/or `$names` has adjustment.
+// @param `$name` The
+// @arbitrary `$names...`
+// @returns The returned value is list of `bool` or `bool`.
+@function has($name, $names...) {
+  $names: list-append.append((), $name, comma, $names...);
+  @for $i from 1 through list.length($names) {
+    $has: false;
+    @if type-of(list-get-map.map(list.nth($names, $i))) == map {
+      $has: true;
+    } @else {
+      @each $name in list.nth($names, $i) {
+        @if list-has-number.number($name) {
+          $has: true;
+        }
+      }
+    }
+
+    $names: list.set-nth($names, $i, $has);
+  }
+  @return if(list.length($names) == 1, list-first.first($names), $names);
+}
+
+// Examples.
+// number
+// @debug has((primary dark, ('*' 50%), ('/' 0.5))); // true
+// @debug has((primary dark) 50deg 5% 3% 0.9); // true
+// @debug has((primary dark, ('*' 50%), ('/' 0.5)), (primary dark) 50deg 5% 3% 0.9); // true, true
+// @debug has((primary dark, ('*' 50%), ('/' 0.5)), (primary dark) 50deg 5% 3% 0.9, (primary dark, 50deg, 5%, 3%, 0.9)); // true, true, true
+
+// map
+// @debug has((primary dark) (lightness: 15%, alpha: 0.5), primary (lightness: 15%, alpha: 0.5)); // true, true
+
+// false
+// @debug has(primary dark, secondary light); // false, false

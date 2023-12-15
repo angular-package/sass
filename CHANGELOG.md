@@ -1,5 +1,14 @@
 # @angular-package/sass changelog
 
+### v0.17.1-beta [#](https://github.com/angular-package/sass/releases/tag/v0.17.1-beta)
+
+- **Fix** `palette.create()` - adding color to variant colors. [2f277bf]
+- **Fix** `name.adjust()` - change `> 0` to `!=`. [2ab64bc]
+
+[2f277bf]: https://github.com/angular-package/sass/commit/2f277bf3baae46d385921619a2b2455c22d544cc
+[2ab64bc]: https://github.com/angular-package/sass/commit/2ab64bcb8d161fbc8e8ed5571d3ef43600ecfbce
+
+
 ### v0.17.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.17.0-beta)
 
 - **Update** `color/functions` - calculate using adjustment (from name too) all hsla values and move retrieve color to each hsla functions.

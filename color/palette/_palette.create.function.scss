@@ -5,14 +5,14 @@
 // Modules.
 @use '../../function';
 @use '../../meta';
+@use '../../values';
 @use '../../variant';
 @use '../name';
 @use 'color';
 
 // Functions.
 @use '../../list/get/get.list.function' as list-get-list;
-@use '../../list/list.insert-nth.function' as list-insert-nth;
-@use '../../list/list.invert.function' as list-invert;
+@use '../../list/list.append.function' as list-append;
 @use '../../list/list.range.function' as list-range;
 @use '../../list/remove/remove.nth.function' as list-remove-nth;
 
@@ -30,45 +30,51 @@ function.$functions: map.set(function.$functions, color, name, meta.get-function
 @function create($values...) {
   $palette: ();
 
-  // FEATURE: Get additional colors.
-  $variant-colors: ();
+  // FEATURE: Prepare variant colors.
+  $additional-colors: ();
+
+  // Iterate `$values`.
   $i: 1;
   @each $variant in $values {
     @if type-of($variant) == map {
       @each $class, $colors in $variant {
-        $j: 1;
+        // Variant colors to add after iterate.
+        $variant-colors: ();
+
+        // Iterate colors to obtain variant colors.
         @each $color in $colors {
+          // Get indicator index.
+          $indicator-index: variant.indicator-index($color, '+');
+
           // FEATURE: Nest colors.
-          @if variant.indicator-index($color, '+') {
-            $indicator-index: variant.indicator-index($color, '+');
+          @if $indicator-index {
             $color: list.set-nth(
               $color,
               $indicator-index,
               variant.indicator-remove(list.nth($color, $indicator-index), '+')
             );
-            $nested-colors: list-invert.invert(name.nest($color...));
-            @each $nested-color in $nested-colors {
-              $colors: list-insert-nth.insert-nth($colors, $j, $nested-color);
-            }
-
-            $colors: list-remove-nth.nth($colors, $j + list.length($nested-colors));
+            $variant-colors: values.join((separator: comma), $variant-colors, name.nest($color...));
           }
 
           // FEATURE: Get additional colors.
           @else if list.separator($color) == space and list.length($color) > 1 and list.length(list-get-list.list($color, last)) == 0 {
+            // Retrieve variant color.
             $variant-color: name.retrieve(list.nth($color, 1));
-            $variant-colors: map.deep-merge(
-              $variant-colors,
-              ($class: (map.get($variant-color, name): list-range.range($color, 2)))
-            );
-            $color: list.nth($color, 1);
-            $colors: list.set-nth($colors, $j, $color);
-          }
 
-          $j: $j + 1;
+            // Add additional colors from range 2.
+            $additional-colors: map.deep-merge(
+              $additional-colors,
+              (variant.indicator-remove($class, '+'): (map.get($variant-color, name): list-range.range($color, 2)))
+            );
+
+            // Append color to variant colors.
+            $variant-colors: list-append.append($variant-colors, list.nth($color, 1), comma);
+          } @else {
+            $variant-colors: list-append.append($variant-colors, $color, comma);
+          }
         }
 
-        $variant: map.deep-merge($variant, ($class: $colors));
+        $variant: map.deep-merge($variant, ($class: $variant-colors));
       }
 
       $values: list.set-nth($values, $i, $variant);
@@ -94,10 +100,9 @@ function.$functions: map.set(function.$functions, color, name, meta.get-function
   }
 
   // FEATURE: Add additional colors to variant.
-  @if list.length($variant-colors) > 0 {
-    @each $name, $variant in $variant-colors {
+  @if list.length($additional-colors) > 0 {
+    @each $name, $variant in $additional-colors {
       @each $name in if(list.separator($name) == space, ($name,), $name) {
-        $name: variant.indicator-remove($name, '+');
         @each $class, $colors in $variant {
           $palette: color.add($palette, $name, $class, space, $colors...);
         }

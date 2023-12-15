@@ -53,6 +53,7 @@
 
   // FEATURE: Multiple colors in variant
   // core: ((primary dark) (secondary dark) (), error), // DONE
+  // test: ((primary dark) (secondary dark) (), error), // DONE
 
   // FEATURE: Color names
   // control: (disabled, error, info, success, warning), // (control: (disabled: disabled color, error: error color, info: info color, success: success color, warning: warning color))
@@ -84,6 +85,8 @@
   // (+bg, +border): (color, dark, light),
   // ('+gray', +secondary, +primary large): (+xs (color, dark, light),) // REVIEW: Check.
 
+  // core: (dark, light, accent, +primary (color, dark, light), +secondary (color, dark, light)),
+  // +core: (+primary (color, dark, light), +secondary (color, dark, light)),
 )) using($palette) {
   @debug $palette;
 
@@ -136,6 +139,8 @@
 // ([string, string]: [string, string])
 // @debug create(([primary, secondary]: [color, dark])); // (primary: (primary: primary color, primary dark: primary color dark), secondary: (secondary: secondary color, secondary dark: secondary color dark))
 
+
+// REMOVE: Bracketed removed.
 // Bracketed
 // ([string]: [string, [string]])
 // @debug create((['gray']: [xs [color, dark, light]])); // ("gray": (gray xs: gray xs color, gray xs dark: gray xs color dark, gray xs light: gray xs color light))

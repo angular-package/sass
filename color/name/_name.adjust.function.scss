@@ -41,13 +41,13 @@
   $saturation: adjustment.calculate($saturation, map.get($adjustment, saturation), map.get($adjust, saturation), 0%);
 
   // Add hue, saturation, lightness or alpha to color name.
-  @if $lightness and $lightness > 0% {
+  @if $lightness and $lightness != 0% {
     $name: list-append.append(($name,), $lightness, $separator);
-    @if $alpha and $alpha > 0 {
+    @if $alpha and $alpha != 0 {
       $name: list-append.append($name, $alpha, $separator);
-      @if $hue and $hue > 0deg {
+      @if $hue and $hue != 0deg {
         $name: list-insert-nth.insert-nth($name, 2, $hue);
-        @if $saturation and $saturation > 0% {
+        @if $saturation and $saturation != 0% {
           $name: list-insert-nth.insert-nth($name, 3, $saturation);
         }
       }

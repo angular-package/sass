@@ -1,4 +1,5 @@
 @forward 'color' as color-*;
+@forward 'schema' as schema-*;
 @forward 'variant' as variant-*;
 @forward 'palette.create.function';
 @forward 'palette.create.mixin';

@@ -1,0 +1,31 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Modules.
+@use '../../../variant';
+@use '../../name';
+
+// Status: DONE
+// NOTE: consider adding bracketed adjust
+// The `palette.variant-create()` function to  create variant from list.
+// @param `$palette`
+// @param `$name`
+// @returns
+@function create($palette, $name: null) {
+  @each $palette-name, $colors in $palette {
+    $allow: if($name, false, true);
+    @if type-of($colors) == list or type-of($colors) == string {
+      @if name.index($palette-name, $name) {
+        $allow: true;
+      }
+      @if $allow {
+        $palette: map.set($palette, $palette-name, variant.create($colors, $type: color));
+      }
+    }
+  }
+  @return $palette;
+}
+
+// Examples.
+// @debug create((accent: (accent color, (accent basic dark) 3% 0.5, accent light, accent dark), primary: (color, (basic dark) 3% 0.5, light, dark)), accent);

@@ -1,0 +1,21 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../../../list/get/get.list.function' as list-get-list;
+
+// Status:
+// The `schema.has-multiple-colors()` function.
+// @param `$schema`
+// @returns
+@function has-multiple-colors($schema, $indicator: ()) {
+  @return type-of($schema) == list and
+    list.separator($schema) == space and
+    list.length($schema) > 1 and
+    list-get-list.list($schema, last) == $indicator;
+}
+
+// Examples.
+// @debug has-multiple-colors((color, 1%) (dark, 3%) (light, 5%) ());
+// @debug has-multiple-colors((color, 1%) (dark, 3%) (light, 5%) (), ());
+// @debug has-multiple-colors((color, 1%) (dark, 3%) (light, 5%) [], []);

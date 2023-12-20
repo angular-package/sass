@@ -1,5 +1,19 @@
 # @angular-package/sass changelog
 
+### v0.18.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.18.0-beta)
+
+- **Update** `color.palette-create()` handle multiple colors in nested colors and use `variant.create()` function from `palette`. [06544a7]
+- **Fix** `variant.indicator-remove()` - remove indicator in nested list, by checking whether element contains indicator. [7eba13a]
+- **Add** schema palette submodule with `has-multiple-colors()` function to check whether schema to create palette has multiple colors. [2cefe16]
+- **Update** `variant.indicator-index()` use directly `string.index()`. [c21bdb6]
+- **Add** `color.palette-variant-create()` function from `palette.create()` to create variant based on schema. [4d5d2b7]
+
+[06544a7]: https://github.com/angular-package/sass/commit/06544a7c55007525da9ea797a3a68112b0e605b1
+[7eba13a]: https://github.com/angular-package/sass/commit/7eba13ae7d997ddb0cac01dfd6b3cfbf9af9a2c4
+[2cefe16]: https://github.com/angular-package/sass/commit/2cefe16f84eb3ff3b8e353d5af26ea0a0ef477f7
+[c21bdb6]: https://github.com/angular-package/sass/commit/c21bdb6f934d70c975f6bc550f82569551edcff3
+[4d5d2b7]: https://github.com/angular-package/sass/commit/4d5d2b7c8a25fd9a5be63ef97508a7bdb5e23b8a
+
 ### v0.17.1-beta [#](https://github.com/angular-package/sass/releases/tag/v0.17.1-beta)
 
 - **Fix** `palette.create()` - adding color to variant colors. [2f277bf]
@@ -7,7 +21,6 @@
 
 [2f277bf]: https://github.com/angular-package/sass/commit/2f277bf3baae46d385921619a2b2455c22d544cc
 [2ab64bc]: https://github.com/angular-package/sass/commit/2ab64bcb8d161fbc8e8ed5571d3ef43600ecfbce
-
 
 ### v0.17.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.17.0-beta)
 

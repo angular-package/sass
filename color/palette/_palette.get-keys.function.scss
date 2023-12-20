@@ -35,21 +35,21 @@
 }
 
 // Examples.
-$example: (
-  test basic: (
-    basic two: (
-      hue saturation: (
-        lightness alpha: hsla(15deg, 30%, 35%, 1)
-      )
-    ),
+// $example: (
+//   test basic: (
+//     basic two: (
+//       hue saturation: (
+//         lightness alpha: hsla(15deg, 30%, 35%, 1)
+//       )
+//     ),
 
-    extended: (
-      accent: (
-        secondary: ()
-      )
-    )
-  )
-);
+//     extended: (
+//       accent: (
+//         secondary: ()
+//       )
+//     )
+//   )
+// );
 
 // nested 2
 // @debug get-keys($example, test, two); // (test basic) (basic two)

@@ -1,9 +1,13 @@
 // Sass.
 @use 'sass:list';
+@use 'sass:string' as string-slice;
 
 // Modules.
-@use '../../list/remove';
-@use '../../string';
+@use '../../string/string.index.function' as string-index;
+@use '../../string/string.replace.function' as string-replace;
+
+// Functions.
+@use 'indicator.index.function' as *;
 
 // Status: TODO:
 // The `indicator.remove()` function.
@@ -11,32 +15,41 @@
 // @param `$indicator`
 // @returns
 @function remove($item, $indicator) {
-  $i: 1;
   @if type-of($item) == string {
-    @if string.index($item, $indicator) {
-      $item: string.slice($item, 2);
+    @if string-index.index($item, $indicator) {
+      $item: string-slice.slice($item, 2);
     }
-  } @else {
-    @each $value in $item {
-      @if type-of($value) == string {
-        $item: list.set-nth($item, $i, string.replace(#{$value}, all, $indicator, ''));
-      } @else if type-of($value) == list {
-        $j: 1;
-        @each $v in $value {
-          $value: list.set-nth($value, $j, string.replace(#{$v}, all, $indicator, ''));
+  } @else{
+    @for $i from 1 through list.length($item) {
+      @if type-of(list.nth($item, $i)) == string {
+        $item: list.set-nth($item, $i, string-replace.replace(#{list.nth($item, $i)}, all, $indicator, ''));
+      } @else if type-of(list.nth($item, $i)) == list {
+        $list: list.nth($item, $i);
+        @for $j from 1 through list.length($list) {
+          @if string-index.index(list.nth($list, $j), $indicator) {
+            $list: list.set-nth($list, $j, string-replace.replace(#{list.nth($list, $j)}, all, $indicator, ''));
+          }
+
           $j: $j + 1;
         }
 
-        $item: list.set-nth($item, $i, $value);
+        $item: list.set-nth($item, $i, $list);
       }
-
-      $i: $i + 1;
     }
   }
   @return $item;
 }
 
+
+
 // Examples.
-// @debug remove(+background, '+');
-// @debug remove(+bg, '+');
-// @debug type-of(remove(+bg, '+'));
+// @debug remove(+background, '+'); // background
+// @debug remove(+bg, '+'); // bg
+// @debug type-of(remove(+bg, '+')); // string
+
+// Palette name
+// @debug remove((+background, border), '+'); // background, border
+
+// Nested colors.
+// @debug remove(+background basic (color, (light, 1%), (dark, 4%)), '+'); // background basic (color, (light, 1%), (dark, 4%))
+// @debug remove(+background basic (+color, (light, 1%), (dark, 4%)), '+'); // background basic (color, (light, 1%), (dark, 4%))

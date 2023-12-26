@@ -1,17 +1,16 @@
 // Modules.
-@use '../../map';
 @use '../../meta';
 
 // Mixins.
 @use '../../class/class.content.mixin';
-@use '../../property/property.set.mixin' as property;
 @use '../../variant/variant.transform.mixin';
 
 // Functions.
+@use '../../map/map.get.function';
 @use '../../selector/selector.class.function';
 
-// Status:
-// The `class.variant-create()` mixin .
+// Status: DONE
+// The `class.variant-create()` mixin.
 // @param `$variant`
 // @param `$combine`
 // @param `$pseudo-class`
@@ -20,7 +19,7 @@
 // @param `$modifier`
 @mixin create(
   $variant,
-  $combine: false false false,
+  $combine: false false false false,
   $pseudo-class: (),
   $dictionary: (),
   $function: meta.get-function(class, false, selector),

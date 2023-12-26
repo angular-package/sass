@@ -7,6 +7,7 @@
 @use '../color/name/name.retrieve.function' as *;
 
 // Status: TODO:
+// Category: Property variant
 // The `variant.create()` creates a variant built from `$value`.
 // @param `$value` A list or string type to create a variant.
 // @param `$modifier`
@@ -31,7 +32,7 @@
     // }
     @each $value in if(list.separator($value) == comma, $value, ($value,)) {
       $key: $value;
-      @if type-of($value) == list {
+      @if type-of($value) == list and list.length($value) > 0 {
         // Remove !important.
         $key: list.remove-value($key, !important);
 

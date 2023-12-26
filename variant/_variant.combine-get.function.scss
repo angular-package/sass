@@ -6,6 +6,7 @@
 @use '../meta/meta.of-type.function';
 
 // Status: TODO:
+// Category: Property variant.
 // The `variant.combine-get()` function switches between variant combine levels 1 - 4 (`false`/`true`) if `$combine` is `list` or `map`.
 // @param `$combine` A `list` of `bool`, `map`, or `bool` to indicate variant is combined.
 // @param `$level` Variant level 1 - 4 to get from `$combine` combine status.

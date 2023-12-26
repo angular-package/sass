@@ -1,14 +1,19 @@
-// Modules.
-@use '../list';
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../list/list.append.function' as list-append;
 
 // Status: TODO:
+// Category: Property variant.
 // The `variant.append()` function appends `$class`, and `$property` as `map` type.
 // @param `$list` List of variants of `map` type.
 // @param `$class` A value related with variant class.
 // @param `$property` Variant property name.
+// @param `$format`
 // @returns The returned value is a `list` of variants.
 @function append($list, $class, $property, $format: map) {
-  @return list.append(
+  @return list-append.append(
     if(list.length($list) == 0, list.join((), (), $bracketed: true), $list),
     (class: $class, property: $property),
     comma

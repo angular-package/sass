@@ -7,13 +7,21 @@
 @use '../../list/get/get.map.function' as list-get-map;
 @use '../../list/has/has.number.function' as list-has-number;
 @use '../../list/list.first.function' as list-first;
+@use '../../list/list.indexes.function' as list-indexes;
 @use '../../list/list.insert-nth.function' as list-insert-nth;
+@use '../../list/list.nth.function' as list-nth;
 @use '../../list/list.to-map.function' as list-to-map;
 @use '../../list/remove/remove.map.function' as list-remove-map;
+@use '../../list/remove/remove.nth.function' as list-remove-nth;
 @use '../../map/map.pick.function' as map-pick;
+@use '../../map/map.update.function' as map-update;
+@use '../../string/string.replace.function' as string-replace;
+@use '../../string/string.unquote.function' as string-unquote;
 
 // Module functions.
 @use 'adjustment/adjustment.has.function';
+@use 'indicator/indicator.remove.function' as indicator-remove;
+@use 'indicator/indicator.retrieve.function' as indicator-retrieve;
 
 // Status: DONE
 // The `color.name-retrieve()` function returns a map with attributes obtained from `$name`.
@@ -26,6 +34,9 @@
   $attributes: ();
   $result: ();
   $separator: list.separator($name);
+
+  // Input name.
+  $result: map.set($result, input-name, $name);
 
   // Check whether `$name` contains adjustment.
   @if adjustment.has($name) {
@@ -59,12 +70,24 @@
       }
 
       // Create map from `$attributes`.
-      $result: map.set(list-to-map.to-map($name, (name: list string), $attributes...), separator, $separator);
+      $result: map.merge($result, list-to-map.to-map($name, (name: list string), $attributes...));
+      $result: map.set($result, separator, $separator);
     }
-
-  // No adjustments.
   } @else {
-    $result: (name: $name, separator: $separator);
+    // No adjustments.
+    $result: map.merge($result, (name: $name, separator: $separator));
+  }
+
+  // Name has property.
+  $property-index: list-indexes.indexes(map.get($result, name), all, '~=', ':');
+  @if $property-index {
+    $property: string-unquote.unquote(string-replace.replace(indicator-retrieve.retrieve(map.get($result, name), ':'), 'first', ':', ''));
+    $no-property-name: indicator-remove.remove(map.get($result, name), ':');
+    $result: map-update.update($result, (
+      property: $property,
+      property-name: ($property: indicator-remove.remove(map.get($result, input-name), ':')),
+      no-property-name: $no-property-name,
+    ));
   }
 
   // If `$model` is set to name set retrieved adjustment to key of color name.
@@ -120,3 +143,8 @@
 
 // `$model`
 // @debug retrieve((primary dark, '*' 5%, '-' 0.2), $model: name); // (primary dark: (lightness: "*" 5%, alpha: "-" 0.2, separator: comma))
+
+// Retrieve color property.
+// @debug retrieve(primary dark ':color');
+// @debug retrieve((primary dark ':color', 5%));
+// @debug retrieve((primary dark ':color') 5%);

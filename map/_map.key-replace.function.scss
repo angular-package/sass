@@ -13,7 +13,11 @@
 @function key-replace($map, $replace, $replacement) {
   @if type-of($map) == map {
     @each $key, $value in $map {
-      $map: map.remove($map, $key);
+      $merge: false;
+      @if (type-of($key) == string and type-of($replace) == string and type-of($replacement) == string) or $key == $replace {
+        $map: map.remove($map, $key);
+        $merge: true;
+      }
       @if type-of($key) == string and type-of($replace) == string and type-of($replacement) == string {
         @if string.index($key, $replace) {
           $key: string.replace($key, first, $replace, $replacement);
@@ -21,8 +25,9 @@
       } @else if $key == $replace {
         $key: $replacement;
       }
-
-      $map: map.merge($map, ($key: $value));
+      @if $merge {
+        $map: map.merge($map, ($key: $value));
+      }
     }
   }
   @return $map;

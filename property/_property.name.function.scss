@@ -1,8 +1,11 @@
+// Sass.
+@use 'sass:list';
+
 // Modules.
-@use '../list';
 @use '../string';
 
 // Functions.
+@use '../list/remove/remove.duplicate.function' as list-remove-duplicate;
 @use 'property.name-nest.function' as *;
 
 // Status: DONE
@@ -12,11 +15,14 @@
 @function name($names...) {
   $names: name-nest($names...);
   @for $i from 1 through list.length($names) {
-    $names: list.set-nth(
-      $names,
-      $i,
-      string.unquote(string.join('-', list.nth($names, $i))),
-    );
+    // Build name.
+    $name: string.unquote(string.join('-', list.nth($names, $i)));
+
+    // Split and remove potential duplicates.
+    $name: list-remove-duplicate.duplicate(string.split($name, '-'));
+
+    // Build name and set to list.
+    $names: list.set-nth($names, $i, string.unquote(string.join('-', $name)));
   }
   @return if(list.length($names) == 1, list.nth($names, 1), $names);
 }
@@ -24,3 +30,6 @@
 // Examples.
 // @debug name(background, border, color); // background-border-color
 // @debug name((background, border, color)); // background, border, color
+
+// remove duplicates.
+// @debug name(background, background, color); // background-color

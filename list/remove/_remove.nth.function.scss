@@ -11,7 +11,7 @@
   $nts: list.join($n, $nts, comma);
   $result: ();
   @for $i from 1 through list.length($nts) {
-    @if list.nth($nts, $i) < 0 {
+    @if list.nth($nts, $i) and list.nth($nts, $i) < 0 {
       $nts: list.set-nth($nts, $i, list.length($list) - (list.nth($nts, $i) * -1) + 1);
     }
   }

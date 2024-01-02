@@ -6,7 +6,7 @@
 @use '../../var/var.variables' as variables;
 
 // Modules.
-@use 'adjustment';
+@use 'adjustment/adjustment.has.function';
 
 // Module functions.
 @use 'name.create.function' as *;
@@ -22,14 +22,14 @@
 @function replace(
   $name,
   $replace,
-  $type,
+  $type: null,
   $delimiter: map.get(variables.$var, delimiter),
   $shade: (dark, light),
 ) {
   @return if(
     adjustment.has($name),
-    list.set-nth($name, 1, create($update, $type, $delimiter, $shade)),
-    create($update, $type, $delimiter, $shade)
+    list.set-nth($name, 1, create($replace, $type, $delimiter, $shade)),
+    create($replace, $type, $delimiter, $shade)
   );
 }
 

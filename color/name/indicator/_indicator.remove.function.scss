@@ -1,0 +1,37 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use '../../../list/list.indexes.function' as list-indexes;
+@use '../../../list/list.nth.function' as list-nth;
+@use '../../../list/remove/remove.nth.function' as list-remove-nth;
+@use '../adjustment/adjustment.has.function';
+
+// Status: DONE
+// The `color.indicator-remove()` function.
+// @param `$color`
+// @param `$indicator`
+// @arbitrary `$indicators...`
+// @returns
+@function remove($color, $indicator, $indicators...) {
+  @if adjustment.has($color) {
+    $name: list-remove-nth.nth(
+      list-nth.nth($color, 1),
+      list-indexes.indexes(list-nth.nth($color, 1), all, '~=', $indicator, $indicators...)
+    );
+    @return list.set-nth($color, 1, $name);
+  }
+  @return list-remove-nth.nth($color, list-indexes.indexes($color, all, '~=', $indicator, $indicators...)...);
+}
+
+// Examples.
+// @debug remove(primary dark ':background', ':background'); // primary dark
+// @debug remove(primary dark ':color', ':color'); // primary dark
+
+// multiple
+// @debug remove(primary dark ':color', ':color', ':background'); // primary dark
+// @debug remove(primary dark ':color', ':'); // primary dark
+
+// adjustment
+// @debug remove((primary dark ':color', 5%), ':'); // primary dark, 5%

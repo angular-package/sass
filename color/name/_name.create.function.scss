@@ -7,7 +7,9 @@
 
 // Modules.
 @use '../../string';
-@use 'indicator';
+
+// Module functions.
+@use 'indicator/indicator.add.function';
 
 // Status: DONE
 // The `color.name-create()` function creates color name with `color` indicator and `$shade`.

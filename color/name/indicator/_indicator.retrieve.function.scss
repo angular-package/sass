@@ -1,0 +1,28 @@
+// Functions.
+@use '../../../list/list.indexes.function' as list-indexes;
+@use '../../../list/list.nth.function' as list-nth;
+@use '../adjustment/adjustment.has.function';
+
+// Status: DONE
+// The `color.indicator-retrieve()` function.
+// @param `$color`
+// @param `$indicator`
+// @arbitrary `$indicators...`
+// @returns
+@function retrieve($color, $indicator, $indicators...) {
+  $color: if(adjustment.has($color), list-nth.nth($color, 1), $color);
+  @return list-nth.nth(
+    $color,
+    list-indexes.indexes($color, all, '~=', $indicator, $indicators...)...
+  );
+}
+
+// Examples.
+// @debug retrieve(primary dark ':background', ':'); // :background
+// @debug retrieve(primary dark ':color', ':'); // :color
+
+// multiple
+// @debug retrieve(primary dark '!test' ':color', ':', '!'); // '":color" "!test"
+
+// adjustment
+// @debug retrieve((primary dark ':color', 5%), ':'); // :color

@@ -1,29 +1,47 @@
+// Sass.
+@use 'sass:list';
+
 // Modules.
 @use '../../map';
 
 // Functions.
-@use '../../property/property.name.function' as *;
+@use '../../list/list.append.function' as list-append;
+@use '../../property/property.name.function' as property-name;
 
 // Status: TODO:
 // The `property.set()` function.
 // @param `$property`
+// @arbitrary `$properties...`
 // @returns
-@function set($property) {
-  @return map.set(map.deep-merge((
-    pre-base: null,
-    base: null,
-    middle: null,
-    attribute: null,
-    prop-attribute: null,
-    value: null,
+@function set($property, $properties...) {
+  $properties: list-append.append([], $property, comma, $properties...);
+  $i: 1;
+  @each $property in $properties {
+    $properties: list.set-nth($properties, $i, map.set(
+      map.deep-merge((
+        base: null,
+        middle: null,
+        attribute: null,
+        prop-attribute: null,
 
-    // -
-    name: null,
-  ), $property), name, name(
-    map.get-any($property, pre-base, null),
-    map.get-any($property, base, null),
-    map.get-any($property, middle, null),
-    map.get-any($property, attribute, null),
-    map.get-any($property, prop-attribute, null),
-  ));
+        // Set name based on properties above.
+        name: null,
+      ), $property),
+      name,
+      property-name.name(
+        map.get-any($property, base, null),
+        map.get-any($property, middle, null),
+        map.get-any($property, attribute, null),
+        map.get-any($property, prop-attribute, null)
+      )
+    ));
+    $i: $i + 1;
+  }
+  @return if(list.length($properties) == 1, list.nth($properties, 1), $properties);
 }
+
+// Argument structure
+// $property: (base: null, middle: null, attribute: null, prop-attribute: null)
+
+// Examples.
+// @debug set((base: border, middle: top, attribute: left, prop-attribute: radius)); // (base: border, middle: top, attribute: left, prop-attribute: radius, name: border-top-left-radius)

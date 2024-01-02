@@ -16,10 +16,13 @@ function.$functions: map.merge(function.$functions, (variant: meta.module-functi
 
 // Test.
 @include variant.transform(
-  // (
-  //   border: 1px solid red,
-  //   (border, outline): (top: 2px solid blue)
-  // )
+  // FEATURE: Variant 1
+  // (border: 1px solid red)
+  // (border: 1px solid red, (border, outline): (top: 2px solid blue))
+  // (border: (+ (color, test): primary light, background: secondary dark)) // REVIEW: Check +
+
+  // TODO: Here.
+  // ((basic: (background, color, border-color) ()): primary light)
 
   // ((border: outline): 'red')
   // ((border: outline): ((start start: (top, bottom)): 'red'))
@@ -36,6 +39,18 @@ function.$functions: map.merge(function.$functions, (variant: meta.module-functi
   // TODO: Check.
   // (((basic1, basic2): (border, outline)): (((y1, y2): (top, bottom)): (((color, radius): (start, start)): (((primary, secondary): (color, radius)): 1px solid red))))
   // ((border, outline): ((top, bottom): (primary: 1px solid red)))
+
+  // FEATURE: Multiple part of properties.
+  // (border: (color: primary light) (background: secondary dark))
+  // (border: (color: primary light, background: secondary dark) ())
+  // ((border: border-color): () (color: primary light, background: secondary dark) (outline: light) (secondary light)) // FEATURE: property suffix
+  // ((border: border-color): (color: primary light, background color: secondary dark) (outline: light) (secondary light) ()) // FEATURE: property
+  // (border: (left: (primary lighten color, 15%)) (top: (darken color, 3%)) ())
+
+  // FEATURE: Multiple + part of properties.
+  // ((border: (border, outline)): (left color: secondary dark, color: primary light !important) ())
+
+
 
   // FEATURE: Variant 2
   // (border: (top: 1px solid red))
@@ -75,71 +90,151 @@ function.$functions: map.merge(function.$functions, (variant: meta.module-functi
   // ((border, outline): ((top, bottom): 1px solid red, bottom: 2px solid blue))
   // (((basic1, basic2): border, extended: outline): 1px solid red, outline: 2px solid blue)
 
-// FEATURE: Variant 3.
-// (border: (top: (primary: 1px solid red)))
-// ((border, outline): (top: (primary: 1px solid red)))
-// ((border, outline): ((top, bottom): (primary: 1px solid red)))
-// ((border, outline): ((top, bottom): ((primary, secondary): 1px solid red)))
-// (border: (top: ((primary, secondary): 1px solid red)))
-// (border: ((top, bottom): ((primary, secondary): 1px solid red)))
+  // + indicator
+  // (border: (+color: primary light, +radius: 10rem))
+  // (border top: (+color: primary light, +radius: 10rem))
+  // (border: (+(top color): primary light, +radius: 10rem))
 
-// ((basic1: (border, outline)): (top: (primary: 1px solid red)))
-// ((basic1 basic2: (border, outline)): (top bottom: (primary red: 1px solid red)))
+  // (core: (primary lighten: (primary lighten color, 15%) (darken color, 3%) ())) // TODO: Here.
 
-// ((basic1: (border, outline)): ((top bottom: (top, bottom)): (primary: 1px solid red)))
-// ((basic1: (border, outline)): (((top, bottom): (top, bottom)): (primary: 1px solid red)))
-// ((basic1: (border, outline)): (((top, bottom): (top, bottom)): ((primary, secondary): 1px solid red)))
+  // FEATURE: Suffix of properties in `color` variant value.
+  // (border: (top: (color: primary light) (radius: third)))
+  // (border: (top: (color: primary light, radius: third) ()))
 
-// (((basic1, basic2): (border, outline)): (top bottom: (primary red: 1px solid red, secondary: 2px solid blue)))
-// (((basic1, basic2): (border, outline)): (((top, bottom): (top, bottom)): ((primary, secondary): 1px solid red)))
+  // FEATURE: Different base name of properties to specific variants.
+  // ((basic: (test1: border (top, bottom), test2: outline)): (test1: 1px solid red, test2: 2px solid blue))
+  // ((basic: (primary light: (background, border, color), primary dark: (border-top, border-bottom))): (primary light: primary light value, primary dark: primary dark value))
+  // ((basic: (primary light: (background, border, color), primary dark: border (top, bottom))): (primary light: primary light value, primary dark: primary dark value))
 
-// (((basic1, basic2): (border, outline)): (((y1, y2): (top, bottom)): ((primary, secondary): 1px solid red)))
+  // FEATURE: Different base name of properties to specific variants + suffix of properties in variant class.
+  // ((basic: (test1: border (top, bottom), test2: (padding, margin))): ((test1: color): 1px solid red, (test2: (top, bottom)): 2px))
+
+  // FEATURE: Different base name of properties + suffix of properties to specific variants in variant value.
+  // ((basic: (test1: border (top, bottom), test2: outline)): (test1: (color: 1px solid red) (), test2: (left: 2px solid blue) ()))
+
+  // FEATURE: Different base name of properties + part of properties in variant class + suffix of properties in variant value.
+  // ((basic: (test1: border (top, bottom), test2: (padding, margin))): ((test1: left): (radius: 10px) (), (test2: (top, bottom)): 2px))
+  // ((basic: (test1: border (top, bottom), test2: padding)): ((test1: left): (radius: 10px) (color: red) (), test2: (top: 3px) (bottom: 2px) ()))
+  // ((basic: (test1: border (top, bottom), '*': outline)): (test1: (color: 1px solid red) (), test2: (left: 2px solid blue) (), test3: 2px solid red))
 
 
-// FEATURE: Variant 4.
-// ((border, outline): ((top, bottom): ((color, radius): (primary: 1px solid red))))
-// ((border, outline): ((top, bottom): ((color, radius): ((primary, secondary): 1px solid red))))
 
-// ((border, outline): ((top, bottom): ((color, radius): (primary: 1px solid red, secondary: 2px solid blue))))
 
-// ((border, outline) start: ((start, bottom): ((color, radius): (primary: 1px solid red))))
-// ((border, outline) start: ((start, bottom): ((color, radius): ((primary, secondary): 1px solid red))))
+  // FEATURE: Variant 3.
+  // (border: (top: (primary: 1px solid red)))
+  // ((border, outline): (top: (primary: 1px solid red)))
+  // ((border, outline): ((top, bottom): (primary: 1px solid red)))
+  // ((border, outline): ((top, bottom): ((primary, secondary): 1px solid red)))
+  // (border: (top: ((primary, secondary): 1px solid red)))
+  // (border: ((top, bottom): ((primary, secondary): 1px solid red)))
 
-// ((border, outline): ((start, bottom) start: ((color, radius): (primary: 1px solid red))))
-// ((border, outline): ((start, bottom) start: ((color, radius): ((primary, secondary): 1px solid red))))
+  // ((basic1: (border, outline)): (top: (primary: 1px solid red)))
+  // ((basic1 basic2: (border, outline)): (top bottom: (primary red: 1px solid red)))
 
-// ((border, outline): ((start, bottom): ((color, radius) end: (primary: 1px solid red))))
-// ((border, outline): ((start, bottom): ((color, radius) end: ((primary, secondary): 1px solid red))))
+  // ((basic1: (border, outline)): ((top bottom: (top, bottom)): (primary: 1px solid red)))
+  // ((basic1: (border, outline)): (((top, bottom): (top, bottom)): (primary: 1px solid red)))
+  // ((basic1: (border, outline)): (((top, bottom): (top, bottom)): ((primary, secondary): 1px solid red)))
 
-// ((border, outline) item1: ((start, bottom) item2: ((color, radius) item3: (primary: 1px solid red))))
-// ((border, outline) item1: ((start, bottom) item2: ((color, radius) item3: ((primary, secondary): 1px solid red))))
+  // (((basic1, basic2): (border, outline)): (top bottom: (primary red: 1px solid red, secondary: 2px solid blue)))
+  // (((basic1, basic2): (border, outline)): (((top, bottom): (top, bottom)): ((primary, secondary): 1px solid red)))
 
-// ((border, outline): ((top, bottom): ((color, radius): ((primary, secondary): 1px solid red))))
-// ((border, outline): ((top, bottom): (color: (border: 1px solid red))))
-// ((border, outline): ((top, bottom): (color: (primary: 1px solid red))))
+  // (((basic1, basic2): (border, outline)): (((y1, y2): (top, bottom)): ((primary, secondary): 1px solid red)))
 
-// ((basic: (border, outline)): ((top, bottom): ((color, radius): (primary: 1px solid red))))
+  // FEATURE: Different properties to specific variants.
+  // ((basic: (test1: border (top, bottom), test2: outline)): ((left: a): ((test1: b): 1px solid red, test2: 2px solid blue))) // TODO:
 
-// (((basic1, basic2): (border, outline)): (((y1, y2): (top, bottom)): ((color, radius): ((primary, secondary): 1px solid red))))
-// (((basic1, basic2): (border, outline)): (((y1, y2): (top, bottom)): (((end1, end2): (color, radius)): ((primary, secondary): 1px solid red))))
+  // FEATURE: Suffix of properties in `color` variant value.
+  // (border: (top: (left: (color: primary light) (radius: third))))
+  // (border: (top: (left: (color: primary light, radius: third) ())))
+
+  // FEATURE: Different base name of properties to specific variants.
+  // ((basic: (test1: border (top, bottom), test2: outline)): (left: (test1: 1px solid red, test2: 2px solid blue)))
+  // ((basic: (primary light: (background, border, color), primary dark: (border-top, border-bottom))): (left: (primary light: primary light value, primary dark: primary dark value)))
+  // ((basic: (primary light: (background, border, color), primary dark: border (top, bottom))): (left: (primary light: primary light value, primary dark: primary dark value)))
+
+  // FEATURE: Different base name of properties to specific variants + suffix of properties in variant class.
+  // ((basic: (test1: border (top, bottom), test2: (padding, margin))): (left: ((test1: color): 1px solid red, (test2: (top, bottom)): 2px)))
+
+  // FEATURE: Different base name of properties + suffix of properties to specific variants in variant value.
+  // ((basic: (test1: border (top, bottom), test2: outline)): (left: (test1: (color: 1px solid red) (), test2: (left: 2px solid blue) ())))
+
+  // FEATURE: Different base name of properties + part of properties in variant class + suffix of properties in variant value.
+  // ((basic: (test1: border (top, bottom), test2: (padding, margin))): (left: ((test1: left): (radius: 10px) (), (test2: (top, bottom)): 2px)))
+  // ((basic: (test1: border (top, bottom), test2: padding)): (left: ((test1: left): (radius: 10px) (color: red) (), test2: (top: 3px) (bottom: 2px) ())))
+  // ((basic: (test1: border (top, bottom), '*': outline)): ((left: (top, bottom)): (test1: (color: 1px solid red) (), test2: (left: 2px solid blue) (), test3: 2px solid red)))
+
+
+
+
+  // FEATURE: Variant 4.
+  // ((border, outline): ((top, bottom): ((color, radius): (primary: 1px solid red))))
+  // ((border, outline): ((top, bottom): ((color, radius): ((primary, secondary): 1px solid red))))
+
+  // ((border, outline): ((top, bottom): ((color, radius): (primary: 1px solid red, secondary: 2px solid blue))))
+
+  // ((border, outline) start: ((start, bottom): ((color, radius): (primary: 1px solid red))))
+  // ((border, outline) start: ((start, bottom): ((color, radius): ((primary, secondary): 1px solid red))))
+
+  // ((border, outline): ((start, bottom) start: ((color, radius): (primary: 1px solid red))))
+  // ((border, outline): ((start, bottom) start: ((color, radius): ((primary, secondary): 1px solid red))))
+
+  // ((border, outline): ((start, bottom): ((color, radius) end: (primary: 1px solid red))))
+  // ((border, outline): ((start, bottom): ((color, radius) end: ((primary, secondary): 1px solid red))))
+
+  // ((border, outline) item1: ((start, bottom) item2: ((color, radius) item3: (primary: 1px solid red))))
+  // ((border, outline) item1: ((start, bottom) item2: ((color, radius) item3: ((primary, secondary): 1px solid red))))
+
+  // ((border, outline): ((top, bottom): ((color, radius): ((primary, secondary): 1px solid red))))
+  // ((border, outline): ((top, bottom): (color: (border: 1px solid red))))
+  // ((border, outline): ((top, bottom): (color: (primary: 1px solid red))))
+
+  // ((basic: (border, outline)): ((top, bottom): ((color, radius): (primary: 1px solid red))))
+
+  // (((basic1, basic2): (border, outline)): (((y1, y2): (top, bottom)): ((color, radius): ((primary, secondary): 1px solid red))))
+  // (((basic1, basic2): (border, outline)): (((y1, y2): (top, bottom)): (((end1, end2): (color, radius)): ((primary, secondary): 1px solid red))))
+
+  // FEATURE: Multiple properties + different values.
+  // (border: ((): ((): (primary: (color: primary light, background: secondary dark)))))
+
+  // FEATURE: Suffix of properties in `color` variant value.
+  // (border: (top: (left: (color: (color: primary light) (radius: third)))))
+  // (border: (top: (left: (color: (color: primary light, radius: third) ()))))
+
+  // FEATURE: Different base name of properties to specific variants.
+  // ((basic: (test1: border (top, bottom), test2: outline)): (left: (right: (test1: 1px solid red, test2: 2px solid blue))))
+  // ((basic: (primary light: (background, border, color), primary dark: (border-top, border-bottom))): (left: (right: (primary light: primary light value, primary dark: primary dark value))))
+  // ((basic: (primary light: (background, border, color), primary dark: border (top, bottom))): (left: (right: (primary light: primary light value, primary dark: primary dark value))))
+
+  // FEATURE: Different base name of properties to specific variants + suffix of properties in variant class.
+  // ((basic: (test1: border (top, bottom), test2: (padding, margin))): (left: (right: ((test1: color): 1px solid red, (test2: (top, bottom)): 2px))))
+
+  // FEATURE: Different base name of properties + suffix of properties to specific variants in variant value.
+  // ((basic: (test1: border (top, bottom), test2: outline)): (left: (right: (test1: (color: 1px solid red) (), test2: (left: 2px solid blue) ()))))
+
+  // FEATURE: Different base name of properties + part of properties in variant class + suffix of properties in variant value.
+  // ((basic: (test1: border (top, bottom), test2: (padding, margin))): (left: (right: ((test1: left): (radius: 10px) (), (test2: (top, bottom)): 2px))))
+  // ((basic: (test1: border (top, bottom), test2: padding)): (left: (right: ((test1: left): (radius: 10px) (color: red) (), test2: (top: 3px) (bottom: 2px) ()))))
+  // ((basic: (test1: border (top, bottom), '*': outline)): ((left: (top, bottom)): (color: (test1: (color: 1px solid red) (), test2: (left: 2px solid blue) (), test3: 2px solid red))))
 
   ,
-  false false false,
+  false false false false,
   // (1: (class: (base: bbbb)), class: (prefix: spectre, attribute: color, suffix: end))
 ) using($resolved) {
   @each $resolved in $resolved {
     @include class.content(
       map.get($resolved, (class, name)),
-      ':visited',
-      (border: b, basic1: bas),
+      // ':visited',
+      // (border: b, basic1: bas),
     ) {
-      @include property.set(
-        (map.get($resolved, (property, name)): map.get($resolved, (property, value))),
-        true,
+      @each $property in if(type-of(map.get($resolved, property)) == map, (map.get($resolved, property),), map.get($resolved, property)) {
+        @include property.set(
+          (map.get($property, name): map.get($property, value)),
+          // true,
 
-        // function to call
-        $arguments: (dictionary: (border: b, basic1: bas)),
-      );
+          // function to call
+          // $arguments: (dictionary: (border: b, basic1: bas)),
+        );
+      }
     }
   }
 }

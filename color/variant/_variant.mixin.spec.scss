@@ -803,3 +803,7 @@
 // .property2-class2 {
 //   property2: var(--s-value-color);
 // }
+
+
+// @include variant(((border background, outline): (primary dark:  primary dark, secondary light: secondary light)));
+

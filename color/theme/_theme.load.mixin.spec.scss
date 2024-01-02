@@ -1,9 +1,16 @@
 // Sass.
+@use 'sass:list';
 @use 'sass:map';
 
 // Modules.
 @use '../../color';
+@use '../../variant';
+
+// Mixin.
 @use 'theme.load.mixin' as *;
+
+// Functions.
+@use '../../list/get/get.list.function' as list-get-list;
 
 // TODO: Check dark word.
 // Theme.
@@ -104,41 +111,50 @@ $-theme: (
   )
 ) !default;
 
+// test b: (+primary style ((color a, 5%), (dark b, 1%) (else c, 2%) (), (light d, 2%),),),
+
 //
 $-dark-1: (
   dark: (
-    // Core colors variant.
-    core: (dark, light, accent, (primary (color, dark, light)), (secondary (color, dark, light))),
+    // // Core colors variant.
+    // core: (dark, light, accent, +primary (color, dark, (lighten, 15%) (darken, 3%) ()), +secondary (color, dark, light)),
+    // core: (dark, light, accent, +primary (color, dark, (lighten ':color', 15%) (darken ':background', 3%) ()), +secondary (color, dark, light)),
+    core: (dark, light, accent, +primary (color, dark, (lighten, 15%) (darken ':color', 3%) ()), +secondary (color, dark, light)),
 
-    // Gray colors.
-    +gray: (color, dark, light),
+    // Multiple colors.
+    // multiple: ((primary light ':background') (secondary dark ':color') (),),
+    // multiple: ((primary light ':background', 15%) (secondary dark ':color', 1%) (),),
+    // multiple: ((primary light ':background', 15%),),
 
-    // Bg colors.
-    +bg: ((color, 15%), dark, light),
+    // // Gray colors.
+    // +gray: (color, dark, light),
 
-    // Border colors.
-    +border: (dark, light),
+    // // Bg colors.
+    // +bg: ((color, 15%), dark, light),
 
-    // Link colors.
-    +link: (color, dark, light),
+    // // Border colors.
+    // +border: (dark, light),
 
-    // Control colors.
-    control: (
-      disabled: disabled,
-      error: error,
-      info: info,
-      success: success,
-      warning: warning
-    ),
+    // // Link colors.
+    // +link: (color, dark, light),
 
-    // Body colors.
-    +body: (bg, font),
+    // // Control colors.
+    // control: (
+    //   disabled: disabled,
+    //   error: error,
+    //   info: info,
+    //   success: success,
+    //   warning: warning
+    // ),
 
-    // Other colors.
-    other: (
-      code: code,
-      highlight: highlight
-    )
+    // // Body colors.
+    // +body: (bg, font),
+
+    // // Other colors.
+    // other: (
+    //   code: code,
+    //   highlight: highlight
+    // )
   )
 ) !default;
 
@@ -180,8 +196,14 @@ $-dark-2: (
 
 // Load theme.
 // @include load($-dark-1, false) using($color-scheme, $palette-name, $variant) {
+//   @each $class, $colors in $variant {
+//     @debug $colors;
+//   }
+
 //   @include color.variant-create((background: $variant));
 // }
+
+// @include color.variant-create(((basic: border): ((top, bottom): (primary dark: ((background, border) color: primary dark, outline color: accent), secondary: secondary light))));
 
 // @include load($-dark-1, false, dark) using($color-scheme, $palette-name, $variant) {
 //   @include color.variant-create((background: $variant));

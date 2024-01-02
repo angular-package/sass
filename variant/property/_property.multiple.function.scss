@@ -1,0 +1,50 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use '../../list/list.append.function' as list-append;
+@use '../modifier/modifier.retrieve.function';
+
+// Status: DONE
+// Category: Property variant.
+// The `variant.property-multiple()` function.
+// @param `$properties`
+// @param `$modifier`
+// @param `$type`
+// @param `$level`
+// @arbitrary `$key-fallback...`
+// @returns
+@function multiple($properties, $modifier, $type, $level, $key-fallback...) {
+  $result: [];
+  @each $name-value in $properties {
+    // FEATURE: Does not have property then add from base.
+    @if not(type-of($name-value) == map) and list.length($name-value) > 0 {
+      $retrieved: modifier.retrieve($modifier, $type, $level, $key-fallback...);
+      @if map.get($retrieved, base) {
+        $name-value: (map.get($retrieved, base): $name-value,);
+      }
+    }
+    @each $name, $value in $name-value {
+      $retrieved: modifier.retrieve(
+        $modifier,
+        $type,
+        $level,
+        (prop-attribute, $name),
+        (value, $value),
+        $key-fallback...
+      );
+
+      // FEATURE: If first element of list is empty then base is `null`.
+      @if list.length(list.nth($properties, list.length($properties))) == 0 {
+        $retrieved: map.set($retrieved, base, null);
+      }
+
+      $result: list-append.append($result, $retrieved, comma);
+    }
+  }
+  @return $result;
+}
+
+// Examples.
+// @debug multiple();

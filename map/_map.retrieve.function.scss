@@ -10,7 +10,11 @@
 // @param `$fallback` The fallback value if returned is `null`.
 // @return The return value is a retrieved value from `$map` or `$fallback`.
 @function retrieve($method, $map, $key, $fallback: null) {
-  @return if($method == get, get($map, $key, $fallback), if($method == pick, pick($map, $key...), $map or $fallback));
+  @return if(
+    $method == get,
+    get($map, $key, $fallback),
+    if($method == pick, pick($map, $key...), $map or $fallback)
+  );
 }
 
 // Examples.

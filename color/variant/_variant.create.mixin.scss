@@ -39,6 +39,7 @@
   $function: meta.get-function(class, false, selector),
   $modifier: null,
 ) {
+  @warn "In previous version `$modifier` is equal to (class: (prop-attribute: color), property: (prop-attribute: color))";
   @include class-variant-create.create(
     $variant,
     $combine,

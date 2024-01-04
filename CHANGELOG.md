@@ -3,7 +3,7 @@
 ### v0.19.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.19.0-beta)
 
 - **Update** [`variant.property-set()`](https://github.com/angular-package/sass/blob/develop/variant/property/_property.set.function.scss) function to handle multiple properties. [8081d34]
-- **Update** [`variant.transform()`](https://github.com/angular-package/sass/blob/develop/color/variant/_variant.mixin.scss) to handle multiple properties. [305e6c1]
+- **Update** [`variant.transform()`](https://github.com/angular-package/sass/blob/develop/variant/_variant.transform.mixin.scss) to handle multiple properties. [305e6c1]
 - **Update** [`schema.has-multiple-colors()`](https://github.com/angular-package/sass/blob/develop/color/palette/schema/_schema.has-multiple-colors.function.scss) function - add `$result` argument to return `bool` or `index` of found indicator. [eca4b74]
 - **Add** [`color.name-indicator-remove()`](https://github.com/angular-package/sass/blob/develop/color/name/indicator/_indicator.remove.function.scss) function to remove indicator or multiple indicators from color name..[ce0cdc4]
 - **Add** [`color.name-indicator-retrieve()`](https://github.com/angular-package/sass/blob/develop/color/name/indicator/_indicator.retrieve.function.scss) function to retrieve indicator or multiple indicators from color name. [b5679c6]

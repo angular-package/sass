@@ -1,15 +1,22 @@
+// Sass.
+@use 'sass:list';
+
 // Modules.
-@use '../list';
 @use '../map';
-@use '../selector';
 
 // Functions.
-@use '../color/name/name.retrieve.function' as *;
+@use '../color/name/name.retrieve.function' as color-name-retrieve;
+@use '../list/has/has.list.function' as list-has-list;
+@use '../list/list.nth.function' as list-nth;
+@use '../list/remove/remove.list.function' as list-remove-list;
+@use '../list/remove/remove.value.function' as list-remove-value;
 
 // Status: TODO:
+// Category: Property variant
 // The `variant.create()` creates a variant built from `$value`.
 // @param `$value` A list or string type to create a variant.
 // @param `$modifier`
+// @param `$type`
 // @returns The returned value is a variant of map type where (class: value).
 @function create($value, $modifier: null, $type: null) {
   $result: ();
@@ -31,19 +38,20 @@
     // }
     @each $value in if(list.separator($value) == comma, $value, ($value,)) {
       $key: $value;
-      @if type-of($value) == list {
+      @if type-of($value) == list and list.length($value) > 0 {
         // Remove !important.
-        $key: list.remove-value($key, !important);
+        $key: list-remove-value.value($key, !important);
 
         // FEATURE: Color variant.
         @if $type == color {
-          $key: map.get(retrieve($key), name);
+          $color: color-name-retrieve.retrieve($key);
+          $key: map.get($color, no-property-name) or map.get($color, name);
         } @else {
           // FEATURE: Check key.
           @if list.separator($key) == comma {
-            $key: list.nth($key, 1);
-          } @else if list.separator($key) == space and list.has-list($key) {
-            $key: list.remove-list($key);
+            $key: list-nth.nth($key, 1);
+          } @else if list.separator($key) == space and list-has-list.has-list($key) {
+            $key: list-remove-list.list($key);
           }
         }
       }

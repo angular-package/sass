@@ -1,0 +1,71 @@
+// Sass.
+@use 'sass:list';
+
+// Modules.
+@use '../../map';
+
+// Status: TODO:
+// The `variant.modifier-retrieve()` function.
+// @param `$modifier` A map type value from which `$key-fallback` are retrieved.
+// @param `$type` String type `property` or `class` to retrieve from `$modifier`.
+// @param `$level` Variant level from `1` to `4`.
+// @arbitrary `$key-fallback...` List of keys to retrieve from `$modifier`.
+// @returns The returned value is `map` with `$key-fallback` .
+@function retrieve($modifier, $type, $level, $key-fallback...) {
+  $result: ();
+  @each $key in $key-fallback {
+    $attribute: if(list.length($key) > 1, list.nth($key, 1), $key);
+    $result: map.set(
+      $result,
+      $attribute,
+      map.get-any(
+        $modifier,
+        ($level, $type, $attribute),
+        ($type, $attribute),
+        if(list.length($key) > 1, list.nth($key, 2), null)
+      )
+    );
+  }
+  @return $result;
+}
+
+// Examples.
+// $-modifier: (
+//   property: (
+//     1: (
+//       base: null,
+//       middle: null,
+//       attribute: null,
+//       prop-attribute: null,
+//     ),
+//     base: null,
+//     middle: null,
+//     attribute: null,
+//     prop-attribute: null,
+//   ),
+//   class: (
+//     4: (
+//       prefix: null,
+//       base: null,
+//       middle: top,
+//       pre-attribute: null,
+//       attribute: null,
+//       prop-attribute: null,
+//       last-attribute: null,
+//       value-class: null,
+//       suffix: null,
+//     ),
+//     prefix: null,
+//     base: null,
+//     middle: null,
+//     pre-attribute: null,
+//     attribute: null,
+//     prop-attribute: null,
+//     last-attribute: null,
+//     value-class: null,
+//     suffix: null,
+//   ),
+// );
+
+// @debug retrieve($-modifier, property, null, prefix, (base, outline)); // (prefix: null, base: outline)
+// @debug retrieve($-modifier, property, 4, (middle, radius)); // (middle: radius)

@@ -9,7 +9,7 @@
 div {
   @include class.variant-create((
     // FEATURE: Variant 1.
-    outline: 2px solid blue,
+    // outline: 2px solid blue,
     // border top: 1px solid yellow,
     // border: 1px solid red,
     // border top: 1px solid red,
@@ -60,7 +60,7 @@ div {
 
     // (border, outline) top: (color: 1px solid red),
     // ((border, outline) start: ((start, end) color: 1px solid red)),
-    // (border, outline) '+top': ((+color, radius): 1px solid red), // TODO: DONE
+    // (border, outline) '+top': ((+color, radius): 1px solid red), // TODO:
 
     // (basic: border): (top: 1px solid red),
     // (basic: border): ((one: top): 1px solid red),

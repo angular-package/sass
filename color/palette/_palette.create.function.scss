@@ -16,10 +16,11 @@
 @use '../../list/list.append.function' as list-append;
 @use '../../list/list.range.function' as list-range;
 @use '../../list/remove/remove.nth.function' as list-remove-nth;
-@use 'variant/variant.create.function' as variant-create;
+@use '../../map/map.key-replace.function' as map-key-replace;
 
 // Module functions.
 @use '../functions/color.name.function' as *;
+@use 'variant/variant.create.function' as variant-create;
 
 // Add.
 function.$functions: map.set(function.$functions, color, name, meta.get-function(name));
@@ -35,85 +36,93 @@ function.$functions: map.set(function.$functions, color, name, meta.get-function
   // Iterate `$palettes`.
   $i: 1;
   @each $palette in $palettes {
+    // Palette must be map type (name: schema).
     @if type-of($palette) == map {
+      // Iterate palette.
       @each $palette-name, $colors in $palette {
-        // Nested variant.
-        $nested-variant: variant.indicator-index($palette-name, '+');
+        // To create color palette need schema list type not variant.
+        @if not (type-of($colors) == map) {
+          // Nested variant.
+          $nested-variant: variant.indicator-index($palette-name, '+');
 
-        // Variant colors to add after iterate.
-        $variant-colors: ();
+          // Variant colors to add after iterate.
+          $variant-colors: ();
 
-        // Iterate colors to obtain variant colors.
-        @each $color in $colors {
-          // Get nested colors indicator index.
-          $nested-colors-index: variant.indicator-index($color, '+');
+          // Iterate colors to obtain variant colors.
+          @each $color in $colors {
+            // Get nested colors indicator index.
+            $nested-colors-index: variant.indicator-index($color, '+');
 
-          // FEATURE: Nested colors.
-          @if $nested-colors-index {
-            $j: 1;
-            @each $nested-color in $color {
-              @if type-of($nested-color) == list {
-                $name: variant.indicator-remove(list-range.range($color, 1, $j - 1), '+');
-                $k: 1;
-                @each $part-color in $nested-color {
-                  // FEATURE: Get additional/multiple colors in nested colors.
-                  @if schema.has-multiple-colors($part-color) {
-                    // Retrieve variant color.
-                    $variant-color: name.retrieve(list.nth($part-color, 1), name);
+            // FEATURE: Nested colors.
+            @if $nested-colors-index {
+              $j: 1;
+              @each $nested-color in $color {
+                @if type-of($nested-color) == list {
+                  $name: variant.indicator-remove(list-range.range($color, 1, $j - 1), '+');
+                  $k: 1;
+                  @each $part-color in $nested-color {
+                    // FEATURE: Get additional/multiple colors in nested colors.
+                    @if schema.has-multiple-colors($part-color) {
+                      // Retrieve variant color.
+                      $variant-color: name.retrieve(list.nth($part-color, 1), name);
 
-                    // If variant nested.
-                    @if $nested-variant {
-                      // REVIEW: Check `name.nest()`
-                      $variant-color: list.nth(name.nest(variant.indicator-remove($palette-name, '+'), $name, $variant-color), 1);
-                    } @else {
-                      $variant-color: list.nth(name.nest($name, $variant-color), 1);
+                      // If variant nested.
+                      @if $nested-variant {
+                        // REVIEW: Check `name.nest()`
+                        $variant-color: list.nth(name.nest(variant.indicator-remove($palette-name, '+'), $name, $variant-color), 1);
+                      } @else {
+                        $variant-color: list.nth(name.nest($name, $variant-color), 1);
+                      }
+
+                      // Add additional colors from range `2`.
+                      $additional-colors: map.deep-merge(
+                        $additional-colors,
+                        (
+                          variant.indicator-remove($palette-name, '+'): (
+                            name.indicator-remove($variant-color, ':'): list-range.range($part-color, 2)
+                          )
+                        )
+                      );
+                      $nested-color: list.set-nth($nested-color, $k, list.nth($part-color, 1));
                     }
 
-                    // Add additional colors from range `2`.
-                    $additional-colors: map.deep-merge(
-                      $additional-colors,
-                      (variant.indicator-remove($palette-name, '+'): ($variant-color: list-range.range($part-color, 2)))
-                    );
-                    $nested-color: list.set-nth($nested-color, $k, list.nth($part-color, 1));
+                    $k: $k + 1;
                   }
 
-                  $k: $k + 1;
+                  $color: list.set-nth($color, $j, $nested-color);
                 }
 
-                $color: list.set-nth($color, $j, $nested-color);
+                $j: $j + 1;
               }
 
-              $j: $j + 1;
+              $variant-colors: values.join(
+                (separator: comma),
+                $variant-colors,
+                name.nest(variant.indicator-remove($color, '+')...)
+              );
             }
 
-            // FIX: indicator-remove.
-            $color: list.set-nth(
-              $color,
-              $nested-colors-index,
-              variant.indicator-remove(list.nth($color, $nested-colors-index), '+'),
-            );
-            $variant-colors: values.join((separator: comma), $variant-colors, name.nest($color...));
+            // FEATURE: Get additional/multiple colors.
+            @else if schema.has-multiple-colors($color) {
+              // Retrieve variant color.
+              $variant-color: name.retrieve(list.nth($color, 1), name);
+
+              // Add additional colors from range `2`.
+              $additional-colors: map.deep-merge(
+                $additional-colors,
+                (variant.indicator-remove($palette-name, '+'): ($variant-color: list-range.range($color, 2)))
+              );
+
+              // Append color to variant colors.
+              $variant-colors: list-append.append($variant-colors, list.nth($color, 1), comma);
+            } @else {
+              $variant-colors: list-append.append($variant-colors, $color, comma);
+            }
           }
 
-          // FEATURE: Get additional/multiple colors.
-          @else if schema.has-multiple-colors($color) {
-            // Retrieve variant color.
-            $variant-color: name.retrieve(list.nth($color, 1), name);
-
-            // Add additional colors from range `2`.
-            $additional-colors: map.deep-merge(
-              $additional-colors,
-              (variant.indicator-remove($palette-name, '+'): ($variant-color: list-range.range($color, 2)))
-            );
-
-            // Append color to variant colors.
-            $variant-colors: list-append.append($variant-colors, list.nth($color, 1), comma);
-          } @else {
-            $variant-colors: list-append.append($variant-colors, $color, comma);
-          }
+          $palette: map.deep-merge($palette, ($palette-name: $variant-colors));
         }
 
-        $palette: map.deep-merge($palette, ($palette-name: $variant-colors));
       }
 
       $palettes: list.set-nth($palettes, $i, $palette);
@@ -143,6 +152,34 @@ function.$functions: map.set(function.$functions, color, name, meta.get-function
         }
       }
     }
+  }
+
+  // FEATURE: Remove property indicator ':' + assign.
+  @each $name, $variant in $palettes {
+    @each $class, $colors in $variant {
+      @if schema.has-multiple-colors($colors) {
+        $i: 1;
+        @each $color in $colors {
+          @if list.length($color) > 0 {
+            $property-name: name.retrieve($color, property-name);
+            @if $property-name {
+              $colors: list.set-nth($colors, $i, $property-name);
+            }
+          }
+
+          $i: $i + 1;
+        }
+
+        $variant: map.set($variant, $class, $colors);
+      } @else {
+        $property-name: name.retrieve($colors, property-name);
+        @if $property-name {
+          $variant: map.set($variant, $class, ($property-name,));
+        }
+      }
+    }
+
+    $palettes: map.set($palettes, $name, $variant);
   }
   @return $palettes;
 }

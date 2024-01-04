@@ -5,10 +5,6 @@
 // Variables.
 @use 'property.variables' as variables;
 
-// Modules.
-@use '../function';
-@use '../values';
-
 // Functions.
 @use '../functions/important.function' as *;
 @use '../list/remove/remove.value.function';

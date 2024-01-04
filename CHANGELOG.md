@@ -1,5 +1,41 @@
 # @angular-package/sass changelog
 
+### v0.19.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.19.0-beta)
+
+- **Update** [`variant.property-set()`](https://github.com/angular-package/sass/blob/develop/variant/property/_property.set.function.scss) function to handle multiple properties. [8081d34]
+- **Update** [`variant.transform()`](https://github.com/angular-package/sass/blob/develop/variant/_variant.transform.mixin.scss) to handle multiple properties. [305e6c1]
+- **Update** [`schema.has-multiple-colors()`](https://github.com/angular-package/sass/blob/develop/color/palette/schema/_schema.has-multiple-colors.function.scss) function - add `$result` argument to return `bool` or `index` of found indicator. [eca4b74]
+- **Add** [`color.name-indicator-remove()`](https://github.com/angular-package/sass/blob/develop/color/name/indicator/_indicator.remove.function.scss) function to remove indicator or multiple indicators from color name..[ce0cdc4]
+- **Add** [`color.name-indicator-retrieve()`](https://github.com/angular-package/sass/blob/develop/color/name/indicator/_indicator.retrieve.function.scss) function to retrieve indicator or multiple indicators from color name. [b5679c6]
+- **Update** [`color.palette-create()`](https://github.com/angular-package/sass/blob/develop/color/palette/_palette.create.function.scss) function - remove property indicator `':'` and assign property to color. [d853f93]
+- **Update** [`variant.create()`](https://github.com/angular-package/sass/blob/develop/variant/_variant.create.function.scss) function to retrieve color, and use `no-property-name` among with `name` in `$type` equal to `color`. [5bfe892]
+- **Add** [`variant.property-multiple-is()`](https://github.com/angular-package/sass/blob/develop/variant/property/_property.multiple-is.function.scss) function to check whether `$value` is multiple properties. [e97555c]
+- **Add** [`variant.property-multiple()`](https://github.com/angular-package/sass/blob/develop/variant/property/_property.multiple.function.scss) function to handle multiple properties in variant. [dc7f92c]
+- **Fix** [`color.name-replace()`](https://github.com/angular-package/sass/blob/develop/color/name/_name.replace.function.scss) function - change variable `$update` to `$replace`, set argument `$type` to `null` by default, use directly `adjustment.has()`. [5e7068e]
+- **Update** [`color.variant-create()`](https://github.com/angular-package/sass/blob/develop/color/variant/_variant.create.mixin.scss) function - remove color indicator from class and property, and handle multiple properties. [fda9204]
+- **Update** [`name.retrieve()`](https://github.com/angular-package/sass/blob/develop/color/name/_name.retrieve.function.scss) function - add  `input-name`, `property`, `property-name`, `no-property-name` properties - retrieve property from name. [534249e]
+- **Update** [`property.name()`](https://github.com/angular-package/sass/blob/develop/property/_property.name.function.scss) function - remove duplicates from name. [7eb5e2e]
+- **Update** add to [`list.remove-duplicate()`](https://github.com/angular-package/sass/blob/develop/list/remove/_remove.duplicate.function.scss) function `$remove` arbitrary argument to define what duplicate remove. [3fab0a7]
+- **Update** move [`modifier-retrieve()`](https://github.com/angular-package/sass/blob/develop/variant/modifier/_modifier.retrieve.function.scss) function to module [`modifier`](https://github.com/angular-package/sass/tree/develop/variant/modifier). [15b13f1]
+- **Fix** forward main index. [eb1b424]
+
+[8081d34]: https://github.com/angular-package/sass/commit/8081d3444ddb73aff2f79055e97884b39c7be4eb
+[305e6c1]: https://github.com/angular-package/sass/commit/305e6c1d06dfaf0152fa0976ace215dff8828337
+[eca4b74]: https://github.com/angular-package/sass/commit/eca4b7488eafe9d7e4f72ec7bf914a5bc83d7e5d
+[ce0cdc4]: https://github.com/angular-package/sass/commit/ce0cdc4ca1397c800b8e372e99fd3a31ea506a10
+[b5679c6]: https://github.com/angular-package/sass/commit/b5679c6924547decd094f9a24c66d57540daa6ff
+[d853f93]: https://github.com/angular-package/sass/commit/d853f939164eb919f5eb32c2b891600078461153
+[5bfe892]: https://github.com/angular-package/sass/commit/5bfe8921086acadc1a77fe752640b19d874046e1
+[e97555c]: https://github.com/angular-package/sass/commit/e97555c6b96a7b53d08cb3b7f1e0faa5868bf741
+[dc7f92c]: https://github.com/angular-package/sass/commit/dc7f92c437d247e86d69844cb637b11dd81bc0b2
+[5e7068e]: https://github.com/angular-package/sass/commit/5e7068ed58df3088b8ff686c71a6e8290bf77c05
+[fda9204]: https://github.com/angular-package/sass/commit/fda92040fc088a2f78b26e44e4b4d39d38317271
+[534249e]: https://github.com/angular-package/sass/commit/534249ecad780d6fa0fd6e85fb4acf310cce4745
+[7eb5e2e]: https://github.com/angular-package/sass/commit/7eb5e2ea49300c778a916f4bc6fa208d496ea063
+[3fab0a7]: https://github.com/angular-package/sass/commit/3fab0a7e552d6da685016f98e67494772d02dd40
+[15b13f1]: https://github.com/angular-package/sass/commit/15b13f13c12bd5a03a375a0af648091e0906be3e
+[eb1b424]: https://github.com/angular-package/sass/commit/eb1b424f717a59480ea47c6593caaf3f4e84bdae
+
 ### v0.18.0-beta [#](https://github.com/angular-package/sass/releases/tag/v0.18.0-beta)
 
 - **Update** `color.palette-create()` handle multiple colors in nested colors and use `variant.create()` function from `palette`. [06544a7]

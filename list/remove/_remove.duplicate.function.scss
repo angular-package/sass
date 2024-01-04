@@ -1,14 +1,21 @@
 // Sass.
 @use 'sass:list';
 
-// Status: TODO: Add values.
+// Status: DONE
 // The `remove.duplicate()` function returns the list without duplicate values.
 // @param `$list` The list from which duplicate values are being removed.
+// @arbitrary `$remove...` Arbitrary list of elements to remove from `$list`.
 // @return The return value is the list with unique elements.
-@function duplicate($list) {
+@function duplicate($list, $remove...) {
   $result: ();
   @for $i from 1 through list.length($list) {
-    @if not list.index($result, list.nth($list, $i)) {
+    $append: false;
+    @if list.length($remove) > 0 and not list.index($remove, list.nth($list, $i)) {
+      $append: true;
+    } @else if not list.index($result, list.nth($list, $i)) {
+      $append: true;
+    }
+    @if $append {
       $result: list.append($result, list.nth($list, $i), list.separator($list));
     }
   }
@@ -17,7 +24,7 @@
 
 // Examples.
 // string
-// @debug duplicate(('a', 'b', 'a', 'c', ('d', 'e', 'f'), 'h', 'g', 'h', 'i', 'j', 'k')); // "b", "c", ("d", "e", "f"), "i", "j", "k"
+// @debug duplicate(('a', 'b', 'a', 'c', ('d', 'e', 'f'), 'h', 'g', 'h', 'i', 'j', 'k')); // "a", "b", "c", ("d", "e", "f"), "h", "g", "i", "j", "k"
 
 // number
 // @debug duplicate((0.9, 1, 1.1, 1, 2, 'a', 2, 'b', 3, 3, 4, 5, 6, 7, 8)); // 0.9, 1, 1.1, 2, "a", "b", 3, 4, 5, 6, 7, 8
@@ -28,3 +35,6 @@
 // none
 // @debug duplicate(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', 'i', 'j', 'k')); // "a", "b", "c", ("d", "e", "f"), "g", "h", "i", "j", "k"
 
+// remove specific duplicates
+// @debug duplicate(('a', 'b', 'a', 'c', 'c', ('d', 'e', 'f'), 'h', 'g', 'h', 'i', 'j', 'k'), 'c'); // "a", "b", "a", ("d", "e", "f"), "h", "g", "h", "i", "j", "k"
+// @debug duplicate(('a', 'b', 'a', 'c', 'c', ('d', 'e', 'f'), 'h', 'g', 'h', 'i', 'j', 'k'), 'c', 'a'); // "b", ("d", "e", "f"), "h", "g", "h", "i", "j", "k"

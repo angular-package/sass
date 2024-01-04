@@ -1,0 +1,16 @@
+// Modules.
+@use '../../list/get/get.list.function' as list-get-list;
+@use '../../list/get/get.map.function' as list-get-map;
+
+// Status: DONE
+// The `variant.property-multiple-is()` function.
+// @param `$value` Value to check.
+// @returns The returned value is `bool` indicating whether `$properties` are multiple.
+@function multiple-is($value) {
+  @return type-of($value) == list and type-of(list-get-map.map($value)) == map;
+}
+
+// Examples.
+// @debug multiple-is((color: primary light) (radius: third)); // true
+// @debug multiple-is((color: primary light) (radius: third)); // true
+// @debug multiple-is((color: primary light, radius: third) ()); // true

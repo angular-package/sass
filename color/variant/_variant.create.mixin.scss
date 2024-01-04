@@ -24,7 +24,6 @@
 // @param `$important`
 // @param `$pseudo-class`
 // @param `$dictionary`
-// @param `$property`
 // @param `$function`
 // @param `$modifier`
 @mixin create(
@@ -40,10 +39,7 @@
   $function: meta.get-function(class, false, selector),
   $modifier: null,
 ) {
-  $modifier: map.deep-merge((
-    class: (prop-attribute: color),
-    property: (prop-attribute: color),
-  ), $modifier or ());
+  @warn "In previous version `$modifier` is equal to (class: (prop-attribute: color), property: (prop-attribute: color))";
   @include class-variant-create.create(
     $variant,
     $combine,
@@ -52,16 +48,18 @@
     $function,
     $modifier,
   ) using($resolved) {
-    @include color(
-      (map-get.get($resolved, (property, name)): map-get.get($resolved, (property, value))),
-      $hue,
-      $saturation,
-      $lightness,
-      $alpha,
-      null,
-      $important,
-      $dictionary: $dictionary,
-    );
+    @each $property in if(type-of(map.get($resolved, property)) == map, (map.get($resolved, property),), map.get($resolved, property)) {
+      @include color(
+        (map.get($property, name): map.get($property, value)),
+        $hue,
+        $saturation,
+        $lightness,
+        $alpha,
+        null,
+        $important,
+        $dictionary: $dictionary,
+      );
+    }
     @content($resolved);
   }
 }

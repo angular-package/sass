@@ -87,6 +87,8 @@
 
   // core: (dark, light, accent, +primary (color, dark, light), +secondary (color, dark, light)),
   // +core: (+primary (color, dark, light), +secondary (color, dark, light)),
+
+  // core: ((primary light, 15%) (secondary dark ":color", 1%) (),) // FEATURE: last element equal to `()` indicates multiple colors
 )) using($palette) {
   @debug $palette;
 

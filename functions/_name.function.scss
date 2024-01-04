@@ -1,22 +1,28 @@
+// Sass.
+@use 'sass:list';
+
 // Variables.
 @use '../variables';
 
 // Functions.
+@use '../list/list.extract-map.function' as list-extract-map;
+@use '../list/remove/remove.map.function' as list-remove-map;
+@use '../map/map.deep-merge.function' as map-deep-merge;
+@use '../map/map.get.function' as map-get;
+@use '../map/map.pick.function' as map-pick;
+@use '../map/map.remove.function' as map-remove;
+@use '../map/map.values.function' as map-values;
 @use '../string/string.join.function';
 @use '../values/values.combine.function';
 
-// Modules.
-@use '../list';
-@use '../map';
-
-// Status:
+// Status: DONE
 // The `name()` function defines name from the given list and `$dictionary`, separated by `$delimiter`.
 // @param `$dictionary`
 // @param `$delimiter`
 // @param `$prefix`
 // @param `$suffix`
 // @param `$config`
-// @return
+// @returns
 @function name(
   $name,
   $dictionary: (),
@@ -28,37 +34,37 @@
   $delimiter: if(list.length($delimiter) == 0, null, $delimiter);
 
   // Get dictionary extracted from the list.
-  $extracted-map: map.get(list.extract-map($name), map, ());
+  $extracted-map: map-get.get(list-extract-map.extract-map($name), map, ());
 
   // Remove the map from the `$name`.
-  $name: list.remove-map($name);
+  $name: list-remove-map.map($name);
 
   // Merge extracted map dictionary with the `$dictionary`.
-  $dictionary: map.deep-merge($dictionary, map.get($extracted-map, dictionary, $extracted-map));
+  $dictionary: map-deep-merge.deep-merge($dictionary, map-get.get($extracted-map, dictionary, $extracted-map));
 
   // Add `$delimiter`, `$prefix` and `$suffix` to the `$dictionary`.
-  $dictionary: map.deep-merge((
-      map.get($config, prefix, prefix): $prefix,
-      map.get($config, delimiter, delimiter): $delimiter,
-      map.get($config, suffix, suffix): $suffix
+  $dictionary: map-deep-merge.deep-merge((
+      map-get.get($config, prefix, prefix): $prefix,
+      map-get.get($config, delimiter, delimiter): $delimiter,
+      map-get.get($config, suffix, suffix): $suffix
     ),
     $dictionary
   );
 
   // Name structure.
-  $name: map.values(
-    map.pick($dictionary, prefix, suffix),
-    values.combine((method: join), map.get($config, prefix, prefix), $name, map.get($config, suffix, suffix))...
+  $name: map-values.values(
+    map-pick.pick($dictionary, prefix, suffix),
+    values.combine((method: join), map-get.get($config, prefix, prefix), $name, map-get.get($config, suffix, suffix))...
   );
 
   // Translate + add delimiter.
   $name: values.combine(
-    (method: join, delimiter: map.get($config, delimiter, delimiter)),
-    map.values(map.remove($dictionary, prefix, suffix), $name...)...
+    (method: join, delimiter: map-get.get($config, delimiter, delimiter)),
+    map-values.values(map-remove.remove($dictionary, prefix, suffix), $name...)...
   );
 
   // Translate delimiter.
-  $name: map.values(map.pick($dictionary, delimiter), $name...);
+  $name: map-values.values(map-pick.pick($dictionary, delimiter), $name...);
 
   // Join list elements to the string.
   @return string.join('', $name...);

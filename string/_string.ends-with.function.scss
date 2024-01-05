@@ -1,0 +1,35 @@
+// Sass.
+@use 'sass:string';
+
+// Modules.
+@use '../meta';
+
+// Functions.
+@use 'string.index.function' as string-index;
+
+// Status: DONE
+// The `string.ends-with()` function determines whether `$string` ends with `$search-string` at `$position`.
+// @param `$string` String to determine that it ends with `$search-string` at `$position`.
+// @param `$search-string` String to determine that ends in `$string` at `$position`.
+// @param `$position` Position at which `$search-string` is expected to be found.
+// @returns The returned value is a `bool` indicating whether `$string` ends with `$search-string` at `$position`.
+@function ends-with($string, $search-string, $position: null) {
+  @if meta.of-type(string, $string, $search-string) {
+    $index: string-index.index($string, $search-string);
+    $allow: if($position, $position and $index == $position, true);
+    @if $allow {
+      @return ($index - 1) + string.length($search-string) == string.length($string);
+    }
+  }
+  @return false;
+}
+
+// Examples.
+// $-text: 'Primary color red';
+
+// @debug ends-with($-text, 'red'); // true
+// @debug ends-with($-text, 'color red'); // true
+
+// Position.
+// @debug ends-with($-text, 'color red', 9); // true
+// @debug ends-with($-text, 'color red', 4); // false

@@ -1,5 +1,6 @@
-@forward 'pick.key-substring.function';
-@forward 'pick.key-type.function';
+@forward 'substring' as substring-*;
+@forward 'pick.field-type.function';
 @forward 'pick.pattern.function';
+@forward 'pick.substring.function';
 @forward 'pick.type.function';
 @forward 'pick.value-type.function';

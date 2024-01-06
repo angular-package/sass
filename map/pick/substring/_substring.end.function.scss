@@ -10,11 +10,11 @@
 @use '../../../list/list.append.function' as *;
 
 // Status: DONE
-// The `pick.substring-end()` function returns a copy of `$map` with keys of start substrings.
-// @param `$map` A map from which keys of start substrings are picked.
-// @param `$end-substring` Substring of key to pick from `$map`.
-// @arbitrary `$end-substrings...` Substrings of keys to pick from `$map`.
-// @return The return value is a copy of `$map` with keys associated with start substrings.
+// The `pick.substring-end()` function returns a copy of `$map` with keys of end substrings.
+// @param `$map` A map from which keys of end substrings are picked.
+// @param `$substring-end` Substring end of key to pick from `$map`.
+// @arbitrary `$substrings-end...` List of end substrings of keys to pick from `$map`.
+// @return The return value is a copy of `$map` with keys associated with end substrings.
 @function end($map, $substring-end, $substrings-end...) {
   $result: ();
   @each $substring in append((), $substring-end, comma, $substrings-end...) {

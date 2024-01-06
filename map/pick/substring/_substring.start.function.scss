@@ -12,8 +12,8 @@
 // Status: DONE
 // The `pick.substring-start()` function returns a copy of `$map` with keys of start substrings.
 // @param `$map` A map from which keys of start substrings are picked.
-// @param `$substring-start` Substring of key to pick from `$map`.
-// @arbitrary `$substrings-start...` Substrings of keys to pick from `$map`.
+// @param `$substring-start` Substring start of key to pick from `$map`.
+// @arbitrary `$substrings-start...` List of start substrings of keys to pick from `$map`.
 // @return The return value is a copy of `$map` with keys associated with start substrings.
 @function start($map, $substring-start, $substrings-start...) {
   $result: ();

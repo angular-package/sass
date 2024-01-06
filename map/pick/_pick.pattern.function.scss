@@ -4,11 +4,12 @@
 
 // Functions.
 @use '../../list/list.append.function' as *;
-@use 'pick.key-substring.function' as *;
+@use 'pick.substring.function' as *;
 @use 'pick.type.function' as *;
 
 // Modules.
 @use '../../string';
+@use 'substring';
 
 // Status: DONE
 // The `pick.pattern()` function returns a copy of `$map` filtered by using pattern.
@@ -20,12 +21,12 @@
   $result: ();
   @each $pattern in append((), $pattern, comma, $patterns...) {
     @if type-of($pattern) == string {
-      @if list.index(string.index($pattern, '^', '$'), 1) {
-        $position: string.slice($pattern, 1, 1);
-        $pattern: string.replace($pattern, first, $position, '');
-        $result: map.deep-merge($result, key-substring($map, ($position: $pattern)));
+      @if string.index($pattern, '^') == 1 {
+        $result: map.deep-merge($result, substring.start($map, string.slice($pattern, 2)));
+      } @else if string.index($pattern, '$') == 1 {
+        $result: map.deep-merge($result, substring.end($map, string.slice($pattern, 2)));
       } @else if string.index($pattern, '*') {
-        $result: map.deep-merge($result, key-substring($map, string.replace($pattern, first, '*', '')));
+        $result: map.deep-merge($result, substring($map, string.replace($pattern, first, '*', '')));
       } @else if string.index($pattern, 'value:') or string.index($pattern, 'key:') {
         $result: map.deep-merge($result, type($map, $pattern));
       }

@@ -1,0 +1,128 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Modules.
+@use '../../../meta';
+@use '../../../string';
+
+// Functions.
+@use '../../../list/list.append.function' as *;
+
+// Status: DONE
+// The `pick.substring-end()` function returns a copy of `$map` with keys of start substrings.
+// @param `$map` A map from which keys of start substrings are picked.
+// @param `$end-substring` Substring of key to pick from `$map`.
+// @arbitrary `$end-substrings...` Substrings of keys to pick from `$map`.
+// @return The return value is a copy of `$map` with keys associated with start substrings.
+@function end($map, $substring-end, $substrings-end...) {
+  $result: ();
+  @each $substring in append((), $substring-end, comma, $substrings-end...) {
+    @if type-of($substring) == string {
+      @each $key in map.keys($map) {
+        $key: if(meta.of-type(color number string, $key), #{$key}, $key);
+        @if string.ends-with($key, $substring) {
+          $result: map.deep-merge($result, ($key: map.get($map, $key)));
+        }
+      }
+    }
+  }
+  @return $result;
+}
+
+// Examples.
+// $-theme: (
+//   dark: (
+//     'dark.palette': (),
+
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
+//   ),
+//   basic: (
+//     '9971test': 1,
+//     '2test': 2,
+//     '3test': 3,
+//     '4test': 4,
+//     '5test': 5,
+
+//     'test9971': 1,
+//     'test2': 2,
+//     'test3': 3,
+//     'test4': 4,
+//     'test5': 5,
+
+//     'default.palette': (),
+
+//     'gray.palette': (
+//       'gray': 'gray' color,
+//       'gray' dark: 'gray' dark,
+//       'gray' light: 'gray' light
+//     ),
+
+//     'bg.palette': (
+//       bg: bg color,
+//       bg dark: bg dark,
+//       bg light: bg light
+//     ),
+
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
+
+//     extended small: (
+//       '': primary,
+//       dark: primary dark,
+//       light: primary light
+//     ),
+
+//     [primary]: (
+//       primary dark: primary dark,
+//     ),
+
+//     (key1, key2): (
+//       primary: primary1
+//     ),
+
+//     key1: primary,
+
+//     // calculation
+//     calc(400px + 10%): calculation,
+//     calculation: calc(400px + 10%),
+
+//     // bool
+//     false: bool,
+//     bool: false,
+
+//     // color
+//     #fff: color,
+//     color: #fff,
+
+//     // function
+//     get-function(append): function,
+//     function: get-function(append),
+
+//     // map
+//     (a: 1, b: 2): map,
+//     map: (a: 1, b: 2),
+
+//     // null
+//     'null': null,
+//     null: 'null',
+
+//     // number
+//     15: number,
+//     number: 15,
+
+//     // string
+//     firstname: string,
+//     string: firstname,
+//   )
+// );
+
+// @debug end(map.get($-theme, basic), 'key1'); // (key1: primary)
+// @debug end(map.get($-theme, basic), 'test'); // (9971test: 1, 2test: 2, 3test: 3, 4test: 4, 5test: 5)

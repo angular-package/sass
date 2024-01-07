@@ -10,7 +10,7 @@
 // @param `$map` A map from which keys of values of `$types` are picked.
 // @param `$type` Required type of the value to pick from `$map`.
 // @arbitrary `$types...` Types of the values to pick from `$map`.
-// @return The return value is a copy of `$map` with a values of types associated with `$types`.
+// @returns The return value is a copy of `$map` with a values of types associated with `$types`.
 @function type($map, $type, $types...) {
   $result: ();
   @each $type in append((), $type, comma, $types...) {

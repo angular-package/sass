@@ -12,7 +12,7 @@
 // @param `$type` The required `bool`, `calculation`, `color`, `function`, `list`, `map`, `null`, `number` or `string` type
 // of the property value to pick from `$map`.
 // @arbitrary `$types...` Additional value types to pick from `$map`.
-// @return The return value is a copy of `$map` with values associated with `$type`,  `$types`.
+// @returns The return value is a copy of `$map` with values associated with `$type`,  `$types`.
 @function value-type($map, $type, $types...) {
   $result: ();
   @each $type in append((), $type, comma, $types...) {

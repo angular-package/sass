@@ -14,7 +14,7 @@
 // @param `$map` A map from which keys of `$substrings` are picked.
 // @param `$substring` Substring of key to pick from `$map`.
 // @arbitrary `$substrings...` Substrings of keys to pick from `$map`.
-// @return The return value is a copy of `$map` with keys associated with `$substrings`.
+// @returns The return value is a copy of `$map` with keys associated with `$substrings`.
 @function substring($map, $substring, $substrings...) {
   $result: ();
   @each $substring in append((), $substring, comma, $substrings...) {

@@ -3,7 +3,7 @@
 @use 'sass:map';
 
 // Functions.
-@use '../../list/list.append.function' as *;
+@use '../../list/list.append.function' as list-append;
 @use 'pick.type.function' as *;
 @use 'pick.value-type.function' as *;
 
@@ -16,10 +16,10 @@
 // @param `$field-type` Required key as pattern `field:type` where field can be `value` or `key` and type
 // bool, calculation, color, function, list, map, null, number or string, to pick properties with the value and/or key of the specified type.
 // @arbitrary `$field-types...` Additional keys as pattern to pick from `$map`.
-// @return The return value is a copy of `$map` with values and/or keys associated with types.
+// @returns The return value is a copy of `$map` with values and/or keys associated with types.
 @function field-type($map, $field-type, $field-types...) {
   $result: ();
-  @each $pattern in append((), $field-type, comma, $field-types...) {
+  @each $pattern in list-append.append((), $field-type, comma, $field-types...) {
     @if type-of($pattern) == string {
       @if list.index(string.index($pattern, 'value:', 'key:'), 1) {
         @each $field, $type in string.to-map($pattern) {
@@ -32,78 +32,78 @@
 }
 
 // Examples.
-$-theme: (
-  dark: (
-    'dark.palette': (),
+// $-theme: (
+//   dark: (
+//     'dark.palette': (),
 
-    basic large: (
-      '': border,
-      dark: border dark,
-      light: border light
-    ),
-  ),
-  basic: (
-    'default.palette': (),
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
+//   ),
+//   basic: (
+//     'default.palette': (),
 
-    'gray.palette': (
-      'gray': 'gray' color,
-      'gray' dark: 'gray' dark,
-      'gray' light: 'gray' light
-    ),
+//     'gray.palette': (
+//       'gray': 'gray' color,
+//       'gray' dark: 'gray' dark,
+//       'gray' light: 'gray' light
+//     ),
 
-    'bg.palette': (
-      bg: bg color,
-      bg dark: bg dark,
-      bg light: bg light
-    ),
+//     'bg.palette': (
+//       bg: bg color,
+//       bg dark: bg dark,
+//       bg light: bg light
+//     ),
 
-    basic large: (
-      '': border,
-      dark: border dark,
-      light: border light
-    ),
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
 
-    extended small: (
-      '': primary,
-      dark: primary dark,
-      light: primary light
-    ),
+//     extended small: (
+//       '': primary,
+//       dark: primary dark,
+//       light: primary light
+//     ),
 
-    [primary]: (
-      primary dark: primary dark,
-    ),
+//     [primary]: (
+//       primary dark: primary dark,
+//     ),
 
-    (key1, key2): (
-      primary: primary1
-    ),
+//     (key1, key2): (
+//       primary: primary1
+//     ),
 
-    key1: primary,
+//     key1: primary,
 
-    // calculation
-    calc(400px + 10%): calculation,
+//     // calculation
+//     calc(400px + 10%): calculation,
 
-    // bool
-    false: bool,
+//     // bool
+//     false: bool,
 
-    // color
-    #fff: color,
+//     // color
+//     #fff: color,
 
-    // function
-    get-function(append): function,
+//     // function
+//     get-function(append): function,
 
-    // map
-    (a: 1, b: 2): map,
+//     // map
+//     (a: 1, b: 2): map,
 
-    // null
-    null: null,
+//     // null
+//     null: null,
 
-    // number
-    15: number,
+//     // number
+//     15: number,
 
-    // string
-    firstname: string,
-  )
-);
+//     // string
+//     firstname: string,
+//   )
+// );
 
 // pattern: key and/or value type
 // @debug field-type(map.get($-theme, basic), 'key:list', 'value:string');

@@ -1,0 +1,138 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use '../../list/list.append.function' as list-append;
+@use '../../list/list.index.function' as list-index;
+
+// Status: DONE
+// The `map.pick-index()` function picks properties of keys found by `list.index()` function.
+// @param `$map` A map from which keys found by `list.index()` are picked.
+// @param `$search-key` Element of list to find by `list.index()` function.
+// @arbitrary `$search-keys...` Elements of list to find by `list.index()` function.
+// @returns The returned value is a copy of `$map` with keys found by `list.index()` function.
+@function index($map, $search-key, $search-keys...) {
+  $result: ();
+  @each $search in list-append.append((), $search-key, comma, $search-keys...) {
+    @each $key, $value in $map {
+      @if list-index.index($key, $search) {
+        $result: map.deep-merge($result, ($search: $value));
+      }
+    }
+  }
+  @return $result;
+}
+
+// Alias name for `index()`.
+@function by-index($map, $search-key, $search-keys...) {
+  @return index($map, $search-key, $search-keys...);
+}
+
+// Alias name for `index()`.
+@function by-list-index($map, $search-key, $search-keys...) {
+  @return index($map, $search-key, $search-keys...);
+}
+
+// Examples.
+// $-theme: (
+//   dark: (
+//     'dark.palette': (),
+
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
+//   ),
+//   basic: (
+//     '9971test': 1,
+//     '2test': 2,
+//     '3test': 3,
+//     '4test': 4,
+//     '5test': 5,
+
+//     'test9971': 1,
+//     'test2': 2,
+//     'test3': 3,
+//     'test4': 4,
+//     'test5': 5,
+
+//     'default.palette': (),
+
+//     'palette.gray': (
+//       'gray': 'gray' color,
+//       'gray' dark: 'gray' dark,
+//       'gray' light: 'gray' light
+//     ),
+
+//     'gray.palette': (
+//       'gray': 'gray' color,
+//       'gray' dark: 'gray' dark,
+//       'gray' light: 'gray' light
+//     ),
+
+//     'bg.palette': (
+//       bg: bg color,
+//       bg dark: bg dark,
+//       bg light: bg light
+//     ),
+
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
+
+//     extended small: (
+//       '': primary,
+//       dark: primary dark,
+//       light: primary light
+//     ),
+
+//     [primary]: (
+//       primary dark: primary dark,
+//     ),
+
+//     (key1, key2): (
+//       primary: primary1
+//     ),
+
+//     key1: primary,
+
+//     // calculation
+//     calc(400px + 10%): calculation,
+//     calculation: calc(400px + 10%),
+
+//     // bool
+//     false: bool,
+//     bool: false,
+
+//     // color
+//     #fff: color,
+//     color: #fff,
+
+//     // function
+//     get-function(append): function,
+//     function: get-function(append),
+
+//     // map
+//     (a: 1, b: 2): map,
+//     map: (a: 1, b: 2),
+
+//     // null
+//     'null': null,
+//     null: 'null',
+
+//     // number
+//     15: number,
+//     number: 15,
+
+//     // string
+//     firstname: string,
+//     string: firstname,
+//   )
+// );
+
+// @debug index(map.get($-theme, basic), small, large);
+// @debug index(map.get($-theme, basic), key1, key2);

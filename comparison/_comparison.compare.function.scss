@@ -4,12 +4,16 @@
 @use 'sass:math';
 @use 'sass:meta';
 
+// Variables.
+@use 'comparison.operators.var' as *;
+
 // Modules.
 @use '../string';
 @use 'greater';
 @use 'less';
 
 // Functions.
+@use '../map/pick/pick.index.function' as map-pick-index;
 @use '../meta/meta.of-type.function' as *;
 @use 'comparison.equal.function' as *;
 
@@ -47,15 +51,16 @@
   $operator: string.replace($operator, first, '!', '');
 
   // Use the function depending on the given operator.
-  $function: map.get((
-    '===': meta.get-function(compatible, $module: math),
-    '~=': meta.get-function(index, $module: string),
-    '==': meta.get-function(equal),
-    '=': meta.get-function(equal),
-    '>': meta.get-function(than, $module: greater),
-    '>=': (meta.get-function(than, $module: greater), meta.get-function(equal)),
-    '<': meta.get-function(than, $module: less),
-    '<=': (meta.get-function(than, $module: less), meta.get-function(equal)),
+  $function: map.get(map-pick-index.index(
+    $operators,
+    '===',
+    '~=',
+    '==',
+    '=',
+    '>',
+    '>=',
+    '<',
+    '<=',
   ), $operator);
 
   // Call the functions to compare.
@@ -95,6 +100,8 @@
 // ':' type
 // '(:)' map keys length
 // '(,)' list length
+// '?~=' string.index() operator
+// '?=' list.index() operator
 
 // Examples.
 // ==

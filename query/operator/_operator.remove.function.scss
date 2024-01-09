@@ -1,0 +1,38 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:string';
+
+// Variable.
+@use 'operator.var' as *;
+
+// Functions.
+@use '../../list/list.index.function' as list-index;
+@use '../../list/remove/remove.nth.function' as list-remove-nth;
+@use '../../string/string.index.function' as string-index;
+
+// Status: DONE
+// The `query.operator-remove()` function.
+// @param `$pattern`
+// @param `$operators`
+// @returns
+@function remove($pattern, $operators: $operators) {
+  @each $operator, $function in $operators {
+    @if list-index.index(string-index.index($pattern, $operator), 1)
+      or list-index.index(list-index.index($pattern, $operator...), 1) {
+      @if type-of($pattern) == string {
+        @return string.slice($pattern, list.length($operator) + 1);
+      } @else if type-of($pattern) == list {
+        @return #{list-remove-nth.nth($pattern, 1)};
+      }
+    }
+  }
+  @return null;
+}
+
+// Examples.
+// @debug remove('?=test'); // test
+// @debug remove('?=' test); // test
+
+// null
+// @debug remove('??=test'); // null

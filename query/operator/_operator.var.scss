@@ -1,0 +1,21 @@
+// Sass.
+@use 'sass:map';
+@use 'sass:meta';
+
+// Variables.
+@use '../../comparison/comparison.operators.var';
+@use '../../function/function.variables' as *;
+
+// Functions.
+@use '../../list/list.index.function';
+@use '../../string/string.index.function';
+
+// Operators.
+$operators: (
+  // Index and value operators.
+  ('?=', '?=>'): meta.get-function(index, false, list), // indicates use of `list.index()` that returns index '?=' or value '?=>'
+  ('?~=', '?~=>'): meta.get-function(index, false, string), // indicates use of `string.index()` that returns index '?~=' or value '?~=>'
+);
+
+// Add to functions.
+$functions: map.deep-merge($functions, map.deep-merge($operators, comparison.$operators));

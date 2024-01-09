@@ -1,0 +1,27 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Variables.
+@use 'operator.var' as *;
+
+// Functions.
+@use '../../list/list.index.function' as list-index;
+
+// Status: DONE
+// The `query.operator-is()` function checks whether `$value` is operator from `$operators` map.
+// @param `$value` Operator of `string` type to determine.
+// @param `$operators` Operators to determine `$operator` .
+// @returns The returned value is `bool` or `null`.
+@function is($value, $operators: $operators) {
+  @each $operator, $function in $operators {
+    @if list-index.index($operator, $value) {
+      @return true;
+    }
+  }
+  @return false;
+}
+
+// Examples.
+// @debug is('?='); // true
+// @debug is('?~='); // true

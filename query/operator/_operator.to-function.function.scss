@@ -1,0 +1,22 @@
+// Sass.
+@use 'sass:map';
+@use 'sass:meta';
+
+// Variable.
+@use 'operator.var' as *;
+
+// Functions.
+@use '../../map/map.get-index.function' as map-get-index;
+
+// Status: DONE
+// The `query.operator-to-function()` function returns function of given `$operator`.
+// @param `$operator` Operator to return function.
+// @param `$operators` Operators to pick by using `$operator` argument.
+// @returns The returned value is function or `null`.
+@function to-function($operator, $operators: $operators) {
+  @return map-get-index.get-index($operators, $operator);
+}
+
+// Examples.
+// @debug to-function('?=');
+// @debug to-function('?~=');

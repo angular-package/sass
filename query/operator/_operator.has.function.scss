@@ -1,0 +1,29 @@
+// Sass.
+@use 'sass:list';
+
+// Variables.
+@use 'operator.var' as *;
+
+// Functions.
+@use 'operator.is.function' as operator-is;
+@use 'operator.retrieve.function' as operator-retrieve;
+
+// Status: DONE
+// The `query.operator-has()` function checks whether `$pattern` is operator from `$operators`.
+// @param `$pattern` Pattern to check whether it has operator of `$operators`.
+// @param `$operators` List of operators to determine `$patten` has.
+// @returns The returned value is a `bool` indicating whether `$pattern` has operator from `$operators`.
+@function has($pattern, $operators: $operators) {
+  @debug operator-retrieve.retrieve($pattern, $operators);
+  @return operator-is.is(
+    operator-retrieve.retrieve($pattern, $operators),
+    $operators
+  );
+}
+
+// Examples.
+// @debug has('?=' core); // true
+// @debug has('?~=' primary dark); // true
+
+// @debug has('?=core'); // true
+// @debug has('?=core'); // true

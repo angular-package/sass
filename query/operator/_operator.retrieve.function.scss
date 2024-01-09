@@ -1,0 +1,38 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:string';
+
+// Variable.
+@use 'operator.var' as *;
+
+// Functions.
+@use '../../list/list.index.function' as list-index;
+@use '../../string/string.index.function' as string-index;
+
+// Status: DONE
+// The `query.operator-retrieve()` function.
+// @param `$pattern`
+// @param `$operators`
+// @returns
+@function retrieve($pattern, $operators: $operators) {
+  @each $operator, $function in $operators {
+    @each $operator in $operator {
+      @if type-of($pattern) == string and string-index.index($pattern, $operator) == 1 {
+        @return string.slice($pattern, 1, string.length($operator));
+      } @else if type-of($pattern) == list and list-index.index($pattern, $operator) == 1 {
+        @return list.nth($pattern, 1);
+      }
+    }
+  }
+  @return null;
+}
+
+// Examples.
+// @debug retrieve('?=test'); // test
+// @debug retrieve('?=' test); // test
+// @debug retrieve('(,)test'); // null
+
+// null
+// @debug retrieve('??=test'); // null
+

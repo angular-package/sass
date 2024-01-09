@@ -18,11 +18,10 @@
 // @returns
 @function remove($pattern, $operators: $operators) {
   @each $operator, $function in $operators {
-    @if list-index.index(string-index.index($pattern, $operator), 1)
-      or list-index.index(list-index.index($pattern, $operator...), 1) {
-      @if type-of($pattern) == string {
-        @return string.slice($pattern, list.length($operator) + 1);
-      } @else if type-of($pattern) == list {
+    @each $operator in $operator {
+      @if type-of($pattern) == string and string-index.index($pattern, $operator) == 1 {
+        @return string.slice($pattern, string.length($operator) + 1);
+      } @else if type-of($pattern) == list and list-index.index($pattern, $operator) == 1 {
         @return #{list-remove-nth.nth($pattern, 1)};
       }
     }

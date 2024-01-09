@@ -14,7 +14,6 @@
 // @param `$operators` List of operators to determine `$patten` has.
 // @returns The returned value is a `bool` indicating whether `$pattern` has operator from `$operators`.
 @function has($pattern, $operators: $operators) {
-  @debug operator-retrieve.retrieve($pattern, $operators);
   @return operator-is.is(
     operator-retrieve.retrieve($pattern, $operators),
     $operators

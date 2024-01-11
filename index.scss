@@ -10,6 +10,7 @@
 @forward 'meta' as meta-*;
 @forward 'number' as number-*;
 @forward 'object' as object-*;
+@forward 'pattern' as pattern-*;
 @forward 'property' as property-* hide property;
 @forward 'property/property.mixin';
 @forward 'query' as query-*;

@@ -1,0 +1,49 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Variables.
+@use 'pattern.variables';
+
+// Modules.
+@use 'operator/operator.has.function';
+
+// Functions.
+@use '../list/list.index.function' as list-index;
+@use '../list/list.last.function' as list-last;
+@use '../string/string.index.function' as string-index;
+
+// Status: DONE
+// The `pattern.is()` function checks whether the `$value` is a pattern, also with specific indicator.
+// @param `$value` A value to check against it's a pattern.
+// @param `$indicators` A list of pattern indicators to check whether `$value` contains.
+// @return The returned value is a `bool` indicating the `$value` is a pattern, also containing `$indicators`.
+@function is($value, $indicators...) {
+  @each $indicator in if(list.length($indicators) > 0, $indicators, map.keys(pattern.$indicators)) {
+    @if type-of($value) == list and list-index.index(list-index.index($value, $indicator...), 1)
+      or type-of($value) == string and list-index.index(string-index.index($value, $indicator...), 1)
+      or operator.has($value, $indicator...) {
+      @return true;
+    }
+  }
+  @return false;
+}
+
+// Examples.
+// string
+// @debug is('*.palette'); // true
+// @debug is('value:string'); // true
+// @debug is('key:number'); // true
+
+// list
+// @debug is('*' '.palette'); // true
+// @debug is('^' '.palette'); // true
+// @debug is('~' '.palette'); // false
+
+// with operator
+// @debug is('?=.palette'); // true
+// @debug is('?=' '.palette'); // true
+
+// specific
+// @debug is('?=.palette', '^'); // false
+// @debug is('?=.palette', '^', '?='); // true

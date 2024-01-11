@@ -1,0 +1,18 @@
+// Sass.
+@use 'sass:meta';
+
+// Functions.
+@use '../list/list.index.function';
+@use '../string/string.index.function';
+
+//
+$indicators: (
+  // "By default quantifiers like * and + are "greedy",
+  // meaning that they try to match as much of the string as possible."
+  ('value:', 'key:'): null,
+  (
+    '*', // Select all characters.
+    '^', // Start string.
+    '$' // End string.
+  ): meta.get-function(index, false, string),
+);

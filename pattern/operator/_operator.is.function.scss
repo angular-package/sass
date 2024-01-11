@@ -3,18 +3,18 @@
 @use 'sass:map';
 
 // Variables.
-@use 'operator.var' as *;
+@use 'operator.var';
 
 // Functions.
 @use '../../list/list.index.function' as list-index;
 
 // Status: DONE
-// The `query.operator-is()` function checks whether `$value` is operator from `$operators` map.
+// The `query.operator-is()` function checks whether `$value` is operator from `$operators`.
 // @param `$value` Operator of `string` type to determine.
-// @param `$operators` Operators to determine `$operator` .
+// @arbitrary `$operators...` Operators to determine `$value` contains.
 // @returns The returned value is `bool` or `null`.
-@function is($value, $operators: $operators) {
-  @each $operator, $function in $operators {
+@function is($value, $operators...) {
+  @each $operator in if(list.length($operators) > 0, $operators, map.keys(operator.$operators)) {
     @if list-index.index($operator, $value) {
       @return true;
     }

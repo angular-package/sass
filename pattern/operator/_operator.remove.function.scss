@@ -4,7 +4,7 @@
 @use 'sass:string';
 
 // Variable.
-@use 'operator.var' as *;
+@use 'operator.var';
 
 // Functions.
 @use '../../list/list.index.function' as list-index;
@@ -14,10 +14,10 @@
 // Status: DONE
 // The `query.operator-remove()` function.
 // @param `$pattern`
-// @param `$operators`
+// @arbitrary `$operators...`
 // @returns
-@function remove($pattern, $operators: $operators) {
-  @each $operator, $function in $operators {
+@function remove($pattern, $operators...) {
+  @each $operator, $function in if(list.length($operators) > 0, $operators, map.keys(operator.$operators)) {
     @each $operator in $operator {
       @if type-of($pattern) == string and string-index.index($pattern, $operator) == 1 {
         @return string.slice($pattern, string.length($operator) + 1);
@@ -26,7 +26,7 @@
       }
     }
   }
-  @return null;
+  @return $pattern;
 }
 
 // Examples.

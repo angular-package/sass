@@ -3,7 +3,7 @@
 @use 'sass:meta';
 
 // Variable.
-@use 'operator.var' as *;
+@use 'operator.var';
 
 // Functions.
 @use '../../map/map.get-index.function' as map-get-index;
@@ -13,7 +13,7 @@
 // @param `$operator` Operator to return function.
 // @param `$operators` Operators to pick by using `$operator` argument.
 // @returns The returned value is function or `null`.
-@function to-function($operator, $operators: $operators) {
+@function to-function($operator, $operators: operator.$operators) {
   @return map-get-index.get-index($operators, $operator);
 }
 

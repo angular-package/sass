@@ -1,8 +1,0 @@
-$pattern: (
-  // "By default quantifiers like * and + are "greedy",
-  // meaning that they try to match as much of the string as possible."
-  any: '*', // Select all characters.
-  field-type: ('value:', 'key:'), // Select
-  start: '^', // String start with
-  end: '$', // String end with
-);

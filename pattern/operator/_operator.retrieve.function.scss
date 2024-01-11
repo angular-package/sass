@@ -4,7 +4,7 @@
 @use 'sass:string';
 
 // Variable.
-@use 'operator.var' as *;
+@use 'operator.var';
 
 // Functions.
 @use '../../list/list.index.function' as list-index;
@@ -13,10 +13,10 @@
 // Status: DONE
 // The `query.operator-retrieve()` function.
 // @param `$pattern`
-// @param `$operators`
+// @arbitrary `$operators...`
 // @returns
-@function retrieve($pattern, $operators: $operators) {
-  @each $operator, $function in $operators {
+@function retrieve($pattern, $operators...) {
+  @each $operator in if(list.length($operators) > 0, $operators, map.keys(operator.$operators)) {
     @each $operator in $operator {
       @if type-of($pattern) == string and string-index.index($pattern, $operator) == 1 {
         @return string.slice($pattern, 1, string.length($operator));

@@ -1,13 +1,12 @@
 // Sass.
-@use 'sass:map';
 @use 'sass:meta';
 
 // Variables.
 @use '../../comparison/comparison.operators.var';
-@use '../../function/function.variables' as *;
 
 // Functions.
 @use '../../list/list.index.function';
+@use '../../map/map.deep-merge.function';
 @use '../../string/string.index.function';
 
 // Operators.
@@ -18,4 +17,4 @@ $operators: (
 );
 
 // Add to functions.
-$functions: map.deep-merge($functions, map.deep-merge($operators, comparison.$operators));
+$operators: map.deep-merge($operators, comparison.$operators);

@@ -12,12 +12,12 @@
 @use '../../string/string.index.function' as string-index;
 
 // Status: DONE
-// The `query.operator-remove()` function.
-// @param `$pattern`
-// @arbitrary `$operators...`
-// @returns
+// The `query.operator-remove()` function to remove operator of `$operators` from `$pattern`.
+// @param `$pattern` Pattern of `string` or `list` type which from operator from `$operators` is removed.
+// @arbitrary `$operators...` List of operators to remove from `$pattern`.
+// @returns The returned value is `$pattern` with removed operator from `$operators`.
 @function remove($pattern, $operators...) {
-  @each $operator, $function in if(list.length($operators) > 0, $operators, map.keys(operator.$operators)) {
+  @each $operator in if(list.length($operators) > 0, $operators, map.keys(operator.$operators)) {
     @each $operator in $operator {
       @if type-of($pattern) == string and string-index.index($pattern, $operator) == 1 {
         @return string.slice($pattern, string.length($operator) + 1);

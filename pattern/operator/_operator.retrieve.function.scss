@@ -11,10 +11,10 @@
 @use '../../string/string.index.function' as string-index;
 
 // Status: DONE
-// The `query.operator-retrieve()` function.
-// @param `$pattern`
-// @arbitrary `$operators...`
-// @returns
+// The `query.operator-retrieve()` function to retrieve operator of `$operators` from `$pattern`.
+// @param `$pattern` Pattern of `string` or `list` type which from operator from `$operators` is retrieved.
+// @arbitrary `$operators...` List of operators to retrieve from `$pattern`.
+// @returns The returned value is retrieved operator of `$operators`, if found, otherwise `null`.
 @function retrieve($pattern, $operators...) {
   @each $operator in if(list.length($operators) > 0, $operators, map.keys(operator.$operators)) {
     @each $operator in $operator {

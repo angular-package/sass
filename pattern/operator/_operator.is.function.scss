@@ -11,8 +11,8 @@
 // Status: DONE
 // The `query.operator-is()` function checks whether `$value` is operator from `$operators`.
 // @param `$value` Operator of `string` type to determine.
-// @arbitrary `$operators...` Operators to determine `$value` contains.
-// @returns The returned value is `bool` or `null`.
+// @arbitrary `$operators...` Operators to determine `$value` is.
+// @returns The returned value is `bool` or `false`.
 @function is($value, $operators...) {
   @each $operator in if(list.length($operators) > 0, $operators, map.keys(operator.$operators)) {
     @if list-index.index($operator, $value) {

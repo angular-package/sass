@@ -5,7 +5,7 @@
 
 // Functions.
 @use '../list/list.limit.function' as list-limit;
-@use '../list/list.to-map.function' as *;
+@use '../list/list.to-map.function' as list-to-map;
 
 // Modules.
 @use '../comparison';
@@ -17,7 +17,7 @@
 // @returns The returned value is a list of selected values from `$query`.
 @function execute($query...) {
   $result: ();
-  $query: to-map(
+  $query: list-to-map.to-map(
     $query,
     (select: has index nth quantity type),
     (from: list),

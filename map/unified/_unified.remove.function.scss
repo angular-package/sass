@@ -1,0 +1,60 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
+// Functions.
+@use '../../list/list.append.function' as list-append;
+
+// Status: DONE
+// The `map.unified-remove()` function with unified `map.remove()` and `deep-remove()` returns a copy `$map` without keys.
+// ? If key is a comma-separated list then `map.deep-remove()` function is used, otherwise `map.remove()`.
+// @param `$map` A map to remove keys from.
+// @param `$unified-key` Required key or nested key as comma-separated list to remove from `$map`.
+// @arbitrary `$unified-keys...` Multiple keys or nested keys as comma-separated list to remove from `$map`.
+// @returns The returned value is a copy of `$map` without any values associated with keys.
+@function remove($map, $unified-key, $unified-keys...) {
+  @each $unified-key in list-append.append((), $unified-key, comma, $unified-keys...) {
+    $map: if(
+      meta.type-of($key) == list and list.separator($key) == comma,
+      map.deep-remove($map, $key...),
+      map.remove($map, $key)
+    );
+  }
+  @return $map;
+}
+
+// Examples.
+// $-fonts: (
+//   "Helvetica": (
+//     "weights": (
+//       "regular": 400,
+//       "medium": 500,
+//       "bold": 700
+//     )
+//   ),
+//   "regular": 400,
+//   "medium": 500,
+//   "bold": 700
+// );
+
+// key - default feature `map.remove()` and `deep-remove()`.
+// @debug remove($-fonts, regular, (Helvetica, weights, medium)); // ("Helvetica": ("weights": ("regular": 400, "bold": 700)), "medium": 500, "bold": 700)
+
+// Key list type
+// $-list: (
+//   (key, one): (
+//     (key, two): (
+//       (key, three): data
+//     )
+//   ),
+
+//   (key, four): (
+//     (key, five): (
+//       (key, six): bool
+//     )
+//   )
+// );
+
+// @debug map.deep-remove($-list, key, one);
+// @debug remove($-list, (key, one));

@@ -15,28 +15,26 @@
 // @returns The returned value is a copy of `$map` without any values associated with keys.
 @function remove($map, $unified-key, $unified-keys...) {
   @each $unified-key in list-append.append((), $unified-key, comma, $unified-keys...) {
-    $map: if(
-      meta.type-of($key) == list and list.separator($key) == comma,
-      map.deep-remove($map, $key...),
-      map.remove($map, $key)
-    );
+    $map: (meta.type-of($unified-key) == list and list.separator($unified-key) == comma and map.deep-remove($map, $unified-key...))
+      or map.remove($map, $unified-key);
   }
   @return $map;
 }
 
 // Examples.
-// $-fonts: (
-//   "Helvetica": (
-//     "weights": (
-//       "regular": 400,
-//       "medium": 500,
-//       "bold": 700
-//     )
-//   ),
-//   "regular": 400,
-//   "medium": 500,
-//   "bold": 700
-// );
+$-fonts: (
+  "Helvetica": (
+    "weights": (
+      "regular": 400,
+      "medium": 500,  }
+
+      "bold": 700
+    )
+  ),
+  "regular": 400,
+  "medium": 500,
+  "bold": 700
+);
 
 // key - default feature `map.remove()` and `deep-remove()`.
 // @debug remove($-fonts, regular, (Helvetica, weights, medium)); // ("Helvetica": ("weights": ("regular": 400, "bold": 700)), "medium": 500, "bold": 700)

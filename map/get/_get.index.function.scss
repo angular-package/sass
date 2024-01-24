@@ -1,0 +1,40 @@
+// Sass.
+@use 'sass:list';
+
+// Modules.
+@use '../../list/remove/remove.nth.function' as list-remove-nth;
+
+// Status: DONE
+// The `map.get-index()` function uses `list.index()` to find `$key` and optional `$nested-keys` in `$map`.
+// @param `$map` A map to get value.
+// @param `$key` Required key to search key by using `list.index()` function in `$map`.
+// @arbitrary `$nested-keys...` Optional nested keys.
+// @returns The returned value is value of `$key` and optional `$nested-keys`.
+@function index($map, $key, $nested-keys...) {
+  @each $key-list, $value in $map {
+    @if list.index($key-list, $key) {
+      @return list.length($nested-keys) > 0 and
+        index(
+          $value,
+          list.nth($nested-keys, 1),
+          list-remove-nth.nth($nested-keys, 1)...
+        )
+        or $value;
+    }
+  }
+  @return null;
+}
+
+// Examples.
+// $example: (
+//   test basic: (
+//     basic two: (
+//       hue saturation: (
+//         lightness alpha: hsla(15deg, 30%, 35%, 1)
+//       )
+//     )
+//   )
+// );
+
+// @debug index($example, test, two, hue, alpha); // hsl(15deg, 30%, 35%)
+// @debug index($example, basic, basic, saturation, lightness); // hsl(15deg, 30%, 35%)

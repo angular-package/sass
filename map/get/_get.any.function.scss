@@ -1,0 +1,29 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use '../../list/list.append.function' as list-append;
+
+// Status: DONE 
+// The `map.get-any()` function returns first value not `null` associated with `$key` or any of `$keys` in `$map`. 
+// @param `$map` A map to get the value by using `$key` or any of `$keys`.
+// @param `$key` Required key used to get the value from `$map`.
+// @arbitrary `$keys...` Any keys to get the value from `$map`.
+// @returns The returned value is not `null` value associated with `$key` or any of `$keys` from the `$map`, otherwise `null`.
+@function any($map, $key, $keys...) {
+  $keys: list-append.append((), $key, comma, $keys...);
+  @for $i from 1 through list.length($keys) {
+    @if not ($i == list.length($keys)) {
+      $result: map.get($map, list.nth($keys, $i));
+      @if $result {
+        @return $result;
+      }
+    }
+  }
+  @return null;
+}
+
+// Examples.
+// @debug any((a-test: 1, b: 2, c: null, b-name: 5), c, b-name, null); // 5
+// @debug any((a-test: 1, b: 2, c: null, b-name: 5, d: null), c, d, 10); // null

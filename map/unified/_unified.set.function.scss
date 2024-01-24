@@ -4,9 +4,9 @@
 @use 'sass:meta';
 
 // Status: DONE
-// The `map.unified-set()` function sets `$allowed` `$value` under `$unified-key` in `$map`.
+// The `map.unified-set()` function sets `$value` under `$unified-key` in `$map`.
 // @param `$map` A map to set `$value` at `$unified-key`.
-// @param `$unified-key` A key under which `$value` is set.
+// @param `$unified-key` A key or nested key as comma-separated list under which `$value` is set.
 // @param `$value` The value to set in `$map` under `$unified-key`.
 // @returns The returned value is updated `$map` with `$value` at `$unified-key`.
 @function set($map, $unified-key, $value) {

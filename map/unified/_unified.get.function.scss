@@ -14,18 +14,18 @@
 }
 
 // Examples.
-$-map: (
-  light theme: (
-    primary palette: (
-      primary: primary color,
-      primary dark: primary color dark
-    )
-  ),
-  (dark theme, normal theme): (
-    silver: #f1f1f1,
-    red: #d72000,
-  )
-);
+// $-map: (
+//   light theme: (
+//     primary palette: (
+//       primary: primary color,
+//       primary dark: primary color dark
+//     )
+//   ),
+//   (dark theme, normal theme): (
+//     silver: #f1f1f1,
+//     red: #d72000,
+//   )
+// );
 
 // simple key
 // @debug get($-map, light theme); // (primary palette: (primary: primary color, primary dark: primary color dark))

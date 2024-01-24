@@ -1,0 +1,71 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Modules
+@use '../../meta';
+
+// Functions.
+@use '../../list/list.append.function' as list-append;
+
+// Status: DONE
+// The`map.remove-type()` function removes the properties from `$map` where values are required `$type`, and optional `$types`.
+// @param `$map` A map from which the values of type from required `$type`, and optional `$types` are removed.
+// @param `$type` Required type of value to remove from `$map`.
+// @arbitrary `$types...` Optional types of values in `$map` to remove .
+// @returns The returned value is a copy of `$map` without the values associated with required `$type`, and optional `$types`.
+@function type($map, $type, $types...) {
+  @each $type in list-append.append((), $type, comma, $types...) {
+    @if list.index(number string color list map calculation bool null function, $type) {
+      @each $key, $value in $map {
+        $map: ((
+          meta.type-of($value) == $type or (not $type and meta.type-of($type) == meta.type-of($value))
+        ) and map.remove($map, $key)) or $map;
+      }
+    }
+  }
+  @return $map;
+}
+
+// Examples.
+// $example-data: (
+//   "Helvetica": (
+//     "weights": (
+//       "regular": 400,
+//       "medium": 500,
+//       "bold": 700
+//     )
+//   ),
+//   "regular": 400,
+//   "medium": 500,
+//   "bold": 700,
+
+//   name: firstname,
+//   age: 15,
+//   surname: false,
+//   calc: calc(15 + 5),
+//   color: silver,
+//   names: (no name, with name),
+//   nullified: null,
+//   fn: get-function(append)
+// );
+
+// Remove number.
+// @debug type($example-data, number); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), surname: false, color: silver, names: (no name, with name), nullified: null, fn: get-function("append"))
+// @debug type((a: 1, b: 2, c: 3), number); // ()
+
+// Remove string and other types.
+// @debug type($example-data, string); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), "regular": 400, "medium": 500, "bold": 700, age: 15, surname: false, calc: 20, color: silver, names: (no name, with name), nullified: null, fn: get-function("append"))
+// @debug type($example-data, map); // ("regular": 400, "medium": 500, "bold": 700, age: 15, surname: false, calc: 20, color: silver, names: (no name, with name), nullified: null, fn: get-function("append"))
+// @debug type($example-data, color); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), "regular": 400, "medium": 500, "bold": 700, age: 15, surname: false, calc: 20, names: (no name, with name), nullified: null, fn: get-function("append"))
+// @debug type($example-data, list); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), "regular": 400, "medium": 500, "bold": 700, age: 15, surname: false, calc: 20, color: silver, nullified: null, fn: get-function("append"))
+// @debug type($example-data, calculation); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), "regular": 400, "medium": 500, "bold": 700, age: 15, surname: false, calc: 20, color: silver, names: (no name, with name), nullified: null, fn: get-function("append"))
+// @debug type($example-data, bool); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), "regular": 400, "medium": 500, "bold": 700, age: 15, calc: 20, color: silver, names: (no name, with name), nullified: null, fn: get-function("append"))
+// @debug type($example-data, null); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), "regular": 400, "medium": 500, "bold": 700, name: firstname, age: 15, surname: false, calc: 20, color: silver, names: (no name, with name), fn: get-function("append"))
+// @debug type($example-data, function); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), "regular": 400, "medium": 500, "bold": 700, age: 15, surname: false, calc: 20, color: silver, names: (no name, with name), nullified: null)
+
+// Remove string, number.
+// @debug type((a: 1, b: 2, c: 3, d: e, f: g, h: (i, j)), number, string); // (h: (i, j))
+
+// All types.
+// @debug type($example-data, number, string, map, color, list, calculation, bool, null, function); // ()

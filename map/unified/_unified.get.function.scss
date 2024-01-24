@@ -1,0 +1,40 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
+// Status: DONE
+// The `map.unified-get()` function returns the value associated with `$unified-key` in `$map`.
+// @param `$map` A map to get the value by using `$unified-key`.
+// @param `$unified-key` The key or nested key as comma-separated list used to get the value from `$map`.
+// @returns The returned value is the value associated with `$unified-key` from the `$map`.
+@function get($map, $unified-key) {
+  @return (list.separator($unified-key) == comma and map.get($map, $unified-key...))
+    or map.get($map, $unified-key);
+}
+
+// Examples.
+$-map: (
+  light theme: (
+    primary palette: (
+      primary: primary color,
+      primary dark: primary color dark
+    )
+  ),
+  (dark theme, normal theme): (
+    silver: #f1f1f1,
+    red: #d72000,
+  )
+);
+
+// simple key
+// @debug get($-map, light theme); // (primary palette: (primary: primary color, primary dark: primary color dark))
+
+// nested key
+// @debug get($-map, (light theme, primary palette)); // (primary: primary color, primary dark: primary color dark)
+
+// null
+// @debug get($-map, wrong key); // null
+
+// fallback
+// @debug get($-map, wrong key, (must be: this value)); // (must be: this value)

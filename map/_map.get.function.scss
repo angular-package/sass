@@ -3,7 +3,7 @@
 @use 'sass:map';
 @use 'sass:meta';
 
-// Status: TODO: Do not check map and key.
+// Status: DEPRECATED
 // The modified `map.get()` function returns the value associated with `$key` in `$map`, and returns `$fallback` if returned is `null`.
 // ? Modified by removing arbitrary argument `$keys...` and instead, adding `$fallback` value. To get the nested value use key as comma-separated list.
 // ? This way of providing key as comma-separated list is consistent with `map.remove()` and `map.set()` functions.
@@ -12,6 +12,7 @@
 // @param `$fallback` The fallback value if returned is `null`.
 // @return The return value is the value associated with `$key` from the `$map`, if `null` returns `$fallback`.
 @function get($map, $key, $fallback: null) {
+  @warn "Deprecated in favor of `map.unified-get()`";
   $result: if(
     meta.type-of($map) == map and list.length($key) > 0,
     if(list.separator($key) == comma, map.get($map, $key...), map.get($map, $key)),

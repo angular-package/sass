@@ -3,14 +3,15 @@
 @use 'sass:map';
 @use 'sass:meta';
 
-// Status: DONE
+// Status: DEPRECATED
 // The `map.set()` function sets `$allowed` `$value` under `$key` in `$map`.
 // @param `$map` A map to set `$value` at `$key`.
 // @param `$key` A key under which `$value` is set.
 // @param `$value` The value to set in `$map` under `key`.
 // @arbitrary `$allowed...` Allowed value types and/or values to set in `$map`.
-// @returns The return value is updated `$map` with `$value` at `$key`.
+// @returns The returned value is updated `$map` with `$value` at `$key`.
 @function set($map, $key, $value, $allowed...) {
+  @warn "Deprecated in favor of `map.unified-set()`";
   @return if(
     if(
       list.length($allowed) > 0,
@@ -27,6 +28,11 @@
     ),
     $map
   );
+}
+
+// Alias name for `map.set()` function.
+@function set-allowed($map, $key, $value, $allowed...) {
+  @return set($map, $key, $value, $allowed...);
 }
 
 // Examples.

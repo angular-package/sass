@@ -1,44 +1,26 @@
-// Functions.
-@use 'map.set.function';
+// Sass.
+@use 'sass:map';
 
 // Status: DONE
-// The `map.update()` function allows to set multiple key-value sets in a `$map`.
-// @param `$map` A map to update by multiple sets `$key-value`.
-// @param `$key-value` A map of (key: value) to update `$map`.
-// @arbitrary `$allowed...` Allowed value types and/or values to update the `$map`.
-// @return The return value is `$map` with updated multiple sets.
-@function update($map, $key-value, $allowed...) {
-  @each $key, $value in $key-value {
-    $map: map.set($map, $key, $value, $allowed...);
+// The `map.update()` function allows to set multiple key with value sets in a `$map`.
+// @param `$map` A map to update by multiple sets `$key_value`.
+// @param `$key_value` A map of (key: value) to update `$map`.
+// @returns The returned value is `$map` with updated multiple sets.
+@function update($map, $key_value) {
+  @each $key, $value in $key_value {
+    $map: map.set($map, $key, $value);
   }
   @return $map;
 }
 
 // Examples.
-// $-fonts: (
-//   "Helvetica": (
-//     "weights": (
-//       "regular": 400,
-//       "medium": 500,
-//       "bold": 700
-//     )
-//   )
-// );
+// $-map: ();
 
-// update single nested key-value
-// @debug update($-fonts, ((("Helvetica", "style"), ): (italic: italic, normal: normal, inherit: inherit))); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), ("Helvetica", "style"): (italic: italic, normal: normal, inherit: inherit))
+// update single key_value
+// @debug update($-map, (key: (italic: italic, normal: normal, inherit: inherit))); // (key: (italic: italic, normal: normal, inherit: inherit))
 
 // update multiple keys
-// @debug update($-fonts, (arial: (size: large), georgia: (size: small), verdana: (size: medium))); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), arial: (size: large), georgia: (size: small), verdana: (size: medium))
+// @debug update($-map, (arial: (size: large), georgia: (size: small), verdana: (size: medium))); // (arial: (size: large), georgia: (size: small), verdana: (size: medium))
 
 // update multiple list keys
-// @debug update($-fonts, ((arial large,): (size: large), (georgia small,): (size: small), (verdana medium,): (size: medium))); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), arial large: (size: large), georgia small: (size: small), verdana medium: (size: medium))
-
-// update only string type
-// @debug update($-fonts, (small: 2px, medium: md, large: 3px), string); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), medium: md)
-
-// update only string type
-// @debug update($-fonts, (small: 2px, medium: md, large: 3px), string, number); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), small: 2px, medium: md, large: 3px)
-
-// update specified value
-// @debug update($-fonts, (small: 2px, medium: md, large: 3px), 3px); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), large: 3px)
+// @debug update($-map, ((arial large): (size: large), (georgia small): (size: small), verdana medium: (size: medium))); // (arial large: (size: large), georgia small: (size: small), verdana medium: (size: medium))

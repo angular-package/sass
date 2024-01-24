@@ -1,0 +1,35 @@
+// Functions.
+@use 'unified.set.function' as unified-set;
+
+// Status: DONE
+// The `map.update()` function allows to set multiple unified-key with value sets in a `$map`.
+// ? Unified key is also nested key as comma-separated list.
+// @param `$map` A map to update by multiple sets `$unified-key_value`.
+// @param `$unified-key_value` A map of (unified-key: value) to update `$map`.
+// @returns The returned value is `$map` with updated multiple sets.
+@function update($map, $unified-key_value) {
+  @each $unified-key, $value in $unified-key_value {
+    $map: unified-set.set($map, $unified-key, $value);
+  }
+  @return $map;
+}
+
+// Examples.
+// $-fonts: (
+//   "Helvetica": (
+//     "weights": (
+//       "regular": 400,
+//       "medium": 500,
+//       "bold": 700
+//     )
+//   )
+// );
+
+// update single nested key-value
+// @debug update($-fonts, ((("Helvetica", "style"), ): (italic: italic, normal: normal, inherit: inherit))); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), ("Helvetica", "style"): (italic: italic, normal: normal, inherit: inherit))
+
+// update multiple keys
+// @debug update($-fonts, (arial: (size: large), georgia: (size: small), verdana: (size: medium))); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), arial: (size: large), georgia: (size: small), verdana: (size: medium))
+
+// update multiple list keys
+// @debug update($-fonts, ((arial large,): (size: large), (georgia small,): (size: small), (verdana medium,): (size: medium))); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), arial large: (size: large), georgia small: (size: small), verdana medium: (size: medium))

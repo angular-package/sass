@@ -1,20 +1,20 @@
-// Functions.
-@use 'map.get.function' as *;
-@use 'map.pick.function' as *;
+// Sass.
+@use 'sass:map';
 
-// Status: TODO: Handle `null` in pick function with map.values.
-// The `map.retrieve()` function retrieves a value from `$map` by a `$method` get or pick with a `$key`.
+// Functions.
+@use 'map.pick.function' as map-pick;
+
+// Status: DONE
+// The `map.retrieve()` function retrieves a value from `$map` by `$method` get or pick with keys.
 // @param `$method` The method get(`map.get()`)  or pick(`map.pick()`) used to retrieve the value.
-// @param `$map` A map to get the value by using `$method` and `$key`.
-// @param `$key` A key to get or pick the value from `$map`.
-// @param `$fallback` The fallback value if returned is `null`.
-// @return The return value is a retrieved value from `$map` or `$fallback`.
-@function retrieve($method, $map, $key, $fallback: null) {
-  @return if(
-    $method == get,
-    get($map, $key, $fallback),
-    if($method == pick, pick($map, $key...), $map or $fallback)
-  );
+// @param `$map` A map to retrieve the value by using `$method`, `$key` and optional `$keys`.
+// @param `$key` Required key to `get` or `pick` the value from `$map`.
+// @arbitrary `$keys...` Optional keys on pick or nested keys on get to retrieve from `$map`.
+// @returns The returned value is a retrieved value by `get` with required `$key` and optional nested `$keys`
+// or `pick` method with required `$key` and optional `$keys` from `$map`.
+@function retrieve($method, $map, $key, $keys...) {
+  @return $method == get and map.get($map, $key, $keys...)
+    or $method == pick and map-pick.pick($map, $key, $keys...);
 }
 
 // Examples.
@@ -30,13 +30,16 @@
 //   var: (prefix: var-prefix, suffix: var-suffix)
 // );
 
+// key
 // @debug retrieve(get, $-dictionary-example, general); // (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c)
-// @debug retrieve(pick, $-dictionary-example, ((class, calendars),)); // (calendars: (calendar: cal))
-// @debug retrieve(pick, $-dictionary-example, (general, (class, calendars))); // (general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c), calendars: (calendar: cal))
+// @debug retrieve(pick, $-dictionary-example, general); // (general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c))
 
-// input list
-// @debug retrieve(pick $-dictionary-example ((class, calendars),)...); // (calendars: (calendar: cal))
+// get nested key
+// @debug retrieve(get, $-dictionary-example, general, word); // słowo
+
+// multiple picks
+// @debug retrieve(pick, $-dictionary-example, general, var); // (general: (word: słowo, (wrapper, wrap): owijka, (technology, technologia): tech, color: c), var: (prefix: var-prefix, suffix: var-suffix))
 
 // null
 // @debug retrieve(get, $-dictionary-example, test); // null
-// @debug retrieve(pick, $-dictionary-example, test); // (test: null)
+// @debug retrieve(pick, $-dictionary-example, test); // null

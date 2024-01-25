@@ -3,20 +3,20 @@
 @use 'sass:map';
 
 // Functions.
-@use '../list/list.append.function' as *;
+@use '../list/list.append.function' as list-append;
 
 // Status: DONE
-// The `map.has-keys()` function checks whether `$map` contains `$keys`.
-// @param `$map` A map to check whether it has all `$keys`.
+// The `map.has-keys()` function checks whether `$map` contains required `$key` and optional `$keys`.
+// @param `$map` A map to check whether it has required `$key` and optional `$keys`.
 // @param `$key` Required key to check whether `$map` contains.
-// @param `$keys...` Additional keys to check whether `$map` contains them.
-// @return The return value is a `bool` indicating `$map` contains `$key` or/and `$keys`.
+// @arbitrary `$keys...` Additional keys to check whether `$map` contains.
+// @returns The returned value is a `bool` indicating `$map` contains `$key` and optional `$keys`.
 @function has-keys($map, $key, $keys...) {
-  $has: ();
-  @each $key in append((), $key, comma, $keys...) {
-    $has: list.append($has, if(list.separator($key) == comma, map.has-key($map, $key...), map.has-key($map, $key)));
+  $result: ();
+  @each $key in list-append.append((), $key, comma, $keys...) {
+    $result: list.append($result, map.has-key($map, $key));
   }
-  @return if(list.index($has, false), false, true);
+  @return if(list.index($result, false), false, true);
 }
 
 // Examples.

@@ -1,0 +1,29 @@
+// Sass.
+@use 'sass:map';
+
+// Status: DONE
+// Modified `map.remove()` function returns a copy `$map` without required `$key` and optional `$keys`.
+// @param `$map` A map from which required `$key` and optional `$keys` are removed.
+// @param `$key` Required key to remove from `$map`.
+// @arbitrary `$keys...` Optional keys to remove from `$map`.
+// @returns The returned value is a copy of `$map` without any values associated with keys.
+@function remove($map, $key, $keys...) {
+  @return map.remove($map, $key, $keys...);
+}
+
+// Examples.
+// $-fonts: (
+//   "Helvetica": (
+//     "weights": (
+//       "regular": 400,
+//       "medium": 500,
+//       "bold": 700
+//     )
+//   ),
+//   "regular": 400,
+//   "medium": 500,
+//   "bold": 700
+// );
+
+// key - default feature `map.remove()` and `deep-remove()`.
+// @debug remove($-fonts, regular, bold); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), "medium": 500)

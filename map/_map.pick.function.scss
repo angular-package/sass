@@ -3,83 +3,23 @@
 @use 'sass:map';
 
 // Functions.
-@use '../list/list.append.function' as *;
-@use '../list/list.range.function' as *;
+@use '../list/list.append.function' as list-append;
 
-
-@use 'map.deep-merge.function' as *;
-@use 'map.get.function' as *;
-@use 'map.key-pattern-index.function' as *;
-@use 'map.keys-pattern.function' as *;
-@use 'map.set.function' as *;
-
-// Modules.
-@use 'pattern';
-@use 'pick';
-
-// Status: TODO: Examples.
-// The `map.pick()` function returns a copy of `$map` of `$keys`.
-// @param `$map` A map from which values of `$keys` are taken.
+// Status: DONE
+// The `map.pick()` function picks required `$key` and optional `$keys` from `$map`.
+// @param `$map` A map from which values of required `$key` and optional `$keys` are taken.
 // @param `$key` Required key to pick from `$map`.
-// @arbitrary `$keys...` List of keys to get the values from `$map`.
-// @return The return value is a copy of `$map` built of `$keys`.
+// @arbitrary `$keys...` List of keys to pick the values from `$map`.
+// @returns The returned value is a copy of `$map` built of required `$key` and optional `$keys`, if keys are not found returns `null`.
 @function pick($map, $key, $keys...) {
   $result: ();
-  @each $key in append((), $key, comma, $keys...) {
-    // FEATURE: Key of list type
-    @if type-of($key) == list {
-      @if key-pattern-index($key) {
-        @each $pattern-key in keys-pattern($map, $key) {
-          $result: set(
-            $result,
-            if(
-              list.separator($pattern-key) == space,
-              ($pattern-key,),
-              if(
-                list.length($pattern-key) > 1,
-                list.nth($pattern-key, list.length($pattern-key)),
-                $pattern-key
-              )
-            ),
-            get($map, $pattern-key)
-          );
-        }
-      } @else {
-        $result: set(
-          $result,
-          if(
-            list.separator($key) == space,
-            ($key,),
-            if(
-              list.length($key) > 1,
-              list.nth($key, list.length($key)),
-              $key
-            )
-          ),
-          get($map, $key)
-        );
-      }
-
-    // FEATURE: Pattern
-    } @else if pattern.is($key) {
-      $result: deep-merge($result, pick.pattern($map, $key));
-
-    // FEATURE: Ordinary key
-    } @else {
-      $result: deep-merge($result, ($key: get($map, $key)));
-    }
+  @each $key in list-append.append((), $key, comma, $keys...) {
+    $result: map.has-key($map, $key) and map.merge($result, ($key: map.get($map, $key))) or $result;
   }
-  @return $result;
+  @return list.length($result) > 0 and $result or null;
 }
 
 // Examples.
-// @debug pick((a: 1, b: 2, c: 3, d: 4), a, b, d); // (a: 1, b: 2, d: 4)
-// @debug pick((a: 1, b: 2, c: 3, d: 4), (a, b, d)); // (a: 1, b: 2, d: 4)
-// @debug pick((a: 1, b: 2, c: 3, d: 4), (a, b), (c, d)); // (a: 1, b: 2, c: 3, d: 4)
-// @debug pick((a: 1, b: 2, c: 3, d: 4, a b: 5), a b); // (a b: 5)
-// @debug pick((a: 1, b: 2, c: 3, d: 4, a b: 5, c d: 6), a b, c d); // (a b: 5, c d: 6)
-// @debug pick((a: 1, b: 2, c: 3, d: 4, e: 5), e); // (e: 5)
-
 // $-theme: (
 //   dark: (
 //     'dark.palette': (),
@@ -120,93 +60,18 @@
 //     [primary]: (
 //       primary dark: primary dark,
 //     ),
-
-//     (key1, key2): (
-//       primary: primary1
-//     ),
-
-//     key1: primary,
-
-//     key2: (
-//       settings1: ( display: true ),
-//       settings2: ( display: true ),
-//     ),
-
-//     key3: (
-//       settings3: ( display: true ),
-//       settings4: ( display: true ),
-//     ),
-
-//     key4: (
-//       settings5: ( display: true ),
-//       settings6: ( font-size: 5px ),
-//     ),
-
-//     key5: (
-//       settings7: ( display: true ),
-//       settings8: ( font-size: 15px ),
-//     ),
-
-//     key6: (
-//       settings9: ( display: true ),
-//       settings10: ( font-size: 15px ),
-//     ),
 //   )
 // );
 
-// Pattern.
-// @debug pick(map.get($-theme, basic), '*.palette');
-// @debug pick($-theme, (basic, '*.palette'));
+// @debug pick((a: 1, b: 2, c: 3, d: 4), a, b, d); // (a: 1, b: 2, d: 4)
+// @debug pick((a: 1, b: 2, c: 3, d: 4), (a, b, d)); // null
 
-// List space separator.
+// string
+// @debug pick(map.get($-theme, basic), 'default.palette'); // ("default.palette": ())
+// @debug pick(map.get($-theme, basic), 'default.palette', 'bg.palette'); // ("default.palette": (), "bg.palette": (bg: bg color, bg dark: bg dark, bg light: bg light))
+
+// list space-separated
 // @debug pick(map.get($-theme, basic), basic large); // (basic large: ("": border, dark: border dark, light: border light))
 
-// List space separator + string.
-// @debug pick(map.get($-theme, basic), basic large, 'bg.palette'); // (basic large: ("": border, dark: border dark, light: border light), "bg.palette": (bg: bg color, bg dark: bg dark, bg light: bg light))
-// @debug pick(map.get($-theme, basic), basic large, 'default.palette', 'gray.palette', 'bg.palette');
-// @debug pick(map.get($-theme, basic), basic large, extended small);
-// @debug pick(map.get($-theme, basic), key1, basic large);
-
-// Nested + string.
-// @debug pick($-theme, (basic, key1), (basic, (key1, key2)));
-
-// Nested + list.
-// @debug pick($-theme, (basic, (key1, key2)));
-// @debug pick($-theme, dark, (basic, (key1, key2)));
-
-// Bracketed.
-// @debug pick(map.get($-theme, basic), [primary]);
-
-// Nested + bracketed.
-// @debug pick($-theme, (basic, [primary]));
-
-// $-map: (
-//   a test: 1,
-//   b test: 2,
-//   c: 3,
-//   (d, test): 4,
-//   e: (f: (g: 6))
-// );
-
-// @debug pick(
-//   $-map,
-//   a,
-//   b test,
-//   (d, test),
-//   (e, f, g)
-// );
-
-
-// @debug pick(
-//   map.get($-theme, basic),
-//   // '*.palette', // FEATURE: suffix .palette
-//   // '$palette', // FEATURE:
-//   // [primary], // FEATURE: bracketed
-//   // basic large, // FEATURE: string
-//   // ((key1, key2),), // FEATURE: key with comma
-//   // key1 // FEATURE: string
-//   (basic, '$palette')
-// );
-
-// @debug pick($-theme, (basic, '$palette'), );
-// @debug pick($-theme, (basic, '^key'), (basic, '^key', settings1), (basic, '*key'));
+// bracketed + list space-separated
+// @debug pick(map.get($-theme, basic), [primary], basic large); // ([primary]: (primary dark: primary dark), basic large: ("": border, dark: border dark, light: border light))

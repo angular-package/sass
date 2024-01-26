@@ -16,13 +16,27 @@
 @function merge($map, $unified-key, $value) {
   @if not (type-of($value) == map) {
     $value: list.length($unified-key) >= 1
-      and (list-last.last($unified-key): $value)
-      or $value;
+      and (
+        list.separator($unified-key) == comma
+        and list-last.last($unified-key)
+        or $unified-key: $value
+      );
     $unified-key: list.length($unified-key) > 1
+      and list.separator($unified-key) == comma
       and list-to.to($unified-key, list.length($unified-key) - 1)
       or ();
   }
-  @return map.merge($map, list-append.append($unified-key, $value, comma)...);
+  @return map.merge(
+    $map,
+    list-append.append(
+      meta.type-of($unified-key) == list
+      and list.separator($unified-key) == comma
+      and $unified-key
+      or ($unified-key,),
+      $value,
+      comma
+    )...
+  );
 }
 
 // Examples.

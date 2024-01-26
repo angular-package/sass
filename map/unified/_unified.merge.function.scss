@@ -1,6 +1,7 @@
 // Sass.
 @use 'sass:list';
 @use 'sass:map';
+@use 'sass:meta';
 
 // Functions.
 @use '../../list/list.append.function' as list-append;
@@ -30,7 +31,8 @@
     $map,
     list-append.append(
       meta.type-of($unified-key) == list
-      and list.separator($unified-key) == comma
+      and (list.separator($unified-key) == comma
+        or list.length($unified-key) == 0)
       and $unified-key
       or ($unified-key,),
       $value,

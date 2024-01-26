@@ -9,7 +9,8 @@
 // @param `$unified-key` The key or nested key as comma-separated list used to get the value from `$map`.
 // @returns The returned value is the value associated with `$unified-key` from the `$map`.
 @function get($map, $unified-key) {
-  @return (list.separator($unified-key) == comma and map.get($map, $unified-key...))
+  @return (list.separator($unified-key) == comma
+    and map.get($map, $unified-key...))
     or map.get($map, $unified-key);
 }
 

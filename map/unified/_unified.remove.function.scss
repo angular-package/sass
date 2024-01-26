@@ -15,7 +15,9 @@
 // @returns The returned value is a copy of `$map` without any values associated with keys.
 @function remove($map, $unified-key, $unified-keys...) {
   @each $unified-key in list-append.append((), $unified-key, comma, $unified-keys...) {
-    $map: (meta.type-of($unified-key) == list and list.separator($unified-key) == comma and map.deep-remove($map, $unified-key...))
+    $map: meta.type-of($unified-key) == list
+      and list.separator($unified-key) == comma
+      and map.deep-remove($map, $unified-key...)
       or map.remove($map, $unified-key);
   }
   @return $map;

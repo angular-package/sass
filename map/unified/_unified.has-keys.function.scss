@@ -6,7 +6,7 @@
 @use '../../list/list.append.function' as list-append;
 
 // Status: DONE
-// The `map.has-keys()` function checks whether `$map` contains required `$unified-key` and optional `$unified-keys`.
+// The `map.unified-has-keys()` function checks whether `$map` contains required `$unified-key` and optional `$unified-keys`.
 // @param `$map` A map to check whether it has required `$unified-key` and optional `$unified-keys`.
 // @param `$unified-key` Required key or nested key as comma-separated list to check whether `$map` contains.
 // @arbitrary `$unified-keys...` Additional keys or nested keys as comma-separated list to check whether `$map` contains.
@@ -17,8 +17,8 @@
     $has: list.append(
       $has,
       list.separator($unified-key) == comma
-        and map.has-key($map, $unified-key...)
-        or map.has-key($map, $unified-key)
+      and map.has-key($map, $unified-key...)
+      or map.has-key($map, $unified-key)
     );
   }
   @return if(list.index($has, false), false, true);

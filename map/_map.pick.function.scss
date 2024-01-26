@@ -14,8 +14,10 @@
 @function pick($map, $key, $keys...) {
   $result: ();
   @each $key in list-append.append((), $key, comma, $keys...) {
-    $result: map.has-key($map, $key) and map.merge($result, ($key: map.get($map, $key))) or $result;
-  }
+    $result: map.has-key($map, $key)
+      and map.deep-merge($result, ($key: map.get($map, $key)))
+      or $result;
+  } 
   @return list.length($result) > 0 and $result or null;
 }
 

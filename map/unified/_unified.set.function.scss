@@ -13,7 +13,8 @@
   @return map.set(
     $map,
     list.append(
-      if(meta.type-of($unified-key) == list and list.separator($unified-key) == comma, $unified-key, ($unified-key,)),
+      meta.type-of($unified-key) == list and list.separator($unified-key) == comma and $unified-key
+      or ($unified-key,),
       $value,
       comma
     )...
@@ -29,9 +30,9 @@
 // @debug set((), (test 1, (test, 2)), 2222); // (test 1: ((test, 2): 2222))
 
 // single type
-// @debug set((a: 1, b: 2), test string, 27, string ); // (a: 1, b: 2)
-// @debug set((a: 1, b: 2), test number, 27, number); // (a: 1, b: 2, test: (number: 27))
-// @debug set((a: 1, b: 2), test map, (map: 22,), map); // (a: 1, b: 2, test: (map: (map: 22)))
-// @debug set((a: 1, b: 2), test list, (22, 44), list); // (a: 1, b: 2, test: (list: (22, 44)))
-// @debug set((a: 1, b: 2), test color, #ffffff, color); // (a: 1, b: 2, test: (color: #ffffff))
-// @debug set((a: 1, b: 2), test null, null, null); // (a: 1, b: 2, test: (null: null))
+// @debug set((a: 1, b: 2), test string, 27); // (a: 1, b: 2)
+// @debug set((a: 1, b: 2), null, 27); // (a: 1, b: 2, test: (number: 27))
+// @debug set((a: 1, b: 2), test map, (map: 22,)); // (a: 1, b: 2, test: (map: (map: 22)))
+// @debug set((a: 1, b: 2), test list, (22, 44)); // (a: 1, b: 2, test: (list: (22, 44)))
+// @debug set((a: 1, b: 2), test color, #ffffff); // (a: 1, b: 2, test: (color: #ffffff))
+// @debug set((a: 1, b: 2), test null, null); // (a: 1, b: 2, test: (null: null))

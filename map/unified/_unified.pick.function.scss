@@ -1,6 +1,7 @@
 // Sass.
 @use 'sass:list';
 @use 'sass:map';
+@use 'sass:meta';
 
 // Functions.
 @use '../../list/list.append.function' as list-append;
@@ -8,16 +9,16 @@
 @use 'unified.merge.function' as unified-merge;
 
 // Status: DONE
-// The `map.pick()` function returns a copy of `$map` of `$keys`.
-// @param `$map` A map from which values of `$keys` are taken.
-// @param `$key` Required key to pick from `$map`.
-// @arbitrary `$keys...` List of keys to get the values from `$map`.
-// @returns The returned value is a copy of `$map` built of `$keys`.
+// The `map.unified-pick()` function returns a copy of `$map` with required `$unified-key` and optional `$unified-keys`.
+// @param `$map` A map from which values of required `$unified-key` and optional `$required-keys` are taken.
+// @param `$unified-key` Required key or nested key as comma-separated list to pick from `$map`.
+// @arbitrary `$unified-keys...` List of keys or nested keys as comma-separated list to pick the values from `$map`.
+// @returns The returned value is a copy of `$map` built of required `$unified` key and optional `$unified-keys`.
 @function pick($map, $unified-key, $unified-keys...) {
   $result: ();
   @each $unified-key in list-append.append((), $unified-key, comma, $unified-keys...) {
     $result: unified-merge.merge(
-      $result,
+      $result,                                                                                                                                                         
       $unified-key,
       unified-get.get($map, $unified-key)
     );
@@ -26,14 +27,6 @@
 }
 
 // Examples.
-// @debug pick((a: 1, b: 2, c: 3, d: 4), a, b, d); // (a: 1, b: 2, d: 4)
-// @debug pick((a: (b: (d: 1)), b: 2, c: 3, d: 4), (a, b, d)); // (a: (b: (d: 1)))
-// @debug pick((a: (b: 1), b: 2, c: (d: 2), d: 4), (a, b), (c, d)); // (a: (b: 1), c: (d: 2))
-
-// @debug pick((a: 1, b: 2, c: 3, d: 4, a b: 5), a b); // (a b: 5)
-// @debug pick((a: 1, b: 2, c: 3, d: 4, a b: 5, c d: 6), a b, c d); // (a b: 5, c d: 6)
-// @debug pick((a: 1, b: 2, c: 3, d: 4, e: 5), e); // (e: 5)
-
 // $-theme: (
 //   dark: (
 //     'dark.palette': (),
@@ -108,12 +101,16 @@
 //   )
 // );
 
-// Pattern.
-// @debug pick(map.get($-theme, basic), '*.palette');
-// @debug pick($-theme, (basic, '*.palette'));
+// @debug pick((a: 1, b: 2, c: 3, d: 4), a, b, d); // (a: 1, b: 2, d: 4)
+// @debug pick((a: (b: (d: 1)), b: 2, c: 3, d: 4), (a, b, d)); // (a: (b: (d: 1)))
+// @debug pick((a: (b: 1), b: 2, c: (d: 2), d: 4), (a, b), (c, d)); // (a: (b: 1), c: (d: 2))
+
+// @debug pick((a: 1, b: 2, c: 3, d: 4, a b: 5), a b); // (a b: 5)
+// @debug pick((a: 1, b: 2, c: 3, d: 4, a b: 5, c d: 6), a b, c d); // (a b: 5, c d: 6)
+// @debug pick((a: 1, b: 2, c: 3, d: 4, e: 5), e); // (e: 5)
 
 // List space separator.
-// @debug pick(map.get($-theme, basic), basic large);  $fallback: nullxtended small);
+// @debug pick(map.get($-theme, basic), basic large);
 // @debug pick(map.get($-theme, basic), key1, basic large);
 
 // Nested + string.
@@ -122,40 +119,3 @@
 // Nested + list.
 // @debug pick($-theme, (basic, (key1, key2)));
 // @debug pick($-theme, dark, (basic, (key1, key2)));
-
-// Bracketed.
-// @debug pick(map.get($-theme, basic), [primary]);
-
-// Nested + bracketed.
-// @debug pick($-theme, (basic, [primary]));
-
-// $-map: (
-//   a test: 1,
-//   b test: 2,
-//   c: 3,
-//   (d, test): 4,
-//   e: (f: (g: 6))
-// );
-
-// @debug pick(
-//   $-map,
-//   a,
-//   b test,
-//   (d, test),
-//   (e, f, g)
-// );
-
-
-// @debug pick(
-//   map.get($-theme, basic),
-//   // '*.palette', // FEATURE: suffix .palette
-//   // '$palette', // FEATURE:
-//   // [primary], // FEATURE: bracketed
-//   // basic large, // FEATURE: string
-//   // ((key1, key2),), // FEATURE: key with comma
-//   // key1 // FEATURE: string
-//   (basic, '$palette')
-// );
-
-// @debug pick($-theme, (basic, '$palette'), );
-// @debug pick($-theme, (basic, '^key'), (basic, '^key', settings1), (basic, '*key'));

@@ -2,7 +2,7 @@
 @use 'unified.set.function' as unified-set;
 
 // Status: DONE
-// The `map.update()` function allows to set multiple unified-key with value sets in a `$map`.
+// The `map.unified-update()` function allows to set multiple unified-key with value sets in a `$map`.
 // ? Unified key is also nested key as comma-separated list.
 // @param `$map` A map to update by multiple sets `$unified-key_value`.
 // @param `$unified-key_value` A map of (unified-key: value) to update `$map`.

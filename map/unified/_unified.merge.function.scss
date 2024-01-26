@@ -1,0 +1,44 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use '../../list/list.append.function' as list-append;
+@use '../../list/list.last.function' as list-last;
+@use '../../list/list.to.function' as list-to;
+
+// Status: DONE
+// The `map.unified-merge()` function returns a copy of `$map` with merged `$value` under `$unified-key`.
+// @param `$map` A map to merge `$value` under `$unified-key`.
+// @param `$unified-key` Key or nested key as comma-separated list under which `$value` is merged in `$map`.
+// @param `$value` The value to merge under `$unified-key`.
+// @returns The returned value is a copy of `$map` merged with `$value` under `$unified-key`.
+@function merge($map, $unified-key, $value) {
+  @if not (type-of($value) == map) {
+    $value: list.length($unified-key) >= 1
+      and (list-last.last($unified-key): $value)
+      or $value;
+    $unified-key: list.length($unified-key) > 1
+      and list-to.to($unified-key, list.length($unified-key) - 1)
+      or ();
+  }
+  @return map.merge($map, list-append.append($unified-key, $value, comma)...);
+}
+
+// Examples.
+// $-theme: (
+//   dark: (
+//     'dark.palette': (),
+//     'gray.palette': (
+//       'gray': 'gray' color,
+//       'gray' dark: 'gray' dark,
+//       'gray' light: 'gray' light
+//     ),
+//   )
+// );
+
+// @debug merge($-theme, dark, dark color);
+// @debug merge($-theme, (dark, 'silver.palette'), dark color);
+
+// @debug merge($-theme, dark, ('silver.palette': dark color));
+// @debug merge($-theme, (dark, 'dark.palette'), (silver color: dark color));

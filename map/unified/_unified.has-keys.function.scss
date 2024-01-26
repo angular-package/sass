@@ -1,0 +1,43 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Functions.
+@use '../../list/list.append.function' as list-append;
+
+// Status: DONE
+// The `map.has-keys()` function checks whether `$map` contains required `$unified-key` and optional `$unified-keys`.
+// @param `$map` A map to check whether it has required `$unified-key` and optional `$unified-keys`.
+// @param `$unified-key` Required key or nested key as comma-separated list to check whether `$map` contains.
+// @arbitrary `$unified-keys...` Additional keys or nested keys as comma-separated list to check whether `$map` contains.
+// @returns The returned value is a `bool` indicating `$map` contains `$unified-key` and optional `$unified-keys`.
+@function has-keys($map, $unified-key, $unified-keys...) {
+  $has: ();
+  @each $unified-key in list-append.append((), $unified-key, comma, $unified-keys...) {
+    $has: list.append(
+      $has,
+      list.separator($unified-key) == comma
+        and map.has-key($map, $unified-key...)
+        or map.has-key($map, $unified-key)
+    );
+  }
+  @return if(list.index($has, false), false, true);
+}
+
+// Examples.
+// $-map: (list1: (), list2: (), a b c d e f: value, a: (b: (c: (d: e))), any: true, all: false, separator: auto, bracketed: false, method: join, null: false);
+
+// string keys
+// @debug has-keys($-map, list1, list2); // true
+// @debug has-keys($-map, list1, list2, wrong); // false
+// @debug has-keys($-map, list1, list3); // false
+
+// list key
+// @debug has-keys($-map, a b c d e f); // true
+// @debug has-keys($-map, a b c d e); // false
+// @debug has-keys($-map, a b c d e f, bracketed); // true
+// @debug has-keys($-map, a b c d e, bracketed); // false
+
+// nested keys
+// @debug has-keys($-map, (a, b, c, d), a b c d e f); // true
+// @debug has-keys($-map, (a, b, c, d), (a b c d e f g)); // false

@@ -5,9 +5,9 @@
 @use '../../list/remove/remove.nth.function' as list-remove-nth;
 
 // Status: DONE
-// The `map.get-index()` function uses `list.index()` to find `$key` and optional `$nested-keys` in `$map`.
+// The `map.get-index()` function uses `list.index()` function to find `$key` and optional `$nested-keys` in `$map`.
 // @param `$map` A map to get value.
-// @param `$key` Required key to search key by using `list.index()` function in `$map`.
+// @param `$key` Required key to search by using `list.index()` function in `$map`.
 // @arbitrary `$nested-keys...` Optional nested keys.
 // @returns The returned value is value of `$key` and optional `$nested-keys`.
 @function index($map, $key, $nested-keys...) {

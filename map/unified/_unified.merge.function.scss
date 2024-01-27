@@ -1,12 +1,12 @@
 // Sass.
 @use 'sass:list';
 @use 'sass:map';
-@use 'sass:meta';
 
 // Functions.
 @use '../../list/list.append.function' as list-append;
 @use '../../list/list.last.function' as list-last;
 @use '../../list/list.to.function' as list-to;
+@use 'unified.is-key.function' as unified-is-key;
 
 // Status: DONE
 // The `map.unified-merge()` function returns a copy of `$map` with merged `$value` under `$unified-key`.
@@ -18,21 +18,19 @@
   @if not (type-of($value) == map) {
     $value: list.length($unified-key) >= 1
       and (
-        list.separator($unified-key) == comma
+        unified-is-key.is-key($unified-key)
         and list-last.last($unified-key)
         or $unified-key: $value
       );
     $unified-key: list.length($unified-key) > 1
-      and list.separator($unified-key) == comma
+      and unified-is-key.is-key($unified-key)
       and list-to.to($unified-key, list.length($unified-key) - 1)
       or ();
   }
   @return map.merge(
     $map,
     list-append.append(
-      meta.type-of($unified-key) == list
-      and (list.separator($unified-key) == comma
-        or list.length($unified-key) == 0)
+      (unified-is-key.is-key($unified-key) or list.length($unified-key) == 0)
       and $unified-key
       or ($unified-key,),
       $value,

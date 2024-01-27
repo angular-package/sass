@@ -1,7 +1,9 @@
 // Sass.
 @use 'sass:list';
 @use 'sass:map';
-@use 'sass:meta';
+
+// Functions.
+@use 'unified.is-key.function' as unified-is-key;
 
 // Status: DONE
 // The `map.unified-set()` function sets `$value` under `$unified-key` in `$map`.
@@ -13,8 +15,7 @@
   @return map.set(
     $map,
     list.append(
-      meta.type-of($unified-key) == list
-      and list.separator($unified-key) == comma
+      unified-is-key.is-key($unified-key)
       and $unified-key
       or ($unified-key,),
       $value,
@@ -32,9 +33,9 @@
 // @debug set((), (test 1, (test, 2)), 2222); // (test 1: ((test, 2): 2222))
 
 // single type
-// @debug set((a: 1, b: 2), test string, 27); // (a: 1, b: 2)
-// @debug set((a: 1, b: 2), null, 27); // (a: 1, b: 2, test: (number: 27))
-// @debug set((a: 1, b: 2), test map, (map: 22,)); // (a: 1, b: 2, test: (map: (map: 22)))
-// @debug set((a: 1, b: 2), test list, (22, 44)); // (a: 1, b: 2, test: (list: (22, 44)))
-// @debug set((a: 1, b: 2), test color, #ffffff); // (a: 1, b: 2, test: (color: #ffffff))
-// @debug set((a: 1, b: 2), test null, null); // (a: 1, b: 2, test: (null: null))
+// @debug set((a: 1, b: 2), test string, 27); // (a: 1, b: 2, test string: 27)
+// @debug set((a: 1, b: 2), null, 27); // (a: 1, b: 2, null: 27)
+// @debug set((a: 1, b: 2), test map, (map: 22,)); // (a: 1, b: 2, test map: (map: 22))
+// @debug set((a: 1, b: 2), test list, (22, 44)); // (a: 1, b: 2, test list: (22, 44))
+// @debug set((a: 1, b: 2), test color, #ffffff); // (a: 1, b: 2, test color: #ffffff)
+// @debug set((a: 1, b: 2), test null, null); // (a: 1, b: 2, test null: null)

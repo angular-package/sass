@@ -4,6 +4,7 @@
 
 // Functions.
 @use '../../list/list.append.function' as list-append;
+@use 'unified.is-key.function' as unified-is-key;
 
 // Status: DONE
 // The `map.unified-has-keys()` function checks whether `$map` contains required `$unified-key` and optional `$unified-keys`.
@@ -16,7 +17,7 @@
   @each $unified-key in list-append.append((), $unified-key, comma, $unified-keys...) {
     $has: list.append(
       $has,
-      list.separator($unified-key) == comma
+      unified-is-key.is-key($unified-key)
       and map.has-key($map, $unified-key...)
       or map.has-key($map, $unified-key)
     );

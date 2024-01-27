@@ -1,0 +1,24 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Status: DONE
+// The `map.unified-is-key()` function checks whether `$value` is unified key, optionally of `$length`.
+// @param `$value` The value to check it's unified key.
+// @param `$length` Optional length of unified key.
+// @returns The returned value is a `bool` indicating whether `$value` is unified key, optionally of `$length`.
+@function is-key($value, $length: list.length($value)) {
+  @return (meta.type-of($value) == list
+    and list.separator($value) == comma
+    and $length and list.length($value) == $length
+  ) or false;
+}
+
+// Examples.
+// @debug is-key((key, nested-key1, nested-key2)); // true
+// @debug is-key(key nested-key1 nested-key2); // false
+
+// length
+// @debug is-key((key, nested-key1, nested-key2), 2); // false
+// @debug is-key((key, nested-key1, nested-key2), 3); // true
+// @debug is-key((key, nested-key1, nested-key2), 4); // false

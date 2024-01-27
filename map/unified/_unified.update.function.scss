@@ -1,15 +1,20 @@
 // Functions.
+@use '../../list/list.append.function' as list-append;
 @use 'unified.set.function' as unified-set;
 
 // Status: DONE
-// The `map.unified-update()` function allows to set multiple unified-key with value sets in a `$map`.
-// ? Unified key is also nested key as comma-separated list.
-// @param `$map` A map to update by multiple sets `$unified-key_value`.
-// @param `$unified-key_value` A map of (unified-key: value) to update `$map`.
-// @returns The returned value is `$map` with updated multiple sets.
-@function update($map, $unified-key_value) {
-  @each $unified-key, $value in $unified-key_value {
-    $map: unified-set.set($map, $unified-key, $value);
+// The `map.unified-update()` function based on a unified key updates `$map` with required `$unified-entry` (unified key: value)
+// or optional entries `$unified-entries`.
+// ? Unified key is key and nested key as comma-separated list.
+// @param `$map` A map to update by required `$unified-entry` (unified key: value) and optional `$unified-entries`.
+// @param `$unified-entry` A map entry of (unified key: value) to set in `$map`.
+// @arbitrary `$unified-entries...`  Optional map entries of (unified key: value) to set in `$map`.
+// @returns The returned value is updated `$map` by required `$unified-entry` and optional `$unified-entries`.
+@function update($map, $unified-entry, $unified-entries...) {
+  @each $unified-entry in list-append.append((), $unified-entry, comma, $unified-entries...) {
+    @each $unified-key, $value in $unified-entry {
+      $map: unified-set.set($map, $unified-key, $value);
+    }
   }
   @return $map;
 }
@@ -33,3 +38,6 @@
 
 // update multiple list keys
 // @debug update($-fonts, ((arial large,): (size: large), (georgia small,): (size: small), (verdana medium,): (size: medium))); // ("Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), arial large: (size: large), georgia small: (size: small), verdana medium: (size: medium))
+
+// arbitrary
+// @debug update($-fonts, (a: 1), (b: 2));

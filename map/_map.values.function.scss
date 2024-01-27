@@ -11,7 +11,9 @@
 @function values($map, $keys...) {
   @if list.length($keys) > 0 {
     @for $i from 1 through list.length($keys) {
-      $keys: if(map.has-key($map, list.nth($keys, $i)), list.set-nth($keys, $i, map.get($map, list.nth($keys, $i))), $keys);
+      $keys: map.has-key($map, list.nth($keys, $i))
+        and list.set-nth($keys, $i, map.get($map, list.nth($keys, $i)))
+        or $keys;
     }
   } @else {
     $keys: map.values($map);

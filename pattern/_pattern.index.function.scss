@@ -1,0 +1,25 @@
+// Functions.
+@use 'pattern.is.function' as pattern-is;
+
+// Status: DONE
+// The `pattern.index()` function retrieves index of indicators in `$list`.
+// @param `$list` A list to find index of pattern containing indicators '*', '^', '$'.
+// @arbitrary `$indicators...` A list of indicators to check in `$list`.
+// @return The returned value is index list where pattern, or with specified indicator is found, otherwise `null`.
+@function index($list, $indicators...) {
+  $index: 1;
+  @each $element in $list {
+    @if pattern-is.is($element, $indicators...) {
+      @return $index;
+    }
+
+    $index: $index + 1;
+  }
+  @return null;
+}
+
+// Examples.
+// @debug index(('*.palette')); // 1
+// @debug index(('', '*.palette')); // 2
+// @debug index(('2', '3', '^test')); // 3
+// @debug index(('a', 'b', '$test')); // 3

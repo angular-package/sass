@@ -1,17 +1,30 @@
 // Sass.
 @use 'sass:list';
 @use 'sass:map';
-@use 'sass:meta';
+
+// Functions.
+@use '../../list/list.append.function' as list-append;
+@use 'unified.is-key.function' as unified-is-key;
 
 // Status: DONE
-// The `map.unified-get()` function returns the value associated with `$unified-key` in `$map`.
-// @param `$map` A map to get the value by using `$unified-key`.
-// @param `$unified-key` The key or nested key as comma-separated list used to get the value from `$map`.
-// @returns The returned value is the value associated with `$unified-key` from the `$map`.
-@function get($map, $unified-key) {
-  @return (list.separator($unified-key) == comma
-    and map.get($map, $unified-key...))
-    or map.get($map, $unified-key);
+// The `map.unified-get()` function based on a unified key returns the value associated with `$unified-key` in `$map`.
+// @param `$map` A map to get the value by using required `$unified-key` and optonal `$unified-keys`.
+// @param `$unified-key` Required key or nested key as comma-separated list used to get the value from `$map`.
+// @arbitrary `$unified-keys...` Optional unified keys to get from `$map`.
+// @returns The returned value is the value associated with required `$unified-key` or list associated 
+// with required `$unified-key` and `$unified-keys` from the `$map`.
+@function get($map, $unified-key, $unified-keys...) {
+  $result: ();
+  @each $unified-key in list-append.append((), $unified-key, comma, $unified-keys...) {
+    $result: list-append.append(
+      $result,
+      (unified-is-key.is-key($unified-key)
+        and map.get($map, $unified-key...))
+        or map.get($map, $unified-key),
+      comma
+    );   
+  }
+  @return list.length($result) == 1 and list.nth($result, 1) or $result;
 }
 
 // Examples.
@@ -37,5 +50,19 @@
 // null
 // @debug get($-map, wrong key); // null
 
-// fallback
-// @debug get($-map, wrong key, (must be: this value)); // (must be: this value)
+// Multiple
+// key string
+// @debug get((a: 1, b: 2, c: 3), 'a', 'b', 'c'); // (1, 2, 3)
+
+// different map order + keys
+// @debug get((b: 2, a: 1, c: 3), 'c', 'b', 'a'); // (3, 2, 1)
+// @debug get((a: 1, b: 2, c: 3), 'b', 'c'); // (2, 3)
+
+// key list
+// @debug get(((a, b): 1, b: 2, c: 3), 'a', (a, b), 'c'); // (null, 1, 3)
+
+// key map
+// @debug get((b: 2, (a: b): 1, c: 3), 'a', (a: b), 'c'); // (null, 1, 3)
+
+// nested key
+// @debug get((a: (b: (c: (d: 1)))), (a, b, c , d)); // 1

@@ -1,0 +1,68 @@
+// Sass.
+@use 'sass:map';
+
+// Modules.
+@use '../../meta';
+@use '../../string';
+
+// Status: DONE
+// The `map.replace-key-substring()` function returns `$map` with substring `$key-substring-replace` replaced by `$key-substring-replacement`.
+// @param `$map` A map in which substring `$key-substring-replace` in key is replaced with `$key-substring-replacement`.
+// @param `$key-substring-replace` Substring in key to replace with `$key-substring-replacement` of `$map`.
+// @param `$key-substring-replacement` String to replace substring `$key-substring-replace` in key of `$map`.
+// @param `$quote` A `bool` value inidicates quote replaced string on `true`, unquote on `false` and do nothing on `null`.
+// @returns The returned value is a `$map` with replaced substring `$key-substring-replace` in key by `$key-substring-replacement` of `$map`.
+@function key-substring(
+  $map,
+  $key-substring-replace,
+  $key-substring-replacement,
+  $quote: null
+) {
+  @if meta.of-type(string, $key-substring-replace, $key-substring-replacement) {
+    $result: ();
+    @each $key, $value in $map {
+      @if meta.of-type(string, $key) {
+        $key: string.index($key, $key-substring-replace)
+          and string.replace(
+            $key,
+            first,
+            $key-substring-replace,
+            $key-substring-replacement
+          ) or $key;
+  
+        $result: map.merge(
+          $result,
+          ($quote and string.quote($key)
+            or $quote == false and string.unquote($key)
+            or $key: $value
+          )
+        );
+      } @else {
+        $result: map.merge($result, ($key: $value));
+      }
+    }
+    @return $result;
+  }
+  @return $map;
+}
+
+// Examples.
+// $-map: (
+//   key replace: (map: 1,),
+//   'key-replace': (map: 2,),
+//   q-key-replace: (map: 3,),
+// );
+
+// replace substring string key
+// @debug key-substring($-map, key, new); // ("new-replace": (map: 2), q-new-replace: (map: 3))
+// @debug key-substring($-map, key, new, false); // (new-replace: (map: 2), q-new-replace: (map: 3))
+// @debug key-substring($-map, q-key, new); // (new-replace: (map: 2), q-new-replace: (map: 3))
+
+// replace string key with a list key
+// @debug key-substring($-map, key-replace, new-key); // (key replace: (map: 1), "new-key": (map: 2), q-new-key: (map: 3))
+
+// replace list key
+// @debug key-substring($-map, key-replace, 'd'); // (key replace: (map: 1), "d": (map: 2), q-d: (map: 3))
+// @debug key-substring(('bold king': 1, b: 2, c: 3, 'bold': 'king', 'test': 'king'), 'bold', 'hairy'); // ("hairy king": 1, b: 2, c: 3, "hairy": "king", "test": "king")
+// @debug key-substring(('bold king': 1, b: 2, c: 3, 'o': bool), 'o', 'ooo'); // ("bold king": 1, b: 2, c: 3, "ooo": bool)
+// @debug key-substring((a: 1, b: 2, c: 3), 'a', 'd'); // (d: 1, b: 2, c: 3)

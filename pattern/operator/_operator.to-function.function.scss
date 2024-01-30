@@ -6,7 +6,7 @@
 @use 'operator.var';
 
 // Functions.
-@use '../../map/map.get-index.function' as map-get-index;
+@use '../../map/get/get.index.function' as map-get-index;
 
 // Status: DONE
 // The `query.operator-to-function()` function returns function of given `$operator`.

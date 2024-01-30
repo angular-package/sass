@@ -6,22 +6,23 @@
 @use 'pattern.variables';
 
 // Modules.
-@use 'operator/operator.has.function';
+@use '../meta';
 
 // Functions.
+@use '../list/get/get.number.function' as list-get-number;
 @use '../list/list.index.function' as list-index;
-@use '../list/list.last.function' as list-last;
 @use '../string/string.index.function' as string-index;
+@use 'operator/operator.has.function';
 
 // Status: DONE
 // The `pattern.is()` function checks whether the `$value` is a pattern, also with specific indicator.
 // @param `$value` A value to check against it's a pattern.
-// @param `$indicators` A list of pattern indicators to check whether `$value` contains.
-// @return The returned value is a `bool` indicating the `$value` is a pattern, also containing `$indicators`.
+// @arbitrary `$indicators...` A list of pattern indicators to check whether `$value` contains.
+// @returns The returned value is a `bool` indicating the `$value` is a pattern, also containing `$indicators`.
 @function is($value, $indicators...) {
-  @each $indicator in if(list.length($indicators) > 0, $indicators, map.keys(pattern.$indicators)) {
-    @if type-of($value) == list and list-index.index(list-index.index($value, $indicator...), 1)
-      or type-of($value) == string and list-index.index(string-index.index($value, $indicator...), 1)
+  @each $indicator in (list.length($indicators) > 0 and $indicators) or map.keys(pattern.$indicators) {
+    @if (meta.type-of($value) == list and list-get-number.number(list-index.index($value, $indicator...)))
+      or (meta.type-of($value) == string and list-get-number.number(string-index.index($value, $indicator...)))
       or operator.has($value, $indicator...) {
       @return true;
     }
@@ -35,10 +36,17 @@
 // @debug is('value:string'); // true
 // @debug is('key:number'); // true
 
+// @debug is('palette.*'); // true
+// @debug is('p^alette.*.light'); // true
+
 // list
 // @debug is('*' '.palette'); // true
 // @debug is('^' '.palette'); // true
 // @debug is('~' '.palette'); // false
+
+// @debug is('palette.' '*'); // true
+// @debug is('palette.' '*' 'dark'); // true
+// @debug is('palette.' '`' 'dark'); // false
 
 // with operator
 // @debug is('?=.palette'); // true

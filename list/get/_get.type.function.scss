@@ -26,8 +26,8 @@
       or $result;
   }
   @return map-get-index.index((
-    (first, any): list.length($result) > 0 and list-first.first($result) or null,
-    last: list.length($result) > 0 and list-last.last($result) or null,
+    (first, any): if(list.length($result) > 0, list-first.first($result), null),
+    last: if(list.length($result) > 0, list-last.last($result), null),
     all: $result,
   ), $occurrence);
 }

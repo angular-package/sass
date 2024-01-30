@@ -1,14 +1,14 @@
 // Functions.
-@use '../list.first.function';
-@use 'get.type.function';
+@use '../list.first.function' as list-first;
+@use 'get.type.function' as get-type;
 
 // Status: DONE
-// The `get.map()` returns the list maps retrieved from the given `$list`.
-// @param `$list` The list from which the map is retrieved.
-// @param `$occurrence` Occurrence of the map type in the list to get, any, first, last or all.
-// @return The return value is the list of the maps retrieved from the given `$list`.
+// The `get.map()` returns retrieved any, first, last occurring map or all occured maps from `$list`. 
+// @param `$list` The list from which occurring maps are retrieved.
+// @param `$occurrence` All, any, first or last occurrence of map in `$list` to retrieve.
+// @returns The returned value is occurred any, first, last map or all occurred maps retrieved from `$list` or `null`.
 @function map($list, $occurrence: first) {
-  @return list.first(get.type($list, $occurrence, map));
+  @return get-type.type($list, $occurrence, map);
 }
 
 // Examples.

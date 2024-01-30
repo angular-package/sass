@@ -1,14 +1,14 @@
 // Functions.
-@use '../list.first.function';
-@use 'get.type.function';
+@use '../list.first.function' as list-first;
+@use 'get.type.function' as get-type;
 
 // Status: DONE
-// The `get.list()` function returns the list from the given list if exists, otherwise null.
-// @param `$list` The list from which the list is taken.
-// @param `$occurrence` All, any, first or last occurrence of the list in the given `$list` to retrieve.
-// @return The return value is the list of the retrieved lists or `null`.
+// The `get.list()` function returns any, first, last occurring list or all occurred lists from `$list`.
+// @param `$list` The list from which occurring lists are taken.
+// @param `$occurrence` All, any, first or last occurrence of list in `$list` to retrieve.
+// @returns The returned value is occurred any, first, last list or all occurred lists retrieved from `$list` or `null`.
 @function list($list, $occurrence: first) {
-  @return list.first(get.type($list, $occurrence, list));
+  @return get-type.type($list, $occurrence, list);
 }
 
 // Examples.

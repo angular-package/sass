@@ -1,20 +1,13 @@
 // Functions.
-@use '../list.first.function' as *;
-@use '../list.select.function';
+@use 'get.type.function' as get-type;
 
 // Status: DONE
-// The `get.number()` function returns any, first or last occurring number, or all occurred numbers, also the specified numbers, otherwise null.
-// @param `$list` A list from which the occurring numbers are retrieved.
-// @param `$occurrence` All, any, first or last occurrence of the retrieved numbers from the given `$list`.
-// @param `$value` The value to retrieve from the given `$list`.
-// @param `$values...` The list of values to retrieve from the given `$list`.
-// @return The return value is a retrieved number, list of numbers or `null`.
-@function number($list, $occurrence: first, $value: null, $values...) {
-  @return if(
-    $value,
-    list.select($occurrence value, $list, value, '==', $value, $values...),
-    first(list.select($occurrence value, $list, value, ':==', number))
-  );
+// The `get.number()` function returns any, first or last occurring number, or all occurred numbers.
+// @param `$list` A list from which occurring numbers are retrieved.
+// @param `$occurrence` All, any, first or last occurrence of the retrieved numbers from `$list`.
+// @returns The returned value is occurred any, first, last number or all occurred numbers retrieved from `$list` or `null`.
+@function number($list, $occurrence: first) {
+  @return get-type.type($list, $occurrence, number);
 }
 
 // Examples.
@@ -33,17 +26,7 @@
 // occurrence: all
 // @debug number((3, 'a', 0, 'b', 1, 'c', 2), all); // 3, 0, 1, 2
 // @debug number(('a', 5, 'b', 2, 'c', (4, )), all); // 5, 2
-
-// occurrence: all + value
-// @debug number(('a', 3, 'b', 2, 4, 2, 7, 2, 'b', 'c', 2), all, 15); // null
-// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all, 8); // 8
-// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), first, 8, ); // 8
-// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), last, 8); // 8
-
-// occurrence: all + values
-// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all, 8, 15, 7, 2); // 8, null, 7, (2, 2, 2, 2)
-
-// specified value TODO: ?
-// @debug number((3, 'a', 0, 'b', 1, 'c', 2), all '>' 2...); // 3
-// @debug number((3, 'a', 0, 'b', 1, 'c', 2), all '>' 1...); // 3, 2
-// @debug number(('3', 'a', '0', 'b', '1', 'c', '2'), last '==' 2...); // null
+// @debug number(('a', 3, 'b', 2, 4, 2, 7, 2, 'b', 'c', 2), all); // 3, 2, 4, 2, 7, 2, 2
+// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all); // 3, 2, 4, 8, 2, 7, 2, 2
+// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), first); // 3
+// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), last); // 2

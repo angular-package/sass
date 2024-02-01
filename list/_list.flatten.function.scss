@@ -7,19 +7,24 @@
 // @param `$list` The list to flatten.
 // @returns The returned value is flattened copy of `$list`.
 @function flatten($list) {
-  $result: ();
-  @for $i from 1 through list.length($list) {
-    @if meta.type-of(list.nth($list, $i)) == list {
-      @each $element in list.nth($list, $i) {
-        $result: list.append($result, $element, list.separator($list));
+  @if meta.type-of($list) == list {
+    $result: ();
+    @for $i from 1 through list.length($list) {
+      @if meta.type-of(list.nth($list, $i)) == list {
+        @each $element in list.nth($list, $i) {
+          $result: list.append($result, $element, list.separator($list));
+        }
+      } @else {
+        $result: list.append($result, list.nth($list, $i), list.separator($list));
       }
-    } @else {
-      $result: list.append($result, list.nth($list, $i), list.separator($list));
-    }
+    }  
+    @return $result;
   }
-  @return $result;
+  @return $list;
 }
 
 // Examples.
 // @debug flatten(('a', 'b', (5, 6), c, d, 2, 4, 5, (a: 1), (1, 2, 3) )); // "a", "b", 5, 6, c, d, 2, 4, 5, (a: 1), 1, 2, 3
 // @debug flatten(('a', 'b', (5, 6), (c, d, 2, 4), 5, (a: 1), (1, 2, 3) )); // "a", "b", 5, 6, c, d, 2, 4, 5, (a: 1), 1, 2, 3
+// @debug flatten(('a', (b: 1), 'b', (5, 6), c, d, 2, 4, 5, (a: 1), (1, 2, 3) ));
+// @debug flatten((b: 1)); // (b: 1)

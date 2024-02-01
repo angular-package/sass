@@ -1,0 +1,34 @@
+// Functions.
+@use 'select.type.function' as select-type;
+
+// Status: DONE
+// The `select.bool()` function returns any, first or last occurring bool value, or the specified `$bool`.
+// @param `$list` The list from which occurring bool values are retrieved.
+// @param `$occurrence` Any, first or last occurrence of `bool` value in `$list`.
+// @param `$operator` Operator to compare with `$bool`.
+// @param `$bool` A `bool` value to retrieve from `$list`.
+// @returns The returned value is a `bool` or list of bools.
+@function bool($list, $occurrence: first, $operator: '==', $bool: null) {
+  @return select-type.type($list, $occurrence, bool, $operator, $bool);
+}
+
+// Examples.
+// @debug bool(('a', 'b', false, 'c', 2)); // `false`
+// @debug bool(('a', 'b', true, 'c', 2)); // `true`
+// @debug bool(('a', 'b', 'c', (true, '5', (6,)))); // `null`
+
+// last
+// @debug bool(('a', 'b', false, 'c', 2, true), last); // `true`
+
+// first
+// @debug bool(('a', 'b', false, 'c', 2, true), first); // `false`
+
+// specific `bool` value
+// @debug bool(('a', 'b', true, 'c', 2), any, '==', false); // `null`
+// @debug bool(('a', 'b', true, 'c', 2), first, '==', true); // `true`
+// @debug bool(('a', 'b', false, 'c', 2), first, '==', true); // null
+// @debug bool(('a', 'b', false, 'c', 2, true), any, '==', false); // `false`
+
+// all
+// @debug bool(('a', 'b', true, 'c', 2, false, 3, true), all); // true, false, true
+// @debug bool(('a', 'b', true, 'c', 2, false, 3, true), all, '==', true); // true, true

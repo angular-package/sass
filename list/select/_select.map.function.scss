@@ -1,0 +1,34 @@
+// Functions.
+@use 'select.type.function' as select-type;
+
+// Status: DONE
+// The `select.map()` or `list.select-map()` function returns any, first or last occurring map,
+// or all occurred maps, or specified maps.
+// @param `$list` A list from which the occurring maps are retrieved.
+// @param `$occurrence` All, any, first or last occurrence of retrieved maps from `$list`.
+// @param `$operator` Operator to compare with `$value` and optional `$values`.
+// @arbitrary `$maps...` The list of values to retrieve from the given `$list`.
+// @returns The returned value is a retrieved number, list of maps or `null`.
+@function map($list, $occurrence: first, $operator: '==', $maps...) {
+  @return select-type.type($list, $occurrence, map, $operator, $maps...);
+}
+
+// Examples.
+// occurrence: first by default
+// @debug map(('a', (a: 1), 'b', (d: 1), 'c', 2)); // (a: 1)
+// @debug map(('a', 'b', 'c', 2), first); // null
+
+// occurrence: last
+// @debug map(('a', (a: 1), 'b', (d: 1), 'c', 2), last); // (d: 1)
+
+// occurrence: all
+// @debug map((3, 'a', (0: 1), 'b', 1, ('c': 2), 2, (d: 5)), all); // (0: 1), ("c": 2), (d: 5)
+
+// occurrence: all + value
+// @debug map((3, 'a', (0: 1), 'b', 1, ('c': 2), 2, (d: 5)), all, '==', (0: 1)); // (0: 1)
+// @debug map((3, 'a', (0: 1), (d: 5), 'b', 1, ('c': 2), 2, (d: 5)), all, '==', (d: 5)); // (((d: 5), (d: 5)),)
+// @debug map((3, 'a', (0: 1), 'b', 1, ('c': 2), 2, (d: 5)), first, '==', (c: 2)); // ("c": 2)
+// @debug map((3, 'a', (0: 1), (d: 5), 'b', 1, ('c': 2), 2, (d: 5)), last, '==', (d: 5)); // (d: 5)
+
+// occurrence: all + values
+// @debug map((3, 'a', (0: 1), (d: 5), 'b', 1, ('c': 2), 2, (d: 5)), all, '==', (d: 5), (0: 1)); // ((d: 5), (d: 5)), (0: 1)

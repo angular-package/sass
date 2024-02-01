@@ -1,0 +1,13 @@
+// Functions.
+@use 'select.type.function' as select-type;
+
+// Status: DONE
+// The `select.null()` function returns any, first or last occurring null, or all occurred nulls, also the specified nulls, otherwise null.
+// @param `$list` A list from which the occurring nulls are retrieved.
+// @param `$occurrence` All, any, first or last occurrence of retrieved nulls from `$list`.
+// @param `$operator` Operator to compare with `$value` and optional `$values`.
+// @returns The returned value is a retrieved null, list of nulls or `null`.
+@function null($list, $occurrence: first, $operator: '==') {
+  @return select-type.type($list, $occurrence, $operator, null);
+}
+

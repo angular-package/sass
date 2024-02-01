@@ -1,0 +1,41 @@
+// Sass.
+@use 'sass:list';
+
+// Functions.
+@use '../list.first.function' as list-first;
+@use '../list.flatten.function' as list-flatten;
+@use '../list.select.function' as list-select;
+
+// Status: DONE
+// The `select.type()` or `list.select-type()` function returns the list with elements of the given types.
+// @param `$list` The list from which elements are being taken.
+// @param `$occurrence` Any, first, last or all occurrence of types in `$list`.
+// @param `$types` The required types to retrieve from `$list`.
+// @param `$operator` Operator to compare with `$values`.
+// @arbitrary `$values...` Additional values of types to retrieve from `$list`.
+// @returns The returned value is list of elements of types.
+@function type($list, $occurrence: any, $types, $operator: '==', $values...) {
+  $list: list-select.select(
+    list.length($values) > 0 and all or $occurrence value,
+    $list,
+    value,
+    ':==',
+    $types...
+  );
+  $list: list-flatten.flatten($list);
+  @return list.length($values) > 0 and
+    list-select.select($occurrence value, $list, value, $operator, $values...)
+    or $list;
+}
+
+// Examples.
+// select `$types`
+// @debug type((firstname, 5, true, lastname, (test: 1)), first, string); // firstname
+// @debug type((firstname, 5, true, lastname, (test: 1)), last, string); // lastname
+
+// string + map
+// @debug type((firstname, 5, (b: 2), true, lastname, (test: 1)), last, string map); // lastname, lastname, (test: 1)
+
+// select `$types` of specific `$values`
+// @debug type((firstname, 5, true, (test: 1)), any, string); // firstname
+// @debug type((firstname, 5, true, lastname, (test: 1)), any, string, '==', lastname); // lastname

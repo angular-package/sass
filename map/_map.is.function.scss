@@ -17,3 +17,7 @@
 // @debug is((a: 1, b: 2, c: 3)); // true
 // @debug is((a: 1, b: 2, c: 3), 2); // false
 // @debug is((a: 1, b: 2, c: 3), 3); // true
+
+// not map
+// @debug is(string); // false
+// @debug is(string bold); // false

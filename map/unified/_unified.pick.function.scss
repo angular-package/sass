@@ -7,11 +7,11 @@
 @use 'unified.merge.function' as unified-merge;
 
 // Status: DONE
-// The `map.unified-pick()` function returns a copy of `$map` with required `$unified-key` and optional `$unified-keys`.
-// @param `$map` A map from which values of required `$unified-key` and optional `$required-keys` are taken.
+// The `map.unified-pick()` function returns a copy of `$map` with required `$unified-key` and additional `$unified-keys`.
+// @param `$map` A map from which values of required `$unified-key` and additional `$required-keys` are picked.
 // @param `$unified-key` Required key or nested key as comma-separated list to pick from `$map`.
-// @arbitrary `$unified-keys...` List of keys or nested keys as comma-separated list to pick the values from `$map`.
-// @returns The returned value is a copy of `$map` built of required `$unified` key and optional `$unified-keys`.
+// @arbitrary `$unified-keys...` Adittional keys or nested keys as comma-separated list to pick the values from `$map`.
+// @returns The returned value is a copy of `$map` built of required `$unified-key` and additional `$unified-keys`.
 @function pick($map, $unified-key, $unified-keys...) {
   $result: ();
   @each $unified-key in list-append.append((), $unified-key, comma, $unified-keys...) {

@@ -4,12 +4,12 @@
 
 // Status: DONE
 // The `map.unified-update()` function based on a unified key updates `$map` with required `$unified-entry` (unified key: value)
-// or optional entries `$unified-entries`.
+// or additional entries `$unified-entries`.
 // ? Unified key is key and nested key as comma-separated list.
-// @param `$map` A map to update by required `$unified-entry` (unified key: value) and optional `$unified-entries`.
-// @param `$unified-entry` A map entry of (unified key: value) to set in `$map`.
+// @param `$map` A map to update with required `$unified-entry` (unified key: value) and optional `$unified-entries`.
+// @param `$unified-entry` Required map entry of (unified key: value) to set in `$map`.
 // @arbitrary `$unified-entries...`  Optional map entries of (unified key: value) to set in `$map`.
-// @returns The returned value is updated `$map` by required `$unified-entry` and optional `$unified-entries`.
+// @returns The returned value is updated `$map` with required `$unified-entry` and optional `$unified-entries`.
 @function update($map, $unified-entry, $unified-entries...) {
   @each $unified-entry in list-append.append((), $unified-entry, comma, $unified-entries...) {
     @each $unified-key, $value in $unified-entry {

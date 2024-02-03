@@ -11,7 +11,7 @@
 // ? If key is a comma-separated list then `map.deep-remove()` function is used, otherwise `map.remove()`.
 // @param `$map` A map to remove keys from.
 // @param `$unified-key` Required key or nested key as comma-separated list to remove from `$map`.
-// @arbitrary `$unified-keys...` Multiple keys or nested keys as comma-separated list to remove from `$map`.
+// @arbitrary `$unified-keys...` Additional keys or nested keys as comma-separated list to remove from `$map`.
 // @returns The returned value is a copy of `$map` without any values associated with keys.
 @function remove($map, $unified-key, $unified-keys...) {
   @each $unified-key in list-append.append((), $unified-key, comma, $unified-keys...) {

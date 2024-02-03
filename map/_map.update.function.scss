@@ -5,11 +5,12 @@
 @use '../list/list.append.function' as list-append;
 
 // Status: DONE
-// The `map.update()` function allows to set multiple key with value sets in a `$map`.
-// @param `$map` A map to update by multiple sets `$key-value`.
-// @param `$key-value` A map of (key: value) to update `$map`.
-// @arbitrary `$key-value-entries...` Multiple maps of (key: value) to update `$map`.
-// @returns The returned value is `$map` with updated multiple sets.
+// The `map.update()` function allows to set multiple key-value sets in a `$map` with required `$key-value`
+// and additional `$key-value-entries`.
+// @param `$map` A map to update by multiple sets key-value.
+// @param `$key-value` Required map of (key: value) to update `$map`.
+// @arbitrary `$key-value-entries...` Additional maps of (key: value) to update `$map`.
+// @returns The returned value is `$map` with updated keys of required `$key-value` and additional `$key-value-entries`.
 @function update($map, $key-value, $key-value-entries...) {
   @each $key-value in list-append.append((), $key-value, comma, $key-value-entries...) {
     @each $key, $value in $key-value {

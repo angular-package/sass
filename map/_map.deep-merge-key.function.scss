@@ -5,11 +5,11 @@
 @use '../list/list.append.function' as list-append;
 
 // Status: DONE
-// The `map.deep-merge-key()` function merges `$map` with retrieved values from key or nested key of this `$map`.
+// The `map.deep-merge-key()` function merges `$map` with retrieved values from required `$key` and optional `$nested-keys`  of `$map`.
 // @param `$map` A map to merge with retrieved value from key or nested key of this map.
 // @param `$key` Required key to merge with `$map`.
 // @arbitrary `$nested-keys...` Optional nested keys to get the value to merge with `$map`.
-// @returns The returned value is a map merged with the values retrieved from key or nested key.
+// @returns The returned value is a map merged with the values retrieved from required `$key` and optional `$nested-keys`.
 @function deep-merge-key($map, $key, $nested-keys...) {
   $keys: list-append.append((), $key, comma, $nested-keys...);
   @return map.deep-remove(

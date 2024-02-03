@@ -6,11 +6,11 @@
 @use '../list/list.append.function' as list-append;
 
 // Status: DONE
-// The `map.pick()` function picks required `$key` and optional `$keys` from `$map`.
-// @param `$map` A map from which values of required `$key` and optional `$keys` are taken.
+// The `map.pick()` function picks required `$key` and additional `$keys` from `$map`.
+// @param `$map` A map from which values of required `$key` and additional `$keys` are taken.
 // @param `$key` Required key to pick from `$map`.
-// @arbitrary `$keys...` List of keys to pick the values from `$map`.
-// @returns The returned value is a copy of `$map` built of required `$key` and optional `$keys`, if keys are not found returns `null`.
+// @arbitrary `$keys...` Additional keys to pick the values from `$map`.
+// @returns The returned value is a copy of `$map` built of required `$key` and additional `$keys`, if keys are not found returns `null`.
 @function pick($map, $key, $keys...) {
   $result: ();
   @each $key in list-append.append((), $key, comma, $keys...) {

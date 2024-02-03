@@ -1,14 +1,20 @@
 // Sass.
 @use 'sass:map';
 
+// Functions.
+@use '../list/list.append.function' as list-append;
+
 // Status: DONE
 // The `map.update()` function allows to set multiple key with value sets in a `$map`.
-// @param `$map` A map to update by multiple sets `$key_value`.
-// @param `$key_value` A map of (key: value) to update `$map`.
+// @param `$map` A map to update by multiple sets `$key-value`.
+// @param `$key-value` A map of (key: value) to update `$map`.
+// @arbitrary `$key-value-entries...` Multiple maps of (key: value) to update `$map`.
 // @returns The returned value is `$map` with updated multiple sets.
-@function update($map, $key_value) {
-  @each $key, $value in $key_value {
-    $map: map.set($map, $key, $value);
+@function update($map, $key-value, $key-value-entries...) {
+  @each $key-value in list-append.append((), $key-value, comma, $key-value-entries...) {
+    @each $key, $value in $key-value {
+      $map: map.set($map, $key, $value);
+    }
   }
   @return $map;
 }
@@ -24,3 +30,4 @@
 
 // update multiple list keys
 // @debug update($-map, ((arial large): (size: large), (georgia small): (size: small), verdana medium: (size: medium))); // (arial large: (size: large), georgia small: (size: small), verdana medium: (size: medium))
+// @debug update($-map, ((arial large): (size: large)), ((georgia small): (size: small)), (verdana medium: (size: medium))); // (arial large: (size: large), georgia small: (size: small), verdana medium: (size: medium))

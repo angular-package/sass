@@ -8,23 +8,25 @@
 
 // Status: DONE
 // The `map.unified-get()` function based on a unified key returns the value associated with `$unified-key` in `$map`.
-// @param `$map` A map to get the value by using required `$unified-key` and optonal `$unified-keys`.
+// @param `$map` A map to get the value by using required `$unified-key` and additional `$unified-keys`.
 // @param `$unified-key` Required key or nested key as comma-separated list used to get the value from `$map`.
-// @arbitrary `$unified-keys...` Optional unified keys to get from `$map`.
+// @arbitrary `$unified-keys...` Additional unified keys to get from `$map`.
 // @returns The returned value is the value associated with required `$unified-key` or list associated 
-// with required `$unified-key` and `$unified-keys` from the `$map`.
+// with required `$unified-key` and additional `$unified-keys` from the `$map`.
 @function get($map, $unified-key, $unified-keys...) {
   $result: ();
   @each $unified-key in list-append.append((), $unified-key, comma, $unified-keys...) {
     $result: list-append.append(
       $result,
-      (unified-is-key.is-key($unified-key)
-        and map.get($map, $unified-key...))
-        or map.get($map, $unified-key),
+      if(
+        unified-is-key.is-key($unified-key),
+        map.get($map, $unified-key...),
+        map.get($map, $unified-key)
+      ),
       comma
     );   
   }
-  @return list.length($result) == 1 and list.nth($result, 1) or $result;
+  @return if(list.length($result) == 1, list.nth($result, 1), $result);
 }
 
 // Examples.

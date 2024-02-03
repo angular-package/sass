@@ -17,9 +17,11 @@
   @each $unified-key in list-append.append((), $unified-key, comma, $unified-keys...) {
     $has: list.append(
       $has,
-      unified-is-key.is-key($unified-key)
-      and map.has-key($map, $unified-key...)
-      or map.has-key($map, $unified-key)
+      if(
+        unified-is-key.is-key($unified-key),
+        map.has-key($map, $unified-key...),
+        map.has-key($map, $unified-key)
+      )
     );
   }
   @return if(list.index($has, false), false, true);

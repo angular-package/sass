@@ -5,7 +5,7 @@
 @use 'map.pick.function' as map-pick;
 
 // Status: DONE
-// The `map.retrieve()` function retrieves a value from `$map` by `$method` get or pick with keys.
+// The `map.retrieve()` function retrieves a value from `$map` by `$method` get or pick with required `$key` and additional `$keys`.
 // @param `$method` The method get(`map.get()`)  or pick(`map.pick()`) used to retrieve the value.
 // @param `$map` A map to retrieve the value by using `$method`, `$key` and optional `$keys`.
 // @param `$key` Required key to `get` or `pick` the value from `$map`.

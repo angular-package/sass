@@ -6,7 +6,7 @@
 // @param `$map1` A map to deep merge with `$map2`.
 // @param `$map2` A map to deep merge with `$map1`.
 // @arbitrary `$maps...` Multiple maps to deep merge with the merged `$map1` and `$map2`.
-// @return The return value is the map built from `$map2` and `$maps`.
+// @returns The returned value is the map built from `$map2` and `$maps`.
 @function deep-merge($map1, $map2, $maps...) {
   $map1: map.deep-merge($map1, $map2);
   @each $map in $maps {

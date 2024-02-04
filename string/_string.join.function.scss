@@ -1,16 +1,17 @@
 // Sass.
 @use 'sass:list';
+@use 'sass:meta';
 @use 'sass:string';
 
 // Status: DONE
 // The `string.join()` function returns the `string` built from `$elements` separated by `$delimiter` in original elements order.
 // @param `$delimiter` The delimiter to add between `$elements`.
 // @param `$elements...` Elements to join to returned string of `color`, `list`, `number` or `string` type with the `$delimiter`.
-// @return The return value is a `string` built from `$elements` with `$delimiter`.
+// @returns The returned value is a `string` built from `$elements` with `$delimiter`.
 @function join($delimiter, $elements...) {
   $string: '';
   @each $element in $elements {
-    @if list.index(color list number string, type-of($element)) {
+    @if list.index(color list number string, meta.type-of($element)) {
       @each $element in $element {
         $string: string.insert($string, #{$element}#{$delimiter or ''}, -1);
       }

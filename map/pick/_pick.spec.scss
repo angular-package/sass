@@ -1,0 +1,705 @@
+// Sass.
+@use 'sass:map';
+
+// Modules.
+@use '../pick';
+
+
+// SECTION: pick.substring-end()
+$-theme: (
+  dark: (
+    'dark.palette': (),
+
+    basic large: (
+      '': border,
+      dark: border dark,
+      light: border light
+    ),
+  ),
+  basic: (
+    '9971test': 1,
+    '2test': 2,
+    '3test': 3,
+    '4test': 4,
+    '5test': 5,
+
+    'test9971': 1,
+    'test2': 2,
+    'test3': 3,
+    'test4': 4,
+    'test5': 5,
+
+    'default.palette': (),
+
+    'gray.palette': (
+      'gray': 'gray' color,
+      'gray' dark: 'gray' dark,
+      'gray' light: 'gray' light
+    ),
+
+    'bg.palette': (
+      bg: bg color,
+      bg dark: bg dark,
+      bg light: bg light
+    ),
+
+    basic large: (
+      '': border,
+      dark: border dark,
+      light: border light
+    ),
+
+    extended small: (
+      '': primary,
+      dark: primary dark,
+      light: primary light
+    ),
+
+    [primary]: (
+      primary dark: primary dark,
+    ),
+
+    (key1, key2): (
+      primary: primary1
+    ),
+
+    key1: primary,
+
+    // calculation
+    calc(400px + 10%): calculation,
+    calculation: calc(400px + 10%),
+
+    // bool
+    false: bool,
+    bool: false,
+
+    // color
+    #fff: color,
+    color: #fff,
+
+    // function
+    get-function(append): function,
+    function: get-function(append),
+
+    // map
+    (a: 1, b: 2): map,
+    map: (a: 1, b: 2),
+
+    // null
+    'null': null,
+    null: 'null',
+
+    // number
+    15: number,
+    number: 15,
+
+    // string
+    firstname: string,
+    string: firstname,
+  )
+);
+
+@debug pick.substring-end(map.get($-theme, basic), 'key1'); // (key1: primary)
+@debug pick.substring-end(map.get($-theme, basic), 'test'); // (9971test: 1, 2test: 2, 3test: 3, 4test: 4, 5test: 5)
+
+
+// SECTION: pick.substring-start()
+
+@debug pick.substring-start(map.get($-theme, basic), 'key1');
+@debug pick.substring-start(map.get($-theme, basic), 'test');
+
+
+// SECTION: pick.field-type()
+$-theme: (
+  dark: (
+    'dark.palette': (),
+
+    basic large: (
+      '': border,
+      dark: border dark,
+      light: border light
+    ),
+  ),
+  basic: (
+    'default.palette': (),
+
+    'gray.palette': (
+      'gray': 'gray' color,
+      'gray' dark: 'gray' dark,
+      'gray' light: 'gray' light
+    ),
+
+    'bg.palette': (
+      bg: bg color,
+      bg dark: bg dark,
+      bg light: bg light
+    ),
+
+    basic large: (
+      '': border,
+      dark: border dark,
+      light: border light
+    ),
+
+    extended small: (
+      '': primary,
+      dark: primary dark,
+      light: primary light
+    ),
+
+    [primary]: (
+      primary dark: primary dark,
+    ),
+
+    (key1, key2): (
+      primary: primary1
+    ),
+
+    key1: primary,
+
+    // calculation
+    calc(400px + 10%): calculation,
+
+    // bool
+    false: bool,
+
+    // color
+    #fff: color,
+
+    // function
+    get-function(append): function,
+
+    // map
+    (a: 1, b: 2): map,
+
+    // null
+    null: null,
+
+    // number
+    15: number,
+
+    // string
+    firstname: string,
+  )
+);
+
+// pattern: key and/or value type
+@debug pick.field-type(map.get($-theme, basic), 'key:list', 'value:string');
+@debug pick.field-type(map.get($-theme, basic), 'value:string,list');
+@debug pick.field-type(map.get($-theme, basic), 'key:string,list');
+
+// key + value
+@debug pick.field-type(map.get($-theme, basic), 'key,value:number,string'); // 
+@debug pick.field-type(map.get($-theme, basic), (key: string), (key: number), (value: null)); // ("default.palette": (), "gray.palette": ("gray": "gray" color, "gray" dark: "gray" dark, "gray" light: "gray" light), "bg.palette": (bg: bg color, bg dark: bg dark, bg light: bg light), key1: primary, firstname: string, 15: number, null: null)
+
+
+// SECTION: pick.index()
+$-theme: (
+  dark: (
+    'dark.palette': (),
+
+    basic large: (
+      '': border,
+      dark: border dark,
+      light: border light
+    ),
+  ),
+  basic: (
+    '9971test': 1,
+    '2test': 2,
+    '3test': 3,
+    '4test': 4,
+    '5test': 5,
+
+    'test9971': 1,
+    'test2': 2,
+    'test3': 3,
+    'test4': 4,
+    'test5': 5,
+
+    'default.palette': (),
+
+    'palette.gray': (
+      'gray': 'gray' color,
+      'gray' dark: 'gray' dark,
+      'gray' light: 'gray' light
+    ),
+
+    'gray.palette': (
+      'gray': 'gray' color,
+      'gray' dark: 'gray' dark,
+      'gray' light: 'gray' light
+    ),
+
+    'bg.palette': (
+      bg: bg color,
+      bg dark: bg dark,
+      bg light: bg light
+    ),
+
+    basic large: (
+      '': border,
+      dark: border dark,
+      light: border light
+    ),
+
+    extended small: (
+      '': primary,
+      dark: primary dark,
+      light: primary light
+    ),
+
+    [primary]: (
+      primary dark: primary dark,
+    ),
+
+    (key1, key2): (
+      primary: primary1
+    ),
+
+    key1: primary,
+
+    // calculation
+    calc(400px + 10%): calculation,
+    calculation: calc(400px + 10%),
+
+    // bool
+    false: bool,
+    bool: false,
+
+    // color
+    #fff: color,
+    color: #fff,
+
+    // function
+    get-function(append): function,
+    function: get-function(append),
+
+    // map
+    (a: 1, b: 2): map,
+    map: (a: 1, b: 2),
+
+    // null
+    'null': null,
+    null: 'null',
+
+    // number
+    15: number,
+    number: 15,
+
+    // string
+    firstname: string,
+    string: firstname,
+  )
+);
+
+@debug pick.index(map.get($-theme, basic), small, large);
+@debug pick.index(map.get($-theme, basic), key1, key2);
+
+
+// SECTION: pick.pattern()
+$-theme: (
+  dark: (
+    'dark.palette': (),
+
+    basic large: (
+      '': border,
+      dark: border dark,
+      light: border light
+    ),
+  ),
+  basic: (
+    '9971test': 1,
+    '2test': 2,
+    '3test': 3,
+    '4test': 4,
+    '5test': 5,
+
+    'test9971': 1,
+    'test2': 2,
+    'test3': 3,
+    'test4': 4,
+    'test5': 5,
+
+    'default.palette': (),
+
+    'palette.gray': (
+      'gray': 'gray' color,
+      'gray' dark: 'gray' dark,
+      'gray' light: 'gray' light
+    ),
+
+    'gray.palette': (
+      'gray': 'gray' color,
+      'gray' dark: 'gray' dark,
+      'gray' light: 'gray' light
+    ),
+
+    'bg.palette': (
+      bg: bg color,
+      bg dark: bg dark,
+      bg light: bg light
+    ),
+
+    basic large: (
+      '': border,
+      dark: border dark,
+      light: border light
+    ),
+
+    extended small: (
+      '': primary,
+      dark: primary dark,
+      light: primary light
+    ),
+
+    [primary]: (
+      primary dark: primary dark,
+    ),
+
+    (key1, key2): (
+      primary: primary1
+    ),
+
+    key1: primary,
+
+    // calculation
+    calc(400px + 10%): calculation,
+    calculation: calc(400px + 10%),
+
+    // bool
+    false: bool,
+    bool: false,
+
+    // color
+    #fff: color,
+    color: #fff,
+
+    // function
+    get-function(append): function,
+    function: get-function(append),
+
+    // mapmap/pick/_pick.pattern.function.scss
+    (a: 1, b: 2): map,
+    map: (a: 1, b: 2),
+
+    // null
+    'null': null,
+    null: 'null',
+
+    // number
+    15: number,
+    number: 15,
+
+    // string
+    firstname: string,
+    string: firstname,
+  )
+);
+
+// pattern: any
+@debug pick.pattern(map.get($-theme, basic), '*palette');
+@debug pick.pattern(map.get($-theme, basic), '*.palette');
+@debug pick.pattern(map.get($-theme, basic), 'palette.*');
+
+// pattern: key and/or value type
+@debug pick.pattern(map.get($-theme, basic), 'key:list', 'value:string,');
+@debug pick.pattern(map.get($-theme, basic), 'value:string,list');
+@debug pick.pattern(map.get($-theme, basic), 'key:string,list');
+@debug pick.pattern(map.get($-theme, basic), 'key,value:list,string'); // TODO
+
+@debug pick.pattern(map.get($-theme, basic), '^test');
+@debug pick.pattern(map.get($-theme, basic), '$test');
+
+// pick by `list.index()`
+@debug pick.pattern(map.get($-theme, basic), '?=key1', '?=' key2);
+
+// pick by `string.index()`
+@debug pick.pattern(map.get($-theme, basic), '~=key');
+@debug pick.pattern(map.get($-theme, basic), '~=' key);
+
+
+// SECTION: pick.substring()
+$-theme: (
+  dark: (
+    'dark.palette': (),
+
+    basic large: (
+      '': border,
+      dark: border dark,
+      light: border light
+    ),
+  ),
+  basic: (
+    '9971test': 1,
+    '2test': 2,
+    '3test': 3,
+    '4test': 4,
+    '5test': 5,
+
+    'test9971': 1,
+    'test2': 2,
+    'test3': 3,
+    'test4': 4,
+    'test5': 5,
+
+    'default.palette': (),
+
+    'gray.palette': (
+      'gray': 'gray' color,
+      'gray' dark: 'gray' dark,
+      'gray' light: 'gray' light
+    ),
+
+    'bg.palette': (
+      bg: bg color,
+      bg dark: bg dark,
+      bg light: bg light
+    ),
+
+    basic large: (
+      '': border,
+      dark: border dark,
+      light: border light
+    ),
+
+    extended small: (
+      '': primary,
+      dark: primary dark,
+      light: primary light
+    ),
+
+    [primary]: (
+      primary dark: primary dark,
+    ),
+
+    (key1, key2): (
+      primary: primary1
+    ),
+
+    key1: primary,
+
+    // calculation
+    calc(400px + 10%): calculation,
+    calculation: calc(400px + 10%),
+
+    // bool
+    false: bool,
+    bool: false,
+
+    // color
+    #fff: color,
+    color: #fff,
+
+    // function
+    get-function(append): function,
+    function: get-function(append),
+
+    // map
+    (a: 1, b: 2): map,
+    map: (a: 1, b: 2),
+
+    // null
+    'null': null,
+    null: 'null',
+
+    // number
+    15: number,
+    number: 15,
+
+    // string
+    firstname: string,
+    string: firstname,
+  )
+);
+
+@debug pick.substring(map.get($-theme, basic), '.palette'); // ("default.palette": (), "gray.palette": ("gray": "gray" color, "gray" dark: "gray" dark, "gray" light: "gray" light), "bg.palette": (bg: bg color, bg dark: bg dark, bg light: bg light))
+@debug pick.substring(map.get($-theme, basic), 'key1'); // (key1: primary)
+@debug pick.substring(map.get($-theme, basic), 'test'); // (9971test: 1, 2test: 2, 3test: 3, 4test: 4, 5test: 5, test9971: 1, test2: 2, test3: 3, test4: 4, test5: 5)
+
+
+// SECTION: pick.type()
+$-theme: (
+  dark: (
+    'dark.palette': (),
+
+    basic large: (
+      '': border,
+      dark: border dark,
+      light: border light
+    ),
+  ),
+  basic: (
+    'default.palette': (),
+
+    'gray.palette': (
+      'gray': 'gray' color,
+      'gray' dark: 'gray' dark,
+      'gray' light: 'gray' light
+    ),
+
+    'bg.palette': (
+      bg: bg color,
+      bg dark: bg dark,
+      bg light: bg light
+    ),
+
+    basic large: (
+      '': border,
+      dark: border dark,
+      light: border light
+    ),
+
+    extended small: (
+      '': primary,
+      dark: primary dark,
+      light: primary light
+    ),
+
+    [primary]: (
+      primary dark: primary dark,
+    ),
+
+    (key1, key2): (
+      primary: primary1
+    ),
+
+    key1: primary,
+
+    // calculation
+    calc(400px + 10%): calculation,
+
+    // bool
+    false: bool,
+
+    // color
+    #fff: color,
+
+    // function
+    get-function(append): function,
+
+    // map
+    (a: 1, b: 2): map,
+
+    // null
+    null: null,
+
+    // number
+    15: number,
+
+    // string
+    firstname: string,
+  )
+);
+
+@debug pick.type(map.get($-theme, basic), bool); // (false: bool)
+@debug pick.type(map.get($-theme, basic), calculation); // (calc(400px + 10%): calculation)
+@debug pick.type(map.get($-theme, basic), color); // (#fff: color)
+@debug pick.type(map.get($-theme, basic), function); // (get-function("append"): function)
+@debug pick.type(map.get($-theme, basic), list); // (basic large: ("": border, dark: border dark, light: border light), extended small: ("": primary, dark: primary dark, light: primary light), [primary]: (primary dark: primary dark), (key1, key2): (primary: primary1))
+@debug pick.type(map.get($-theme, basic), map); // ((a: 1, b: 2): map)
+@debug pick.type(map.get($-theme, basic), null); // (null: null)
+@debug pick.type(map.get($-theme, basic), number); // (15: number)
+@debug pick.type(map.get($-theme, basic), string); // ("default.palette": (), "gray.palette": ("gray": "gray" color, "gray" dark: "gray" dark, "gray" light: "gray" light), "bg.palette": (bg: bg color, bg dark: bg dark, bg light: bg light), key1: primary, firstname: string)
+
+// multiple
+@debug pick.type(map.get($-theme, basic), number, null); // (15: number, null: null)
+@debug pick.type(map.get($-theme, basic), function, map); // (get-function("append"): function, (a: 1, b: 2): map)
+
+
+// SECTION: pick.value-type()
+$-theme: (
+  dark: (
+    'dark.palette': (),
+
+    basic large: (
+      '': border,
+      dark: border dark,
+      light: border light
+    ),
+  ),
+  basic: (
+    'default.palette': (),
+
+    'gray.palette': (
+      'gray': 'gray' color,
+      'gray' dark: 'gray' dark,
+      'gray' light: 'gray' light
+    ),
+
+    'bg.palette': (
+      bg: bg color,
+      bg dark: bg dark,
+      bg light: bg light
+    ),
+
+    basic large: (
+      '': border,
+      dark: border dark,
+      light: border light
+    ),
+
+    extended small: (
+      '': primary,
+      dark: primary dark,
+      light: primary light
+    ),
+
+    [primary]: (
+      primary dark: primary dark,
+    ),
+
+    (key1, key2): (
+      primary: primary1
+    ),
+
+    key1: primary,
+
+    // calculation
+    calc(400px + 10%): calculation,
+    calculation: calc(400px + 10%),
+
+    // bool
+    false: bool,
+    bool: false,
+
+    // color
+    #fff: color,
+    color: #fff,
+
+    // function
+    get-function(append): function,
+    function: get-function(append),
+
+    // map
+    (a: 1, b: 2): map,
+    map: (a: 1, b: 2),
+
+    // null
+    'null': null,
+    null: 'null',
+
+    // number
+    15: number,
+    number: 15,
+
+    // string
+    firstname: string,
+    string: firstname,
+  )
+);
+
+@debug pick.value-type(map.get($-theme, basic), bool); // (bool: false)
+@debug pick.value-type(map.get($-theme, basic), calculation); // (calculation: calc(400px + 10%))
+@debug pick.value-type(map.get($-theme, basic), color); // (color: #fff)
+@debug pick.value-type(map.get($-theme, basic), function); // (function: get-function("append"))
+@debug pick.value-type(map.get($-theme, basic), list); // ("default.palette": ())
+@debug pick.value-type(map.get($-theme, basic), map); // ("gray.palette": ("gray": "gray" color, "gray" dark: "gray" dark, "gray" light: "gray" light), "bg.palette": (bg: bg color, bg dark: bg dark, bg light: bg light), basic large: ("": border, dark: border dark, light: border light), extended small: ("": primary, dark: primary dark, light: primary light), [primary]: (primary dark: primary dark), (key1, key2): (primary: primary1), map: (a: 1, b: 2))
+@debug pick.value-type(map.get($-theme, basic), null); // ("null": null)
+@debug pick.value-type(map.get($-theme, basic), number); // (number: 15)
+@debug pick.value-type(map.get($-theme, basic), string); // (key1: primary, calc(400px + 10%): calculation, false: bool, #fff: color, get-function("append"): function, (a: 1, b: 2): map, null: "null", 15: number, firstname: string, string: firstname)
+
+// multiple
+@debug pick.value-type(map.get($-theme, basic), list, string); // ("default.palette": (), key1: primary, calc(400px + 10%): calculation, false: bool, #fff: color, get-function("append"): function, (a: 1, b: 2): map, null: "null", 15: number, firstname: string, string: firstname)
+@debug pick.value-type(map.get($-theme, basic), number, null); // (number: 15, "null": null)
+@debug pick.value-type(map.get($-theme, basic), number, null, list, color); // (number: 15, "null": null, "default.palette": (), color: #fff)

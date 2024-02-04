@@ -16,8 +16,7 @@
 @function ends-with($string, $search-string, $position: null) {
   @if meta.of-type(string, $string, $search-string) {
     $index: string-index.index($string, $search-string);
-    $allow: if($position, $position and $index == $position, true);
-    @if $allow {
+    @if if($position, $position and $index == $position, true) {
       @return ($index - 1) + string.length($search-string) == string.length($string);
     }
   }

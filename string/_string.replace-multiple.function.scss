@@ -5,7 +5,7 @@
 // The `string.replace-multiple()` function handles multiple string replaces, using `string.replace()` function.
 // @param `$string` The string to do multiple `$replaces`.
 // @arbitrary `$replaces...` Arbitrary replaces (occurrence, substring, replacement) to do on `$string`.
-// @return The return value is a `string` with done `$replaces`.
+// @returns The returned value is a `string` with done `$replaces`.
 @function replace-multiple($string, $replaces...) {
   @each $occurrence, $substring, $replacement in $replaces {
     $string: string.replace($string, $occurrence, $substring, $replacement);

@@ -1,30 +1,67 @@
 // Sass.
 @use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
 
 // Functions.
-@use 'string.index.function' as *;
-@use 'string.split.function' as *;
-
-// Modules.
-@use '../list/list.nth.function' as *;
+@use 'string.index.function' as string-index;
+@use 'string.split.function' as string-split;
 
 // Status: DONE
-// The `string.to-map()` function returns map of type if string contains `:`.
-// @param `$string` A string type value of `key:value` pattern.
-// @returns The return value is a map built from `$string`.
-@function to-map($string) {
-  @if type-of($string) == string and index($string, ':') {
-    $string: split($string, ':');
-    $key: list.nth($string, 1);
-    $value: list.nth($string, list.length($string));
-    @if index($value, ',') {
-      $value: split($value, ',');
+// The `string.to-map()` function returns map build of `$key-value` and additional `$key-value-strings`, if they contain `:`.
+// @param `$key-value` A string type value of `key:value` pattern to build `map`.
+// Allowed formats: 'key1,key2:value1,value2' converts to (key1: (value1, value2), key2: (value1, value2))
+// or 'key1,key2:value1;value2' converts to (key1: value1, key2: value2).
+// @arbitrary `$key-value-strings...` Additional strings of `key:value` pattern to add to returned `map`.
+// @returns The returned value is a `map` built from `$key-value` and additional `$key-value-strings`, if arguments are strings, otherwise `null`.
+@function to-map($key-value, $key-value-strings...) {
+  $result: ();
+  @each $key-value in list.join($key-value, $key-value-strings, comma) {
+    @if meta.type-of($key-value) == string and string-index.index($key-value, ':') {
+      $key-value: string-split.split($key-value, ':');
+  
+      // Key.
+      $key: list.nth($key-value, 1);
+      @if string-index.index($key, ',') {
+        $key: string-split.split($key, ',');
+      }
+  
+      // Value.
+      $value: list.nth($key-value, list.length($key-value));
+
+      // Split value.
+      $value: string-index.index($value, ';')
+        and string-split.split($value, ';', $bracketed: true)
+        or string-index.index($value, ',')
+        and string-split.split($value, ',')
+        or $value;
+
+      // Each key.
+      $i: 1;
+      @each $key in $key {
+        $result: map.deep-merge(
+          $result,
+          ($key: list.is-bracketed($value) and list.nth($value, $i) or $value)
+        );
+        $i: $i + 1;
+      }
     }
-    @return ($key: $value);
   }
-  @return $string;
+  @return list.length($result) > 0 and $result or null;
 }
 
 // Examples.
-// @debug to-map('separator:string,number');
-// @debug to-map('separator:bool');
+// Input data
+// 'key:number,value:string' 
+// 'key;value:number;string'
+// 
+
+// @debug to-map('separator:string,number'); // ("separator": ("string", "number"))
+// @debug to-map('separator:bool'); // ("separator": "bool")
+
+// multiple key
+// @debug to-map('key,value:string,number'); // ("key": ("string", "number"), "value": ("string", "number"))
+// @debug to-map('key,value:string;number'); // ("key": "string", "value": "number")
+
+// add multiple with `$key-value-strings`
+// @debug to-map('key1,key2:string;number', 'key3,key4:string;number', 'key5,key6:string;number'); // ("key1": "string", "key2": "number", "key3": "string", "key4": "number", "key5": "string", "key6": "number")

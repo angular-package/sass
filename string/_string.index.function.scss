@@ -4,19 +4,27 @@
 @use 'sass:string';
 
 // Status: DONE
-// The `string.index()` function returns index or list of indexes of `$substrings`.
-// @param `$string` The value to check whether it contains `$substrings`.
+// The `string.index()` function returns index of required `$substring` and additional indexes of `$substrings`.
+// @param `$string` String to check whether it contains required `$substring` and additional `$substrings`.
 // @param `$substring` A substring to find in `$string`.
-// @arbitrary `$substrings...` The list of substrings to find in `$string`.
-// @return The return value is the index or list of indexes of the given found substrings.
+// @arbitrary `$substrings...` Additional substrings to find in `$string`.
+// @returns The returned value is index of `$substring` and additional indexes of `$substrings`.
 @function index($string, $substring, $substrings...) {
   @if type-of($string) == string {
     $result: ();
     @each $substring in list.join($substring, $substrings, comma) {
-      $result: list.append($result, if(meta.type-of($substring) == string, string.index($string, $substring), null), comma);
+      $result: list.append(
+        $result,
+        meta.type-of($substring) == string
+          and string.index($string, $substring)
+          or null,
+        comma
+      );
     }
     @if list.length($result) > 0 {
-      @return if(list.length($result) == 1, list.nth($result, 1), $result);
+      @return list.length($result) > 1
+        and $result
+        or list.nth($result, 1);
     }
   }
   @return null;

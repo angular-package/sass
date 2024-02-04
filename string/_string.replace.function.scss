@@ -7,16 +7,21 @@
 // @param `$occurrence` First or all occurrences of `$substring` to replace in `$string`.
 // @param `$substring` A `string` or list of strings to replace by `$replacement`.
 // @param `$replacement` A `string` to replace `$substring`.
-// @return The return value is a `string` with a first/all replaced `$substring` by `$replacement`.
+// @returns The returned value is a `string` with a first/all replaced `$substring` by `$replacement`.
 @function replace($string, $occurrence, $substring, $replacement) {
   @each $value in $substring {
     $index: string.index($string, $value);
     @while not ($index == null) {
-      $string: string.insert(string.slice($string, 1, $index - 1) + string.slice(
-        $string,
-        $index + string.length($value),
-        string.length($string)
-      ), $replacement, $index);
+      $string: string.insert(
+        string.slice($string, 1, $index - 1) +
+          string.slice(
+            $string,
+            $index + string.length($value),
+            string.length($string)
+          ),
+        $replacement,
+        $index
+      );
       @if $occurrence == first {
         $index: null;
       }

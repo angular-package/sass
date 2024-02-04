@@ -6,9 +6,9 @@
 @use '../math';
 
 // Functions.
-@use '../list/remove/remove.value.function';
-@use 'string.index.function' as *;
-@use 'string.unquote.function' as *;
+@use '../list/remove/remove.value.function' as list-remove-value;
+@use 'string.index.function' as string-index;
+@use 'string.unquote.function' as string-unquote;
 
 // Status: DONE
 // The `string.split()` function returns comma-separated list of substrings of `$string` that are separated by `$separator`.
@@ -20,29 +20,60 @@
 // @param `$limit` Limit split of `$string`.
 // @param `$bracketed` Returns bracketed list.
 // @param `$unquote` Whether to unquote returned elements of list.
-// @return The return value is a list separated by `$separator` limited by `$limit` times, and/or is `$bracketed`.
-@function split($string, $separator, $limit: null, $bracketed: false, $unquote: false) {
+// @returns The returned value is a list separated by `$separator` limited by `$limit` times, and/or is `$bracketed`.
+@function split(
+  $string,
+  $separator,
+  $limit: null,
+  $bracketed: false,
+  $unquote: false
+) {
   $result: list.join((), (), comma, $bracketed);
   $index: 0;
   $i: 1;
-  @while $index != null {
+  @while not ($index == null) {
+    // Set `$index` to `null` to finish loop by default.
     $index: null;
-    $separators: index($string, $separator...);
+  
+    // Separator index in 
     $separator-index: null;
-    @if list.length(remove.value($separators, null)) > 0 {
-      $index: math.min(remove.value($separators, null)...);
+  
+    // Find indexes of `$separator` in `$string`.
+    $separators: string-index.index($string, $separator...);
+
+    @if list.length(list-remove-value.value($separators, null)) > 0 {
+      $index: math.min(list-remove-value.value($separators, null)...);
       $separator-index: list.index($separators, $index);
     }
-    @if $index and $separator-index {
-      $result: list.append($result, unquote(string.slice($string, 1, $index - 1), $unquote));
+
+    @if $separator-index {
+      $result: list.append(
+        $result,
+        string-unquote.unquote(
+          string.slice($string, 1, $index - 1),
+          $unquote
+        )
+      );
       @if $limit and $limit == $i {
-        $result: list.append($result, unquote(string.slice($string, $index + string.length(list.nth($separator, $separator-index)), -1), $unquote));
+        $result: list.append(
+          $result,
+          string-unquote.unquote(
+            string.slice($string, $index + string.length(list.nth($separator, $separator-index)), -1),
+            $unquote
+          )
+        );
         $index: null;
       } @else {
-        $string: string.slice($string, $index + string.length(list.nth($separator, $separator-index)));
+        $string: string.slice(
+          $string,
+          $index + string.length(list.nth($separator, $separator-index))
+        );
       }
     } @else {
-      $result: list.append($result, unquote($string, $unquote));
+      $result: list.append(
+        $result,
+        string-unquote.unquote($string, $unquote)
+      );
     }
 
     $i: $i + 1;

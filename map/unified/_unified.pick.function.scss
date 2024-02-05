@@ -2,7 +2,6 @@
 @use 'sass:list';
 
 // Functions.
-@use '../../list/list.append.function' as list-append;
 @use 'unified.get.function' as unified-get;
 @use 'unified.merge.function' as unified-merge;
 
@@ -14,7 +13,7 @@
 // @returns The returned value is a copy of `$map` built of required `$unified-key` and additional `$unified-keys`.
 @function pick($map, $unified-key, $unified-keys...) {
   $result: ();
-  @each $unified-key in list-append.append((), $unified-key, comma, $unified-keys...) {
+  @each $unified-key in list.join(($unified-key,), $unified-keys, comma) {
     $result: unified-merge.merge(
       $result,                                                                                                                                                         
       $unified-key,

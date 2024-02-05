@@ -3,7 +3,6 @@
 @use 'sass:map';
 
 // Functions.
-@use '../../list/list.append.function' as list-append;
 @use 'unified.is-key.function' as unified-is-key;
 
 // Status: DONE
@@ -14,7 +13,7 @@
 // @returns The returned value is a `bool` indicating `$map` contains `$unified-key` and optional `$unified-keys`.
 @function has-keys($map, $unified-key, $unified-keys...) {
   $has: ();
-  @each $unified-key in list-append.append((), $unified-key, comma, $unified-keys...) {
+  @each $unified-key in list.join(($unified-key,), $unified-keys, comma) {
     $has: list.append(
       $has,
       if(

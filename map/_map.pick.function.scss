@@ -2,9 +2,6 @@
 @use 'sass:list';
 @use 'sass:map';
 
-// Functions.
-@use '../list/list.append.function' as list-append;
-
 // Status: DONE
 // The `map.pick()` function picks required `$key` and additional `$keys` from `$map`.
 // @param `$map` A map from which values of required `$key` and additional `$keys` are taken.
@@ -13,7 +10,7 @@
 // @returns The returned value is a copy of `$map` built of required `$key` and additional `$keys`, if keys are not found returns `null`.
 @function pick($map, $key, $keys...) {
   $result: ();
-  @each $key in list-append.append((), $key, comma, $keys...) {
+  @each $key in list.join(($key,), $keys, comma) {
     $result: map.has-key($map, $key)
       and map.deep-merge($result, ($key: map.get($map, $key)))
       or $result;

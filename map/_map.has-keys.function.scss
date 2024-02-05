@@ -2,9 +2,6 @@
 @use 'sass:list';
 @use 'sass:map';
 
-// Functions.
-@use '../list/list.append.function' as list-append;
-
 // Status: DONE
 // The `map.has-keys()` function checks whether `$map` contains required `$key` and additional `$keys`.
 // @param `$map` A map to check whether it has required `$key` and additional `$keys`.
@@ -13,7 +10,7 @@
 // @returns The returned value is a `bool` indicating `$map` contains `$key` and additional `$keys`.
 @function has-keys($map, $key, $keys...) {
   $result: ();
-  @each $key in list-append.append((), $key, comma, $keys...) {
+  @each $key in list.join(($key,), $keys, comma) {
     $result: list.append($result, map.has-key($map, $key));
   }
   @return not list.index($result, false) and true;

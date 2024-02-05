@@ -1,5 +1,7 @@
+// Sass.
+@use 'sass:list';
+
 // Functions.
-@use '../../list/list.append.function' as list-append;
 @use 'unified.set.function' as unified-set;
 
 // Status: DONE
@@ -11,7 +13,7 @@
 // @arbitrary `$unified-entries...`  Optional map entries of (unified key: value) to set in `$map`.
 // @returns The returned value is updated `$map` with required `$unified-entry` and optional `$unified-entries`.
 @function update($map, $unified-entry, $unified-entries...) {
-  @each $unified-entry in list-append.append((), $unified-entry, comma, $unified-entries...) {
+  @each $unified-entry in list.join(($unified-entry,), $unified-entries, comma) {
     @each $unified-key, $value in $unified-entry {
       $map: unified-set.set($map, $unified-key, $value);
     }

@@ -1,8 +1,8 @@
 // Sass.
 @use 'sass:list';
+@use 'sass:meta';
 
 // Functions.
-@use '../list/list.append.function' as list-append;
 @use '../list/list.to.function' as list-to;
 @use 'map.get.function' as map-get;
 @use 'map.pick.function' as map-pick;
@@ -15,13 +15,13 @@
 // @returns The returned value is map depth of `number`.
 @function depth($map, $key: null, $nested-keys...) {
   $max-depth: 0;
-  $keys: list-append.append((), $key, comma, $nested-keys...);
+  $keys: list.join(($key,), $nested-keys, comma);
   @if list.length($keys) > 1 {
     $map: map-get.get($map, list-to.to($keys, list.length($keys) - 1)...);
     $key: list.nth($keys, list.length($keys));
   }
   @each $key, $value in ($key and map-pick.pick($map, $key)) or $map  {
-    $current-depth: (type-of($value) == map and 1 + depth($value)) or 1;
+    $current-depth: (meta.type-of($value) == map and 1 + depth($value)) or 1;
     $max-depth: ($current-depth > $max-depth and $current-depth) or $max-depth;
   }
   @return $max-depth;

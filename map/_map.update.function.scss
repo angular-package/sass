@@ -1,8 +1,6 @@
 // Sass.
+@use 'sass:list';
 @use 'sass:map';
-
-// Functions.
-@use '../list/list.append.function' as list-append;
 
 // Status: DONE
 // The `map.update()` function allows to set multiple key-value sets in a `$map` with required `$key-value`
@@ -12,7 +10,7 @@
 // @arbitrary `$key-value-entries...` Additional maps of (key: value) to update `$map`.
 // @returns The returned value is `$map` with updated keys of required `$key-value` and additional `$key-value-entries`.
 @function update($map, $key-value, $key-value-entries...) {
-  @each $key-value in list-append.append((), $key-value, comma, $key-value-entries...) {
+  @each $key-value in list.join(($key-value,), $key-value-entries, comma) {
     @each $key, $value in $key-value {
       $map: map.set($map, $key, $value);
     }

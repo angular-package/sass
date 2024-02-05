@@ -1,9 +1,6 @@
 // Sass.
 @use 'sass:map';
 
-// Functions.
-@use '../list/list.append.function' as list-append;
-
 // Status: DONE
 // The `map.deep-merge-key()` function merges `$map` with retrieved values from required `$key` and optional `$nested-keys`  of `$map`.
 // @param `$map` A map to merge with retrieved value from key or nested key of this map.
@@ -11,7 +8,7 @@
 // @arbitrary `$nested-keys...` Optional nested keys to get the value to merge with `$map`.
 // @returns The returned value is a map merged with the values retrieved from required `$key` and optional `$nested-keys`.
 @function deep-merge-key($map, $key, $nested-keys...) {
-  $keys: list-append.append((), $key, comma, $nested-keys...);
+  $keys: list.join(($key,), $nested-keys, comma);
   @return map.deep-remove(
     map.deep-merge($map, map.get($map, $keys...) or ()),
     $keys...

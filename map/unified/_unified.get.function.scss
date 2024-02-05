@@ -15,7 +15,7 @@
 // with required `$unified-key` and additional `$unified-keys` from the `$map`.
 @function get($map, $unified-key, $unified-keys...) {
   $result: ();
-  @each $unified-key in list-append.append((), $unified-key, comma, $unified-keys...) {
+  @each $unified-key in list.join(($unified-key,), $unified-keys, comma) {
     $result: list-append.append(
       $result,
       if(

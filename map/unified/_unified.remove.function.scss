@@ -1,9 +1,9 @@
 // Sass.
+@use 'sass:list';
 @use 'sass:map';
 @use 'sass:meta';
 
 // Functions.
-@use '../../list/list.append.function' as list-append;
 @use 'unified.is-key.function' as unified-is-key;
 
 // Status: DONE
@@ -14,7 +14,7 @@
 // @arbitrary `$unified-keys...` Additional keys or nested keys as comma-separated list to remove from `$map`.
 // @returns The returned value is a copy of `$map` without any values associated with keys.
 @function remove($map, $unified-key, $unified-keys...) {
-  @each $unified-key in list-append.append((), $unified-key, comma, $unified-keys...) {
+  @each $unified-key in list.join(($unified-key,), $unified-keys, comma) {
     $map: unified-is-key.is-key($unified-key)
       and map.deep-remove($map, $unified-key...)
       or map.remove($map, $unified-key);

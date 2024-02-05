@@ -5,9 +5,6 @@
 // Modules
 @use '../../meta';
 
-// Functions.
-@use '../../list/list.append.function' as list-append;
-
 // Status: DONE
 // The`map.remove-type()` function removes the properties from `$map` where values are required `$type`, and optional `$types`.
 // @param `$map` A map from which the values of type from required `$type`, and optional `$types` are removed.
@@ -15,7 +12,7 @@
 // @arbitrary `$types...` Optional types of values in `$map` to remove .
 // @returns The returned value is a copy of `$map` without the values associated with required `$type`, and optional `$types`.
 @function type($map, $type, $types...) {
-  @each $type in list-append.append((), $type, comma, $types...) {
+  @each $type in list.join(($type,), $types, comma) {
     @if list.index(number string color list map calculation bool null function, $type) {
       @each $key, $value in $map {
         $map: ((

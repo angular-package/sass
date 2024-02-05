@@ -3,7 +3,6 @@
 @use 'sass:map';
 
 // Functions.
-@use '../../list/list.append.function' as list-append;
 @use '../../list/remove/remove.nth.function' as list-remove-nth;
 @use 'pick.field-type.function' as pick-field-type;
 @use 'pick.index.function' as pick-index;
@@ -26,35 +25,39 @@
 // 'value:' pick type of value by `pick-field-type.field-type()`
 // 'key:' pick type of key by `pick-field-type.field-type()`
 // @arbitrary `$patterns...` Additional patterns to pick properties from `$map`.
-// @returns The return value is a copy of `$map` with properties associated with patterns.
+// @returns The returned value is a copy of `$map` with properties associated with patterns.
 @function pattern($map, $pattern, $patterns...) {
   $result: ();
-  @each $pattern in list-append.append((), $pattern, comma, $patterns...) {
+  @each $pattern in list.join(($pattern,), $patterns, comma) {
     @if meta.of-type(list string, $pattern) {
-      @if pattern.is($pattern, '?=') {
+      @if pattern.operator-has($pattern, '?=') {
         $result: map.deep-merge(
           $result,
-          pick-index.index($map, if(
-            meta.type-of($pattern) == string,
-            string.slice($pattern, 3),
-            #{list-remove-nth.nth($pattern, 1)},
-          ))
+          pick-index.index($map, pattern.operator-remove($pattern, '?='))
         );
       } @else if pattern.is($pattern, '^') {
-        $result: map.deep-merge($result, substring.start($map, string.slice($pattern, 2)));
+        $result: map.deep-merge(
+          $result,
+          substring.start($map, pattern.remove-indicator($pattern, '^'))
+        );
       } @else if pattern.is($pattern, '$') {
-        $result: map.deep-merge($result, substring.end($map, string.slice($pattern, 2)));
+        $result: map.deep-merge(
+          $result,
+          substring.end($map, pattern.remove-indicator($pattern, '$'))
+        );
       } @else if pattern.is($pattern, '*', '~=') {
         $result: map.deep-merge(
           $result,
-          pick-substring.substring($map, if(
-            meta.type-of($pattern) == string,
-            string.replace-multiple($pattern, first '*' '', first '~=' ''),
-            #{list-remove-nth.nth($pattern, 1)}
-          ))
+          pick-substring.substring(
+            $map,
+            pattern.remove-indicator($pattern, '*', '~=')
+          )
         );
       } @else if pattern.is($pattern, 'value:', 'key:') {
-        $result: map.deep-merge($result, pick-field-type.field-type($map, $pattern));
+        $result: map.deep-merge(
+          $result,
+          pick-field-type.field-type($map, $pattern)
+        );
       }
     }
   }
@@ -67,104 +70,104 @@
 }
 
 // Examples.
-$-theme: (
-  dark: (
-    'dark.palette': (),
+// $-theme: (
+//   dark: (
+//     'dark.palette': (),
 
-    basic large: (
-      '': border,
-      dark: border dark,
-      light: border light
-    ),
-  ),
-  basic: (
-    '9971test': 1,
-    '2test': 2,
-    '3test': 3,
-    '4test': 4,
-    '5test': 5,
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
+//   ),
+//   basic: (
+//     '9971test': 1,
+//     '2test': 2,
+//     '3test': 3,
+//     '4test': 4,
+//     '5test': 5,
 
-    'test9971': 1,
-    'test2': 2,
-    'test3': 3,
-    'test4': 4,
-    'test5': 5,
+//     'test9971': 1,
+//     'test2': 2,
+//     'test3': 3,
+//     'test4': 4,
+//     'test5': 5,
 
-    'default.palette': (),
+//     'default.palette': (),
 
-    'palette.gray': (
-      'gray': 'gray' color,
-      'gray' dark: 'gray' dark,
-      'gray' light: 'gray' light
-    ),
+//     'palette.gray': (
+//       'gray': 'gray' color,
+//       'gray' dark: 'gray' dark,
+//       'gray' light: 'gray' light
+//     ),
 
-    'gray.palette': (
-      'gray': 'gray' color,
-      'gray' dark: 'gray' dark,
-      'gray' light: 'gray' light
-    ),
+//     'gray.palette': (
+//       'gray': 'gray' color,
+//       'gray' dark: 'gray' dark,
+//       'gray' light: 'gray' light
+//     ),
 
-    'bg.palette': (
-      bg: bg color,
-      bg dark: bg dark,
-      bg light: bg light
-    ),
+//     'bg.palette': (
+//       bg: bg color,
+//       bg dark: bg dark,
+//       bg light: bg light
+//     ),
 
-    basic large: (
-      '': border,
-      dark: border dark,
-      light: border light
-    ),
+//     basic large: (
+//       '': border,
+//       dark: border dark,
+//       light: border light
+//     ),
 
-    extended small: (
-      '': primary,
-      dark: primary dark,
-      light: primary light
-    ),
+//     extended small: (
+//       '': primary,
+//       dark: primary dark,
+//       light: primary light
+//     ),
 
-    [primary]: (
-      primary dark: primary dark,
-    ),
+//     [primary]: (
+//       primary dark: primary dark,
+//     ),
 
-    (key1, key2): (
-      primary: primary1
-    ),
+//     (key1, key2): (
+//       primary: primary1
+//     ),
 
-    key1: primary,
+//     key1: primary,
 
-    // calculation
-    calc(400px + 10%): calculation,
-    calculation: calc(400px + 10%),
+//     // calculation
+//     calc(400px + 10%): calculation,
+//     calculation: calc(400px + 10%),
 
-    // bool
-    false: bool,
-    bool: false,
+//     // bool
+//     false: bool,
+//     bool: false,
 
-    // color
-    #fff: color,
-    color: #fff,
+//     // color
+//     #fff: color,
+//     color: #fff,
 
-    // function
-    get-function(append): function,
-    function: get-function(append),
+//     // function
+//     get-function(append): function,
+//     function: get-function(append),
 
-    // map
-    (a: 1, b: 2): map,
-    map: (a: 1, b: 2),
+//     // mapmap/pick/_pick.pattern.function.scss
+//     (a: 1, b: 2): map,
+//     map: (a: 1, b: 2),
 
-    // null
-    'null': null,
-    null: 'null',
+//     // null
+//     'null': null,
+//     null: 'null',
 
-    // number
-    15: number,
-    number: 15,
+//     // number
+//     15: number,
+//     number: 15,
 
-    // string
-    firstname: string,
-    string: firstname,
-  )
-);
+//     // string
+//     firstname: string,
+//     string: firstname,
+//   )
+// );
 
 // pattern: any
 // @debug pattern(map.get($-theme, basic), '*palette');

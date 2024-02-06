@@ -1,0 +1,65 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
+// Variables.
+@use 'validator.variables' as variables;
+
+// Modules.
+@use '../function';
+@use 'is';
+
+// Add validators to function module.
+function.$functions: map.deep-merge(function.$functions, variables.$validators);
+
+// Status: TODO:
+// The `is-valid()` function checks whether `$value` is valid.
+// @param `$value` Any to check whether it's valid of `$validations`.
+// @arbitrary `$validations...` Type or value to check whether `$value` is valid.
+// @returns The returned value is `bool` indicating `$value` is valid of `$validations`, otherwise `true`.
+@function is-valid($value, $validations...) {
+  $result: ();
+  @each $validator in $validations {
+    @if meta.type-of($validator) == map {
+      @each $name, $arguments in $validator {
+        @if list.length($name) > 1 {
+          $result: list.append(
+            $result,
+            function.call-multiple(
+              $name,
+              list.join($value, $arguments, comma)...
+            ),
+            comma
+          );  
+        } @else {
+          $result: list.append(
+            $result,
+            function.call-by-list(
+              $name
+              list.join($value, $arguments, comma)
+            ),
+            comma
+          );  
+        }
+      }
+    } @else if meta.type-of($validator) == list {
+      $result: list.append(
+        $result,
+        function.call-by-list(
+          list.nth($validator, 1)
+          list.join($value, list.nth($validator, 2), comma)
+        ),
+        comma
+      );
+    }
+  }
+  @return list.length($result) > 1 and $result or list.nth($result, 1);
+}
+
+// Examples.
+// validator of map type
+// @debug is-valid(test, (--is-allowed: (string, number))); // true
+
+// validator of list type
+// @debug is-valid(test, --is-allowed (string, number)); // true

@@ -1,0 +1,26 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Status: TODO:
+// The `is.allowed()` function checks whether `$value` is allowed.
+// @param `$value` Any to check whether it's allowed of `$allowed`.
+// @arbitrary `$allowed...` Type or value to check whether `$value` is allowed.
+// @returns The returned value is `bool` indicating `$value` is allowed of `$allowed`, otherwise `true`.
+@function allowed($value, $allowed...) {
+  @return if(
+    list.length($allowed) > 0,
+    if(
+      list.index($allowed, meta.type-of($value)) or
+        list.index($allowed, $value),
+      true,
+      false
+    ),
+    true
+  );
+}
+
+// Examples.
+// string
+// @debug allowed(test, string); // true
+// @debug allowed(test, test); // true

@@ -1,0 +1,9 @@
+// Sass.
+@use 'sass:meta';
+
+// Modules.
+@use 'is';
+
+$validators: (
+  is: (allowed: meta.get-function(allowed, false, is))
+) !default;

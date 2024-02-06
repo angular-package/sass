@@ -1,0 +1,67 @@
+// From.
+$from:
+  list
+  /*, map*/; // TODO: map
+
+// Method.
+$method:
+  get
+  pick;
+
+// Limit.
+$limit:
+  number
+  list;
+
+// Occurrence.
+$occurrence:
+  all
+  any
+  end
+  first
+  last
+  only
+  start;
+
+// Operand.
+$operand:
+  index
+  nth
+  type;
+
+// Operator.
+$operator: string; // TODO: operators.
+
+// Operands.
+$operands: list;
+
+// Range.
+$range: list;
+
+// Select.
+$select:
+  has
+  index
+  /*key*/
+  nth
+  quantity
+  type
+  value
+; // TODO: map key
+
+// Indicators.
+$fields: (
+  $method: method,
+  $occurrence: occurrence,
+  $select: select,
+);
+
+// Query.
+$query:
+  (select: $select),
+  (from: $from),
+  (occurrence: $occurrence),
+  (operand: $operand),
+  (operator: $operator),
+  (operands: $operands),
+  (range: $range, limit: $limit);

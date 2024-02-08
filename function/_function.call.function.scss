@@ -1,8 +1,9 @@
 // Sass.
+@use 'sass:map';
 @use 'sass:meta';
 
 // Functions.
-@use 'function.get.function';
+@use 'function.get.function' as *;
 
 // Status: DONE
 // The `function.call()` function invokes function of `$name` with `$arguments`.
@@ -11,8 +12,13 @@
 // Function name as `string` without prefix must be defined as follows `module-function` or `module.function`, and as `map`
 // (module: function). Function name with prefix must be defined as follows `--module-function` or `--module-function`.
 // @param `$name` Function name to call.
+// @param `$config` Configure of `map` type with `prefix`, `separator` and `functions`,
+// if `null` default values from `variables` are picked.
 // @arbitrary `$arguments...` Arguments to pass into invoked function named `$name`.
 // @returns The returned value is result of invoked function named `$name`.
-@function call($name, $arguments...) {
-  @return meta.call(function.get($name), $arguments...);
+@function call($name, $config: null, $arguments...) {
+  @return meta.call(get($name, $config...), $arguments...);
 }
+
+// Examples.
+// @debug call(--selector-nest, null, a, b, c);

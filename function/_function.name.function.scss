@@ -1,108 +1,118 @@
 // Sass.
-@use 'sass:color';
 @use 'sass:list';
-@use 'sass:map';
-@use 'sass:math';
+@use 'sass:meta';
 @use 'sass:selector';
 
-// Variables.
-@use 'function.variables' as variables;
-
 // Modules.
-@use '../meta';
 @use '../string';
 
 // Functions.
 @use 'function.prefix.function' as *;
 
 // Status: DONE
-// The `function.name()` function checks if `$name` contains `$prefix` and `$separator` and returns a list in form (module, function name).
+// The `function.name()` function checks if `$name` contains `$prefixes` and `$separators` and returns a list in form (module, function name).
 // @param `$name` Function name to check.
-// @param `$prefix` Prefixes for the function in `$name`.
-// @param `$separator` Separator between module and function in `string` type `$name`.
-// @param `$unquote` A bool type indicates whether to unquote returned list.
+// @param `$prefixes` Prefixes for the function in `$name`.
+// @param `$separators` Separator between module and function in `string` type `$name`.
 // @returns The returned value is a list containing (module, function) or function.
-@function name($name, $prefix: null, $separator: null, $unquote: false) {
-  @if meta.of-type(list map string, type-of($name)) {
-    $prefix: if($prefix, $prefix, variables.$prefix);
-    $separator: if($separator, $separator, variables.$separator);
+@function name(
+  $name,
+  $prefixes: null,
+  $separators: null,
+) {
+  @if list.index(list map string, meta.type-of($name)) {
     $name: if(
-      meta.of-type(list map, $name),
-      string.join('[SEPARATOR]', if(meta.type-of($name) == map, list.nth($name, 1), $name)...),
+      list.index(list map, meta.type-of($name)),
+      string.join(
+        '[SEPARATOR]',
+        if(meta.type-of($name) == map, list.nth($name, 1), $name)...
+      ),
       $name
     );
-    @if type-of($name) == string {
+    @if meta.type-of($name) == string {
       // Remove prefix.
-      @if prefix($name, $prefix) {
-        $name: string.replace($name, first, $prefix, '');
+      @if prefix($name, $prefixes) {
+        $name: string.replace($name, first, $prefixes, '');
       }
 
       // Split into list for `get-function()` or `function-exists()`.
-      $name: string.split($name, if(string.index($name, 'SEPARATOR'), '[SEPARATOR]', $separator), 1, false, $unquote);
+      $name: string.split(
+        $name,
+        if(string.index($name, 'SEPARATOR'), '[SEPARATOR]', $separators),
+        1,
+        false,
+        true
+      );
     }
-    @return if(list.length($name) == 1, list.nth($name, 1), $name);
+    @return if(
+      list.length($name) == 1,
+      list.nth($name, 1),
+      $name
+    );
   }
   @return null;
 }
 
 // Alias name.
-@function name-inspect($name, $prefix: null, $separator: null, $unquote: false) {
-  @return name($name, $prefix, $separator, $unquote);
+@function name-inspect($name, $prefixes: null, $separators: null) {
+  @return name($name, $prefixes, $separators);
+}
+
+// Alias name.
+@function name-format($name, $prefixes: null, $separators: null) {
+  @return name($name, $prefixes, $separators);
 }
 
 // Examples.
+// $prefixes: ('--', '__', '@', '&', '+', '/') !default;
+// $separators: ('-', '_', '.') !default;
+
 // string without prefix
 // @debug name(nth); // nth
 // @debug name(color); // color
 
 // prefix + string
-// @debug name(--nth); // nth
-// @debug name(--color); // nth
+// @debug name(--nth, '--'); // nth
+// @debug name(--color, '--'); // color
 
 // string + separator
-// @debug name(list-nth); // list, nth
-// @debug name(selector-nest); // selector, nest
-// @debug name(var-get); // var, get
-// @debug name(selector_nest); // selector, nest
-// @debug name(selectorXnest); // selectorXnest
+// @debug name(list-nth, null, $separators); // list, nth
+// @debug name(selector-nest, null, $separators); // selector, nest
+// @debug name(var-get, null, $separators); // var, get
+// @debug name(selector_nest, null, $separators); // selector, nest
+// @debug name(selectorXnest, null, $separators); // selectorXnest
 
 // string + dot
-// @debug name('selector.nest'); // "selector", "nest"
-// @debug name('selector.nest', $unquote: true); // selector, nest
+// @debug name('selector.nest', null, $separators); // selector, nest
 
 // string
 // @debug name(any); // any
 
 // prefixed --
-// @debug name(--selector-nest, '--'); // selector, nest
-// @debug name('--selector.nest', '--'); // "selector", "nest"
-// @debug name(selectorXnest, $separator: (X, Y)); // selector, nest
-// @debug name(selectorYnest, $separator: (X, Y)); // selector, nest
-
-// unquote
-// @debug name('--selector.nest', '--', null, true); // selector, nest
+// @debug name(--selector-nest, $prefixes, $separators); // selector, nest
+// @debug name('--selector.nest', $prefixes, $separators); // selector, nest
+// @debug name(selectorXnest, $separators: (X, Y)); // selector, nest
+// @debug name(selectorYnest, $separators: (X, Y)); // selector, nest
 
 // list
-// @debug name(list nth); // "list", "nth"
-// @debug name(selector nest); // "selector", "nest"
+// @debug name(list nth); // list, nth
+// @debug name(selector nest); // selector, nest
 
-// @debug name(--list nth); // "list", "nth"
+// @debug name(--list nth, $prefixes); // list, nth
+// @debug name(--selector nest, $prefixes); // selector, nest
 
-// @debug name(--list nth, '--'); // "list", "nth"
-// @debug name(--selector nest, '--'); // "selector", "nest"
-
-// @debug name(--list nth, '@'); // "--list", "nth"
-// @debug name((10xfunction #aaa)); // "10xfunction", "#aaa"
+// @debug name(--list nth, '@'); // --list, nth
+// @debug name((10xfunction #aaa)); // 10xfunction, #aaa
 
 // different allowed `$separator`
 // @debug name(__selector_nest, '__', '-'); // selector_nest
 
 // map
-// @debug name((list: nth)); // "list", "nth"
-// @debug name((selector: nest)); // "selector", "nest"
+// @debug name((list: nth)); // list, nth
+// @debug name((selector: nest)); // selector, nest
 
-// @debug name((--list: nth), '--'); // "list", "nth"
-// @debug name((--selector: nest), '--'); //  "selector", "nest"
+// @debug name((--list: nth), '--'); // list, nth
+// @debug name((--selector: nest), '--'); //  selector, nest
 
 // @debug name((10xfunction: #aaa)); // ERROR: Error
 

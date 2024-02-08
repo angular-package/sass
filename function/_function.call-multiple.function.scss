@@ -1,0 +1,35 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
+// Functions.
+// @use 'call/call.by-list.function' as call-by-list;
+@use 'function.get.function' as *;
+
+// Status: DONE
+// The `function.call-multiple()` function invokes multiples functions of `$names` with `$arguments`.
+// @param `$names` Function name or names as list to call.
+// @param `$config`
+// @arbitrary `$arguments...` Arguments to pass into invoked functions from `$names`.
+// @returns The returned value is result list of invoked functions from `$names`.
+@function call-multiple($names, $config: null, $arguments...) {
+  $result: ();
+  @each $name in list.separator($names) == comma and $names or ($names) {
+    @if meta.type-of($name) == list {
+      // REVIEW: call by list
+    } @else {
+      @each $function in get($name, $config...) {
+        $result: list.append(
+          $result,
+          meta.call($function, $arguments...),
+          comma
+        );
+      }
+    }
+  }
+  @return $result;
+}
+
+// Examples.
+// @debug call-multiple(--list-nth, null, a, 1);

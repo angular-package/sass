@@ -7,9 +7,7 @@
 @use 'sass:selector';
 
 // Functions.
-@use '../list/list.swap.function' as list-swap;
 @use '../map/get/get.index.function' as map-get-index;
-@use 'function.config.function' as *;
 @use 'function.name.function' as *;
 @use 'function.prefix.function' as *;
 
@@ -22,10 +20,10 @@
 // @returns The returned value is a `bool` indicating `$name` is an existing function or from `$functions` function.
 @function is($name, $prefixes: null, $separators: null, $functions: null) {
   @if list.index(list map string, meta.type-of($name)) {
-    @if not prefix($name, $prefixes) {
-      @return false;
-    } @else {
+    @if prefix($name, $prefixes) {
       $name: name($name, $prefixes, $separators);
+    } @else {
+      @return false;
     }
 
     // First check `$functions`.
@@ -37,13 +35,11 @@
       );
       @return meta.type-of($function) == function;
     } @else {
-      @return meta.function-exists(
-        if(
-            list.length($name) == 2,
-            list-swap.swap($name, 1, 2),
-            list.nth($name, 1)
-          )...
-      );
+      @return meta.function-exists((
+        list.length($name) == 2
+          and (list.nth($name, 2), list.nth($name, 1))
+          or list.nth($name, 1)
+      )...);
     }
   }
   @return false;

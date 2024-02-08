@@ -1,62 +1,76 @@
 // Sass.
 @use 'sass:list';
 @use 'sass:map';
+@use 'sass:meta';
 
 // Functions.
-@use '../list/remove/remove.nth.function';
-@use 'function.is.function';
+@use '../list/remove/remove.nth.function' as list-remove-nth;
+@use 'function.is.function' as *;
 
 // Status: DONE
 // The `function.remove()` function removes function(existing) name with arguments from `$value`.
 // @param `$value` Value from which function(existing) name with arguments is removed.
-// @param `$prefix` Prefix for the function name in `$value`.
+// @param `$prefixes` Available prefixes for the function name in `$value`.
+// @param `$separators` Available separators between module and function in string type name.
 // @param `$functions` Additional functions of `map` type to remove from `$value`.
-// @returns The return value is `$value` without function name and arguments.
-@function remove($value, $prefix: null, $separator: null, $functions: null) {
+// @returns The returned value is `$value` without function name and arguments.
+@function remove($value, $prefixes: null, $separators: null, $functions: null) {
   @for $i from 1 through list.length($value) {
     $element: list.nth($value, $i);
-    @if type-of($element) == map {
+    @if meta.type-of($element) == map {
       $element: map.keys($element);
     }
-    @if type-of($element) == list {
+    @if meta.type-of($element) == list {
       $element: list.nth($element, 1);
     }
-    @if function.is($element, $prefix, $separator, $functions) {
-      @return remove.nth($value, $i, if(type-of(list.nth($value, $i)) == string, $i + 1, 0));
+    @if is($element, $prefixes, $separators, $functions) {
+      @return list-remove-nth.nth(
+        $value,
+        $i,
+        if(meta.type-of(list.nth($value, $i)) == string, $i + 1, 0)
+      );
     }
   }
   @return $value;
 }
 
 // Alias name.
-@function remove-from-value($value, $prefix: null, $separator: null, $functions: null) {
-  @return remove($value, $prefix, $separator, $functions);
+@function remove-from-value(
+  $value,
+  $prefixes: null,
+  $separators: null,
+  $functions: null
+) {
+  @return remove($value, $prefixes, $separators, $functions);
 }
 
 // Examples.
+// $prefixes: ('--', '__', '@', '&', '+', '/') !default;
+// $separators: ('-', '_', '.') !default;
+
 // from list
-// @debug remove(selector-nest (unit 2)); // ()
-// @debug remove((size 2) selector-nest); // (size 2)
-// @debug remove(--color (primary dark)); // --color (primary dark)
-// @debug remove(10px --selector-nest (unit 10) 15px (unit 2)); // 10px 15px (unit 2)
+// @debug remove(--selector-nest (unit 2), $prefixes, $separators); // ()
+// @debug remove((size 2) --selector-nest, $prefixes, $separators); // (size 2)
+// @debug remove(--color (primary dark), $prefixes, $separators); // --color (primary dark)
+// @debug remove(10px --selector-nest (unit 10) 15px (unit 2), $prefixes, $separators); // 10px 15px (unit 2)
 
 // nested list
-// @debug remove(10px (selector-nest (unit 10)) 15px (unit 2)); // 10px 15px (unit 2)
+// @debug remove(10px (--selector-nest (unit 10)) 15px (unit 2), $prefixes, $separators); // 10px 15px (unit 2)
 
-// $-removed: remove(10px (selector-nest (unit 10)) 15px (selector-nest (unit 2))); // 10px 15px (selector-nest (unit 2))
-// @debug $-removed; // 10px 15px
+// $-removed: remove(10px (--selector-nest (unit 10)) 15px (--selector-nest (unit 2)), $prefixes, $separators);
+// @debug $-removed; // 10px 15px (--selector-nest (unit 2))
 
-// $-removed: remove($-removed); //
+// $-removed: remove($-removed, $prefixes, $separators); //
 // @debug $-removed; // 10px 15px
 
 // from map
-// @debug remove((selector-nest: (unit 2,))); // ()
-// @debug remove((var-get: (unit 2,))); // unit 2
-// @debug remove((--color: (unit 2,))); // (--color: ((unit 2,)))
+// @debug remove((--selector-nest: (unit 2,)), $prefixes, $separators); // ()
+// @debug remove((--var-get: (unit 2,)), $prefixes, $separators); // unit 2
+// @debug remove((--color: (unit 2,)), $prefixes, $separators); // (--color: ((unit 2,)))
 
 // nested map
-// @debug remove(10px (selector-nest: (unit 10)) 15px (unit 2)); // 10px 15px (unit 2)
+// @debug remove(10px (--selector-nest: (unit 10)) 15px (unit 2), $prefixes, $separators); // 10px 15px (unit 2)
 
 // prefix
-// @debug remove(--selector-nest (unit 2)); // ()
-// @debug remove(__selector-nest (unit 2), __); // ()
+// @debug remove(--selector-nest (unit 2), $prefixes, $separators); // ()
+// @debug remove(__selector-nest (unit 2), __, $separators); // ()

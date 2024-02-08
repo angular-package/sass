@@ -1,33 +1,32 @@
 // Sass.
 @use 'sass:list';
-
-// Variables.
-@use 'function.variables' as variables;
+@use 'sass:meta';
 
 // Modules.
-@use '../meta';
 @use '../string';
 
 // Status: DONE
-// The `function.prefix()` function gets function prefix of `$prefix` from `$name`.
+// The `function.prefix()` function gets function prefix of `$prefixes` from `$name`.
 // @param `$name` Function name of `list`, `map` or `string` type to get prefix of `$prefix`.
-// @param `$prefix` Prefixes for the function name in `$name`.
+// @param `$prefixes` Prefixes for the function name in `$name`.
 // @returns The returned value is prefix of `string` type if found, otherwise `null`.
-@function prefix($name, $prefix: null) {
-  @if meta.of-type(list map string, $name) {
-    $prefix: if($prefix, $prefix, variables.$prefix);
+@function prefix($name, $prefixes: null) {
+  @if list.index(list map string, meta.type-of($name)) {
     $name: if(
-      meta.of-type(list map, $name),
-      string.join('[SEPARATOR]', if(meta.type-of($name) == map, list.nth($name, 1), $name)...),
+      list.index(list map, meta.type-of($name)),
+      string.join(
+        '[SEPARATOR]',
+        if(meta.type-of($name) == map, list.nth($name, 1), $name)...
+      ),
       $name
     );
 
     // Split into list.
-    @if type-of($name) == string {
+    @if meta.type-of($name) == string {
       $i: 1;
-      @each $index in string.index($name, $prefix...) {
+      @each $index in string.index($name, $prefixes...) {
         @if $index == 1 {
-          @return list.nth($prefix, $i);
+          @return list.nth($prefixes, $i);
         }
 
         $i: $i + 1;
@@ -37,14 +36,27 @@
   @return null;
 }
 
+// Alias name for `function.prefix()`.
+@function get-prefix($name, $prefixes: null) {
+  @return prefix($name, $prefixes);
+}
+
+// Alias name for `function.prefix()`.
+@function name-prefix($name, $prefixes: null) {
+  @return prefix($name, $prefixes);
+}
+
 // Examples.
+// $prefixes: ('--', '__', '@', '&', '+', '/') !default;
+// $separators: ('-', '_', '.') !default;
+
 // string
-// @debug prefix(nth); // ''
-// @debug prefix(color); // ''
+// @debug prefix(nth, $prefixes); // null
+// @debug prefix(color); // null
 
 // prefixed --
-// @debug prefix(--selector-nest); // --
-// @debug prefix('--selector.nest'); // --
+// @debug prefix(--selector-nest, $prefixes); // --
+// @debug prefix('--selector.nest', $prefixes); // --
 
 // string + `$prefix`
 // @debug prefix(--selector-nest, '--'); // --
@@ -55,28 +67,28 @@
 // @debug prefix('--selector.nest', '@'); // null
 
 // list
-// @debug prefix(list nth); // ''
-// @debug prefix(selector nest); // ''
-// @debug prefix(--list nth); // --
+// @debug prefix(list nth); // null
+// @debug prefix(selector nest); // null
+// @debug prefix(--list nth, $prefixes); // --
 
 // list + `$prefix`
 // @debug prefix(--list nth, '--'); // --
 // @debug prefix(--selector nest, '--'); // --
-// @debug prefix((10xfunction #aaa)); // ''
+// @debug prefix((10xfunction #aaa)); // null
 
 // list + different `$prefix`
 // @debug prefix(--selector nest, '@'); // null
 
 // map
-// @debug prefix((list: nth)); // ''
-// @debug prefix((selector: nest)); // ''
+// @debug prefix((list: nth)); // null
+// @debug prefix((selector: nest)); // null
 
 // map + `$prefix`
-// @debug prefix((--list: nth), '--'); // --
+// @debug prefix((--list: nth), $prefixes); // --
 // @debug prefix((--selector: nest), '--'); // --
 
 // map + different `$prefix`
 // @debug prefix((--list: nth), '@'); // null
 // @debug prefix((--selector: nest), '@'); // null
 
-// @debug prefix((10xfunction: #aaa)); // ''
+// @debug prefix((10xfunction: #aaa)); // null

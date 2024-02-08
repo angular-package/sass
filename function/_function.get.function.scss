@@ -9,20 +9,25 @@
 
 // Functions.
 @use '../map/get/get.index.function' as map-get-index;
-@use 'function.name.function' as function-name;
+@use 'function.name.function' as *;
 
 // Status: DONE
 // The `function.get()` function returns `function` named `$name`. The `$name` can be a string `module-function` or `module.function` or
 // map `(module: function)`.
 // @param `$name` Function name to retrieve.
-// @param `$prefix` Function prefixes to search in `$name`.
-// @param `$separator` Separator between module and function in string type `$name`.
+// @param `$prefixes` Function prefixes to search in `$name`.
+// @param `$separators` Separator between module and function in string type `$name`.
 // @param `$functions` Additional functions of `map` type to get by using `$name`.
-// @returns The returned value is an existing `function` or from `$functions` retrieved by using `$name`, `$prefix`, and `$separator`.
-@function get($name, $prefix: null, $separator: null, $functions: null) {
+// @returns The returned value is an existing `function` or from `$functions` retrieved by using `$name`, `$prefixes`, and `$separators`.
+@function get(
+  $name,
+  $prefixes: null,
+  $separators: null,
+  $functions: null,
+) {
   @if list.index(list map string, meta.type-of($name)) {
     // Retrieve name to get function.
-    $name: function-name.name($name, $prefix, $separator);
+    $name: name($name, $prefixes, $separators);
 
     // First check `$functions`.
     @return if(
@@ -32,13 +37,17 @@
         map.get($functions, $name...),
         map-get-index.index($functions, $name)
       ),
-      meta.get-function(
-        if(
+      meta.function-exists((
+        list.length($name) == 2
+          and (list.nth($name, 2), list.nth($name, 1))
+          or list.nth($name, 1)
+      )...) and
+        meta.get-function(if(
           list.length($name) == 2,
           list.nth($name, 2) false list.nth($name, 1),
           list.nth($name, 1)
         )...
-      )
+      ) or null
     );
   }
   @return null;
@@ -47,54 +56,54 @@
 // Alias name for `function.get()`.
 @function get-function(
   $name,
-  $prefix: null,
-  $separator: null,
-  $functions: null
+  $prefixes: null,
+  $separators: null,
+  $functions: null,
 ) {
-  @return get($name, $prefix, $separator, $functions);
+  @return get($name, $prefixes, $separators, $functions);
 }
 
 // Examples.
-// $-prefix: ('--', '__', '@', '&', '+', '/');
-// $-separator: ('-', '_', '.');
+// $prefixes: ('--', '__', '@', '&', '+', '/') !default;
+// $separators: ('-', '_', '.') !default;
 
 // string
 // @debug get(nth); // get-function("nth")
 // @debug get(selector-nest); // get-function("nest")
 
 // prefix + string + dot separator
-// @debug get('--selector.nest', $-prefix, $-separator); // get-function("nest")
-// @debug get('__selector.nest'); // get-function("nest")
-// @debug get('@selector.nest'); // get-function("nest")
-// @debug get('&selector.nest'); // get-function("nest")
-// @debug get('+selector.nest'); // get-function("nest")
-// @debug get('/selector.nest'); // get-function("nest")
+// @debug get('--selector.nest', $prefixes, $separators); // get-function("nest")
+// @debug get('__selector.nest', $prefixes, $separators); // get-function("nest")
+// @debug get('@selector.nest', $prefixes, $separators); // get-function("nest")
+// @debug get('&selector.nest', $prefixes, $separators); // get-function("nest")
+// @debug get('+selector.nest', $prefixes, $separators); // get-function("nest")
+// @debug get('/selector.nest', $prefixes, $separators); // get-function("nest")
 
 // prefix + string + dash separator
-// @debug get('--selector-nest'); // get-function("nest")
-// @debug get(--selector-nest); // get-function("nest")
-// @debug get(__selector-nest); // get-function("nest")
-// @debug get(+selector-nest); // get-function("nest")
-// @debug get(&selector-nest); // get-function("nest")
-// @debug get(/selector-nest); // get-function("nest")
+// @debug get('--selector-nest', $prefixes, $separators); // get-function("nest")
+// @debug get(--selector-nest, $prefixes, $separators); // get-function("nest")
+// @debug get(__selector-nest, $prefixes, $separators); // get-function("nest")
+// @debug get(+selector-nest, $prefixes, $separators); // get-function("nest")
+// @debug get(&selector-nest, $prefixes, $separators); // get-function("nest")
+// @debug get(/selector-nest, $prefixes, $separators); // get-function("nest")
 
 // prefix + string + underscore separator
-// @debug get('--selector_nest'); // get-function("nest")
-// @debug get(--selector_nest); // get-function("nest")
-// @debug get(__selector_nest); // get-function("nest")
-// @debug get(+selector_nest); // get-function("nest")
-// @debug get(&selector_nest); // get-function("nest")
-// @debug get(/selector_nest); // get-function("nest")
-// @debug get(__list-nth); // get-function("nth")
+// @debug get('--selector_nest', $prefixes, $separators); // get-function("nest")
+// @debug get(--selector_nest, $prefixes, $separators); // get-function("nest")
+// @debug get(__selector_nest, $prefixes, $separators); // get-function("nest")
+// @debug get(+selector_nest, $prefixes, $separators); // get-function("nest")
+// @debug get(&selector_nest, $prefixes, $separators); // get-function("nest")
+// @debug get(/selector_nest, $prefixes, $separators); // get-function("nest")
+// @debug get(__list-nth, $prefixes, $separators); // get-function("nth")
 
 // prefix + function name
-// @debug get('@nth'); // get-function("nth")
-// @debug get('/nth'); // get-function("nth")
-// @debug get('+nth'); // get-function("nth")
+// @debug get('@nth', $prefixes, $separators); // get-function("nth")
+// @debug get('/nth', $prefixes, $separators); // get-function("nth")
+// @debug get('+nth', $prefixes, $separators); // get-function("nth")
 
 // map
-// @debug get((selector: nest)); // get-function("nest")
+// @debug get((selector: nest), $prefixes, $separators); // get-function("nest")
 
 // map + prefix
-// @debug get((--selector: nest)); // get-function("nest")
-// @debug get((+selector: nest)); // get-function("nest")
+// @debug get((--selector: nest), $prefixes, $separators); // get-function("nest")
+// @debug get((+selector: nest), $prefixes, $separators); // get-function("nest")

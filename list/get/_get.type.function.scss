@@ -1,9 +1,7 @@
 // Sass.
 @use 'sass:list';
 @use 'sass:map';
-
-// Modules.
-@use '../../meta';
+@use 'sass:meta';
 
 // Functions.
 @use '../../map/get/get.index.function' as map-get-index;
@@ -21,7 +19,7 @@
 @function type($list, $occurrence: any, $type, $types...) {
   $result: ();
   @each $element in $list {
-    $result: meta.of-type($type, $element)
+    $result: list.index($type, meta.type-of($element))
       and list-append.append($result, $element, comma)
       or $result;
   }
@@ -31,3 +29,6 @@
     all: $result,
   ), $occurrence);
 }
+
+// Examples.
+// @debug type(a 1 true, any, string); // a

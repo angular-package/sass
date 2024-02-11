@@ -9,88 +9,88 @@
 @use '../get';
 
 // Examples `bool`.
-// @debug get.bool(('a', 'b', false, 'c', 2)); // `false`
-// @debug get.bool(('a', 'b', true, 'c', 2)); // `true`
-// @debug get.bool(('a', 'b', 'c', (true, '5', (6,)))); // `null`
-// @debug get.bool(('a', 'b', true, 'c', 2), any); // `true`
-// @debug get.bool(('a', 'b', true, 'c', 2), first); // `true`
-// @debug get.bool(('a', 'b', false, 'c', 2, true), any); // `false`
-// @debug get.bool(('a', 'b', false, 'c', 2, true), last); // `true`
-// @debug get.bool(('a', 'b', false, 'c', 2, true), first); // `false`
+@debug get.bool(('a', 'b', false, 'c', 2)); // `false`
+@debug get.bool(('a', 'b', true, 'c', 2)); // `true`
+@debug get.bool(('a', 'b', 'c', (true, '5', (6,)))); // `null`
+@debug get.bool(('a', 'b', true, 'c', 2), any); // `true`
+@debug get.bool(('a', 'b', true, 'c', 2), first); // `true`
+@debug get.bool(('a', 'b', false, 'c', 2, true), any); // `false`
+@debug get.bool(('a', 'b', false, 'c', 2, true), last); // `true`
+@debug get.bool(('a', 'b', false, 'c', 2, true), first); // `false`
 
 
 // Examples `list`.
-// @debug get.list(('a', 'b', 'c')); // `null`
+@debug get.list(('a', 'b', 'c')); // `null`
 
 // fist/any
-// @debug get.list(('a', 'b', 'c', ('d', 'e', 'f'))); // ("d", "e", "f")
-// @debug get.list(('a', 'b', 'c', ('d', 'e', 'f'), 132, ('a', 'd', 'f')), any); // "d", "e", "f"
+@debug get.list(('a', 'b', 'c', ('d', 'e', 'f'))); // ("d", "e", "f")
+@debug get.list(('a', 'b', 'c', ('d', 'e', 'f'), 132, ('a', 'd', 'f')), any); // "d", "e", "f"
 
 // all
-// @debug get.list(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', (1, 2, 3)), all); // ("d", "e", "f"), (1, 2, 3)
-// @debug get.list(('a', 'b', 'c', ('d', (1, 2, 3, (4, 5, 6)), 'e', 'f')), all); // ("d", (1, 2, 3, (4, 5, 6)), "e", "f")
+@debug get.list(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', (1, 2, 3)), all); // ("d", "e", "f"), (1, 2, 3)
+@debug get.list(('a', 'b', 'c', ('d', (1, 2, 3, (4, 5, 6)), 'e', 'f')), all); // ("d", (1, 2, 3, (4, 5, 6)), "e", "f")
 
 // last
-// @debug get.list(('a', 'b', 'c', ('d', 'e', 'f'), 132, ('a', 'd', 'f')), last); // "a", "d", "f"
+@debug get.list(('a', 'b', 'c', ('d', 'e', 'f'), 132, ('a', 'd', 'f')), last); // "a", "d", "f"
 
 
 // Examples `map`.
 // none
-// @debug get.map(('a', 'b', 'c')); // null
+@debug get.map(('a', 'b', 'c')); // null
 
 // first
-// @debug get.map(('a', 'b', 'c', ('d': 1, 'e': 2, 'f': 3))); // ("d": 1, "e": 2, "f": 3)
-// @debug get.map(('a', 'b', 'c', (('d': 1, 'e': 2, 'f': 3), 'g'), 'h')); // null
-// @debug get.map(('a', ('d': 1, 'e': 2, 'f': 3), 'b', 'c', ('d', ('g': 1, 'h': 2, 'i': 3), (1, 2, 3, (4, 5, 6)), 'e', 'f'))); // ("d": 1, "e": 2, "f": 3)
+@debug get.map(('a', 'b', 'c', ('d': 1, 'e': 2, 'f': 3))); // ("d": 1, "e": 2, "f": 3)
+@debug get.map(('a', 'b', 'c', (('d': 1, 'e': 2, 'f': 3), 'g'), 'h')); // null
+@debug get.map(('a', ('d': 1, 'e': 2, 'f': 3), 'b', 'c', ('d', ('g': 1, 'h': 2, 'i': 3), (1, 2, 3, (4, 5, 6)), 'e', 'f'))); // ("d": 1, "e": 2, "f": 3)
 
 // all
-// @debug get.map(('a', (test: 2, test3: 45), 'b', 'c', ('d': 1, 'e': 2, 'f': 3)), all); // (test: 2, test3: 45), ("d": 1, "e": 2, "f": 3)
-// @debug get.map(('a', 'b', 'c', ('d': 1, 'e': 2, 'f': 3), 'g', 'h', ('1': 'd', '2': 'e', '3': 'f')), all); // ("d": 1, "e": 2, "f": 3), ("1": "d", "2": "e", "3": "f")
+@debug get.map(('a', (test: 2, test3: 45), 'b', 'c', ('d': 1, 'e': 2, 'f': 3)), all); // (test: 2, test3: 45), ("d": 1, "e": 2, "f": 3)
+@debug get.map(('a', 'b', 'c', ('d': 1, 'e': 2, 'f': 3), 'g', 'h', ('1': 'd', '2': 'e', '3': 'f')), all); // ("d": 1, "e": 2, "f": 3), ("1": "d", "2": "e", "3": "f")
 
 // last
-// @debug get.map(('a', (test: 2, test3: 45), 'b', 'c', ('d': 1, 'e': 2, 'f': 3)), last); // ("d": 1, "e": 2, "f": 3)
+@debug get.map(('a', (test: 2, test3: 45), 'b', 'c', ('d': 1, 'e': 2, 'f': 3)), last); // ("d": 1, "e": 2, "f": 3)
 
 
 
 // Examples `number`.
 // occurrence: first by default
-// @debug get.number(('a', 'b', 'c', 2)); // `2`
-// @debug get.number(('a', 'b', 'c', 2), first); // `2`
+@debug get.number(('a', 'b', 'c', 2)); // `2`
+@debug get.number(('a', 'b', 'c', 2), first); // `2`
 
 // occurrence: any
-// @debug get.number(('a', 'b', 'c', (3))); // `3`
-// @debug get.number(('a', 'b', 'c', (4, ))); // `null`
-// @debug get.number(('a', 'b', 'c', ('5', (6,)))); // `null`
+@debug get.number(('a', 'b', 'c', (3))); // `3`
+@debug get.number(('a', 'b', 'c', (4, ))); // `null`
+@debug get.number(('a', 'b', 'c', ('5', (6,)))); // `null`
 
 // occurrence: last
-// @debug get.number(('a', 5, 'b', 2, 'c', (4, ))); // 5
+@debug get.number(('a', 5, 'b', 2, 'c', (4, ))); // 5
 
 // occurrence: all
-// @debug get.number((3, 'a', 0, 'b', 1, 'c', 2), all); // 3, 0, 1, 2
-// @debug get.number(('a', 5, 'b', 2, 'c', (4, )), all); // 5, 2
-// @debug get.number(('a', 3, 'b', 2, 4, 2, 7, 2, 'b', 'c', 2), all); // 3, 2, 4, 2, 7, 2, 2
-// @debug get.number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all); // 3, 2, 4, 8, 2, 7, 2, 2
-// @debug get.number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), first); // 3
-// @debug get.number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), last); // 2
+@debug get.number((3, 'a', 0, 'b', 1, 'c', 2), all); // 3, 0, 1, 2
+@debug get.number(('a', 5, 'b', 2, 'c', (4, )), all); // 5, 2
+@debug get.number(('a', 3, 'b', 2, 4, 2, 7, 2, 'b', 'c', 2), all); // 3, 2, 4, 2, 7, 2, 2
+@debug get.number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all); // 3, 2, 4, 8, 2, 7, 2, 2
+@debug get.number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), first); // 3
+@debug get.number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), last); // 2
 
 
 
 // Examples `string`.
 // occurrence: first by default
-// @debug get.string((1, 'a', 'b', 'c', 2)); // a
-// @debug get.string((1, 2, 3, 'a', 'b', 'c', 2), first); // a
-// @debug get.string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), first); // a
+@debug get.string((1, 'a', 'b', 'c', 2)); // a
+@debug get.string((1, 2, 3, 'a', 'b', 'c', 2), first); // a
+@debug get.string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), first); // a
 
 // occurrence: any
-// @debug get.string((1, 2, 3, 'a', 'b', 'c', (3)), any); // a
+@debug get.string((1, 2, 3, 'a', 'b', 'c', (3)), any); // a
 
 // occurrence: last
-// @debug get.string(('a', 5, 'b', 2, 'c', (4, )), last); // c
-// @debug get.string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), last); // c
+@debug get.string(('a', 5, 'b', 2, 'c', (4, )), last); // c
+@debug get.string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), last); // c
 
 // occurrence: all
-// @debug get.string((3, 'a', 0, 'b', 1, 'c', 2), all); // "a", "b", "c"
-// @debug get.string(('a', 'the', 5, 'sun', 'b', 2, 'c', (4, )), all); // "a", "the", "sun", "b", "c"
-// @debug get.string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all); // "a", "b", "b", "c"
-// @debug get.string(('a', 3, 'b', 2, 'c', 4, 2, 7, 2, 'b', 'c', 2), all); // "a", "b", "c", "b", "c"
-// @debug get.string(('a', 3, 'b', 2, 'c', 4, 'd', 8, 'e', 2, 7, 2, 'b', 'c', 2), all); // "a", "b", "c", "d", "e", "b", "c"
+@debug get.string((3, 'a', 0, 'b', 1, 'c', 2), all); // "a", "b", "c"
+@debug get.string(('a', 'the', 5, 'sun', 'b', 2, 'c', (4, )), all); // "a", "the", "sun", "b", "c"
+@debug get.string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all); // "a", "b", "b", "c"
+@debug get.string(('a', 3, 'b', 2, 'c', 4, 2, 7, 2, 'b', 'c', 2), all); // "a", "b", "c", "b", "c"
+@debug get.string(('a', 3, 'b', 2, 'c', 4, 'd', 8, 'e', 2, 7, 2, 'b', 'c', 2), all); // "a", "b", "c", "d", "e", "b", "c"

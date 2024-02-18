@@ -3,18 +3,17 @@
 @use 'sass:map';
 
 // Status: DONE 
-// The `map.get-any()` function returns first value not `null` associated with `$key` or any of `$keys` from `$map`. 
+// The `map.get-any()` function returns first where map has key associated with `$key` or any of `$keys` from `$map`. 
 // @param `$map` A map to get the value by using `$key` or any of `$keys`.
 // @param `$key` Required key used to get the value from `$map`.
 // @arbitrary `$keys...` Any keys to get the value from `$map`.
-// @returns The returned value is not `null` value associated with `$key` or any of `$keys` from the `$map`, otherwise `null`.
+// @returns The returned value is the first value where map has key associated with `$key` or any of `$keys` from the `$map`, otherwise `null`.
 @function any($map, $key, $keys...) {
   $keys: list.join(($key,), $keys, comma);
   @for $i from 1 through list.length($keys) {
     @if not ($i == list.length($keys)) {
-      $result: map.get($map, list.nth($keys, $i));
-      @if $result {
-        @return $result;
+      @if map.has-key($map, list.nth($keys, $i)) {
+        @return map.get($map, list.nth($keys, $i));
       }
     }
   }

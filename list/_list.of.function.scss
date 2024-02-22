@@ -1,0 +1,51 @@
+// Sass.
+@use 'sass:map';
+@use 'sass:meta';
+@use 'sass:list';
+@use 'sass:string';
+
+// Status: 
+// The `list.of()` function returns `$list` specification of `$spec` separated by `$separator`.
+// @param `$list` The list to determine its details - bracketed, length, separator in any order.
+// @param `$spec` List of specification details - bracketed, length, separator and optional type in any order.
+// @param `$separator` Separator used between details.
+// @param `$type` Whether to return `list` as first in specification.
+// @returns The returned value is `$list` specification of `$details`.
+@function of($list, $spec, $separator: null, $type: false) {
+  $result: '';
+  $spec: if(
+    $type,
+    list.index($spec, type) and $spec or list.join(type, $spec),
+    $spec
+  );
+  $specification: (
+    bracketed: (list.is-bracketed($list) and bracket) or 'notbracketed', // consider: bracket 
+    length: list.length($list),
+    separator: list.separator($list),
+    type: meta.type-of($list),
+  );
+  @each $name in $spec {
+    $result: string.insert(
+      $result,
+      string.insert(#{map.get($specification, $name)}, $separator and $separator or '', -1),
+      -1
+    );
+  }
+  @return string.slice($result, 1, $separator and -2 or -1);
+}
+
+// Examples.
+// @debug of((a, b), separator); // comma
+// @debug of((a, b), separator length); // comma2
+// @debug of((a, b), bracketed); // bracketed
+
+// @debug of((a, b), separator bracketed); // commabracketed
+// @debug of((a, b), bracketed separator ); // notbracketedcomma
+
+// @debug of((a, b), separator, '.'); // comma
+// @debug of((a, b), separator bracketed, '.'); // comma.notbracketed
+
+// @debug of((a, b), type separator, '.'); // list.comma
+// @debug of((a, b), separator type, '.'); // comma.list
+
+// @debug of((a, b), separator, '.', true); // list.comma

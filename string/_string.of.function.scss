@@ -1,0 +1,80 @@
+// Sass.
+@use 'sass:meta';
+@use 'sass:list';
+@use 'sass:string';
+
+// Functions.
+@use 'string.is-lower-case.function' as string-is-lower-case;
+@use 'string.is-upper-case.function' as string-is-upper-case;
+
+// Status: DONE
+// The `meta.string-of()` function returns `$string` specification of `$spec` separated by `$separator`.
+// @param `$string` The string to determine its specification `$spec` - letter capital(xcase), length, lower case(lowercase), upper case(uppercase) in any order.
+// @param `$spec` List of string specification - letter capital(xcase), length, lower case(lowercase), upper case(uppercase) in any order.
+// @param `$separator` Separator used between returned details of specification `$spec`.
+// @param `$type` Whether to return `string` as first in specification.
+// @returns The returned value is `$string` specification of `$spec`.
+@function of($string, $spec, $separator: null, $type: false) {
+  $result: '';
+  $spec: if(
+    $type,
+    list.index($spec, type) and $spec or list.join(type, $spec),
+    $spec
+  );
+  @each $name in $spec {
+    @debug $name;
+    $result: string.insert(
+      $result,
+      string.insert(
+        $name == xcase
+          and (
+            string-is-lower-case.is-lower-case($string)
+            and lowercase
+            or string-is-upper-case.is-upper-case($string)
+            and uppercase
+            or variouslycase
+          )
+        or $name == length and string.length($string)
+        or $name == lowercase
+          and (
+            string-is-lower-case.is-lower-case($string)
+            and lowercase
+            or notlowercase
+          )
+        or $name == type and meta.type-of($string)
+        or $name == uppercase
+          and (
+            string-is-upper-case.is-upper-case($string)
+            and uppercase
+            or notuppercase
+          )
+        or '',
+        $separator and $separator or '',
+        -1
+      ),
+      -1
+    );
+  }
+  @return string.slice($result, 1, $separator and -2 or -1);
+}
+
+// Examples.
+// lowercase
+// @debug of('test test test', lowercase); // lowercase
+// @debug of('TEST TEST TEST', lowercase); // notlowercase
+// @debug of('test TEST test', lowercase); // notlowercase
+
+// uppercase
+// @debug of('TEST TEST TEST', uppercase); // uppercase
+// @debug of('test test test', uppercase); // notuppercase
+// @debug of('test TEST test', uppercase); // notuppercase
+
+// lowercase uppercase
+// @debug of('TEST TEST TEST', type lowercase uppercase, '.'); // string.notlowercase.uppercase
+
+// xcase
+// @debug of('test TEST test', xcase); // variouslycase
+// @debug of('TEST TEST TEST', xcase); // uppercase
+// @debug of('test test test', xcase); // lowercase
+
+// @debug of('TEST TEST TEST', type xcase, '.'); // string.uppercase

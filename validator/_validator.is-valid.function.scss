@@ -2,16 +2,25 @@
 @use 'sass:list';
 @use 'sass:map';
 @use 'sass:meta';
+@use 'sass:selector';
 
 // Variables.
 @use 'validator.variables' as variables;
 
 // Modules.
 @use '../function';
-@use 'is';
 
 // Add validators to function module.
-function.$functions: map.deep-merge(function.$functions, variables.$validators);
+// function.$functions: map.deep-merge(function.$functions, variables.$validators);
+
+// @use 'is';
+
+// @debug function.get(--is-allowed, '--', '-', variables.$validators);
+// @debug function.call(--is-allowed, (
+//   prefix: '--',
+//   separator: '-',
+//   functions: variables.$validators
+// ), test, number);
 
 // Status: TODO:
 // The `is-valid()` function checks whether `$value` is valid.

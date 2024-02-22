@@ -4,52 +4,61 @@
 @use 'sass:meta';
 
 // Functions.
-@use '../../list/get';
-@use '../../list/remove';
-@use '../function.get.function';
+@use '../../list/list.limit.function' as list-limit;
+@use '../function.get.function' as function-get;
 
 // Status: DONE
-// The `call.arglist()` function calls function of `$name` on `$arglist` with a separator comma where elements are arguments or space where the whole
-// list is an argument. Arguments can be passed as list or map by `$arguments` parameter.
+// The `call.arglist()` function calls function of `$name` on `$arglist` arguments as comma-separated list and optional `$argmap` as rest named arguments.
 // @param `$name` Function name to call arguments from `$arglist` as comma-separated arguments or argument.
-// @param `$arglist` List on which to call function of `$name`.
-// @param `$prefix` Allowed prefixes of the function name.
-// @param `$separator` Allowed separators of the function name.
-// @param `$functions` Functions instead of global functions retrieved from `function.$functions`.
-// @param `$function` Function name to retrieve from `$functions` if not `null` otherwise from global `function.$functions`.
-// @param `$arguments` Additional arguments as `list` or `map` following `$arglist` to pass.
-// @returns The returned value is the result of invoked function.
+// @param `$arglist` Comma-separated list as function arguments on which to call function of `$name`.
+// @param `$argmap` Additional arguments as `map` (arguments: (argument: value)) or (args: (argument: value)
+//        following `$arglist` to pass.
+// @param `$prefixes` Available prefixes of the function `$name`.
+// @param `$separators` Available separators of the function `$name.
+// @param `$functions` Available functions to call besides built-in.
+// @param `$function` Function retrieved by using `$name`, `$prefixes` and `$separators` from optional `$functions`.
+// @returns The returned value is the result of invoked function of `$name` on `$arglist` and optional `$argmap`.
 @function arglist(
   $name,
   $arglist,
-  $prefix: null,
-  $separator: null,
+  $argmap: null,
+  $prefixes: null,
+  $separators: null,
   $functions: null,
-  $function: function.get($name, $prefix, $separator, $functions),
-  $arguments: null
+  $function: function-get.get($name, $prefixes, $separators, $functions),
 ) {
   @if $name {
-    @if $arguments {
-      $arglist: list.append(
-        if(meta.type-of($arglist) == list and list.separator($arglist) == space, ($arglist,), $arglist),
-        if(meta.type-of($arguments) == map, (arguments: $arguments), $arguments),
-        comma
-      );
+    $arglist: list.separator($arglist) == space 
+      and ($arglist,)
+      or $arglist;
+
+    $arglast: list.nth($arglist, list.length($arglist));
+    @if meta.type-of($arglast) == map
+      and (map.has-key($arglast, args) or map.has-key($arglast, arguments)) {
+      $argmap: meta.type-of($argmap) == map
+        and map.deep-merge($arglast, (list.nth(map.keys($arglast), 1): $argmap))
+        or map.get($arglast, list.nth(map.keys($arglast), 1));
     }
-    @if list.separator($arglist) == comma {
-      @if get.map($arglist) {
-        // Map type arguments
-        @if map.has-key(get.map($arglist), arguments) or map.has-key(get.map($arglist), args) {
-          @return meta.call(
-            $function,
-            remove.map($arglist)...,
-            map.get(get.map($arglist), args) or map.get(get.map($arglist), arguments)...
-          );
-        }
-      }
-      @return meta.call($function, $arglist...);
-    }
-    @return meta.call($function, $arglist);
+    @return meta.type-of($argmap) == map
+      and meta.call(
+        $function,
+        list-limit.limit($arglist, list.length($arglist) - 1)...,
+        $argmap...
+      )
+      or meta.call($function, $arglist...);
   }
   @return null;
 }
+
+
+// Examples.
+// $prefixes: ('--', '__', '@', '&', '+', '/') !default;
+// $separators: ('-', '_', '.') !default;
+
+// Map with `arguments` or `args` key to pass as rest arguments.
+// @debug arglist(--list-nth, (a 2 3, (args: (n: 2))), null, $prefixes, $separators); // 2
+// @debug arglist(--list-nth, (a 2 13, (args: (n: 3))), null, $prefixes, $separators); // 13
+// @debug arglist(--list-nth, (a 2 13, (arguments: (n: 3))), null, $prefixes, $separators); // 13
+
+// map as the second argument
+// @debug arglist(--list-join, (a 2 3, (list1: b 4)), (list2: c 5, bracketed: true, separator: comma), $prefixes, $separators); // 2

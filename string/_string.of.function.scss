@@ -22,7 +22,6 @@
     $spec
   );
   @each $name in $spec {
-    @debug $name;
     $result: string.insert(
       $result,
       string.insert(
@@ -34,7 +33,7 @@
             and uppercase
             or variouslycase
           )
-        or $name == length and string.length($string)
+        or $name == length and #{string.length($string)}
         or $name == lowercase
           and (
             string-is-lower-case.is-lower-case($string)
@@ -78,3 +77,7 @@
 // @debug of('test test test', xcase); // lowercase
 
 // @debug of('TEST TEST TEST', type xcase, '.'); // string.uppercase
+
+// length
+// @debug of('TEST TEST TEST', length xcase); // 14uppercase
+// @debug of('TEST TEST TEST', length xcase, '.'); // 14.uppercase

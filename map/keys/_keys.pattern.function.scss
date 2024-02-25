@@ -2,14 +2,7 @@
 @use 'sass:list';
 @use 'sass:map';
 
-// Modules.
-@use '../../pattern';
-@use '../unified';
-
 // Functions.
-@use '../../list/list.add.function' as list-add;
-@use '../../list/list.join.function' as list-join;
-@use '../../list/list.range.function' as list-range;
 @use '../pick/pick.pattern.function' as pick-pattern;
 
 // Status: DONE
@@ -21,57 +14,10 @@
 @function pattern($map, $key-pattern, $keys-pattern...) {
   $result: ();
   @each $key in list.join(($key-pattern,), $keys-pattern, comma) {
-    // Check whether pattern exists at index.
-    $pattern-index: pattern.index($key);
-
-    // If pattern exists retrieve key to `map.get()`.
-    @if $pattern-index {
-      $resolved-key: list-range.range($key, 1, $pattern-index - 1);
-      @if $resolved-key {
-        $resolved-keys: null;
-        @if list.length($key) == 1 {
-          $resolved-keys: map.keys(pick-pattern.pattern($map, $resolved-key...));
-        } @else {
-          $resolved-keys: map.keys(
-            pick-pattern.pattern(
-              unified.get($map, $resolved-key),
-              list.nth($key, $pattern-index)
-            )
-          );
-          $i: 1;
-          @each $k in $resolved-keys {
-            $add: if(
-              list.length($key) > $pattern-index,
-              ($resolved-key, comma, $k, list-range.range($key, $pattern-index + 1, list.length($key))),
-              ($resolved-key, comma, $k),
-            );
-            $resolved-keys: list.set-nth(
-              $resolved-keys,
-              $i,
-              list.length($key) == 1 and $k or list-add.add($add...)
-            );
-            $i: $i + 1;
-          }
-        }
-
-        // Map has keys.
-        @if $resolved-keys {
-          $result: list-join.join($result, $resolved-keys);
-        }
-
-        // Check whether map has keys.
-        @if list.length($key) > $pattern-index {
-          $-result: ();
-          @each $key in $result {
-            @if unified.has-keys($map, $key) {
-              $-result: list-add.add($-result, comma, $key);
-            }
-          }
-
-          $result: $-result;
-        }
-      }
-    }
+    $result: list.join(
+      $result,
+      map.keys(pick-pattern.pattern($map, $key...))
+    );
   }
   @return list.length($result) > 0
     and $result
@@ -162,15 +108,6 @@
 // );
 
 // @debug pattern($-map, 'key'); // null
-// @debug pattern($-map, '*key'); // 
-// @debug pattern($-map, '*list');
-// @debug pattern($-map, '*key', '*list');
-// @debug pattern($-map, (key, config, '*config')); // (key, config, config1), (key, config, config2), (key, config, config3), (key, config, config4), (key, config, config5)
-// @debug pattern($-map, (key, config, '*config'), (key, '*test'));
-
-// Key between
-// @debug pattern($-map, (key, '*config', display)); // ((key, config3, display),)
-// @debug pattern($-map, (key, '^test')); // (key, test1), (key, test2), (key, test3), (key, test4), (key, test5)
-// @debug pattern($-map, (key, '$test')); // (key, 1test), (key, 2test), (key, 3test), (key, 4test), (key, 5test)
-
-// @debug pattern($-map, (key, '*config', display), (key, '^test', settings2)); // (key, config3, display), (key, test4, settings2)
+// @debug pattern($-map, '*key'); // (key,)
+// @debug pattern($-map, '*list'); // list1, list2
+// @debug pattern($-map, '*key', '*list'); // key, list1, list2

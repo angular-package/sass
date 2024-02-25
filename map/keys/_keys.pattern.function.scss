@@ -4,13 +4,13 @@
 
 // Modules.
 @use '../../pattern';
-@use '../pick';
 @use '../unified';
 
 // Functions.
 @use '../../list/list.add.function' as list-add;
 @use '../../list/list.join.function' as list-join;
 @use '../../list/list.range.function' as list-range;
+@use '../pick/pick.pattern.function' as pick-pattern;
 
 // Status: DONE
 // The `map.keys-pattern()` function retrieves keys of `$key-pattern` or/and `$keys-pattern` with pattern.
@@ -30,10 +30,10 @@
       @if $resolved-key {
         $resolved-keys: null;
         @if list.length($key) == 1 {
-          $resolved-keys: map.keys(pick.pattern($map, $resolved-key));
+          $resolved-keys: map.keys(pick-pattern.pattern($map, $resolved-key...));
         } @else {
           $resolved-keys: map.keys(
-            pick.pattern(
+            pick-pattern.pattern(
               unified.get($map, $resolved-key),
               list.nth($key, $pattern-index)
             )
@@ -61,14 +61,11 @@
 
         // Check whether map has keys.
         @if list.length($key) > $pattern-index {
-          $i: 1;
           $-result: ();
           @each $key in $result {
             @if unified.has-keys($map, $key) {
               $-result: list-add.add($-result, comma, $key);
             }
-
-            $i: $i + 1;
           }
 
           $result: $-result;

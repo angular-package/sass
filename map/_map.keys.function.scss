@@ -3,127 +3,74 @@
 @use 'sass:map';
 
 // Functions.
-@use '../list/list.join.function' as *;
-@use 'map.keys-pattern.function' as *;
+@use 'keys/keys.pattern.function' as map-keys-pattern;
 
 // Status: DONE
-// The `map.keys()` function retrieves all keys or of given `$patterns`.
-// @param `$map` A map to retrieve keys or keys of `$patterns`.
-// @param `$patterns...` Additional keys to check whether `$maps` contains them.
-// @returns The returned value is a list of all keys or keys of `$patterns`.
-@function keys($map, $patterns...) {
-  @return join(
-    map.keys($map),
-    if(
-      list.length($patterns) > 0,
-      keys-pattern($map, $patterns...),
-      ()
-    )
-  );
+// The `map.keys()` function retrieves all keys or keys of `$search-keys`.
+// @param `$map` A map to retrieve all keys or keys of `$search-keys`.
+// @param `$search-keys...` Keys with pattern where '?=' is `list.index()`, '*' is substring, '^' is start, and '$' is end of `string` to retrieve from `$map`.
+// @returns The returned value is a list of all keys or keys of `$search-keys`.
+@function keys($map, $search-keys...) {
+  @return list.length($search-keys) > 0
+    and (map-keys-pattern.pattern($map, $search-keys...) or ())
+    or map.keys($map);
 }
 
 // Examples.
 // $-map: (
 //   key: (
-//     key1: 1,
-//     config: (
-//       config1: 1,
-//       setting1: 1,
-//       config2: 2,
-//       setting2: 2,
-//       config3: (
-//         pattern1: 1,
-//         test1: (),
-//         pattern2: 2,
-//         test2: (),
-//         pattern3: 3,
-//         test3: (),
-//         pattern4: 4,
-//         test4: (),
-//         pattern5: 5,
-//       ),
-//       setting3: 3,
-//       config4: 4,
-//       setting4: 4,
-//       config5: 5,
-//       setting5: 5,
-//     ),
-//     test1: 1,
-//     1test: 1,
-//     key2: 2,
-//     config3: (
-//       display: true
-//     ),
-//     test2: 2,
-//     2test: 2,
-//     key3: 3,
-//     config4: (
-//       display4: true
-//     ),
-//     test3: 3,
-//     3test: 3,
-//     key4: 4,
-//     config1: (
-//       display1: true
-//     ),
-//     test4: (
-//       settings1: (
-//         platform1: 1,
-//         platform2: 2,
-//       ),
-//       settings2: (
-//         platform3: 1,
-//         platform4: 2,
-//       ),
-//     ),
-//     4test: (
-//       settings3: (
-//         platform5: 5,
-//         platform6: 6,
-//       ),
-//       settings4: (
-//         platform7: 7,
-//         platform8: 8,
-//       ),
-//     ),
-//     key5: 5,
-//     test5: 5,
-//     5test: 5,
-//     config2: (
-//       display2: true
-//     ),
+//     key1: 1
 //   ),
 //   list1: (),
 //   list2: (),
+//   (list1, list2): (),
+//   list1 list2: (),
 //   a b c d e f: value,
-//   a: (b: (c: (d: e))),
+//   a: (
+//     b: (
+//       c: (
+//         d: e,
+//       ),
+//     ),
+//   ),
 //   any: true,
 //   all: false,
 //   separator: auto,
 //   bracketed: false,
 //   method: join,
-//   null: false
+//   null: false,
+//   false: null,
+//   'false': null
 // );
 
-// string key
-// @debug keys($-map, list1, list2); // true
+// default
+// @debug keys($-map); //  key, list1, list2, (list1, list2), list1 list2, a b c d e f, a, any, all, separator, bracketed, method, null, false, "false"
 
-// string keys
-// @debug keys($-map, list1, list2); // true
-// @debug keys($-map, list1, list2, wrong); // false
-// @debug keys($-map, list1, list3); // false
+// '?=' find keys with `list.index()`
+// @debug keys($-map, '?=list1'); // list1, (list1, list2), list1 list2
 
-// list key
-// @debug keys($-map, a b c d e f); // true
-// @debug keys($-map, a b c d e); // false
-// @debug keys($-map, a b c d e f, bracketed); // true
-// @debug keys($-map, a b c d e, bracketed); // false
+// '^'
+// @debug keys($-map, '^sep'); // separator
+// @debug keys($-map, '^sep', '^sep'); // (separator,)
+// @debug keys($-map, 'sep^'); // (separator,)
+// @debug keys($-map, '^rac'); // ()
 
-// nested keys
-// @debug keys($-map, (a, b, c, d), a b c d e f); // true
-// @debug keys($-map, (a, b, c, d), (a b c d e f g)); // false
+// '$'
+// @debug keys($-map, '$tor'); // (separator,)
+// @debug keys($-map, '$ara'); // ()
+// @debug keys($-map, 'tor$'); // (separator,)
 
-// pattern
-// @debug keys($-map, (key, '*key'));
-// @debug keys($-map, (key, config, '*config'));
-// @debug keys($-map, (key, '*config', display), (key, '^test', settings2));
+// '~='
+// @debug keys($-map, '~=ara'); // (separator,)
+// @debug keys($-map, 'ara~='); // (separator,)
+
+// '*'
+// @debug keys($-map, '*ara'); // (separator,)
+
+// 'value:' 
+// @debug keys($-map, 'value:bool'); // any, all, bracketed, null
+// @debug keys($-map, 'value:list'); // list1, list2, (list1, list2), list1 list2
+
+// 'key:'
+// @debug keys($-map, 'key:bool'); // (false,)
+// @debug keys($-map, 'key:string'); // key, list1, list2, a, any, all, separator, bracketed, method, "false"

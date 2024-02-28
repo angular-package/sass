@@ -1,28 +1,31 @@
 // Sass.
 @use 'sass:list';
 @use 'sass:map';
-
-// Functions.
-@use '../../list/list.append.function' as *;
+@use 'sass:meta';
 
 // Status: DONE
-// The `pick.type()` function returns a map with values of `$types`.
-// @param `$map` A map from which keys of values of `$types` are picked.
-// @param `$type` Required type of the value to pick from `$map`.
-// @arbitrary `$types...` Types of the values to pick from `$map`.
-// @returns The return value is a copy of `$map` with a values of types associated with `$types`.
-@function type($map, $type, $types...) {
+// The `pick.type()` function returns a copy of `$map` with values of required `$type` and additional `$types`.
+// @param `$map` A map from which keys of values of required `$type` and additional `$types` are picked.
+// @param `$type` Required value type to pick from `$map`.
+// @arbitrary `$types...` Additional value types to pick from `$map`.
+// @returns The returned value is a copy of `$map` with a values of types associated with required `$type` and additional `$types`.
+@function key-type($map, $type, $types...) {
   $result: ();
-  @each $type in append((), $type, comma, $types...) {
+  @each $type in list.join(($type,), $types, comma) {
     @if list.index(bool calculation color function list map null number string, $type) {
       @each $key, $value in $map {
-        @if type-of($key) == $type or (not $type and type-of($type) == type-of($key)) {
-          $result: map.deep-merge($result, ($key: $value));
+        @if meta.type-of($key) == $type or (not $type and meta.type-of($type) == meta.type-of($key)) {
+          $result: map.deep-merge(
+            $result,
+            ($key: $value)
+          );
         }
       }
     }
   }
-  @return $result;
+  @return list.length($result) > 0
+    and $result
+    or null;
 }
 
 // Examples.
@@ -99,15 +102,36 @@
 //   )
 // );
 
-// @debug type(map.get($-theme, basic), bool);
-// @debug type(map.get($-theme, basic), calculation);
-// @debug type(map.get($-theme, basic), color);
-// @debug type(map.get($-theme, basic), function);
-// @debug type(map.get($-theme, basic), list);
-// @debug type(map.get($-theme, basic), map);
-// @debug type(map.get($-theme, basic), null);
-// @debug type(map.get($-theme, basic), number);
-// @debug type(map.get($-theme, basic), string);
+// no key
+// @debug type(map.get($-theme, basic), test); // null
+
+// bool
+// @debug type(map.get($-theme, basic), bool); // (false: bool)
+
+// calculation
+// @debug type(map.get($-theme, basic), calculation); // (calc(400px + 10%): calculation)
+
+// color
+// @debug type(map.get($-theme, basic), color); // (#fff: color)
+
+// function
+// @debug type(map.get($-theme, basic), function); // (get-function("append"): function)
+
+// list
+// @debug type(map.get($-theme, basic), list); // (basic large: ("": border, dark: border dark, light: border light), extended small: ("": primary, dark: primary dark, light: primary light), [primary]: (primary dark: primary dark), (key1, key2): (primary: primary1))
+
+// map
+// @debug type(map.get($-theme, basic), map); // ((a: 1, b: 2): map)
+
+// null
+// @debug type(map.get($-theme, basic), null); // (null: null)
+
+// number
+// @debug type(map.get($-theme, basic), number); // (15: number)
+
+// string
+// @debug type(map.get($-theme, basic), string); // ("default.palette": (), "gray.palette": ("gray": "gray" color, "gray" dark: "gray" dark, "gray" light: "gray" light), "bg.palette": (bg: bg color, bg dark: bg dark, bg light: bg light), key1: primary, firstname: string)
 
 // multiple
-// @debug type(map.get($-theme, basic), list, string);
+// @debug type(map.get($-theme, basic), number, null); // (15: number, null: null)
+// @debug type(map.get($-theme, basic), function, map); // (get-function("append"): function, (a: 1, b: 2): map)

@@ -28,6 +28,11 @@
     or null;
 }
 
+// Alias name for `key-type()`.
+@function type($map, $type, $types...) {
+  @return key-type($map, $type, $types...);
+}
+
 // Examples.
 // $-theme: (
 //   dark: (

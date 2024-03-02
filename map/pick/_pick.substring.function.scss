@@ -14,22 +14,27 @@
 // @arbitrary `$substrings...` Additional substrings of keys to pick from `$map`.
 // @returns The returned value is a copy of `$map` with keys associated with required `$substring` and additional `$substrings`.
 @function substring($map, $substring, $substrings...) {
-  @if list.length($map) > 0 {
+  $keys: ();
+  @each $key in map.keys($map) {
+    @if meta.type-of($key) == string {
+      $keys: list.append($keys, $key);
+    }
+  }
+  @if list.length($keys) > 0 {
     $result: ();
-    $keys: ();
-    @each $key in map.keys($map) {
-      @if meta.type-of($key) == string {
-        $keys: list.append($keys, $key);
-      }
-    }  
     @each $substring in list.join(($substring,), $substrings, comma) {
       @each $key in $keys {
-        $result: string-index.index($key, $substring)
-          and map.deep-merge($result, map-pick.pick($map, $key) or ())
-          or $result;
+        $result: map.deep-merge(
+          $result,
+          string-index.index($key, $substring)
+            and map-pick.pick($map, $key)
+            or ()
+        );
       }
     }
-    @return $result;
+    @if list.length($result) > 0 {
+      @return $result;
+    }
   }
   @return null;
 }

@@ -1,33 +1,46 @@
 // Sass.
 @use 'sass:list';
 @use 'sass:map';
-
-// Modules.
-@use '../../../meta';
-@use '../../../string';
+@use 'sass:meta';
 
 // Functions.
-@use '../../../list/list.append.function' as *;
+@use '../../../string/string.starts-with.function' as string-starts-with;
 
 // Status: DONE
 // The `pick.substring-start()` function returns a copy of `$map` with keys of start substrings.
 // @param `$map` A map from which keys of start substrings are picked.
 // @param `$substring-start` Substring start of key to pick from `$map`.
 // @arbitrary `$substrings-start...` List of start substrings of keys to pick from `$map`.
-// @return The return value is a copy of `$map` with keys associated with start substrings.
+// @returns The returned value is a copy of `$map` with keys associated with start substrings.
 @function start($map, $substring-start, $substrings-start...) {
-  $result: ();
-  @each $substring in append((), $substring-start, comma, $substrings-start...) {
-    @if type-of($substring) == string {
-      @each $key in map.keys($map) {
-        $key: if(meta.of-type(color number string, $key), #{$key}, $key);
-        @if string.starts-with($key, $substring) {
-          $result: map.deep-merge($result, ($key: map.get($map, $key)));
-        }
-      }
+  $keys: ();
+  @each $key in map.keys($map) {
+    @if meta.type-of($key) == string {
+      $keys: list.append($keys, $key);
     }
   }
-  @return $result;
+  @if list.length($keys) > 0 {
+    $result: ();
+    @each $substring in list.join(($substring-start,), $substrings-start, comma) {
+      @each $key in $keys {
+        $result: map.deep-merge(
+          $result,
+          string-starts-with.starts-with($key, $substring)
+            and ($key: map.get($map, $key))
+            or ()
+        );
+      }
+    }
+    @if list.length($result) > 0 {
+      @return $result;
+    }
+  }
+  @return null;
+}
+
+// Alias `map.pick-key-start-substring()` to `map.pick-substring-start()`.
+@function key-substring-start($map, $substring-start, $substrings-start...) {
+  @return end($map, $substring-start, $substrings-start...);
 }
 
 // Examples.
@@ -124,5 +137,6 @@
 //   )
 // );
 
-// @debug start(map.get($-theme, basic), 'key1');
-// @debug start(map.get($-theme, basic), 'test');
+// @debug start(map.get($-theme, basic), 'key1'); // (key1: primary)
+// @debug start(map.get($-theme, basic), 'test'); // ("test9971": 1, "test2": 2, "test3": 3, "test4": 4, "test5": 5)
+// @debug start(map.get($-theme, basic), 15); // null

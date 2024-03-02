@@ -1,33 +1,46 @@
 // Sass.
 @use 'sass:list';
 @use 'sass:map';
-
-// Modules.
-@use '../../../meta';
-@use '../../../string';
+@use 'sass:meta';
 
 // Functions.
-@use '../../../list/list.append.function' as *;
+@use '../../../string/string.ends-with.function' as string-ends-with;
 
 // Status: DONE
 // The `pick.substring-end()` function returns a copy of `$map` with keys of end substrings.
 // @param `$map` A map from which keys of end substrings are picked.
 // @param `$substring-end` Substring end of key to pick from `$map`.
 // @arbitrary `$substrings-end...` List of end substrings of keys to pick from `$map`.
-// @return The return value is a copy of `$map` with keys associated with end substrings.
+// @return The returned value is a copy of `$map` with keys associated with end substrings.
 @function end($map, $substring-end, $substrings-end...) {
-  $result: ();
-  @each $substring in append((), $substring-end, comma, $substrings-end...) {
-    @if type-of($substring) == string {
-      @each $key in map.keys($map) {
-        $key: if(meta.of-type(color number string, $key), #{$key}, $key);
-        @if string.ends-with($key, $substring) {
-          $result: map.deep-merge($result, ($key: map.get($map, $key)));
-        }
-      }
+  $keys: ();
+  @each $key in map.keys($map) {
+    @if meta.type-of($key) == string {
+      $keys: list.append($keys, $key);
     }
   }
-  @return $result;
+  @if list.length($keys) > 0 {
+    $result: ();
+    @each $substring in list.join(($substring-end,), $substrings-end, comma) {
+      @each $key in $keys {
+        $result: map.deep-merge(
+          $result,
+          string-ends-with.ends-with($key, $substring)
+            and ($key: map.get($map, $key))
+            or ()
+        );
+      }
+    }
+    @if list.length($result) > 0 {
+      @return $result;
+    }
+  }
+  @return null;
+}
+
+// Alias `map.pick-key-substring-end()` to `map.pick-substring-end()`.
+@function key-substring-end($map, $substring-end, $substrings-end...) {
+  @return end($map, $substring-end, $substrings-end...);
 }
 
 // Examples.

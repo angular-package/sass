@@ -2,26 +2,29 @@
 @use 'sass:list';
 @use 'sass:map';
 
-// Functions.
-@use '../../list/list.append.function' as list-append;
-@use '../../list/list.index.function' as list-index;
-
 // Status: DONE
-// The `map.pick-index()` function picks properties of keys found by `list.index()` function.
-// @param `$map` A map from which keys found by `list.index()` are picked.
-// @param `$search-key` Element of list to find by `list.index()` function.
-// @arbitrary `$search-keys...` Elements of list to find by `list.index()` function.
-// @returns The returned value is a copy of `$map` with keys found by `list.index()` function.
+// The `map.pick-index()` function picks properties of required `$search-key` and additional `$search-keys` found by `list.index()` function.
+// If keys are not found returns `null`.
+// @param `$map` A map from which required `$search-key` and additional `$search-keys` found by `list.index()` are picked.
+// @param `$search-key` Required key as element of list or list to find by `list.index()` function.
+// @arbitrary `$search-keys...` Additional keys as element of list or list to find by `list.index()` function.
+// @returns The returned value is a copy of `$map` with required `$search-key` and additional `$search-keys` found by `list.index()` function.
+// If keys are found, otherwise `null`.
 @function index($map, $search-key, $search-keys...) {
   $result: ();
-  @each $search in list-append.append((), $search-key, comma, $search-keys...) {
+  @each $search in list.join(($search-key,), $search-keys, comma) {
     @each $key, $value in $map {
-      @if list-index.index($key, $search) {
-        $result: map.deep-merge($result, ($search: $value));
+      @if list.index($key, $search) {
+        $result: map.deep-merge(
+          $result,
+          ($key: $value)
+        );
       }
     }
   }
-  @return $result;
+  @return list.length($result) > 0
+    and $result
+    or null;
 }
 
 // Alias name for `index()`.
@@ -134,5 +137,5 @@
 //   )
 // );
 
-// @debug index(map.get($-theme, basic), small, large);
-// @debug index(map.get($-theme, basic), key1, key2);
+// @debug index(map.get($-theme, basic), small, large); // (small: ("": primary, dark: primary dark, light: primary light), large: ("": border, dark: border dark, light: border light))
+// @debug index(map.get($-theme, basic), key1, key2); // (key1: primary, key2: (primary: primary1))

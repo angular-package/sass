@@ -24,12 +24,12 @@
     $result: ();
     @each $substring in list.join(($substring,), $substrings, comma) {
       @each $key in $keys {
-        $result: map.deep-merge(
-          $result,
-          string-index.index($key, $substring)
-            and map-pick.pick($map, $key)
-            or ()
-        );
+        @if string-index.index($key, $substring) {
+          $result: map.deep-merge(
+            $result,
+            map-pick.pick($map, $key)
+          );
+        }
       }
     }
     @if list.length($result) > 0 {

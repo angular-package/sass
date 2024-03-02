@@ -11,7 +11,7 @@
 // @param `$map` A map from which keys of end substrings are picked.
 // @param `$substring-end` Substring end of key to pick from `$map`.
 // @arbitrary `$substrings-end...` List of end substrings of keys to pick from `$map`.
-// @return The returned value is a copy of `$map` with keys associated with end substrings.
+// @returns The returned value is a copy of `$map` with keys associated with end substrings.
 @function end($map, $substring-end, $substrings-end...) {
   $keys: ();
   @each $key in map.keys($map) {
@@ -23,12 +23,12 @@
     $result: ();
     @each $substring in list.join(($substring-end,), $substrings-end, comma) {
       @each $key in $keys {
-        $result: map.deep-merge(
-          $result,
-          string-ends-with.ends-with($key, $substring)
-            and ($key: map.get($map, $key))
-            or ()
-        );
+        @if string-ends-with.ends-with($key, $substring) {
+          $result: map.deep-merge(
+            $result,
+            ($key: map.get($map, $key))
+          );  
+        }
       }
     }
     @if list.length($result) > 0 {

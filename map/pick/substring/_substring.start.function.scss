@@ -23,12 +23,12 @@
     $result: ();
     @each $substring in list.join(($substring-start,), $substrings-start, comma) {
       @each $key in $keys {
-        $result: map.deep-merge(
-          $result,
-          string-starts-with.starts-with($key, $substring)
-            and ($key: map.get($map, $key))
-            or ()
-        );
+        @if string-starts-with.starts-with($key, $substring) {
+          $result: map.deep-merge(
+            $result,
+            ($key: map.get($map, $key))
+          );  
+        }
       }
     }
     @if list.length($result) > 0 {

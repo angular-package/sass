@@ -1,0 +1,50 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
+// Status: DONE
+// The `map.keys-string()` function returns all keys of `string` type.
+// @param `$map` A map to retrieve all keys of `string` type.
+// @returns The returned value is keys list of `string` type if found, otherwise `null`.
+@function string($map) {
+  $result: ();
+  @each $key in map.keys($map) {
+    @if meta.type-of($key) == string {
+      $result: list.append($result, $key, comma);
+    }
+  }
+  @return list.length($result) > 0
+    and $result
+    or null;
+}
+
+// Examples.
+// $-map: (
+//   key: (
+//     key1: 1
+//   ),
+//   list1: (),
+//   list2: (),
+//   (list1, list2): (),
+//   list1 list2: (),
+//   a b c d e f: value,
+//   a: (
+//     b: (
+//       c: (
+//         d: e,
+//       ),
+//     ),
+//   ),
+//   any: true,
+//   all: false,
+//   separator: auto,
+//   bracketed: false,
+//   method: join,
+//   null: false,
+//   false: null,
+//   'false': null
+// );
+
+// default
+// @debug string($-map); // key list1 list2 a any all separator bracketed method "false"

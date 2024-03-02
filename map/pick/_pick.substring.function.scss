@@ -1,36 +1,40 @@
 // Sass.
 @use 'sass:list';
 @use 'sass:map';
-
-// Modules.
-@use '../../meta';
-@use '../../string';
+@use 'sass:meta';
 
 // Functions.
-@use '../../list/list.append.function' as *;
+@use '../../string/string.index.function' as string-index;
+@use '../map.pick.function' as map-pick;
 
 // Status: DONE
-// The `pick.substring()` function returns a copy of `$map` with keys of `$substrings`.
-// @param `$map` A map from which keys of `$substrings` are picked.
-// @param `$substring` Substring of key to pick from `$map`.
-// @arbitrary `$substrings...` Substrings of keys to pick from `$map`.
-// @returns The return value is a copy of `$map` with keys associated with `$substrings`.
+// The `pick.substring()` function returns a copy of `$map` with keys of required `$substring` and additional `$substrings`.
+// @param `$map` A map from which keys of required `$substring` and additional `$substrings` are picked.
+// @param `$substring` Required substring of key to pick from `$map`.
+// @arbitrary `$substrings...` Additional substrings of keys to pick from `$map`.
+// @returns The returned value is a copy of `$map` with keys associated with required `$substring` and additional `$substrings`.
 @function substring($map, $substring, $substrings...) {
-  $result: ();
-  @each $substring in append((), $substring, comma, $substrings...) {
-    @if type-of($substring) == string {
-      @each $key in map.keys($map) {
-        $key: if(meta.of-type(color number string, $key), #{$key}, $key);
-        @if string.index($key, $substring) {
-          $result: map.deep-merge($result, ($key: map.get($map, $key)));
-        }
+  @if list.length($map) > 0 {
+    $result: ();
+    $keys: ();
+    @each $key in map.keys($map) {
+      @if meta.type-of($key) == string {
+        $keys: list.append($keys, $key);
+      }
+    }  
+    @each $substring in list.join(($substring,), $substrings, comma) {
+      @each $key in $keys {
+        $result: string-index.index($key, $substring)
+          and map.deep-merge($result, map-pick.pick($map, $key) or ())
+          or $result;
       }
     }
+    @return $result;
   }
-  @return $result;
+  @return null;
 }
 
-// Alias name for `substring()`.
+// Alias name for `key-substring()`.
 @function key-substring($map, $substring, $substrings...) {
   @return substring($map, $substring, $substrings...);
 }

@@ -1,8 +1,5 @@
-// Sass.
-@use 'sass:list';
-
 // Functions.
-@use '../meta/meta.of-type.function';
+@use '../meta/meta.of-type.function' as meta-of-type;
 
 // Modules.
 @use 'range';
@@ -13,11 +10,13 @@
 // @param `$to` The value of the number type indicates the end of the range.
 // @param `$except` The value of a number or list of numbers not belonging to the range.
 // @param `$separator` A separator between the given range numbers.
-// @return The return value is the list of numbers from the given range.
+// @returns The returned value is the list of numbers from the given range.
 @function range($from, $to, $step: 1, $except: null, $separator: auto) {
   @return if(
-    meta.of-type(number, $from, $to, $step),
-    if($from < $to, range.up($from, $to, $step, $except, $separator), range.down($from, $to, $step, $except, $separator)),
+    meta-of-type.of-type(number, $from, $to, $step),
+    $from < $to
+      and range.up($from, $to, $step, $except, $separator)
+      or range.down($from, $to, $step, $except, $separator),
     null
   );
 }

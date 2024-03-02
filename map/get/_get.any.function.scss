@@ -11,7 +11,7 @@
 @function any($map, $key, $keys...) {
   $keys: list.join(($key,), $keys, comma);
   @for $i from 1 through list.length($keys) {
-    @if not ($i == list.length($keys)) {
+    @if $i <= list.length($keys) {
       @if map.has-key($map, list.nth($keys, $i)) {
         @return map.get($map, list.nth($keys, $i));
       }

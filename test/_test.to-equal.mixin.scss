@@ -1,0 +1,60 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:string';
+
+// Status: 
+// The `test.to-equal()` mixin.
+// @param `$describe` 
+// @param `$actual`
+// @param `$expected`
+@mixin to-equal($describe, $actual, $expected, $execute: true, $error: true) {
+  @if $execute == true {
+    $i: 1;
+    $passed: 0;
+    $failed: 0;
+    $summary: null;
+
+    @each $e in $expected {
+      $done: list.length($actual) == $i and true or false;
+      $description: 
+        $i > list.length($describe)
+          and list.nth($describe, list.length($describe))
+          or list.nth($describe, $i);
+      $check: list.nth($actual, $i) == $e;
+      $spec: #{$i + '.'};
+      $spec: list.join(
+        $spec,
+        $check and string.unquote('Passed.') or string.unquote('Failed.')
+      );
+      $spec: list.join(
+        $spec,
+        list.join(
+          string.unquote(#{$description}),
+          $e expected list.nth($actual, $i)
+        )
+      );
+  
+      @if $check {
+        $passed: $passed + 1;
+      } @else {
+        $failed: $failed + 1;
+      }
+
+      @if $error and not $check {
+        @error $spec;
+      }
+  
+      @content(
+        $i,
+        $passed,
+        $failed,
+        list.length($actual),
+        $spec,
+        Tests list.length($expected) Passed $passed Failed $failed,
+        $done
+      );
+  
+      $i: $i + 1;
+    }  
+  }
+}

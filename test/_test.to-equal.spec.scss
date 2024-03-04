@@ -1,0 +1,33 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:selector';
+
+// Modules.
+@use '../test';
+
+// Tests.
+$describe: (
+  List nth must be,
+  // Selector nested must be,
+  // List nth must be
+);
+
+$actual: 
+  list.nth((a, b), 2),
+  selector.nest((a, b)...),
+  list.nth((a, b, c), 1)
+;
+
+$expected: (
+  b,
+  (a b,),
+  b
+);
+
+@include test.to-equal($describe, $actual, $expected) using(
+  $id, $passed, $failed, $max, $spec, $summary, $done
+) {
+  // @debug $summary;
+  @debug $spec;
+  // @debug $done;
+}

@@ -16,6 +16,6 @@
 }
 
 // Examples.
-// @debug is-lower-case('test test test'); // false
+// @debug is-lower-case('test test test'); // true
 // @debug is-lower-case('TEST TEST TEST'); // false
 // @debug is-lower-case('TEST test TEST'); // false

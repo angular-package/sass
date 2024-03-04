@@ -46,5 +46,5 @@
 // @debug replace('bold king is bold hairy', all, 'bold', 'test'); // test king is test hairy
 
 // multiple replacements
-// @debug replace('bold king is hairy', all, ('bold', 'king'), 'baloon'); // baloon king is hairy
+// @debug replace('bold king is hairy', all, ('bold', 'king'), 'baloon'); // baloon baloon is hairy
 // @debug replace('bold king is hairy', first, (bold is), ''); //  king  hairy

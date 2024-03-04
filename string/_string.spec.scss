@@ -1,8 +1,360 @@
 // Sass.
-@use 'sass:string';
+@use 'sass:map';
 
 // Modules.
-// @use '../string';
+@use '../string';
+@use '../test';
 
 // Examples.
-@debug string.split('aaa bbb ccc', ' '); // "aaa", "bbb", "ccc"
+$execute: true;
+$spec: (
+  ends-with: $execute,
+  index: $execute,
+  is-upper-case: $execute,
+  is-lower-case: $execute,
+  is: $execute,
+  join: $execute,
+  of: $execute,
+  replace-multiple: $execute,
+  replace: $execute,
+  split: $execute,
+  starts-with: $execute,
+  to-map: $execute,
+  unquote: $execute,
+);
+
+// SECTION: string.ends-with()
+$-text: 'Primary color red';
+
+@include test.to-equal(
+  'string.ends-with()',
+  (
+    string.ends-with($-text, 'red'),
+    string.ends-with($-text, 'color red'),
+    string.ends-with($-text, 'color red', 9),
+    string.ends-with($-text, 'color red', 4)
+  ),
+  (
+    true, true, true, false
+  ),
+  map.get($spec, ends-with),
+) using($id, $passed, $failed, $max, $spec, $summary, $done) {
+  @debug $spec;
+  @if $done {
+    @debug $summary;
+    @debug '---';
+  }
+}
+
+
+// SECTION: string.index()
+@include test.to-equal(
+  'string.index()',
+  (
+    string.index("Helvetica Neue", "Helvetica"),
+    string.index("Helvetica Neue", "Neue"),
+    string.index("Helvetica Neue", "Helvetica", "Neue"),
+    string.index("Helvetica Neue", "Helvetica", "Neue", "Wrong"),
+    string.index("Helvetica Neue", "Helvetica", "Neue", "Wrong", true),
+    string.index(true, "Helvetica")
+  ),
+  (
+    1, 11, (1, 11), (1, 11, null), (1, 11, null, null), null,
+  ),
+  map.get($spec, index)
+) using($id, $passed, $failed, $max, $spec, $summary, $done) {
+  @debug $spec;
+  @if $done {
+    @debug $summary;
+    @debug '---';
+  }
+}
+
+
+// SECTION: string.is-lower-case()
+@include test.to-equal(
+  'string.is-lower-case()',
+  (
+    string.is-lower-case('test test test'),
+    string.is-lower-case('TEST TEST TEST'),
+    string.is-lower-case('TEST test TEST'),
+  ),
+  (
+    true, false, false
+  ),
+  map.get($spec, is-lower-case)
+) using($id, $passed, $failed, $max, $spec, $summary, $done) {
+  @debug $spec;
+  @if $done {
+    @debug $summary;
+    @debug '---';
+  }
+}
+
+// SECTION: string.is-upper-case()
+@include test.to-equal(
+  'string.is-upper-case()',
+  (
+    string.is-upper-case('test test test'),
+    string.is-upper-case('TEST TEST TEST'),
+    string.is-upper-case('TEST test TEST'),
+  ),
+  (
+    false, true, false
+  ),
+  map.get($spec, is-upper-case)
+) using($id, $passed, $failed, $max, $spec, $summary, $done) {
+  @debug $spec;
+  @if $done {
+    @debug $summary;
+    @debug '---';
+  }
+}
+
+// SECTION: string.is()
+@include test.to-equal(
+  'string.is()',
+  (
+    string.is(test),
+    string.is(test, test1, test2),
+    string.is(1),
+    string.is(1, 2),
+  ),
+  (
+    true, true, false, false
+  ),
+  map.get($spec, is)
+) using($id, $passed, $failed, $max, $spec, $summary, $done) {
+  @debug $spec;
+  @if $done {
+    @debug $summary;
+    @debug '---';
+  }
+}
+
+
+// SECTION: string.join()
+@include test.to-equal(
+  'string.join()',
+  (
+    string.join('-'),
+    string.join('-', 'a', 'b', 'c'),
+    string.join('-', '', 'a', 'b', 'c'),
+    string.join('-', 'a', 'b', 'c', ''),
+    string.join('-', '', 'a', 'b', 'c', ''),
+    string.join('-', 'a', ('b', 'c')),
+    string.join('-', a, b, c),
+
+    // Join number.
+    string.join('-', a, 1, b, 2, c, 3),
+
+    // Join color.
+    string.join('-', silver, orange, green, red, blue, yellow)
+  ),
+  (
+    '', a-b-c, -a-b-c, a-b-c-, -a-b-c-, a-b-c, a-b-c, a-1-b-2-c-3, silver-orange-green-red-blue-yellow
+  ),
+  map.get($spec, join)
+) using($id, $passed, $failed, $max, $spec, $summary, $done) {
+  @debug $spec;
+  @if $done {
+    @debug $summary;
+    @debug '---';
+  }
+}
+
+
+// SECTION: string.of()
+@include test.to-equal(
+  'string.of()',
+  (
+    // lowercase
+    string.of('test test test', lowercase), // lowercase
+    string.of('TEST TEST TEST', lowercase), // notlowercase
+    string.of('test TEST test', lowercase), // notlowercase
+
+    // uppercase
+    string.of('TEST TEST TEST', uppercase), // uppercase
+    string.of('test test test', uppercase), // notuppercase
+    string.of('test TEST test', uppercase), // notuppercase
+
+    // lowercase uppercase
+    string.of('TEST TEST TEST', type lowercase uppercase, '.'), // string.notlowercase.uppercase
+
+    // xcase
+    string.of('test TEST test', xcase), // variouslycase
+    string.of('TEST TEST TEST', xcase), // uppercase
+    string.of('test test test', xcase), // lowercase
+
+    string.of('TEST TEST TEST', type xcase, '.'), // string.uppercase
+
+    // length
+    string.of('TEST TEST TEST', length xcase), // 14uppercase
+    string.of('TEST TEST TEST', length xcase, '.'), // 14.uppercase
+  ),
+  (
+    lowercase, notlowercase, notlowercase, uppercase, notuppercase, notuppercase,
+    'string.notlowercase.uppercase', variouslycase, uppercase, lowercase, 'string.uppercase',
+    "14uppercase", '14.uppercase'
+  ),
+  map.get($spec, of)
+) using($id, $passed, $failed, $max, $spec, $summary, $done) {
+  @debug $spec;
+  @if $done {
+    @debug $summary;
+    @debug '---';
+  }
+}
+
+// SECTION: string.replace-multiple()
+@include test.to-equal(
+  'string. ()',
+  (
+  ),
+  (
+  ),
+  map.get($spec, is)
+) using($id, $passed, $failed, $max, $spec, $summary, $done) {
+  @debug $spec;
+  @if $done {
+    @debug $summary;
+    @debug '---';
+  }
+}
+
+// SECTION: string.replace()
+@include test.to-equal(
+  'string.replace()',
+  (
+    // single replacement first occurrence
+    string.replace('bold king is hairy', first, 'bold', 'baloon'), // baloon king is hairy
+    string.replace('bold king is hairy', first, 'bold', ''), //  king is  hairy
+    string.replace(':==', first, ':', ''),
+
+    // single replacement all occurrences
+    string.replace('bold king is hairy', all, 'bold', 'baloon'), // baloon king is hairy
+    string.replace('bold king is hairy', all, 'king', 'baloon'), // baloon king is hairy
+    string.replace('bold king is bold hairy', all, 'bold', ''), //  king is  hairy
+    string.replace('bold king is bold hairy', all, 'bold', 'test'), // test king is test hairy
+
+    // multiple replacements
+    string.replace('bold king is hairy', all, ('bold', 'king'), 'baloon'), // baloon baloon is hairy
+    string.replace('bold king is hairy', first, (bold is), ''), //  king  hairy
+  ),
+  (
+    "baloon king is hairy", " king is hairy", "==", "baloon king is hairy", "bold baloon is hairy", " king is  hairy",
+    "test king is test hairy", "baloon baloon is hairy", " king  hairy"
+  ),
+  map.get($spec, replace)
+) using($id, $passed, $failed, $max, $spec, $summary, $done) {
+  @debug $spec;
+  @if $done {
+    @debug $summary;
+    @debug '---';
+  }
+}
+
+// SECTION: string.split()
+@include test.to-equal(
+  'string.split()',
+  (
+    // single character
+    string.split('aaa bbb ccc', ' '), // "aaa", "bbb", "ccc"
+    string.split('aaa-bbb-ccc', '-'), // "aaa", "bbb", "ccc"
+    string.split('aaa/bbb/ccc', '/'), // "aaa", "bbb", "ccc"
+    string.split("Segoe UI Emoji", " "), // "Segoe", "UI", "Emoji"
+    string.split("Segoe UI Emoji", " ", $limit: 1), // "Segoe", "UI Emoji"
+    string.split("Segoe UI Emoji", " ", $limit: 1, $bracketed: true), // ["Segoe", "UI Emoji"]
+    string.split("SF Mono Segoe UI Mono Roboto Mono", " ", $limit: 2, $bracketed: true), // ["SF", "Mono", "Segoe UI Mono Roboto Mono"]
+
+    // word `$separator`
+    string.split('aaa_DELIMITER_bbb_DELIMITER_ccc', '_DELIMITER_'), // "aaa", "bbb", "ccc"
+    string.split('aaa[separator]bbb[separator]ccc', '[separator]'), // "aaa", "bbb", "ccc"
+
+    // multiple separators
+    string.split('aaa_SEPARATOR_bbb_DELIMITER_ccc_ADD_eee_SEPARATOR_ddd', ('_DELIMITER_', '_SEPARATOR_', '_ADD_')), // "aaa", "bbb", "ccc", "eee", "ddd"
+  ),
+  (
+    ("aaa", "bbb", "ccc"), ("aaa", "bbb", "ccc"), ("aaa", "bbb", "ccc"), ("Segoe", "UI", "Emoji"), ("Segoe", "UI Emoji"),
+    ["Segoe", "UI Emoji"], ["SF", "Mono", "Segoe UI Mono Roboto Mono"], ("aaa", "bbb", "ccc"), ("aaa", "bbb", "ccc"),
+    ("aaa", "bbb", "ccc", "eee", "ddd")
+  ),
+  map.get($spec, split)
+) using($id, $passed, $failed, $max, $spec, $summary, $done) {
+  @debug $spec;
+  @if $done {
+    @debug $summary;
+    @debug '---';
+  }
+}
+
+// SECTION: string.split()
+// @debug string.split('aaa bbb ccc', ' '); // "aaa", "bbb", "ccc"
+
+// SECTION: string.starts-with()
+@include test.to-equal(
+  'string.starts-with()',
+  (
+    string.starts-with($-text, 'Primary color'), // true
+    string.starts-with($-text, 'color red'), // false
+
+    // Position.
+    string.starts-with($-text, 'color red', 9), // true
+    string.starts-with($-text, 'color red', 4), // false
+  ),
+  (true, false, true, false),
+  map.get($spec, starts-with)
+) using($id, $passed, $failed, $max, $spec, $summary, $done) {
+  @debug $spec;
+  @if $done {
+    @debug $summary;
+    @debug '---';
+  }
+}
+
+// SECTION: string.to-map()
+@include test.to-equal(
+  'string.to-map()',
+  (
+    string.to-map('separator:string,number'), // ("separator": ("string", "number"))
+    string.to-map('separator:bool'), // ("separator": "bool")
+
+    // multiple key
+    string.to-map('key,value:string,number'), // ("key": ("string", "number"), "value": ("string", "number"))
+    string.to-map('key,value:string,number'), // ("key": ("string", "number"), "value": ("string", "number"))
+
+    // add multiple with `$key-value-strings`
+    string.to-map('key1,key2:string;number', 'key3,key4:string;number', 'key5,key6:string;number') // ("key1": "string", "key2": "number", "key3": "string", "key4": "number", "key5": "string", "key6": "number")
+  ),
+  (
+    ("separator": ("string", "number")),
+    ("separator": "bool"),
+    ("key": ("string", "number"), "value": ("string", "number")),
+    ("key": ("string", "number"), "value": ("string", "number")),
+    ("key1": "string", "key2": "number", "key3": "string", "key4": "number", "key5": "string", "key6": "number")
+  ),
+  map.get($spec, to-map)
+) using($id, $passed, $failed, $max, $spec, $summary, $done) {
+  @debug $spec;
+  @if $done {
+    @debug $summary;
+    @debug '---';
+  }
+}
+
+// SECTION: string.unquote()
+@include test.to-equal(
+  'string.unquote()',
+  (
+    string.unquote("test test"),
+    string.unquote(testTest),
+  ),
+  ("test test", testTest),
+  map.get($spec, unquote)
+) using($id, $passed, $failed, $max, $spec, $summary, $done) {
+  @debug $spec;
+  @if $done {
+    @debug $summary;
+    @debug '---';
+  }
+}

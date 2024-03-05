@@ -6,9 +6,9 @@
 // The `math.calculate()` function performs value and operand calculation by using a given operator `+` addition, `-` subtraction,
 // `*` multiplication, `/` division of `string` type.
 // @arbitrary `$operations...` Arbitrary values in order (value, operator, operand) to perform calculation.
-// @return The return value is calculated `number` or CSS function `calc()` with a specified calculation.
+// @returns The returned value is calculated `number` or CSS function `calc()` with a specified calculation.
 @function calculate($operations...) {
-  @each $value, $operator, $operand in if(list.length($operations) == 3, ($operations,), $operations){
+  @each $value, $operator, $operand in list.length($operations) == 3 and ($operations,) or $operations {
     @if $value and $operand {
       @if $operator == '+' {
         @return calc($value + $operand);

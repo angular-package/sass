@@ -2,25 +2,21 @@
 @use 'sass:list';
 
 // Functions.
-@use 'list.nth.function' as *;
-
-// Modules.
-@use '../math';
+@use '../math/math.range.function' as math-range;
+@use 'list.nths.function' as list-nths;
 
 // Status: DONE
 // The `list.range()` function returns the list from the `$list` of range `$from` to `$to`.
 // @param `$list` The list to retrieve the elements from the range `$from` to `$to`.
 // @param `$from` Index from which retrieving elements begins.
 // @param `$to` Index where the retrieval of elements ends.
-// @return The return value is the list of the given range.
+// @returns The returned value is the list of the given range.
 @function range($list, $from: 1, $to: list.length($list)) {
-  @return nth($list, (math.range(($from, $to, 1, 0)...) or $to)...);
+  @return list-nths.nths(
+    $list,
+    (math-range.range(($from, $to, 1, 0)...) or $to)...
+  );
 }
-
-// from or to
-// occurrence operator operand
-// any/first/last '==' a, 1, true
-// (any/first/last '==' a, 1, true) adjust
 
 // Examples.
 // from - to
@@ -29,12 +25,12 @@
 // @debug range(('a', 'b', 'c', 'd', 'e', 'f'), -1, 1); // "f", "a"
 // @debug range(('a', 'b', 'c', 'd', 'e', 'f'), -6, -2); // "a", "b", "c", "d", "e"
 // @debug range(('a', 'b', 'c', 'd', 'e', 'f'), 4, -4); // "d", "c", "b", "a", "f", "e", "d", "c"
-// @debug range(('a', 'b', 'c', 'd', 'e', 'f'), 4, 9); // "d", "e", "f", null, null, null
+
+// @debug range(('a', 'b', 'c', 'd', 'e', 'f'), 4, 9); // Error: $n: Invalid index 7 for a list with 6 elements.
 // @debug range(('a', 'b', 'c', 'd', 'e', 'f'), -1, -2); // "f", "e"
 
 // from: number - to: string TODO: ?
-// @debug range(('a', 'b', 'c', 'd', 'e', 'f'), -4, length); // "c", "d", "e", "f", "a", "b", "c", "d", "e", "f"
-// @debug range(('a', 'b', 'c', 'd', 'e', 'f'), -4, last); // "c", "d", "e", "f", "a", "b", "c", "d", "e", "f"
+// @debug range(('a', 'b', 'c', 'd', 'e', 'f'), -4); // "c", "d", "e", "f", "a", "b", "c", "d", "e", "f"
 
 // from: string to to: number
 // TODO: ?

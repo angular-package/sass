@@ -1,12 +1,15 @@
 // Sass.
 @use 'sass:math';
+@use 'sass:meta';
 
 // Status: DONE
 // The `math.strip-unit()` function strips the unit from a given `$number`.
 // @param `$number` A `number` to strip the unit from.
-// @return The return value is number without unit.
+// @returns The returned value is number without unit.
 @function strip-unit($number) {
-  @return if(type-of($number) == number, math.div($number, ($number * 0 + 1)), $number);
+  @return meta.type-of($number) == number
+    and math.div($number, ($number * 0 + 1))
+    or $number;
 }
 
 // Examples.

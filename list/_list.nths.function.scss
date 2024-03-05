@@ -2,7 +2,7 @@
 @use 'sass:list';
 
 // Status: DONE
-// The `list.nth()` function returns elements of `$list` at `$n...` indexes.
+// The `list.nths()` function returns elements of `$list` at `$n...` indexes.
 // @param `$list` A list from which elements of indexes `$n...` are retrieved.
 // @arbitrary `$n...` Multiple indexes of `$list`.
 // @returns The returned value is list of retrieved elements at `$n...` indexes.
@@ -18,8 +18,3 @@
 // @debug nths(('a', 'b', 'c', 'd', 'e', 'f'), 0); // Error: $n: List index may not be 0.
 // @debug nths(('a', 'b', 'c', 'd', 'e', 'f'), 4); // ("d",)
 // @debug nths(('a', 'b', 'c', 'd', 'e', 'f'), 4, 3, 4); // "d", "c", "d"
-
-// @debug nths(('a', 'b', 'c', 'd', 'e', 'f'), 10); // null
-// @debug nths(('a', 'b', 'c', 'd', 'e', 'f'), 10) or false; // false
-// @debug nths(('a', 'b', 'c', 'd', 'e', 'f'), -10); // null
-// @debug nths(('a', 'b', 'c', 'd', 'e', 'f'), -10); // false

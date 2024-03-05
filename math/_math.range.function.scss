@@ -12,16 +12,13 @@
 // @param `$separator` A separator between the given range numbers.
 // @returns The returned value is the list of numbers from the given range.
 @function range($from, $to, $step: 1, $except: null, $separator: auto) {
-  @return if(
-    meta-of-type.of-type(number, $from, $to, $step),
-    $from < $to
-      and range.up($from, $to, $step, $except, $separator)
-      or range.down($from, $to, $step, $except, $separator),
-    null
-  );
+  @return range.up($from, $to, $step, $except, $separator)
+    or range.down($from, $to, $step, $except, $separator);
 }
 
 // Examples.
+// @debug range(1, 1); // 1
+// @debug range(34, 34); // 34
 // @debug range(15, 20); // 15 16 17 18 19 20
 // @debug range(20, 15); // 20 19 18 17 16 15
 

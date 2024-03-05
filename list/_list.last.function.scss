@@ -4,7 +4,7 @@
 // Status: DONE
 // The `list.last()` function returns the last element of `$list`.
 // @param `$list` The list to get the last element from.
-// @return The return value is the last element of `$list`.
+// @returns The returned value is the last element of `$list`.
 @function last($list) {
   @return list.nth($list, list.length($list));
 }

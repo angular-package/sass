@@ -4,9 +4,9 @@
 // Status: DONE
 // The `list.first()` function returns the first element of `$list`.
 // @param `$list` The list to get the first element from.
-// @return The return value is the first element of `$list`.
+// @returns The returned value is the first element of `$list`.
 @function first($list) {
-  @return if(type-of($list) == list, list.nth($list, 1), $list);
+  @return list.nth($list, 1);
 }
 
 // Examples.

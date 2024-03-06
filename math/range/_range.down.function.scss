@@ -1,35 +1,37 @@
 // Sass.
 @use 'sass:list';
 
-// Functions.
-@use '../../meta/meta.of-type.function';
-
 // Status: DONE
 // The `range.down()` function returns the range of numbers where `$from` is higher than `$to`.
 // @param `$from` The value of the number type indicates the beginning of the range.
 // @param `$to` The value of the number type indicates the end of the range.
-// @param `$step` The value of the number type indicates each increment of the range. By default, it's 1.
+// @param `$step` The value of the number type indicates each increment of the range. By default, it's `1`.
 // @param `$except` The value of a number or list of numbers not belonging to the range.
 // @param `$separator` A separator between the given range numbers.
-// @return The return value is the list of numbers of the given range.
+// @returns The returned value is the list of numbers of the given range.
 @function down($from, $to, $step: 1, $except: null, $separator: auto) {
-  @if meta.of-type(number, $from, $to, $step) and $from > $to {
+  @if $from > $to {
     $result: ();
     $number: $from;
     @if $step > 0 {
       $step: $step * -1;
     }
-    @while $number >= $to {
-      $result: if(not $except or ($except and not list.index($except, $number)), list.append($result, $number, $separator), $result);
-      $number: $number + $step;
+    @while $from >= $to {
+      $result: if(
+        not $except or ($except and not list.index($except, $from)),
+        list.append($result, $from, $separator),
+        $result
+      );
+      $from: $from + $step;
     }
-
-    @return if(list.length($result) > 0, $result, null);
+    @return list.length($result) > 0 and $result or null;
   }
-  @return null;
+  @return $from == $to and $from or null;
 }
 
 // Examples.
+// @debug down(1, 1); // 1
+// @debug down(34, 34); // 34
 // @debug down(20, 15); // 20 19 18 17 16 15
 
 // step 0.1

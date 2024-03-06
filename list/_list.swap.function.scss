@@ -8,7 +8,11 @@
 // @param `$to` Index of the element to swap with `$n`.
 // @returns The returned value is `$list` with element at index `$n` swapped with an element at index `$to`.
 @function swap($list, $n, $to, $nth: list.nth($list, $n)) {
-  @return list.set-nth(list.set-nth($list, $n, list.nth($list, $to)), $to, $nth);
+  @return list.set-nth(
+    list.set-nth($list, $n, list.nth($list, $to)),
+    $to,
+    $nth
+  );
 }
 
 // Examples.

@@ -3,9 +3,9 @@
 @use 'sass:meta';
 
 // Status: DONE
-// The `list.flatten()` function returns flattened list of `$list`.
+// The `list.flatten()` function returns flattened list of `$list`, otherwise `null`.
 // @param `$list` The list to flatten.
-// @returns The returned value is flattened copy of `$list`.
+// @returns The returned value is flattened copy of `$list`, otherwise `null`.
 @function flatten($list) {
   @if meta.type-of($list) == list {
     $result: ();
@@ -17,14 +17,14 @@
       } @else {
         $result: list.append($result, list.nth($list, $i), list.separator($list));
       }
-    }  
+    }
     @return $result;
   }
-  @return $list;
+  @return null;
 }
 
 // Examples.
 // @debug flatten(('a', 'b', (5, 6), c, d, 2, 4, 5, (a: 1), (1, 2, 3) )); // "a", "b", 5, 6, c, d, 2, 4, 5, (a: 1), 1, 2, 3
 // @debug flatten(('a', 'b', (5, 6), (c, d, 2, 4), 5, (a: 1), (1, 2, 3) )); // "a", "b", 5, 6, c, d, 2, 4, 5, (a: 1), 1, 2, 3
-// @debug flatten(('a', (b: 1), 'b', (5, 6), c, d, 2, 4, 5, (a: 1), (1, 2, 3) ));
-// @debug flatten((b: 1)); // (b: 1)
+// @debug flatten(('a', (b: 1), 'b', (5, 6), c, d, 2, 4, 5, (a: 1), (1, 2, 3) )); // "a", (b: 1), "b", 5, 6, c, d, 2, 4, 5, (a: 1), 1, 2, 3
+// @debug flatten((b: 1)); // null

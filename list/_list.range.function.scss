@@ -14,7 +14,7 @@
 @function range($list, $from: 1, $to: list.length($list)) {
   @return list-nths.nths(
     $list,
-    (math-range.range(($from, $to, 1, 0)...) or $to)...
+    math-range.range(($from, $to, 1, 0)...)...
   );
 }
 

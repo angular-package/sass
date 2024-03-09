@@ -8,7 +8,7 @@
 // @param `$to` Index of the last element to retrieve from `$list`.
 // @returns The returned value is the list of the elements from `1` to given `$to` index.
 @function to($list, $to) {
-  @return list-nths.nths($list, math-range.range(0, $to, 1, 0) or $to...);
+  @return list-nths.nths($list, math-range.range(0, $to, 1, 0)...);
 }
 
 // Examples.
@@ -16,6 +16,7 @@
 
 // @debug to(('a',), 1); // ("a",)
 // @debug to(('a',), -1); // ("a",)
+// @debug to('&' '.' 'a' 'b' 'c', 2); // "&" "."
 
 // @debug to($-list, 1); // ("a",)
 // @debug to($-list, -1); // ((a: 1),)
@@ -23,4 +24,4 @@
 // @debug to($-list, 4); // "a", "b", c, d
 // @debug to($-list, 7); // "a", "b", c, d, 2, 4, 5
 
-// @debug to('&' '.' 'a' 'b' 'c', 2); // "&" "."
+// @debug to($-list, 0); // Error: $n: List index may not be 0.

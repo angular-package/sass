@@ -2,15 +2,15 @@
 @use 'sass:list';
 
 // Functions.
-@use 'list.range.function' as *;
+@use 'list.range.function' as list-range;
 
 // Status: DONE
 // The `list.limit()` function returns the list from the first to `$limit` index, or from the offset to the limit index.
 // @param `$list` The list to retrieve the elements from.
 // @arbitrary `$limit...` A number of the indexes of the returned list from first, or given offset.
-// @return The return value is `$list` of elements specified in `$limit...`.
+// @returns The returned value is `$list` of elements specified in `$limit...`.
 @function limit($list, $limit...) {
-  @return range($list, if(
+  @return list-range.range($list, if(
     list.length($limit) == 1,
     list.join(1, $limit, comma),
     list.join(list.nth($limit, 1), calc(list.nth($limit, 1) + list.nth($limit, 2) - 1), comma),

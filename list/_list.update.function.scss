@@ -1,14 +1,15 @@
 // Sass.
 @use 'sass:list';
+@use 'sass:meta';
 
-// Status: TODO:
+// Status: DONE
 // The `list.update()` function updates list elements by providing nth value pairs as `map` or `list` type.
 // @param `$list` List to update elements from `$nth-value`.
 // @arbitrary `$nth-value...` Element's list of nth value pairs to update `$list`.
 // @returns The returned value is `$list` with updated values by provided `$nth-value`.
 @function update($list, $nth-value...) {
   @each $nth-value in $nth-value {
-    @each $nth, $value in if(type-of($nth-value) == list, ($nth-value,), $nth-value) {
+    @each $nth, $value in meta.type-of($nth-value) == list and ($nth-value,) or $nth-value {
       $list: list.set-nth($list, $nth, $value);
     }
   }
@@ -17,8 +18,9 @@
 
 // Examples.
 // list
-// @debug update((a, b, c, d, e), (3, cc), (5, aaa));
+// @debug update((a, b, c, d, e), (3, cc), (5, aaa)); // a, b, cc, d, aaa
 
 // map
-// @debug update((a, b, c, d, e), (3: cc), (5: aaa));
-// @debug update((a, b, c, d, e), (3: cc, 5: aaa));
+// @debug update((a, b, c, d, e), (3: cc), (5: aaa)); // a, b, cc, d, aaa
+// @debug update((a, b, c, d, e), (3: cc, 5: aaa)); // a, b, cc, d, aaa
+

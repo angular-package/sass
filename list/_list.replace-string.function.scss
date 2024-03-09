@@ -1,5 +1,6 @@
 // Sass.
 @use 'sass:list';
+@use 'sass:meta';
 
 // Modules.
 @use '../string';
@@ -9,12 +10,16 @@
 // @param `$list` A list in which `$replace` substring in the elements of `string` type are replaced by `$replacement`.
 // @param `$replace` A substring to replace with `$replacement` in the `$list` elements of the `string` type.
 // @param `$replacement` The string to replace `$replace` in the `string` type elements of `$list`.
-// @return The return value is `$list` where substring `$replace` of `string` type elements are replaced with `$replacement`.
+// @returns The returned value is `$list` where substring `$replace` of `string` type elements are replaced with `$replacement`.
 @function replace-string($list, $replace, $replacement) {
-  @if (type-of($list) == list or type-of($list) == arglist) and list.length($list) > 0 {
+  @if list.index(list arglist, meta.type-of($list)) and list.length($list) > 0 {
     @for $i from 1 through list.length($list) {
-      @if type-of(list.nth($list, $i)) == string {
-        $list: list.set-nth($list, $i, string.replace(list.nth($list, $i), all, $replace, $replacement));
+      @if meta.type-of(list.nth($list, $i)) == string {
+        $list: list.set-nth(
+          $list,
+          $i,
+          string.replace(list.nth($list, $i), all, $replace, $replacement)
+        );
       }
     }
   }

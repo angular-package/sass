@@ -8,17 +8,24 @@
 // @param `$val` The value to append to the end of `$list`.
 // @param `$separator` The separator `comma`, `space` or `slash` of the list. Default `auto`.
 // @arbitrary `$values...` Additional values to append into `$list`.
-// @return Returns a copy of `$list` with `$val` and/or `$values` added to the end.
+// @returns Returns a copy of `$list` with `$val` and/or `$values` added to the end.
 @function append($list, $val, $separator: auto, $values...) {
-  @each $value in list.join(($val,), $values, comma) {
-    $list: list.append($list, $value, $separator);
-  }
-  @return $list;
+  @return list.join(
+    $list,
+    list.join(($val,), $values, list.separator($list)),
+    $separator
+  );
 }
 
 // Examples.
 // @debug append(10px 20px, 30px); // 10px 20px 30px
 // @debug append((red, green), blue, space); // red green blue
+
+// @debug list.join(((10px 20px),), ((30px, 10px), (50px, 40px)), $separator: comma);
+// @debug append(((10px 20px),), (30px, 10px), comma, (50px, 40px));
+
+// @debug list.join(((10px 20px),), ((30px, 10px),), comma);
+// @debug list.append(((10px 20px),), (30px, 10px), comma);
 
 // additional values
 // @debug append((blue, red), green, auto, blue, red); // blue, red, green, blue, red

@@ -1,21 +1,22 @@
 // Sass.
 @use 'sass:list';
 
-// Functions.
-@use 'list.append.function' as *;
-
 // Status: DONE
 // The `list.index()` function returns the index and/or indexes of the given `$values`.
 // @param `$list` The list from which indexes of the given values are retrieved.
 // @param `$value` The single value to find in the given list and return its index.
 // @arbitrary `$values...` Multiple values to find their indexes in the given list.
-// @return The return value is an index or list of indexes of the given values.
+// @returns The returned value is an index or list of indexes of the given values.
 @function index($list, $value, $values...) {
   $result: ();
-  @each $value in append((), $value, auto, $values...) {
-    $result: if(list.index($list, $value), append($result, list.index($list, $value), comma), $result);
+  @each $value in list.join(($value,), $values, comma) {
+    $result: list.index($list, $value)
+      and list.append($result, list.index($list, $value), comma)
+      or $result;
   }
-  @return if(list.length($result) > 0, if(list.length($result) == 1, list.nth($result, 1), $result), null);
+  @return list.length($result) > 0
+    and list.length($result) == 1 and list.nth($result, 1) or $result
+    or null;
 }
 
 // Examples.

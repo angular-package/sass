@@ -2,39 +2,54 @@
 @use 'sass:list';
 
 // Status: DONE
-// The `remove.duplicate()` function returns the list without duplicate values.
+// The `list.remove-duplicate()` or `remove.duplicate()` function returns the list without duplicate values.
 // @param `$list` The list from which duplicate values are being removed.
-// @arbitrary `$remove...` Arbitrary list of elements to remove from `$list`.
-// @return The return value is the list with unique elements.
-@function duplicate($list, $remove...) {
+// @arbitrary `$values...` Arbitrary list of elements to remove from `$list`.
+// @returns The returned value is a copy of `$list` with unique elements.
+@function duplicate($list, $values...) {
   $result: ();
   @for $i from 1 through list.length($list) {
-    $append: false;
-    @if list.length($remove) > 0 and not list.index($remove, list.nth($list, $i)) {
-      $append: true;
-    } @else if not list.index($result, list.nth($list, $i)) {
-      $append: true;
-    }
-    @if $append {
+    @if list.length($values) > 0 and not list.index($values, list.nth($list, $i))
+      or not list.index($result, list.nth($list, $i)) {
       $result: list.append($result, list.nth($list, $i), list.separator($list));
     }
   }
   @return $result;
-}
+}  
 
 // Examples.
+// SECTION: $remove not defined
+// @debug duplicate(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', 'i', 'j', 'k')); // "a", "b", "c", ("d", "e", "f"), "g", "h", "i", "j", "k"
+
 // string
 // @debug duplicate(('a', 'b', 'a', 'c', ('d', 'e', 'f'), 'h', 'g', 'h', 'i', 'j', 'k')); // "a", "b", "c", ("d", "e", "f"), "h", "g", "i", "j", "k"
 
+// map
+// @debug duplicate(((1: 1), (2: 2), (3, 3), (1: 1), (3, 3))); // (1: 1), (2: 2), (3, 3)
+
 // number
 // @debug duplicate((0.9, 1, 1.1, 1, 2, 'a', 2, 'b', 3, 3, 4, 5, 6, 7, 8)); // 0.9, 1, 1.1, 2, "a", "b", 3, 4, 5, 6, 7, 8
+// @debug duplicate((a, b, 1, true, false, a, c, 1, c, (d, e, f), h, g, true, h, i, j, k), 1); // a, b, 1, true, false, a, c, c, (d, e, f), h, g, true, h, i, j, k
+// @debug duplicate((a, b, 1, true, 3.14, a, c, 1, c, (d, e, f), h, g, true, 3.14, h, i, j, k), 1, 3.14); // a, b, 1, true, 3.14, a, c, c, (d, e, f), h, g, true, h, i, j, k
 
 // list
 // @debug duplicate(( (1, 1), (2, 2), (3, 3), (1, 1), (3, 3) )); // (1, 1), (2, 2), (3, 3)
+// @debug duplicate(('a', primary dark, 'a', 'c', primary dark, ('d', 'e', 'f'), 'h', 'g', 'h', ('d', 'e', 'f'), 'i', 'j', 'k'), primary dark, ('d', 'e', 'f')); // "a", primary dark, "a", "c", ("d", "e", "f"), "h", "g", "h", "i", "j", "k"
 
-// none
-// @debug duplicate(('a', 'b', 'c', ('d', 'e', 'f'), 'g', 'h', 'i', 'j', 'k')); // "a", "b", "c", ("d", "e", "f"), "g", "h", "i", "j", "k"
-
+// SECTION: $remove defined
 // remove specific duplicates
 // @debug duplicate(('a', 'b', 'a', 'c', 'c', ('d', 'e', 'f'), 'h', 'g', 'h', 'i', 'j', 'k'), 'c'); // "a", "b", "a", ("d", "e", "f"), "h", "g", "h", "i", "j", "k"
 // @debug duplicate(('a', 'b', 'a', 'c', 'c', ('d', 'e', 'f'), 'h', 'g', 'h', 'i', 'j', 'k'), 'c', 'a'); // "b", ("d", "e", "f"), "h", "g", "h", "i", "j", "k"
+
+// string
+// @debug duplicate(('a', 'b', 'a', 'c', 'c', ('d', 'e', 'f'), 'h', 'g', 'h', 'i', 'j', 'k'), 'c'); // "a", "b", "a", "c", ("d", "e", "f"), "h", "g", "h", "i", "j", "k"
+// @debug duplicate(('a', 'k', 'b', 'a', 'c', 'c', ('d', 'e', 'f'), 'h', 'g', 'h', 'i', 'j', 'k'), 'k'); // "a", "k", "b", "a", "c", "c", ("d", "e", "f"), "h", "g", "h", "i", "j"
+
+// bool
+// @debug duplicate(('a', 'b', true, false, 'a', 'c', 'c', ('d', 'e', 'f'), 'h', 'g', true, 'h', 'i', 'j', 'k'), true); // "a", "b", true, false, "a", "c", "c", ("d", "e", "f"), "h", "g", "h", "i", "j", "k"
+
+// null
+// @debug duplicate(((1, 1), null, (2, 2), (3, 3), (1, 1), null, (3, 3) )); // (1, 1), null, (2, 2), (3, 3)
+
+// list
+// @debug duplicate(((1, 1), null, (2, 2), (3, 3), (1, 1), null, (3, 3) ), (3, 3)); // (1, 1), null, (2, 2), (3, 3), (1, 1), null

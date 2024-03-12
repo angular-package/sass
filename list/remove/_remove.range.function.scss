@@ -2,17 +2,17 @@
 @use 'sass:list';
 
 // Functions.
-@use '../../number/number.range.function';
-@use 'remove.nth.function';
+@use '../../math/math.range.function' as math-range;
+@use 'remove.nth.function' as remove-nth;
 
 // Status: DONE
-// The `remove.range()` function removes the indexes of the given range.
-// @param `$list` A list from which the given indexes are being removed.
+// The `list.remove-range()` or`remove.range()` function removes the indexes of the given range.
+// @param `$list` A list from which indexes of range `$from` to `$to` are being removed.
 // @param `$from` The index from which the range of elements to remove begins.
 // @param `$to` The end index of the range of elements to remove.
-// @return The list without the elements of the given index range.
+// @returns The returned value is a copy of `$list` without the elements of the given index range `$from` to `$to`.
 @function range($list, $from: 1, $to: list.length($list)) {
-  @return remove.nth($list, number.range($from, $to, 1, 0)...);
+  @return remove-nth.nth($list, math-range.range($from, $to, 1, 0)...);
 }
 
 // Examples.

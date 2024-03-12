@@ -1,12 +1,12 @@
 // Functions.
-@use 'remove.type.function';
+@use 'remove.type.function' as remove-type;
 
 // Status: DONE
-// The `remove.map()` function returns the list without the map type elements.
-// @param `$list` The list from which the map type elements are being removed.
-// @return The return value is the list without elements of the map type.
+// The `list.remove-map()` or `remove.map()` function returns the list without the map type elements.
+// @param `$list` The list from which `map` type elements are being removed.
+// @returns The returned value is a copy of `$list` without elements of `map` type.
 @function map($list) {
-  @return remove.type($list, map);
+  @return remove-type.type($list, map);
 }
 
 // Examples.

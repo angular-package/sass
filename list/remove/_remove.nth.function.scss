@@ -2,17 +2,21 @@
 @use 'sass:list';
 
 // Status: DONE
-// The `remove.nth()` function returns the list with removed given indexes.
-// @param `$list` A list from which the given indexes are being removed.
-// @param `$n` Index of the given `$list` to be removed.
-// @arbitrary `$nts...` Indexes of the given `$list` to be removed.
-// @return The list without the given indexes.
+// The `list.remove-nth()` or `remove.nth()` function returns the list with removed indexes.
+// @param `$list` A list from which required index `$n` and additional indexes `$nts` are being removed.
+// @param `$n` A required index of `$list` to be removed.
+// @arbitrary `$nts...` An additional indexes of `$list` to be removed.
+// @returns The returned value is a copy of `$list` without required index `$n` and indexes `$nts`.
 @function nth($list, $n, $nts...) {
   $nts: list.join($n, $nts, comma);
   $result: ();
   @for $i from 1 through list.length($nts) {
     @if list.nth($nts, $i) and list.nth($nts, $i) < 0 {
-      $nts: list.set-nth($nts, $i, list.length($list) - (list.nth($nts, $i) * -1) + 1);
+      $nts: list.set-nth(
+        $nts,
+        $i,
+        list.length($list) - (list.nth($nts, $i) * -1) + 1
+      );
     }
   }
   @for $i from 1 through list.length($list) {

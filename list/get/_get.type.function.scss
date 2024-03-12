@@ -3,14 +3,8 @@
 @use 'sass:map';
 @use 'sass:meta';
 
-// Functions.
-@use '../../map/get/get.index.function' as map-get-index;
-@use '../list.append.function' as list-append;
-@use '../list.first.function' as list-first;
-@use '../list.last.function' as list-last;
-
 // Status: DONE
-// The `get.type()` function returns the list with any, first, last or all occurred elements of `$type` and optional `$types`.
+// The `list.get-type()` or `get.type()` function returns the list with any, first, last or all occurred elements of `$type` and optional `$types`.
 // @param `$list` The list from which occurred elements of required `$type` and optional `$types` are taken.
 // @param `$occurrence` Any, first, last or all occurrence of `$type` and optional `$types` in `$list`.
 // @param `$type` Required type to retrieve from `$list`.
@@ -20,15 +14,20 @@
   $result: ();
   @each $element in $list {
     $result: list.index($type, meta.type-of($element))
-      and list-append.append($result, $element, comma)
+      and list.append($result, $element, comma)
       or $result;
   }
-  @return map-get-index.index((
-    (first, any): if(list.length($result) > 0, list-first.first($result), null),
-    last: if(list.length($result) > 0, list-last.last($result), null),
+  $first: list.length($result) > 0 and list.nth($result, 1);
+  $last: list.length($result) > 0 and list.nth($result, list.length($result));
+  @return map.get((
+    any: $first,
+    first: $first,
+    last: $last,
     all: $result,
   ), $occurrence);
 }
 
 // Examples.
 // @debug type(a 1 true, any, string); // a
+// @debug type(a 1 true, any, number); // 1
+// @debug type(a 1 true, any, bool); // true

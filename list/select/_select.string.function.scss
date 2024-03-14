@@ -2,12 +2,16 @@
 @use 'select.type.function' as select-type;
 
 // Status: DONE
-// The `select.string()` function returns any, first or last occurring string, or all occurred string, also the specified strings.
-// @param `$list` A list from which occurring strings are retrieved.
-// @param `$occurrence` All, any, first or last occurrence of retrieved strings from `$list`.
-// @param `$operator` Operator to compare with `$value`.
-// @arbitrary `$strings...` Optional list of values to retrieve from  `$list`.
-// @returns The returned value is a retrieved string, list of strings or `null`.
+// The `list.select-string()` or `select.string()` function returns any, first or last occurring `string`, or all/only occurred `strings`, also specified `$strings`.
+// @param `$list` A list from which occurring `strings` or specific `$strings` are retrieved.
+// @param `$occurrence` All, any, first, last or only occurrence of retrieved `strings` from `$list`.
+// @param `$operator` Operator to compare `$list` elements with elements of `$strings`.
+// @arbitrary `$strings...` Additional list of `strings` to retrieve from `$list`.
+// @returns The returned value is a retrieved `string`, or list of `strings`, specific `$strings` or `null`.
+// ? any/first/last - returns `string` or list of `strings` when `$strings` are given e.g. "b"
+// ? all - returns `string` or list of `strings` on no `$strings` or one `$strings` given, e.g. "a", "b", "c"
+// ? all - multiple `$strings` given returns list of `strings` mixed with list of `strings` e.g. ("b", "b"), ("c", "c"), e
+// ? If `$strings` are given and any that is not found is `null`.
 @function string($list, $occurrence: first, $operator: '==', $strings...) {
   @return select-type.type($list, $occurrence, string, $operator, $strings...);
 }
@@ -19,11 +23,15 @@
 
 // occurrence: any
 // @debug string(('a', 'b', 'c', (3))); // a
-// @debug string(('a', 'b', 'c', (4, ))); // `null`
-// @debug string(('a', 'b', 'c', ('5', (6,)))); // `null`
+// @debug string(('a', 'b', 'c', (4, ))); // a
+// @debug string(('a', 'b', 'c', ('5', (6,)))); // a
 
 // occurrence: last
-// @debug string(('a', 5, 'b', 2, 'c', (4, ))); // 5
+// @debug string(('a', 5, 'b', 2, 'c', (4, )), last); // c
+
+// occurrence: only
+// @debug string(('a', 'a', 'a', 'a', 'a', 'a'), only, '==', 'a'); // "a", "a", "a", "a", "a", "a"
+// @debug string(('a', 'a', 'a', 'a', 'a', 'a'), only, '==', 'c'); // null
 
 // occurrence: all
 // @debug string((3, 'a', 0, 'b', 1, 'c', 2), all); // "a", "b", "c"
@@ -31,9 +39,17 @@
 
 // occurrence: all + value
 // @debug string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all, '==', 'c'); // c
-// @debug string(('a', 3, 'b', 2, 'c', 4, 2, 7, 2, 'b', 'c', 2), all, '==','b', 'c'); // ("b", "b"), ("c", "c")
+// @debug string(('a', 3, 'b', 2, 'c', 4, 2, 7, 2, 'b', 'c', 2), all, '==', 'b'); // "b", "b",
+// @debug string(('a', 3, 'b', 2, 'c', 4, 2, 7, 2, 'b', 'c', 2), all, '==', 'b', 'c'); // ("b", "b"), ("c", "c")
 // @debug string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), first, '==', 'f'); // null
 // @debug string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), last, '==', 'e'); // null
 
 // occurrence: all + values
-// @debug string(('a', 3, 'b', 2, 'c', 4, 'd', 8, 'e', 2, 7, 2, 'b', 'c', 2), all, '==', 'a', 'e', 'f', 'd'); // "a", "e", null, "d"
+// @debug string(('a', 3, 'a', 'b', 2, 'c', 4, 'd', 8, 'e', 2, 7, 2, 'b', 'c', 2), all, '==', 'a', 'e', 'f', 'd'); // ("a", "a"), "e", null, "d"
+
+// occurrence: any/first + values
+// @debug string(('a', 3, 'a', 'b', 2, 'c', 4, 'd', 8, 'e', 2, 7, 2, 'b', 'c', 2), any, '==', 'a', 'e', 'f', 'd'); // "a", "e", null, "d"
+// @debug string(('a', 3, 'a', 'b', 2, 'c', 4, 'd', 8, 'e', 2, 7, 2, 'b', 'c', 2), first, '==', 'a', 'e', 'f', 'd'); // "a", "e", null, "d"
+
+// occurrence: last + values
+// @debug string(('a', 3, 'a', 'b', 2, 'c', 4, 'd', 8, 'e', 2, 7, 2, 'b', 'c', 2), last, '==', 'a', 'e', 'f', 'd'); // "a", "e", null, "d"

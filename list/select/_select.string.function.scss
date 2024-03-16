@@ -3,15 +3,15 @@
 
 // Status: DONE
 // The `list.select-string()` or `select.string()` function returns any, first or last occurring `string`, or all/only occurred `strings`, also specified `$strings`.
-// @param `$list` A list from which occurring `strings` or specific `$strings` are retrieved.
+// @param `$list` A list from which occurring `strings` or specific `$strings` compared by using `$operator` are retrieved.
 // @param `$occurrence` All, any, first, last or only occurrence of retrieved `strings` from `$list`.
-// @param `$operator` Operator to compare `$list` elements with elements of `$strings`.
-// @arbitrary `$strings...` Additional list of `strings` to retrieve from `$list`.
-// @returns The returned value is a retrieved `string`, or list of `strings`, specific `$strings` or `null`.
+// @param `$operator` Operator to compare `$list` elements, also with `$strings`.
+// @arbitrary `$strings...` Additional list of `strings` to retrieve from `$list`, any not found is `null`.
+// @returns The returned value is a retrieved `string`, list of `strings`, specified `$strings` or `null`.
 // ? any/first/last - returns `string` or list of `strings` when `$strings` are given e.g. "b"
 // ? all - returns `string` or list of `strings` on no `$strings` or one `$strings` given, e.g. "a", "b", "c"
-// ? all - multiple `$strings` given returns list of `strings` mixed with list of `strings` e.g. ("b", "b"), ("c", "c"), e
-// ? If `$strings` are given and any that is not found is `null`.
+// ? all - multiple `$strings` given returns list of `strings` mixed with list of `strings` if more than one is found e.g. ("b", "b"), ("c", "c"), e
+// ? If `$strings` are given then any not found is `null`.
 @function string($list, $occurrence: first, $operator: '==', $strings...) {
   @return select-type.type($list, $occurrence, string, $operator, $strings...);
 }
@@ -36,6 +36,9 @@
 // occurrence: all
 // @debug string((3, 'a', 0, 'b', 1, 'c', 2), all); // "a", "b", "c"
 // @debug string(('a', 'the', 5, 'sun', 'b', 2, 'c', (4)), all); // "a", "the", "sun", "b", "c"
+
+// occurrence: all + operator
+// @debug string((3, 'a', 0, 'b', 1, 'c', 2), all, '!='); // 3, 0, 1, 2
 
 // occurrence: all + value
 // @debug string(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all, '==', 'c'); // c

@@ -2,20 +2,24 @@
 @use 'select.type.function' as select-type;
 
 // Status: DONE
-// The `select.number()` function returns any, first or last occurring number, or all occurred numbers, also the specified numbers, otherwise null.
-// @param `$list` A list from which the occurring numbers are retrieved.
-// @param `$occurrence` All, any, first or last occurrence of retrieved numbers from `$list`.
+// The `select.number()` function returns any, first or last occurring `number`, or all occurred `numbers`, also the specified `numbers`, otherwise `null`.
+// @param `$list` A list from which the occurring `numbers` compared by using `$operator` are retrieved.
+// @param `$occurrence` All, any, first or last occurrence of retrieved `numbers` from `$list`.
 // @param `$operator` Operator to compare with `$value` and optional `$values`.
-// @arbitrary `$numbers...` The list of values to retrieve from the given `$list`.
-// @returns The returned value is a retrieved number, list of numbers or `null`.
+// @arbitrary `$numbers...` The list of values to retrieve from the given `$list`, any not found is `null`.
+// @returns The returned value is a retrieved `number`, list of `numbers`, specified `$numbers` or `null`.
+// ? any/first/last - returns `number` or list of `numbers` when `$numbers` are given e.g. 2
+// ? all - returns `number` or list of `numbers` on no `$numbers` or one `$numbers` given, e.g. 3, 0, 1, 2
+// ? all - multiple `$numbers` given return list of `numbers` mixed with list of `numbers` if more than one is found  e.g. 8, null, 7, (2, 2, 2, 2)
+// ? If `$numbers` are given then any not found is `null`.
 @function number($list, $occurrence: first, $operator: '==', $numbers...) {
-  @return select-type.type($list, $occurrence, string, $operator, $numbers...);
+  @return select-type.type($list, $occurrence, number, $operator, $numbers...);
 }
 
 // Examples.
 // occurrence: first by default
-// @debug number(('a', 'b', 'c', 2)); // `2`
-// @debug number(('a', 'b', 'c', 2), first); // `2`
+// @debug number(('a', 'b', 'c', 2)); // 2
+// @debug number(('a', 'b', 'c', 2), first); // 2
 
 // occurrence: any
 // @debug number(('a', 'b', 'c', (3))); // `3`
@@ -30,15 +34,16 @@
 // @debug number(('a', 5, 'b', 2, 'c', (4, )), all); // 5, 2
 
 // occurrence: all + value
-// @debug number(('a', 3, 'b', 2, 4, 2, 7, 2, 'b', 'c', 2), all, 15); // null
-// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all, 8); // 8
-// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), first, 8, ); // 8
-// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), last, 8); // 8
+// @debug number(('a', 3, 'b', 2, 4, 2, 7, 2, 'b', 'c', 2), all, '==', 15); // null
+// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all, '==', 8); // 8
+// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), first, '==', 8, ); // 8
+// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), last, '==', 8); // 8
 
 // occurrence: all + values
-// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all, 8, 15, 7, 2); // 8, null, 7, (2, 2, 2, 2)
+// @debug number(('a', 3, 'b', 2, 4, 8, 2, 7, 2, 'b', 'c', 2), all, '==', 8, 15, 7, 2); // 8, null, 7, (2, 2, 2, 2)
 
-// specified value TODO: ?
+// specified value
+// @debug number((3, 4, 5, 6, 7, 8, 2), all '>' 2...); // 3
 // @debug number((3, 'a', 0, 'b', 1, 'c', 2), all '>' 2...); // 3
 // @debug number((3, 'a', 0, 'b', 1, 'c', 2), all '>' 1...); // 3, 2
 // @debug number(('3', 'a', '0', 'b', '1', 'c', '2'), last '==' 2...); // null

@@ -2,13 +2,16 @@
 @use 'select.type.function' as select-type;
 
 // Status: DONE
-// The `select.map()` or `list.select-map()` function returns any, first or last occurring map,
-// or all occurred maps, or specified maps.
-// @param `$list` A list from which the occurring maps are retrieved.
+// The `list.select-map()` or `select.map()` function returns any, first or last occurring `map`, or all occurred `maps`, or specified `maps`.
+// @param `$list` A list from which the occurring `maps` compared by using `$operator` are retrieved.
 // @param `$occurrence` All, any, first or last occurrence of retrieved maps from `$list`.
 // @param `$operator` Operator to compare with `$value` and optional `$values`.
-// @arbitrary `$maps...` The list of values to retrieve from the given `$list`.
-// @returns The returned value is a retrieved number, list of maps or `null`.
+// @arbitrary `$maps...` The list of values to retrieve from the given `$list`, any not found is `null`.
+// @returns The returned value is a retrieved `map`, list of `maps`, specified `$maps` or `null`.
+// ? any/first/last - returns `map` or list of `maps` when `$maps` are given e.g. (a: 1)
+// ? all - returns `map` or list of `maps` on no `$maps` or one `$maps` given, e.g. (0: 1), ("c": 2), (d: 5)
+// ? all - multiple `$maps` given returns list of `maps` mixed with list of `maps` if more than one is found e.g. ((d: 5), (d: 5)), (0: 1)
+// ? If `$maps` are given and any that is not found is `null`.
 @function map($list, $occurrence: first, $operator: '==', $maps...) {
   @return select-type.type($list, $occurrence, map, $operator, $maps...);
 }

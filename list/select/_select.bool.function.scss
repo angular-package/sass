@@ -3,13 +3,17 @@
 
 // Status: DONE
 // The `list.select-bool()` or `select.bool()` function returns any, first or last occurring `bool`, or specified `$bool` compared by using `$operator`.
-// @param `$list` The list from which occurring `bool` or specific `$bool` are retrieved.
-// @param `$occurrence` Any, first or last occurrence of `bool` value in `$list`.
-// @param `$operator` Operator to compare element's of `$list` with `$bool`.
-// @param `$bool` A `bool` value to retrieve from `$list`.
-// @returns The returned value is a `bool`, list of `bools` or list of specified `$bool`.
-@function bool($list, $occurrence: first, $operator: '==', $bool: null) {
-  @return select-type.type($list, $occurrence, bool, $operator, $bool);
+// @param `$list` The list from which occurring `bool` or specified `$bool` compared by using `$operator` are retrieved.
+// @param `$occurrence` Any, first, last, or only occurrence of `bool` value in `$list`.
+// @param `$operator` Operator to compare `$list` elements, also with `$bool`.
+// @arbitrary `$bool` A `bool` value to retrieve from `$list`, any not found is `null`.
+// @returns The returned value is a `bool`, list of `bools` or list of specified `$bool` compared by using `$operator`.
+// ? any/first/last - returns `bool` or list of `bools` when `$bools` are given e.g. false
+// ? all - returns `bool` or list of `bools` on no `$bools` or one `$bools` given, e.g. true, false, true
+// ? all - multiple `$bools` given returns list of `bools` mixed with list of `bools` if more than one is found e.g. (true, true), false
+// ? If `$bools` are given and any that is not found is `null`.
+@function bool($list, $occurrence: first, $operator: '==', $bool...) {
+  @return select-type.type($list, $occurrence, bool, $operator, $bool...);
 }
 
 // Examples.

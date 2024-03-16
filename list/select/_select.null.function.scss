@@ -2,12 +2,26 @@
 @use 'select.type.function' as select-type;
 
 // Status: DONE
-// The `select.null()` function returns any, first or last occurring null, or all occurred nulls, also the specified nulls, otherwise null.
-// @param `$list` A list from which the occurring nulls are retrieved.
-// @param `$occurrence` All, any, first or last occurrence of retrieved nulls from `$list`.
-// @param `$operator` Operator to compare with `$value` and optional `$values`.
-// @returns The returned value is a retrieved null, list of nulls or `null`.
+// The `list.select-null()` or `select.null()` function returns any, first or last occurring `null`, or all occurred `nulls`.
+// @param `$list` A list from which the occurring `nulls` compared by using `$operator` are retrieved.
+// @param `$occurrence` All, any, first, last or only occurrence of retrieved `nulls` from `$list`.
+// @param `$operator` Operator to compare with `$list` elements.
+// @returns The returned value is a retrieved `null`, list of `nulls` or `null`.
+// ? any/first/last - returns `null` or list of `nulls`
+// ? all - returns `null` or list of `nulls` mixed with list of `nulls`
 @function null($list, $occurrence: first, $operator: '==') {
-  @return select-type.type($list, $occurrence, $operator, null);
+  @return select-type.type($list, $occurrence, null, $operator);
 }
 
+// Examples.
+// $-example-list: 'a' null 1 'b' 2 'c' null 3 'd' null 4 'e';
+
+// first
+// @debug null($-example-list); // null
+
+// any !=
+// @debug null($-example-list, any, '!='); // a
+
+// all
+// @debug null($-example-list, all); // null, null, null
+// @debug null($-example-list, all, '!='); //  "a", 1, "b", 2, "c", 3, "d", 4, "e"

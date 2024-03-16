@@ -1,17 +1,28 @@
 // Functions.
-@use 'list.select.function';
+@use 'list.select.function' as list-select;
 
 // Status: DONE
-// The `list.has()` function returns the `bool` indicating the given `$list` contains the `$value` and/or given `$values`.
-// @param `$list` The list to check whether it contains the values.
-// @param `$occurrence` (all, any, only)
-// @param `$operator` The operator of a string type to compare list elements with the given values.
-// @param `$value` The value to check against its existence in the `$list`.
-// @arbitrary `$values...` Additional values to check against their existence in the `$list`.
-// @return The return value is the `bool`, indicating the `$list` has values.
+// The `list.has()` function checks whether `$list` contains any, all, only occurring required `$value` and additional `$values` compared by using `$operator`
+// with `$list` elements.
+// ? Occurrence `all` indicates `$value` and additional `$values` `$list` need to contain to return `true`
+// ? Occurrence `any`/`first`/`last` indicates that one of required `$value` and additional `$values` found in`$list` return `true`
+// ? Occurrence `only` indicates all `$list` elements equal to `$value` returning `true`
+// @param `$list` The list to check whether it contains any, all, only occurring required `$value` and additional `$values` compared by using `$operator`.
+// @param `$occurrence` Occurrence (all, any, only) of required `$value` and additional `$values`.
+// @param `$operator` The operator of a `string` type to compare list elements with required `$value` and additional `$values`.
+// @param `$value` The required value compared with `$list` elements by using `$operator` to check its existence in `$list`.
+// @arbitrary `$values...` Additional values compared with `$list` elements by using `$operator` to check their existence in `$list`.
+// @returns The returned value is `bool`, indicating `$list` has any, all, only occurring required `$value` and additional `$values` compared by using `$operator`.
 // ? types: arglist bool calculation color function list map null number string
 @function has($list, $occurrence: any, $operator: '==', $value, $values...) {
-  @return list.select(has $occurrence, $list, value, $operator, $value, $values...);
+  @return list-select.select(
+    has $occurrence,
+    $list,
+    value,
+    $operator,
+    $value,
+    $values...
+  );
 }
 
 // Examples.

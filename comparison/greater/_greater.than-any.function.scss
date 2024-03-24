@@ -1,15 +1,11 @@
-// Functions.
-@use '../../meta/meta.of-type.function';
-
 // Status: DONE
-
 // The `greater.than-any()` function checks whether the given `$greater` is greater than any of the given `$values`.
 // @param `$greater` The value of number type to check if it's greater than any of the given `$values`.
 // @param `$values...` The values of number type to compare with a given `$greater`.
-// @returns The return value is a bool indicating the `$greater` is greater than any of the given `$values`.
+// @returns The returned value is a bool indicating the `$greater` is greater than any of the given `$values`.
 @function than-any($greater, $values...) {
   @each $value in $values {
-    @if meta.of-type(number, $greater, $value) and $greater > $value {
+    @if $greater > $value {
       @return true;
     }
   }

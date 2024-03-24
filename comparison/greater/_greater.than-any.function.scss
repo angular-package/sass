@@ -1,10 +1,19 @@
+// Sass.
+@use 'sass:meta';
+
 // Status: DONE
-// The `greater.than-any()` function checks whether the given `$greater` is greater than any of the given `$values`.
-// @param `$greater` The value of number type to check if it's greater than any of the given `$values`.
-// @param `$values...` The values of number type to compare with a given `$greater`.
-// @returns The returned value is a bool indicating the `$greater` is greater than any of the given `$values`.
-@function than-any($greater, $values...) {
-  @each $value in $values {
+// The `greater.than-any()` function checks whether `$greater` is greater than any number of `$numbers`.
+// @param `$greater` The number to check whether it's greater than any number of `$numbers`.
+// @arbitrary `$numbers...` The numbers to compare with a `$greater`.
+// @returns The returned value is a bool indicating `$greater` is greater than any number of `$numbers`.
+@function than-any($greater, $numbers...) {
+  @if not (meta.type-of($greater) == number) {
+    @error "$greater: #{$greater} is not a number";
+  }
+  @each $value in $numbers {
+    @if not (meta.type-of($value) == number) {
+      @error "$numbers...: #{$value} is not a number";
+    }
     @if $greater > $value {
       @return true;
     }

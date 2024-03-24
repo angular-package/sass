@@ -3,27 +3,27 @@
 @use 'sass:meta';
 
 // Functions.
-@use 'less.than-any.function' as *;
-@use 'less.than-every.function' as *;
+@use 'less.than-any.function' as less-than-any;
+@use 'less.than-every.function' as less-than-every;
 
 // Status: DONE
-// The `less.than()` function checks whether the given `$value` is less than compared `$value` and/or `$values`.
-// @param `$less` The value of number type to be compared against the given every and/or any values.
-// @param `$value` The value of number type to be less than the given `$less`.
-// @arbitrary `$values...` The values of number type to be less than the given `$value`.
-// @return The return value is a bool indicating whether the given `$less` is greater than values.
-@function than($less, $value, $values...) {
-  $values: if(meta.type-of($value) == number, list.join($value, $values), $values);
+// The `less.than()` function checks whether `$less` is less than required `$value` and additional `$numbers`.
+// @param `$less` The number to be compared against required `$value` and additional `$numbers`.
+// @param `$value` Required number to be greater than `$less` or any/every occurrence of `$numbers`.
+// @arbitrary `$numbers...` Any of additional numbers or every additional number to be greater than `$less`.
+// @returns The returned value is a bool indicating whether `$less` is greater than required `$value` and additional `$numbers`.
+@function than($less, $value, $numbers...) {
+  $numbers: meta.type-of($value) == number and list.join($value, $numbers) or $numbers;
   @return if(
     if($value == any, any, every) == every,
-    than-every($less, $values...),
-    than-any($less, $values...)
+    less-than-every.than-every($less, $numbers...),
+    less-than-any.than-any($less, $numbers...)
   );
 }
 
 // Additional function name.
-@function less($less, $value, $values...) {
-  @return than($less, $value, $values...);
+@function less($less, $value, $numbers...) {
+  @return than($less, $value, $numbers...);
 }
 
 // Examples.

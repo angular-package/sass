@@ -1,28 +1,29 @@
 // Sass.
 @use 'sass:list';
+@use 'sass:meta';
 
 // Functions.
 @use 'greater.than-any.function' as greater-than-any;
 @use 'greater.than-every.function' as greater-than-every;
 
 // Status: DONE
-// The `greater.than()` function checks whether the given `$value` is greater than compared `$value` and/or `$values`.
-// @param `$greater` The value of number type to be compared against the given every and/or any values.
-// @param `$value` The value of number type to be less than the given `$greater`.
-// @arbitrary `$values...` The values of number type to be less than the given `$value`.
-// @returns The returned value is a bool indicating whether the given `$greater` is greater than values.
-@function than($greater, $value, $values...) {
-  $values: list.join($value, $values, comma);
+// The `greater.than()` function checks whether `$greater` is greater than compared `$value` and additional `$numbers`.
+// @param `$greater` The number to be compared against required `$value` and additional `$numbers`.
+// @param `$value` Required number to be less than `$greater` or any/every occurrence of `$numbers`.
+// @arbitrary `$numbers...` Any of additional numbers or every additional number to be less than `$greater`.
+// @returns The returned value is a bool indicating whether `$greater` is greater than required `$value` and additional `$numbers`.
+@function than($greater, $value, $numbers...) {
+  $numbers: meta.type-of($value) == number and list.join($value, $numbers) or $numbers;
   @return if(
     if($value == any, any, every) == every,
-    greater-than-every.than-every($greater, $values...),
-    greater-than-any.than-any($greater, $values...)
+    greater-than-every.than-every($greater, $numbers...),
+    greater-than-any.than-any($greater, $numbers...)
   );
 }
 
 // Additional function name.
-@function greater($greater, $value, $values...) {
-  @return than($greater, $value, $values...);
+@function greater($greater, $value, $numbers...) {
+  @return than($greater, $value, $numbers...);
 }
 
 // Examples.

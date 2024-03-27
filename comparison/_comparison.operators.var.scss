@@ -2,33 +2,92 @@
 @use 'sass:list';
 @use 'sass:math';
 @use 'sass:meta';
+@use 'sass:string';
 
 // Modules.
-@use '../map';
-@use '../string';
 @use 'greater';
 @use 'less';
 
 // Functions.
-@use 'comparison.equal.function' as *;
+@use '../list/list.is-length.function' as list-is-length;
+@use 'comparison.equal.function' as comparison-equal;
 
 // Operators.
 $operators: (
-  // Equality operators.
-  '===': meta.get-function(compatible, $module: math), // indicates use of `math.compatible()` that returns `bool`
-  ('=', '=='): meta.get-function(equal), // indicates (value is equal) use of `equal()` that returns `bool`
-  '~=': meta.get-function(index, $module: string), // indicates (string does contain) use of `string.index()` that returns `bool`
-  ':==': meta.get-function(type-of, false, meta), // indicates use of `meta.type-of()` that returns `bool`
+  // SECTION: math.compatible()
+  (
+    // Equality operators.
+    '===', // indicates (value is compatible) use of `math.compatible()` that returns `bool`
 
+    // Inequality operators.
+    '!===', // indicates (value is NOT compatible) use of `math.compatible()` that returns `bool`
+  ): meta.get-function(compatible, false, math),
+
+  // SECTION: equal()
+  (
+    // Equality operators.
+    '=', '==', // indicates use of `equal()` that returns `bool`
+    '(,)=', '(,)==', '(:)=', '(:)==', // indicates (list/map.length() is equal to) use of `equal()` that returns `bool`
+
+    // Inequality operators.
+    '!=', // indicates (value is NOT equal) use of `equal()` that returns `bool`
+    '!==',
+    '(,)!=', '(:)!=', '(,)!==', '(:)!==', // indicates (list/map.length() is NOT equal) use of `equal()` that returns `bool`
+  ): meta.get-function(equal, false, comparison-equal),
+
+  // SECTION: string.index()
+  (
+    '~=', // indicates (string does contain) use of `string.index()` that returns `bool`
+    '!~=' // indicates (string does not contain) use of `string.index()` that returns `bool`
+  ): meta.get-function(index, false, string),
+
+  // SECTION: meta.type-of()
+  (
+    // Equality operators.
+    ':==', // indicates use of `meta.type-of()` that returns `bool`
+
+    // Inequality operators.
+    ':!=', ':!==', // indicates (type of the given value is not equal to the given type) use of `meta.type-of()` that returns `bool`
+  ): meta.get-function(type-of, false, meta),
+
+
+  // SECTION: list.is-length()
   // Length and type operators.
-  ('(,)', '(:)'): meta.get-function(length, false, list), // indicates use of `list.length()` for `list` and `map` that returns `bool`
+  (
+    '(,)', // indicates use of `list.length()` for `list` and `map` that returns `bool`
+    '(:)', // indicates use of `list.length()` for `list` and `map` that returns `bool`
+  ): meta.get-function(is-length, false, list-is-length),
 
+  // SECTION: than.less()
   // Inequality operators.
-  '!=': meta.get-function(equal), // indicates (value is NOT equal) use of `equal()` that `bool`
-  '!~=': meta.get-function(index, false, string), // indicates (string does not contain) use of `string.index()` that returns `bool`
-  ':!=': meta.get-function(type-of, false, meta),  // indicates (type of the given value is not equal to the given type) use of `meta.type-of()` that returns `bool`
-  '<': meta.get-function(than, $module: less), // indicates use of`less.than()` that returns `bool`
-  '<=': (meta.get-function(than, $module: less), meta.get-function(equal)), // indicates use of`less.than()` and `equal()` that returns `bool`
-  '>': meta.get-function(than, $module: greater), // indicates use of`greater.than()` that returns `bool`
-  '>=': (meta.get-function(than, $module: greater), meta.get-function(equal)), // indicates use of`greater.than()` and `equal()` that returns `bool`
+  (
+    '<', // indicates use of `less.than()` that returns `bool`
+    '!<',
+    '(,)<', '(:)<', // indicates use of `less.than()` that returns `bool`
+    '(,)!<', '(:)!<', // indicates use of NOT `less.than()` that returns `bool`
+  ): meta.get-function(than, false, less),
+
+  // SECTION: than.less() + equal()
+  (
+    '<=', // indicates use of`less.than()` and `equal()` that returns `bool`
+    '!<=',
+    '(,)<=', '(:)<=', // indicates use of `less.than()` and `equal()` that returns `bool`
+    '(,)!<=', '(:)!<=', // indicates use of `less.than()` and `equal()` that returns `bool`
+  ): (meta.get-function(than, false, less), meta.get-function(equal, false, comparison-equal)),
+
+  // SECTION: than.greater()
+  (
+    '>', // indicates use of`greater.than()` that returns `bool`
+    '!>',
+    '(,)>', '(:)>', // indicates use of`greater.than()` that returns `bool`
+    '(,)!>', '(:)!>', // indicates use of`greater.than()` that returns `bool`
+  ): meta.get-function(than, false, greater),
+
+  // SECTION: than.greater() + equal()
+  (
+    '>=', // indicates use of `greater.than()` and `equal()` that returns `bool`
+    '!>=',
+    '(,)>=', '(:)>=', // indicates use of `greater.than()` and `equal()` that returns `bool`
+    '(,)!>=', '(:)!>=', // indicates use of NOT `greater.than()` and `equal()` that returns `bool`
+  ): (meta.get-function(than, false, greater), meta.get-function(equal, false, comparison-equal)),
 );

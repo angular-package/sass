@@ -1,80 +1,65 @@
 // Sass.
 @use 'sass:list';
-@use 'sass:map';
-@use 'sass:math';
 @use 'sass:meta';
+@use 'sass:string';
 
 // Variables.
 @use 'comparison.operators.var' as *;
-
-// Modules.
-@use '../string';
-@use 'greater';
-@use 'less';
-
-// Functions.
-@use '../map/pick/pick.index.function' as map-pick-index;
-@use '../meta/meta.of-type.function' as *;
-@use 'comparison.equal.function' as *;
 
 // Status: TODO: number of pairs in a map.
 // The `comparison.compare()` function returns a bool indicating the result of the comparison.
 // @param `$value` The value to compare with the given `$operand`.
 // @param `$operator` The operator used to compare `$value` and `$operand`.
 // @param `$operand` The value to compare with the given `$value`.
-// @return The return value is a bool indicating the result of the comparison.
+// @returns The returned value is a `bool` indicating the result of the comparison.
 @function compare($value, $operator, $operand) {
-  $not: if(string.index($operator, '!'), true, false);
+  $result: null;
+  $not: string.index($operator, '!') and true or false;
   $check-type: null;
 
   // List length.
-  @if string.index($operator, '(,)') {
-    $operator: string.replace($operator, first, '(,)', '');
+  @if string.index($operator, '(,)') and string.length($operator) > 3 {
     $check-type: meta.type-of($value) == list or meta.type-of($value) == map;
-    $value: if($check-type, list.length($value), $value);
+    $value: $check-type and list.length($value) or $value;
 
   // Map length.
-  } @else if string.index($operator, '(:)') {
+  } @else if string.index($operator, '(:)') and string.length($operator) > 3 {
     // @deprecated
-    $operator: string.replace($operator, first, '(:)', '');
     $check-type: meta.type-of($value) == map;
-    $value: if($check-type, list.length($value), $value);
+    $value: $check-type and list.length($value) or $value;
 
   // Type of.
   } @else if string.index($operator, ':') == 1 {
-    $operator: string.replace($operator, first, ':', '');
+    $operator: string.slice($operator, $not and 3 or 2, -1);
     $value: meta.type-of($value);
     $operand: if(not $operand, meta.type-of($operand), $operand);
   }
 
-  // Remove not.
-  $operator: string.replace($operator, first, '!', '');
+  // Use functions depending on the given operator.
+  @each $operators, $functions in $operators {
+    @if list.index($operators, $operator) {
+      @each $function in $functions {
+        $result: list.append(
+          $result,
+          meta.call($function, $value, $operand),
+          comma
+        );
+      }
 
-  // Use the function depending on the given operator.
-  $function: map.get(map-pick-index.index(
-    $operators,
-    '===',
-    '~=',
-    '==',
-    '=',
-    '>',
-    '>=',
-    '<',
-    '<=',
-  ), $operator);
-
-  // Call the functions to compare.
-  $result: ();
-  @each $function in $function {
-    $comparison-result: meta.call($function, $value, $operand);
-    $result: list.append($result, if(meta.type-of($comparison-result) == number, true, $comparison-result));
+      @for $i from 1 through list.length($result) {
+        $result: meta.type-of(list.nth($result, $i)) == number
+          and list.set-nth($result, $i, true)
+          or $result;
+      }
+    
+      // Check whether the `$result` contains `true`.
+      $result: list.index($result, true) and true or false;
+    
+      // Check the type for list and map length.
+      $result: (meta.type-of($check-type) == bool
+        and $check-type and $result) or $result;
+    }
   }
-
-  // Check whether the result contains true.
-  $result: if(list.index($result, true), true, false);
-
-  // Check the type for list and map length.
-  $result: if(meta.type-of($check-type) == bool, $check-type and $result, $result);
 
   // Returns comparison result.
   @return if($not, not $result, $result);
@@ -115,97 +100,174 @@
 // @debug compare((27, '==', 27)...); // true
 
 // Map.
-// @debug compare((value: 27, operator: '==', operand: 27)); // true
+// @debug compare((value: 27, operator: '==', operand: 27)...); // true
 
 // @debug compare('there is a word', '==', 'there is a word'); // true
 // @debug compare(null, '==', null); // true
 // @debug compare((a: 2222), '==', ('a': 2222)); // true
 
-// Multiple comparisons as map.
-// @debug compare((value: 27, operator: '==', operand: 27), (value: 17, operator: '==', operand: 27)); // true, false
-
-// Multiple comparisons as list.
-// @debug compare(27 '==' 27, 17 '==' 27, 5 '>' 3); // true, false, true
-// @debug compare((27, '==', 27), (27, '!=', 27)); // true, false
-
-// ===
+// SECTION: math.compatible() === 
 // @debug compare(27px, '===', 27px); // true
 // @debug compare(27px, '===', 27em); // false
 
-// !==
+// SECTION: NOT math.compatible() !=== 
+// @debug compare(27px, '!===', 27px); // false
+// @debug compare(27px, '!===', 27em); // true
+
+
+
+// SECTION: NOT equal() == or =
+// @debug compare(27, '==', 27); // true
+// @debug compare('there is a word', '==', 'there is a word'); // true
+// @debug compare(null, '==', null); // true
+// @debug compare((a: 2222), '==', ('a': 2222)); // true
+// @debug compare(true, '==', null); // false
+
+// SECTION: NOT equal() !== or !=
 // @debug compare(27, '!==', 27); // false
 // @debug compare('there is a word', '!==', 'there is a word'); // false
 // @debug compare(null, '!==', null); // false
 // @debug compare((a: 2222), '!==', ('a': 2222)); // false
 // @debug compare(true, '!==', null); // true
 
-// :==
+
+
+// SECTION: meta.type-of() :==
 // @debug compare('a', ':==', string); // true
 // @debug compare(null, ':==', null); // true
 // @debug compare(false, ':==', bool); // true
 
-// :!==
+// SECTION: NOT meta.type-of() :!==
 // @debug compare(3, ':!=', string); // true
 // @debug compare(27, ':!==', string); // true
 // @debug compare('a', ':!==', string); // false
 // @debug compare(null, ':!==', null); // false
 // @debug compare(false, ':!==', bool); // false
 
-// ~=
+
+
+// SECTION: string.index() ~=
 // @debug compare('bold king', '~=', 'bold'); // true
 
-// !~=
+// SECTION: NOT string.index() !~=
 // @debug compare('bold king', '!~=', 'word'); // true
 // @debug compare('bold king', '!~=', 'bold'); // false
 
-// >
+
+
+// SECTION: than.greater() >
 // @debug compare(3, '>', 1); // true
 // @debug compare(3, '>', 5); // false
 
-// >=
+// SECTION: NOT than.greater() !>
+// @debug compare(3, '!>', 1); // false
+// @debug compare(3, '!>', 5); // true
+
+
+
+// SECTION: than.greater() or equal >=
 // @debug compare(3, '>=', 1); // true
 // @debug compare(3, '>=', 3); // true
 
-// <
+// SECTION: NOT than.greater() or equal !>=
+// @debug compare(3, '!>=', 1); // false
+// @debug compare(3, '!>=', 3); // false
+
+
+
+// SECTION: than.less() <
 // @debug compare(3, '<', 1); // false
 // @debug compare(3, '>', 5); // false
 
-// <=
+// SECTION: NOT than.less() !<
+// @debug compare(3, '!<', 1); // true
+// @debug compare(1, '!<', 3); // false
+
+
+
+// SECTION: than.less() or equal() <=
 // @debug compare(3, '<=', 1); // false
 // @debug compare(3, '<=', 3); // true
 
-// (,)==
+// SECTION: NOT than.less() or equal() !<=
+// @debug compare(3, '!<=', 1); // true
+// @debug compare(3, '!<=', 3); // false
+
+
+
+// SECTION: list.is-length() (,)
+// @debug compare(('a', 'b', 'c'), '(,)', 3); // true
+// @debug compare(('a', 'b', 'c'), '(,)', 4); // false
+
+
+// SECTION: list.length() equal() (,)==
 // @debug compare(('a', 'b', 'c'), '(,)==', 3); // true
 // @debug compare(('a', 'b', 'c'), '(,)==', 13); // false
 
-// (,)!=
+// SECTION: list.length() NOT equal() (,)!=
 // @debug compare(('a', 'b', 'c'), '(,)!=', 3); // false
 // @debug compare(('a', 'b', 'c'), '(,)!=', 13); // true
+// @debug compare(('a', 'b', 'c'), '(,)!==', 3); // false
+// @debug compare(('a', 'b', 'c'), '(,)!==', 13); // true
 
-// (,)>
+
+
+// SECTION: list.length() and than.greater() (,)>
 // @debug compare(('a', 'b', 'c'), '(,)>', 2); // true
 // @debug compare(('a', 'b', 'c'), '(,)>', 3); // false
 
-// (,)>=
+// SECTION: list.length() and NOT than.greater() (,)!>
+// @debug compare(('a', 'b', 'c'), '(,)!>', 2); // false
+// @debug compare(('a', 'b', 'c'), '(,)!>', 3); // true
+
+
+
+// SECTION: list.length() and than.greater() or equal() (,)>=
+// @debug compare(('a', 'b', 'c'), '(,)>=', 3); // true
+// @debug compare(('a', 'b', 'c'), '(,)>=', 4); // false
 // @debug compare(('a', 'b', 'c'), '(,)>=', 3); // true
 // @debug compare(('a', 'b', 'c'), '(,)>=', 4); // false
 
-// (,)<
+// SECTION: list.length() and NOT than.greater() or equal() (,)!>=
+// @debug compare(('a', 'b', 'c'), '(,)!>=', 3); // false
+// @debug compare(('a', 'b', 'c'), '(,)!>=', 4); // true
+
+
+
+// SECTION: list.length() and than.less() (,)<
 // @debug compare(('a', 'b', 'c'), '(,)<', 4); // true
 // @debug compare(('a', 'b', 'c'), '(,)<', 3); // false
 
-// (,)<=
+// SECTION: list.length() and NOT than.less() (,)!<
+// @debug compare(('a', 'b', 'c'), '(,)!<', 4); // true
+// @debug compare(('a', 'b', 'c'), '(,)!<', 3); // false
+
+
+
+// SECTION: list.length() and than.less() or equal() (,)<=
 // @debug compare(('a', 'b', 'c'), '(,)<=', 3); // true
 // @debug compare(('a', 'b', 'c'), '(,)<=', 2); // false
 
-// (:)==
-// @debug compare(('a': 1, 'b': 2, 'c': 3), '(,)==', 3); // true
-// @debug compare(('a': 1, 'b': 2, 'c': 3), '(,)==', 4); // false
+// SECTION: list.length() and NOT than.less() or equal() (,)!<=
+// @debug compare(('a', 'b', 'c'), '(,)!<=', 3); // false
+// @debug compare(('a', 'b', 'c'), '(,)!<=', 2); // true
 
-// (:)!=
-// @debug compare(('a': 1, 'b': 2, 'c': 3), '(,)!=', 3); // false
-// @debug compare(('a': 1, 'b': 2, 'c': 3), '(,)!=', 2); // true
 
-// (:)> (:)<
-// @debug compare(('a': 1, 'b': 2, 'c': 3), '(,)>', 3); // false
-// @debug compare(('a': 1, 'b': 2, 'c': 3), '(,)<', 2); // false
+
+// SECTION: list.length() or equal() (:)==
+// @debug compare(('a': 1, 'b': 2, 'c': 3), '(:)==', 3); // true
+// @debug compare(('a': 1, 'b': 2, 'c': 3), '(:)==', 4); // false
+
+// SECTION: list.length() NOT equal() (:)!=
+// @debug compare(('a': 1, 'b': 2, 'c': 3), '(:)!=', 3); // false
+// @debug compare(('a': 1, 'b': 2, 'c': 3), '(:)!=', 2); // true
+
+
+
+// SECTION: list.length() than.greater() (:)> than.less() (:)<
+// @debug compare(('a': 1, 'b': 2, 'c': 3), '(:)>', 3); // false
+// @debug compare(('a': 1, 'b': 2, 'c': 3), '(:)<', 2); // false
+
+// SECTION: NOT list.length() than.greater() (:)!> than.less() (:)!<
+// @debug compare(('a': 1, 'b': 2, 'c': 3), '(:)!>', 3); // true
+// @debug compare(('a': 1, 'b': 2, 'c': 3), '(:)!<', 3); // true

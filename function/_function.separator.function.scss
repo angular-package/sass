@@ -1,0 +1,37 @@
+// Sass.
+@use 'sass:map';
+@use 'sass:meta';
+@use 'sass:string';
+
+// Completed
+// Low
+// The `function.separator()` function gets separator of `$separators` between module and function name from `$identifier`.
+// @param `$identifier` Prefixed module name with function name of `string` type to get separator of `$separators`.
+// @param `$prefixes` Required available prefixes for `$identifier`.
+// @param `$separators` Required available separators between module and function name in `$identifier`.
+// @returns The returned value is one of the `$separators` of `string` type found between module and function name in `$identifier`, otherwise `null`.
+@function separator($identifier, $prefixes, $separators) {
+  @each $prefix in $prefixes {
+    @if meta.type-of($identifier) == string and string.index($identifier, $prefix) == 1 {
+      @each $separator in $separators {
+        $-name: string.slice($identifier, string.length($prefix) + 1, -1);
+        @if string.index($-name, $separator) {
+          @return $separator;
+        }
+      }
+    }
+  }
+  @return null;
+}
+
+// Examples.
+// $prefixes: ('--', '__') !default;
+// $separators: ('--', '-', '_', '.') !default;
+
+// @debug separator(--nth, $prefixes, $separators); // null
+
+// @debug separator(--selector-nest, $prefixes, $separators); // -
+// @debug separator(__selector_nest, $prefixes, $separators); // _
+// @debug separator('--selector.nest', $prefixes, $separators); // .
+
+// @debug separator(--selector--nest, $prefixes, $separators); // --

@@ -1,0 +1,33 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+@use 'sass:string';
+
+// In Progress
+// Low
+// The `function.module()` function gets module name from `$identifier`.
+// @param `$identifier` Module name with function name of `string` type to get module name.
+// @param `$prefixes` Required available prefixes for `$identifier`.
+// @param `$separators` Required available separators between module and function name in `$identifier`.
+// @returns The returned value is module name of `string` type `$identifier`.
+@function module($identifier, $prefixes, $separators) {
+  @each $prefix in $prefixes {
+    @if meta.type-of($identifier) == string and string.index($identifier, $prefix) == 1 {
+      @each $separator in $separators {
+        $-name: string.slice($identifier, string.length($prefix) + 1, -1);
+        @if string.index($-name, $separator) {
+          @return list.nth(string.split($-name, $separator), 1);
+        }
+      }
+    }
+  }
+  @return null;
+}
+
+// Examples.
+// $prefixes: ('--', '__') !default;
+// $separators: ('-', '_', '.') !default;
+
+// @debug module(--selector-nest, $prefixes, $separators); // selector
+// @debug module(__selector_nest, $prefixes, $separators); // selector
+// @debug module('--selector.nest', $prefixes, $separators); // selector

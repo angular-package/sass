@@ -2,12 +2,13 @@
 @use 'sass:list';
 @use 'sass:map';
 @use 'sass:meta';
+@use 'sass:string';
 
 // Functions.
-@use 'string.index.function' as string-index;
 @use 'string.split.function' as string-split;
 
-// Status: DONE
+// Completed
+// Low
 // The `string.to-map()` function returns map build of `$key-value` and additional `$key-value-strings`, if they contain `:`.
 // @param `$key-value` A string type value of `key:value` pattern to build `map`.
 // Allowed formats: 'key1,key2:value1,value2' converts to (key1: (value1, value2), key2: (value1, value2))
@@ -15,14 +16,17 @@
 // @arbitrary `$key-value-strings...` Additional strings of `key:value` pattern to add to returned `map`.
 // @returns The returned value is a `map` built from `$key-value` and additional `$key-value-strings`, if arguments are strings, otherwise `null`.
 @function to-map($key-value, $key-value-strings...) {
+  @if not (meta.type-of($key-value) == string) {
+    @error "$key-value: #{$key-value} is not string";
+  }
   $result: ();
   @each $key-value in list.join($key-value, $key-value-strings, comma) {
-    @if meta.type-of($key-value) == string and string-index.index($key-value, ':') {
+    @if meta.type-of($key-value) == string and string.index($key-value, ':') {
       $key-value: string-split.split($key-value, ':');
   
       // Key.
       $key: list.nth($key-value, 1);
-      @if string-index.index($key, ',') {
+      @if string.index($key, ',') {
         $key: string-split.split($key, ',');
       }
   
@@ -30,9 +34,9 @@
       $value: list.nth($key-value, list.length($key-value));
 
       // Split value.
-      $value: string-index.index($value, ';')
+      $value: string.index($value, ';')
         and string-split.split($value, ';', $bracketed: true)
-        or string-index.index($value, ',')
+        or string.index($value, ',')
         and string-split.split($value, ',')
         or $value;
 

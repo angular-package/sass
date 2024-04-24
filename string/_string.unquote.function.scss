@@ -1,11 +1,15 @@
 // Sass.
+@use 'sass:meta';
 @use 'sass:string';
 
-// Status: DONE
+// Completed
 // The `string.unquote()` function unquotes `$string` on `$execute` set to `true`.
 // @param `$string` String to unquote.
 // @param `$execute` Whether to execute unquote on `$string`.
 // @returns The returned value is unquoted `$string` if unquote is allowed.
 @function unquote($string, $execute: true) {
+  @if not (meta.type-of($string) == string) {
+    @error "$string: #{$string} is not string";
+  }
   @return if($execute, string.unquote($string), $string);
 }

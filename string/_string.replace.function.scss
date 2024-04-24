@@ -1,7 +1,8 @@
 // Sass.
+@use 'sass:meta';
 @use 'sass:string';
 
-// Status: DONE
+// Completed
 // The `string.replace()` function replaces the first or all `$substring` occurrences in the string with `$replacement`.
 // @param `$string` A `string` to replace first or all `$substring` in it by `$replacement`.
 // @param `$occurrence` First or all occurrences of `$substring` to replace in `$string`.
@@ -9,6 +10,9 @@
 // @param `$replacement` A `string` to replace `$substring`.
 // @returns The returned value is a `string` with a first/all replaced `$substring` by `$replacement`.
 @function replace($string, $occurrence, $substring, $replacement) {
+  @if not (meta.type-of($string) == string) {
+    @error "$string: #{$string} is not string";
+  }
   @each $value in $substring {
     $index: string.index($string, $value);
     @while not ($index == null) {

@@ -1,16 +1,15 @@
 // Sass.
+@use 'sass:meta';
 @use 'sass:list';
+@use 'sass:math';
 @use 'sass:string';
-
-// Modules.
-@use '../math';
 
 // Functions.
 @use '../list/remove/remove.value.function' as list-remove-value;
 @use 'string.index.function' as string-index;
 @use 'string.unquote.function' as string-unquote;
 
-// Status: DONE
+// Completed
 // The `string.split()` function returns comma-separated list of substrings of `$string` that are separated by `$separator`.
 // The separators aren’t included in these substrings..
 // If `$limit` is a number `1` or higher, this splits on at most that many $separators (and so returns at most $limit + 1 strings).
@@ -28,6 +27,9 @@
   $bracketed: false,
   $unquote: false
 ) {
+  @if not (meta.type-of($string) == string) {
+    @error "$string: #{$string} is not string";
+  }
   $result: list.join((), (), comma, $bracketed);
   $index: 0;
   $i: 1;

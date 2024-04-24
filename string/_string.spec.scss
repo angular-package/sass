@@ -56,10 +56,10 @@ $-text: 'Primary color red';
     string.index("Helvetica Neue", "Helvetica", "Neue"),
     string.index("Helvetica Neue", "Helvetica", "Neue", "Wrong"),
     string.index("Helvetica Neue", "Helvetica", "Neue", "Wrong", true),
-    string.index(true, "Helvetica")
+    // string.index(true, "Helvetica")
   ),
   (
-    1, 11, (1, 11), (1, 11, null), (1, 11, null, null), null,
+    1, 11, (1, 11), (1, 11, null), (1, 11, null, null),
   ),
   map.get($spec, index)
 ) using($id, $passed, $failed, $max, $spec, $summary, $done) {

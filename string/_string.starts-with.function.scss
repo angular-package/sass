@@ -1,20 +1,23 @@
-// Modules.
-@use '../meta';
+// Sass.
+@use 'sass:meta';
+@use 'sass:string';
 
-// Functions.
-@use 'string.index.function' as string-index;
-
-// Status: DONE
+// Completed
+// Low
 // The `string.starts-with()` function determines whether `$string` begins with `$search-string` at `$position`.
 // @param `$string` String to determine that it begins with `$search-string` at `$position`.
 // @param `$search-string` String to determine that begins in `$string` at `$position`.
 // @param `$position` Position at which `$search-string` is expected to be found.
 // @returns The returned value is a `bool` indicating whether `$string` begins with `$search-string` at `$position`.
 @function starts-with($string, $search-string, $position: 1) {
-  @if meta.of-type(string, $string, $search-string) {
-    @if string-index.index($string, $search-string) == $position {
-      @return true;
-    }
+  @if not (meta.type-of($string) == string) {
+    @error "$string: #{$string} is not string";
+  }
+  @if not (meta.type-of($search-string) == string) {
+    @error "$search-string: #{$search-string} is not string";
+  }
+  @if string.index($string, $search-string) == $position {
+    @return true;
   }
   @return false;
 }

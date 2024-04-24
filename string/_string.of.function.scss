@@ -7,7 +7,7 @@
 @use 'string.is-lower-case.function' as string-is-lower-case;
 @use 'string.is-upper-case.function' as string-is-upper-case;
 
-// Status: DONE
+// Completed
 // The `string.of()` function returns `$string` specification of `$spec` separated by `$separator`.
 // @param `$string` The string to determine its specification `$spec` - letter capital(xcase), length, lower case(lowercase), upper case(uppercase) in any order.
 // @param `$spec` List of string specification - letter capital(xcase), length, lower case(lowercase), upper case(uppercase) in any order.
@@ -15,6 +15,9 @@
 // @param `$type` Whether to return `string` as first in specification.
 // @returns The returned value is `$string` specification of `$spec`.
 @function of($string, $spec, $separator: null, $type: false) {
+  @if not (meta.type-of($string) == string) {
+    @error "$string: #{$string} is not string";
+  }
   $result: '';
   $spec: if(
     $type,

@@ -2,7 +2,7 @@
 @use 'sass:list';
 @use 'sass:meta';
 
-// Status: DONE
+// Completed
 // The `string.is()` function checks whether `$value` is `string` type. 
 // @param `$value` Any value to check against `string` type.
 // @arbitrary `$values...` Additional values to check against `string` type.
@@ -19,6 +19,7 @@
 // Examples.
 // @debug is(test); // true
 // @debug is(test, test1, test2); // true
+// @debug is(test, test1, 2); // false
 
 // @debug is(1); // false
 // @debug is(1, 2); // false

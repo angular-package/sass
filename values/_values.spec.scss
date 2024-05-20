@@ -1,0 +1,82 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:map';
+
+// Modules.
+@use '../values';
+@use '../test';
+
+// Examples.
+$execute: true;
+$spec: (
+  combine: true,
+  join: true
+);
+
+
+// SECTION: values.combine()
+
+@include test.to-equal(
+  (
+    'values.combine(\'&\')',
+    'values.combine((\'&\', dark))',
+
+    'values.combine((method: join))',
+    'values.combine((method: join))',
+
+    'values.combine((separator: space))',
+    'values.combine((separator: comma))',
+  ),
+  (
+    values.combine('&', layout sidebar, primary dark, extra small),
+    values.combine(('&', dark), layout sidebar, primary dark, extra small),
+    
+    values.combine((method: join), '&', layout sidebar, primary dark, extra small),
+    values.combine((method: join), ('&', dark), layout sidebar, primary dark, extra small),
+
+    values.combine((separator: space), '&', layout sidebar, primary dark, extra small),
+    values.combine((separator: comma), '&', layout sidebar, primary dark, extra small),
+
+
+  ),
+  (
+    "&" (layout sidebar) (primary dark) (extra small),
+    (("&", dark), (layout sidebar), (primary dark), (extra small)),
+    "&" layout sidebar primary dark extra small,
+    ("&", dark, layout, sidebar, primary, dark, extra, small),
+    "&" (layout sidebar) (primary dark) (extra small),
+    ("&", layout sidebar, primary dark, extra small),
+  ),
+  map.get($spec, combine),
+) using($id, $passed, $failed, $max, $spec, $summary, $done) {
+  @debug $spec;
+  @if $done {
+    @debug $summary;
+    @debug '---';
+  }
+}
+
+// SECTION: values.join()
+
+// @include test.to-equal(
+//   'values.join()',
+//   (
+//     values.combine('&', layout sidebar, primary dark, extra small),
+//     values.combine(('&', dark), layout sidebar, primary dark, extra small),
+//     values.combine((method: join), '&', layout sidebar, primary dark, extra small),
+//     values.combine((method: join), ('&', dark), layout sidebar, primary dark, extra small),
+//   ),
+//   (
+//     "&" (layout sidebar) (primary dark) (extra small),
+//     ("&", dark) (layout sidebar) (primary dark) (extra small),
+//     "&" layout sidebar primary dark extra small,
+//     ("&", dark, layout, sidebar, primary, dark, extra, small),
+//   ),
+//   map.get($spec, combine),
+// ) using($id, $passed, $failed, $max, $spec, $summary, $done) {
+//   @debug $spec;
+//   @if $done {
+//     @debug $summary;
+//     @debug '---';
+//   }
+// }

@@ -1,11 +1,8 @@
 // Sass.
-@use 'sass:list';
-@use 'sass:meta';
+@use "sass:list";
+@use "sass:meta";
 
-// Functions.
-@use '../has/has.type.function' as has-type;
-
-// Status: DONE
+// Completed
 // The `list.remove-type()` or `remove.type()` function returns the list without the elements of the given types.
 // @param `$list` The list from which required `$type` and additional `$types` are being removed.
 // @param `$type` A required type to remove from `$list`.
@@ -13,7 +10,18 @@
 // @returns The returned value is a copy of `$list` without required `$type` and additional `$types`.
 @function type($list, $type, $types...) {
   $types: list.join($type, $types, comma);
-  @if has-type.type($list, any, '==', $types...) {
+  $exists: false;
+  $i: 1;
+  @while meta.type-of($i) == number {
+    @if list.index($types, meta.type-of(list.nth($list, $i))) {
+      $exists: true;
+    }
+    $i: $i + 1;
+    @if $exists or $i == list.length($i) {
+      $i: null;
+    }
+  }
+  @if $exists {
     $result: ();
     @each $element in $list {
       $result: if(

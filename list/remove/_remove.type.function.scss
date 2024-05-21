@@ -11,13 +11,13 @@
 @function type($list, $type, $types...) {
   $types: list.join($type, $types, comma);
   $exists: false;
-  $i: 1;
+  $i: 0;
   @while meta.type-of($i) == number {
+    $i: $i + 1;
     @if list.index($types, meta.type-of(list.nth($list, $i))) {
       $exists: true;
     }
-    $i: $i + 1;
-    @if $exists or $i == list.length($i) {
+    @if $exists or $i == list.length($list) {
       $i: null;
     }
   }

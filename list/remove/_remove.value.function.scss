@@ -1,7 +1,7 @@
 // Sass.
-@use 'sass:list';
+@use "sass:list";
 
-// Status: DONE
+// Completed
 // The `list.remove-value()` or `remove.value()` function returns the list without given values.
 // @param `$list` The list from which required `$value` and additional `$values` are being removed.
 // @param `$value` A required value to remove from `$list`.

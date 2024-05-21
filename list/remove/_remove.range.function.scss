@@ -1,11 +1,11 @@
 // Sass.
-@use 'sass:list';
+@use "sass:list";
 
 // Functions.
-@use '../../math/math.range.function' as math-range;
-@use 'remove.nth.function' as remove-nth;
+@use "../../math/math.range.function" as math-range;
+@use "remove.nth.function" as remove-nth;
 
-// Status: DONE
+// Completed
 // The `list.remove-range()` or`remove.range()` function removes the indexes of the given range.
 // @param `$list` A list from which indexes of range `$from` to `$to` are being removed.
 // @param `$from` The index from which the range of elements to remove begins.

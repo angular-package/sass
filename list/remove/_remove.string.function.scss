@@ -1,7 +1,7 @@
 // Functions.
-@use 'remove.type.function' as remove-type;
+@use "remove.type.function" as remove-type;
 
-// Status: DONE
+// Completed
 // The `list.remove-string()` or `remove.string()` function returns the list without the `string` type elements.
 // @param `$list` The list from which the `string` type elements are being removed.
 // @returns The returned value is a copy of `$list` without the strings.

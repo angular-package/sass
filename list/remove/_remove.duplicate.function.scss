@@ -1,7 +1,7 @@
 // Sass.
-@use 'sass:list';
+@use "sass:list";
 
-// Status: DONE
+// Completed
 // The `list.remove-duplicate()` or `remove.duplicate()` function returns the list without duplicate values.
 // @param `$list` The list from which duplicate values are being removed.
 // @arbitrary `$values...` Arbitrary list of elements to remove from `$list`.
@@ -9,13 +9,16 @@
 @function duplicate($list, $values...) {
   $result: ();
   @for $i from 1 through list.length($list) {
-    @if list.length($values) > 0 and not list.index($values, list.nth($list, $i))
-      or not list.index($result, list.nth($list, $i)) {
+    @if list.length($values) >
+      0 and not
+      list.index($values, list.nth($list, $i)) or not
+      list.index($result, list.nth($list, $i))
+    {
       $result: list.append($result, list.nth($list, $i), list.separator($list));
     }
   }
   @return $result;
-}  
+}
 
 // Examples.
 // SECTION: $remove not defined

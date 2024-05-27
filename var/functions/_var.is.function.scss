@@ -1,12 +1,17 @@
 // Sass.
-@use 'sass:string';
+@use "sass:string";
+@use "sass:meta";
 
-// Status: DONE
-// The `var.is()` function checks whether the given value is CSS variable `var()`.
+// Completed
+// The `var.is()` function checks whether `$value` is CSS variable `var()`.
 // @param `$value` The value to check against the CSS variable.
-// @returns The return value is a `bool` indicating whether the given `$value` is CSS variable.
+// @returns The returned value is a `bool` indicating whether `$value` is CSS variable.
 @function is($value) {
-  @return if(type-of($value) == string and string.index($value, 'var('), true, false);
+  @return if(
+    meta.type-of($value) == string and string.index($value, "var("),
+    true,
+    false
+  );
 }
 
 // Examples.

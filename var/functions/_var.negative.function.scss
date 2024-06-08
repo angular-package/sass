@@ -1,27 +1,19 @@
-// Sass.
-@use "sass:meta";
-
 // Functions.
 @use "var.is.function" as var-is;
 
 // Completed
-// The function `var.negative()` returns CSS `calc()` function with `$var` multiplied by `-1`.
-// @param `$var` Variable to multiply by `-1`.
-// @returns The returned value is CSS calculation multiplied by `-1`.
+// The function `var.negative()` returns calculation `calc()` function with `$var` as CSS variable in `var()` function multiplied by `-1`.
+// @param `$var` Required CSS variable in `var()` function to multiply by `-1`.
+// @returns The returned value is calculation `calc()` function with `$var` as CSS variable in `var()` function multiplied by `-1`.
 @function negative($var) {
-  @if not (var-is.is($var) or meta.type-of($var) == calculation) {
+  @if not var-is.is($var) {
     @error "$var: #{$var} is not CSS variable `var()`";
   }
-  @return if(
-    meta.type-of($var) == calculation,
-    calc((#{meta.calc-args($var)}) * -1),
-    calc($var * -1)
-  );
+  @return calc(#{$var} * -1);
 }
 
 // Examples.
 // @debug negative(var(--s-layout-spacing)); // calc(var(--s-layout-spacing) * -1)
-// @debug negative(calc(var(--s-layout-spacing) + 10)); // calc((var(--s-layout-spacing) + 10) * -1)
 
 // error
 // @debug negative(--s-layout-spacing); // Error: "$var: --s-layout-spacing is not CSS variable `var()`"

@@ -1,0 +1,80 @@
+// Sass.
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Mixins.
+@use "test.to-equal.mixin" as to-equal;
+
+// In Progress
+// The `test.execute()` mixin.
+// @param `$tests`
+// @param `$execute`
+// @param `$error`
+@mixin execute($tests, $execute: true, $error: true) {
+  @if $execute {
+    @each $spec, $tests in $tests {
+      $description: $spec;
+      $i: 1;
+      $passed: 0;
+      $failed: 0;
+      $summary: null;
+
+      // Describe tests.
+      @if meta.type-of($spec) == map {
+        $description: map.get($spec, description);
+      }
+
+      @debug $description;
+
+      // Iterate tests.
+      @each $test in $tests {
+        $actual: null;
+        $expected: null;
+        $description: "";
+
+        @if meta.type-of($test) == map {
+          $actual: map.get($test, actual);
+          $description: map.get($test, description);
+          $expected: map.get($test, expected);
+        }
+
+        @include to-equal.to-equal(
+          $description,
+          $actual,
+          $expected,
+          $execute,
+          false
+        ) using(
+          $id,
+          $-passed,
+          $-failed,
+          $max,
+          $spec,
+          $-summary,
+          $done,
+          $description,
+          $result
+        ) {
+          $description: if($description, $description + ' expected', Expected);
+
+          @debug "#{$i}. #{$result and Passed or Failed}. #{$description} #{$actual} got #{$expected}";
+
+          $passed: $result and $passed + 1 or $passed;
+          $failed: not $result and $failed + 1 or $failed;
+
+          $summary: Tests list.length($tests) Passed $passed Failed $failed;
+        }
+        $i: $i + 1;
+      }
+
+      @debug $summary;
+      @debug "---";
+      @debug "";
+    }  
+  }
+}
+
+

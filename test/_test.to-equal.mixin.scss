@@ -1,55 +1,43 @@
-// Sass.
-@use "sass:list";
-@use "sass:string";
-
-// In Progress
-// The `test.to-equal()` mixin.
-// @param `$description`
-// @param `$actual`
-// @param `$expected`
-// @param `$execute`
-// @param `$error`
-@mixin to-equal($description, $actual, $expected, $execute: true, $error: true) {
+// Completed
+// The `test.to-equal()` mixin checks whether `$actual` is equal to `$expected`.
+// @param `$description` Test description.
+// @param `$actual` Actual result.
+// @param `$expected` Expected result.
+// @param `$execute` A `boolean` indicates to execute test.
+// @param `$error` A `boolean` indicates to throw an error if test fail.
+// @param `$display` A `boolean` indicates to display `@debug`.
+@mixin to-equal(
+  $description,
+  $actual,
+  $expected,
+  $execute: true,
+  $error: true,
+  $display: true,
+) {
   @if $execute {
-    $i: 1;
-    $passed: 0;
-    $failed: 0;
-    $summary: null;
-    $-description: $description;
-    @each $e in $expected {
-      $description: $-description;
-      $done: (list.length($expected) == $i or list.length($actual) == $i) and true or false;
-      $result: list.nth($actual, $i) == $e;
-      $description: $i >
-        list.length($description) and
-        list.nth($description, list.length($description)) or
-        list.nth($description, $i);
-      $description: if($description, $description + ' expected', Expected);
-      $spec: "#{$i}. #{$result and Passed or Failed}. #{$description} #{list.nth($actual, $i)} got #{$e}";
+    // Result.
+    $result: $actual == $expected;
 
-      @if $result {
-        $passed: $passed + 1;
-      } @else {
-        $failed: $failed + 1;
-      }
+    // Spec.
+    $spec: "#{$result and Passed or Failed}. #{$description} expected #{$actual} got #{$expected}";
 
-      @if $error and not $result {
-        @error $spec;
-      }
-
-      @content (
-        $i,
-        $passed,
-        $failed,
-        list.length($actual),
-        $spec,
-        Tests list.length($expected) Passed $passed Failed $failed,
-        $done,
-        $description,
-        $result,
-      );
-
-      $i: $i + 1;
+    // Throw an error.
+    @if $error and not $result {
+      @error $spec;
     }
+
+    // Display.
+    @if $display {
+      @debug $spec;
+    }
+
+    // Content.
+    @content(
+      $result,
+      $description,
+      $spec,
+      $actual,
+      $expected,
+    );
   }
 }

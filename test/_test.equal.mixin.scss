@@ -1,12 +1,12 @@
 // Completed
-// The `test.to-equal()` mixin checks whether `$actual` is equal to `$expected`.
+// The `test.equal()` mixin checks whether `$actual` is equal to `$expected`.
 // @param `$description` Test description.
 // @param `$actual` Actual result.
 // @param `$expected` Expected result.
 // @param `$execute` A `boolean` indicates to execute test.
 // @param `$error` A `boolean` indicates to throw an error if test fail.
 // @param `$display` A `boolean` indicates to display `@debug`.
-@mixin to-equal(
+@mixin equal(
   $description,
   $actual,
   $expected,

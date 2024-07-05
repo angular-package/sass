@@ -2,7 +2,7 @@
 @use '../test';
 
 
-@include test.to-equal(
+@include test.equal(
   List nth must be,
   list.nth((a, b), 2),
   b,

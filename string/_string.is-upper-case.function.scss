@@ -1,0 +1,25 @@
+// Sass.
+@use 'sass:meta';
+@use 'sass:string';
+
+// Completed
+// The `string.is-upper-case()` function determines `$string` is written in capital letters.
+// @param `$string` String to determine is written in capital letters.
+// @returns The returned value is `bool` indicating `$string` is written in capital letters.
+@function is-upper-case($string) {
+  @if not (meta.type-of($string) == string) {
+    @error "$string: #{$string} is not string";
+  }
+  @for $i from 1 through string.length($string) {
+    $letter: string.slice($string, $i, $i);
+    @if ($letter != string.to-upper-case($letter)) {
+      @return false;
+    }
+  }
+  @return true;
+}
+
+// Examples.
+// @debug is-upper-case('TEST TEST TEST'); // true
+// @debug is-upper-case('test test test'); // false
+// @debug is-upper-case('TEST test TEST'); // false

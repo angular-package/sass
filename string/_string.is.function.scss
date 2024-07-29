@@ -1,0 +1,25 @@
+// Sass.
+@use 'sass:list';
+@use 'sass:meta';
+
+// Completed
+// The `string.is()` function checks whether `$value` is `string` type. 
+// @param `$value` Any value to check against `string` type.
+// @arbitrary `$values...` Additional values to check against `string` type.
+// @return The returned value is `bool` indicating whether `$value` is `string` type.
+@function is($value, $values...) {
+  @each $value in list.join(($value,), $values, comma) {
+    @if not (meta.type-of($value) == string) {
+      @return false;
+    }
+  }
+  @return true;
+}
+
+// Examples.
+// @debug is(test); // true
+// @debug is(test, test1, test2); // true
+// @debug is(test, test1, 2); // false
+
+// @debug is(1); // false
+// @debug is(1, 2); // false

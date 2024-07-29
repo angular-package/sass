@@ -1,0 +1,25 @@
+// Sass.
+@use 'sass:meta';
+@use 'sass:string';
+
+// Completed
+// The `string.is-lower-case()` function determines `$string` is written in small letters.
+// @param `$string` String to determine is written in small letters.
+// @returns The returned value is `bool` indicating `$string` is written in small letters.
+@function is-lower-case($string) {
+  @if not (meta.type-of($string) == string) {
+    @error "$string: #{$string} is not string";
+  }
+  @for $i from 1 through string.length($string) {
+    $letter: string.slice($string, $i, $i);
+    @if ($letter != string.to-lower-case($letter)) {
+      @return false;
+    }
+  }
+  @return true;
+}
+
+// Examples.
+// @debug is-lower-case('test test test'); // true
+// @debug is-lower-case('TEST TEST TEST'); // false
+// @debug is-lower-case('TEST test TEST'); // false

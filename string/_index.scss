@@ -1,8 +1,9 @@
-@forward 'string.index.function';
-@forward 'string.join.function';
-@forward 'string.replace-multiple.function';
-@forward 'string.replace.function';
-@forward 'string.split.function';
-@forward 'string.to-map.function';
-@forward 'string.unquote.function';
-@forward 'sass:string' hide index, split, unquote;
+@forward "string.index.function";
+@forward "string.is-lower-case.function";
+@forward "string.join.function";
+@forward "string.replace-multiple.function";
+@forward "string.replace.function";
+@forward "string.split.function";
+@forward "string.to-map.function";
+@forward "string.unquote.function";
+@forward "sass:string" hide index, split, unquote;

@@ -1,0 +1,33 @@
+// Sass.
+@use 'sass:meta';
+@use 'sass:string';
+
+// Completed
+// Low
+// The `string.starts-with()` function determines whether `$string` begins with `$search-string` at `$position`.
+// @param `$string` String to determine that it begins with `$search-string` at `$position`.
+// @param `$search-string` String to determine that begins in `$string` at `$position`.
+// @param `$position` Position at which `$search-string` is expected to be found.
+// @returns The returned value is a `bool` indicating whether `$string` begins with `$search-string` at `$position`.
+@function starts-with($string, $search-string, $position: 1) {
+  @if not (meta.type-of($string) == string) {
+    @error "$string: #{$string} is not string";
+  }
+  @if not (meta.type-of($search-string) == string) {
+    @error "$search-string: #{$search-string} is not string";
+  }
+  @if string.index($string, $search-string) == $position {
+    @return true;
+  }
+  @return false;
+}
+
+// Examples.
+// $-text: 'Primary color red';
+
+// @debug starts-with($-text, 'Primary color'); // true
+// @debug starts-with($-text, 'color red'); // false
+
+// Position.
+// @debug starts-with($-text, 'color red', 9); // true
+// @debug starts-with($-text, 'color red', 4); // false

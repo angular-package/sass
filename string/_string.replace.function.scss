@@ -1,22 +1,41 @@
 // Sass.
-@use 'sass:string';
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
 
-// Status: DONE
+// Completed
 // The `string.replace()` function replaces the first or all `$substring` occurrences in the string with `$replacement`.
 // @param `$string` A `string` to replace first or all `$substring` in it by `$replacement`.
 // @param `$occurrence` First or all occurrences of `$substring` to replace in `$string`.
 // @param `$substring` A `string` or list of strings to replace by `$replacement`.
 // @param `$replacement` A `string` to replace `$substring`.
-// @return The return value is a `string` with a first/all replaced `$substring` by `$replacement`.
+// @returns The returned value is a `string` with a first/all replaced `$substring` by `$replacement`.
 @function replace($string, $occurrence, $substring, $replacement) {
+  @if not (meta.type-of($string) == string) {
+    @error "$string: #{$string} is not `string`";
+  }
+  @if not (list.index(all first, $occurrence)) {
+    @error "$occurrence: #{$occurrence} is not string equal to `first` or `all`";
+  }
+  @if not (meta.type-of($replacement) == string) {
+    @error "$replacement: #{$replacement} is not `string`";
+  }
   @each $value in $substring {
+    @if not (meta.type-of($value) == string) {
+      @error "$substring: #{$value} is not `string`";
+    }
     $index: string.index($string, $value);
     @while not ($index == null) {
-      $string: string.insert(string.slice($string, 1, $index - 1) + string.slice(
-        $string,
-        $index + string.length($value),
-        string.length($string)
-      ), $replacement, $index);
+      $string: string.insert(
+        string.slice($string, 1, $index - 1) +
+          string.slice(
+            $string,
+            $index + string.length($value),
+            string.length($string)
+          ),
+        $replacement,
+        $index
+      );
       @if $occurrence == first {
         $index: null;
       }
@@ -41,5 +60,5 @@
 // @debug replace('bold king is bold hairy', all, 'bold', 'test'); // test king is test hairy
 
 // multiple replacements
-// @debug replace('bold king is hairy', all, ('bold', 'king'), 'baloon'); // baloon king is hairy
+// @debug replace('bold king is hairy', all, ('bold', 'king'), 'baloon'); // baloon baloon is hairy
 // @debug replace('bold king is hairy', first, (bold is), ''); //  king  hairy

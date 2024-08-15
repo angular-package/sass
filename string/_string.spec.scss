@@ -1,8 +1,159 @@
-// Sass.
-@use 'sass:string';
-
 // Modules.
-// @use '../string';
+@use "../string";
 
-// Examples.
-@debug string.split('aaa bbb ccc', ' '); // "aaa", "bbb", "ccc"
+// string.ends-with()
+$-text: "Primary color red";
+
+@debug string.ends-with($-text, "red"); // true
+@debug string.ends-with($-text, "color red"); // true
+
+// Position.
+@debug string.ends-with($-text, "color red", 9); // true
+@debug string.ends-with($-text, "color red", 4); // false
+
+
+
+// string.index()
+// Single
+@debug string.index("Helvetica Neue", "Helvetica"); // 1
+@debug string.index("Helvetica Neue", "Neue"); // 11
+
+// Multiple
+@debug string.index("Helvetica Neue", "Helvetica", "Neue"); // 1, 11
+@debug string.index("Helvetica Neue", "Helvetica", "Neue", "Wrong"); // 1, 11, null
+@debug string.index("Helvetica Neue", "Helvetica", "Neue", "Wrong", true); // 1, 11, null, null
+
+// null
+@debug string.index("Helvetica Neue", "d"); // null
+
+// Different type of the `$string`
+// @debug string.index(true, "Helvetica"); // error
+
+
+
+// string.is-lower-case()
+@debug string.is-lower-case("test test test"); // true
+@debug string.is-lower-case("TEST TEST TEST"); // false
+@debug string.is-lower-case("TEST test TEST"); // false
+
+
+
+// string.is-upper-case()
+@debug string.is-upper-case("TEST TEST TEST"); // true
+@debug string.is-upper-case("test test test"); // false
+@debug string.is-upper-case("TEST test TEST"); // false
+
+
+
+// @debug string.is(test); // true
+@debug string.is(test, test1, test2); // true
+@debug string.is(test, test1, 2); // false
+
+@debug string.is(1); // false
+@debug string.is(1, 2); // false
+
+
+
+// string.join()
+@debug string.join("-");
+@debug string.join("-", "a", "b", "c"); // a-b-c
+@debug string.join("-", "", "a", "b", "c"); // -a-b-c
+@debug string.join("-", "a", "b", "c", ""); // a-b-c-
+@debug string.join("-", "", "a", "b", "c", ""); // a-b-c-
+@debug string.join("-", "a", ("b", "c")); // a-b-c
+@debug string.join("-", a, b, c); // a-b-c
+
+// Join number.
+@debug string.join("-", a, 1, b, 2, c, 3); // a-1-b-2-c-3
+
+// Join color.
+@debug string.join("-", silver, orange, green, red, blue, yellow); // silver-orange-green-red-blue-yellow
+
+
+
+// string.replace-multiple()
+// single replacement first occurrence
+@debug string.replace-multiple("bold king is hairy", first "bold" "baloon"); // baloon king is hairy
+@debug string.replace-multiple("bold king is hairy", first "bold" ""); //  king is  hairy
+@debug string.replace-multiple(":==", first ":" "");
+
+// single replacement all occurrences
+@debug string.replace-multiple("bold king is bold hairy", all "bold" ""); //  king is  hairy
+@debug string.replace-multiple("bold king is bold hairy", all "bold" "test"); // test king is test hairy
+
+// multiple replacements
+@debug string.replace-multiple("bold king is hairy", first (bold is) ""); //  king  hairy
+@debug string.replace-multiple("bold king is hairy", first bold baloon, first king baloon); // baloon baloon is hairy
+@debug string.replace-multiple("bold king is hairy", first (bold king) baloon, first (is hairy) bold); // baloon baloon bold bold
+@debug string.replace-multiple("atmosphere bold bold bold king is hairy", first (king bold) baloon); // atmosphere baloon bold bold baloon is hairy
+@debug string.replace-multiple("atmosphere bold bold bold king is hairy", all (king bold) baloon); // atmosphere baloon baloon baloon baloon is hairy
+
+// multiple replacements different occurrences
+@debug string.replace-multiple("atmosphere bold bold bold king is hairy", first bold clean, all (king bold) baloon); // atmosphere clean baloon baloon baloon is hairy
+
+
+
+// string.replace()
+// single string.replacement first occurrence
+@debug string.replace("bold king is hairy", first, "bold", "baloon"); // baloon king is hairy
+@debug string.replace("bold king is hairy", first, "bold", ""); //  king is  hairy
+@debug string.replace(":==", first, ":", "");
+
+// single replacement all occurrences
+@debug string.replace("bold king is hairy", all, "bold", "baloon"); // baloon king is hairy
+@debug string.replace("bold king is hairy", all, "king", "baloon"); // baloon king is hairy
+@debug string.replace("bold king is bold hairy", all, "bold", ""); //  king is  hairy
+@debug string.replace("bold king is bold hairy", all, "bold", "test"); // test king is test hairy
+
+// multiple replacements
+@debug string.replace("bold king is hairy", all, ("bold", "king"), "baloon"); // baloon baloon is hairy
+@debug string.replace("bold king is hairy", first, (bold is), ""); //  king  hairy
+
+
+
+// string.split()
+// single character
+@debug string.split("aaa bbb ccc", " "); // "aaa", "bbb", "ccc"
+@debug string.split("aaa-bbb-ccc", "-"); // "aaa", "bbb", "ccc"
+@debug string.split("aaa/bbb/ccc", "/"); // "aaa", "bbb", "ccc"
+@debug string.split("Segoe UI Emoji", " "); // "Segoe", "UI", "Emoji"
+@debug string.split("Segoe UI Emoji", " ", $limit: 1); // "Segoe", "UI Emoji"
+@debug string.split("Segoe UI Emoji", " ", $limit: 1, $bracketed: true); // ["Segoe", "UI Emoji"]
+@debug string.split("SF Mono Segoe UI Mono Roboto Mono", " ", $limit: 2, $bracketed: true); // ["SF", "Mono", "Segoe UI Mono Roboto Mono"]
+
+// word `$separator`
+@debug string.split("aaa_DELIMITER_bbb_DELIMITER_ccc", "_DELIMITER_"); // "aaa", "bbb", "ccc"
+@debug string.split("aaa[separator]bbb[separator]ccc", "[separator]"); // "aaa", "bbb", "ccc"
+
+// multiple separators
+@debug string.split("aaa_SEPARATOR_bbb_DELIMITER_ccc_ADD_eee_SEPARATOR_ddd", ("_DELIMITER_", "_SEPARATOR_", "_ADD_")); // "aaa", "bbb", "ccc", "eee", "ddd"
+
+
+
+// string.starts-with()
+$-text: "Primary color red";
+
+@debug string.starts-with($-text, "Primary color"); // true
+@debug string.starts-with($-text, "color red"); // false
+
+// Position.
+@debug string.starts-with($-text, "color red", 9); // true
+@debug string.starts-with($-text, "color red", 4); // false
+
+
+
+// string.to-map()
+// Input data
+// "key:number,value:string" 
+// "key;value:number;string"
+// 
+
+@debug string.to-map("separator:string,number"); // ("separator": ("string", "number"))
+@debug string.to-map("separator:bool"); // ("separator": "bool")
+
+// multiple key
+@debug string.to-map("key,value:string,number"); // ("key": ("string", "number"), "value": ("string", "number"))
+@debug string.to-map("key,value:string;number"); // ("key": "string", "value": "number")
+
+// add multiple with `$key-value-strings`
+@debug string.to-map("key1,key2:string;number", "key3,key4:string;number", "key5,key6:string;number"); // ("key1": "string", "key2": "number", "key3": "string", "key4": "number", "key5": "string", "key6": "number")

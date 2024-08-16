@@ -1,0 +1,157 @@
+// Sass.
+@use "sass:list";
+
+// Modules.
+@use "../../var";
+@use '../../test';
+
+// Tests.
+$execute: true;
+$spec: (
+  $execute, 
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+);
+
+@include test.it(
+  "var.adjust()",
+
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing))',
+    var.adjust(var(--s-layout-spacing)),
+    var(--s-layout-spacing),
+    list.nth($spec, 1),
+  ),
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing), 27)',
+    var.adjust(var(--s-layout-spacing), 27),
+    calc(var(--s-layout-spacing) + 27),
+    list.nth($spec, 2),
+  ),
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing), 1)',
+    var.adjust(var(--s-layout-spacing), 1),
+    calc(var(--s-layout-spacing) + 1),
+    list.nth($spec, 3),
+  ),
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing), "/" 1)',
+    var.adjust(var(--s-layout-spacing), "/" 1),
+    calc(var(--s-layout-spacing) / 1),
+    list.nth($spec, 4),
+  ),
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing), "+" 0)',
+    var.adjust(var(--s-layout-spacing), "+" 0),
+    var(--s-layout-spacing),
+    list.nth($spec, 5),
+  ),
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing), "*" 0)',
+    var.adjust(var(--s-layout-spacing), "*" 0),
+    calc(var(--s-layout-spacing) * 0),
+    list.nth($spec, 6),
+  ),
+
+  // negative
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing), null, true)',
+    var.adjust(var(--s-layout-spacing), null, true),
+    calc(var(--s-layout-spacing) * -1),
+    list.nth($spec, 7),
+  ),
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing), 27, true)',
+    var.adjust(var(--s-layout-spacing), 27, true),
+    calc(calc(var(--s-layout-spacing) + 27) * -1),
+    list.nth($spec, 8),
+  ),
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing), -27, true)',
+    var.adjust(var(--s-layout-spacing), -27, true),
+    calc(calc(var(--s-layout-spacing) - 27) * -1),
+    list.nth($spec, 9),
+  ),
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing), "/" 27, true)',
+    var.adjust(var(--s-layout-spacing), "/" 27, true),
+    calc(calc(var(--s-layout-spacing) / 27) * -1),
+    list.nth($spec, 10),
+  ),
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing), "*" 27, true)',
+    var.adjust(var(--s-layout-spacing), "*" 27, true),
+    calc(calc(var(--s-layout-spacing) * 27) * -1),
+    list.nth($spec, 11),
+  ),
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing), "*" 27, true)',
+    var.adjust(var(--s-layout-spacing), "*" 27, true),
+    calc(calc(var(--s-layout-spacing) * 27) * -1),
+    list.nth($spec, 12),
+  ),
+
+  // adjust + negative + unit
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing), "*" 27, true, rem)',
+    var.adjust(var(--s-layout-spacing), "*" 27, true, rem),
+    calc(var(--s-layout-spacing) * #{1 + rem} * 27 * -1),
+    list.nth($spec, 13),
+  ),
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing), "/" 27, true, rem)',
+    var.adjust(var(--s-layout-spacing), "/" 27, true, rem),
+    calc(var(--s-layout-spacing) * #{1 + rem} / 27 * -1),
+    list.nth($spec, 14),
+  ),
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing), "+" 0, true, rem)',
+    var.adjust(var(--s-layout-spacing), "+" 0, true, rem),
+    calc(var(--s-layout-spacing) * #{1 + rem} * -1),
+    list.nth($spec, 15),
+  ),
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing), 0, true, rem)',
+    var.adjust(var(--s-layout-spacing), 0, true, rem),
+    calc(var(--s-layout-spacing) * #{1 + rem} * -1),
+    list.nth($spec, 16),
+  ),
+  (
+    equal,
+    'var.adjust(var(--s-layout-spacing), 0, true, px)',
+    var.adjust(var(--s-layout-spacing), 0, true, px),
+    calc(var(--s-layout-spacing) * #{1 + px} * -1),
+    list.nth($spec, 17),
+  ),
+);
+

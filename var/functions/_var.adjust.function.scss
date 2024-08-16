@@ -1,62 +1,100 @@
 // Sass.
-@use 'sass:list';
-@use 'sass:map';
-@use 'sass:meta';
-
-// Variables.
-@use '../var.variables';
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
 
 // Functions.
-@use '../../list/list.nth.function' as *;
+@use "var.is.function" as var-is;
+@use "var.unit.function" as var-unit;
 
 // Modules.
-@use '../../math';
+@use "../../math";
 
-// Status: DONE
-// The function `var.adjust()` returns CSS variable `$var` adjusted by `$adjust` if not `null`, otherwise `$var`.
-// @param `$var` CSS variable to adjust by `$adjust`.
-// @param `$adjust` A number(addition), or list(operator, number) to adjust `$var`.
-// @returns The return value is `$var` adjusted by `$adjust`.
-@function adjust($var, $adjust: null) {
-  @if $adjust {
+// Completed
+// The function `var.adjust()` returns `$var` CSS variable in `var()` function adjusted by `$adjustment`, `$negative` and `$unit`, otherwise `$var`.
+// @param `$var` Required CSS variable in `var()` function to adjust by `$adjustment`, `$negative` and `$unit`.
+// @param `$adjustment` A `number`(addition), or `list`(operator number/var) to adjust `$var`.
+// @param `$negative` A `bool` value indicates whether CSS variable in `var()` function is negative multiplied by `-1`.
+// @param `$unit` A `bool`, or unit type value to multiply in calculation `calc()` function CSS variable in `var()` function `$var`. If it's set to
+// `true` then `var()` is multiplied by `$default-unit` of last parameter, if it's `string` e.g. "rem" then `var()` is multiplied by "1rem".
+// // @param `$default-unit` The default unit for `$var` used if `$unit` is a `bool` type set to `true`.
+// @returns The returned value is `$var` CSS variable in `var()` function adjusted in a calculation `calc()` function by `$adjustment`, `$negative`
+// and `$unit`.
+@function adjust($var, $adjustment: null, $negative: null, $unit: null) {
+  // Check whether `$var` is not CSS variable in `var()` function
+  @if not var-is.is($var) {
+    @error "$var: #{$var} is not CSS variable in `var ()` function";
+  }
+
+  // Add unit
+  @if $unit {
+    $var: var-unit.unit($var, $unit);
+  }
+
+  // Adjustment
+  @if $adjustment {
+    // REVIEW: calc()
+    @if not list.index(list number function, meta.type-of($adjustment)) {
+      @error "$adjustment: #{$adjustment} is not `list` or `number` type";
+    }
+
     $calculate: true;
-    $operator: '+';
-    $value: $adjust;
-    @if type-of($adjust) == list {
-      @if list.length($adjust) > 1 {
-        $operator: nth($adjust, 1);
-        $value: nth($adjust, 2);
+    $operator: "+";
+    $value: $adjustment;
+
+    @if meta.type-of($adjustment) == list {
+      @if list.length($adjustment) > 1 {
+        $operator: list.nth($adjustment, 1);
+        $value: list.nth($adjustment, 2);
       } @else {
-        $value: nth($adjust, 1);
+        $value: list.nth($adjustment, 1);
       }
     }
-    @if
-    ($operator == '+' and math.strip-unit($value) == 0) or
-    ($operator == '*' and math.strip-unit($value) == 1) {
+
+    @if ($operator == "+" and math.strip-unit($value) == 0) or
+      ($operator == "*" and math.strip-unit($value) == 1) {
       $calculate: false;
     }
-    @if $calculate == true and type-of($value) == number {
-      @return math.calculate($var $operator $value);
+
+    @if $calculate {
+      $var: math.calculate($var $operator $value);
+    }
+  }
+
+  // Negative.
+  @if $negative {
+    @if meta.type-of($negative) == bool {
+      @return calc($var * -1);
+    } @else {
+      @error "$negative: #{$negative} is not `bool` type";
     }
   }
   @return $var;
 }
 
 // Examples.
-// Update to the spectre settings.
-// var.$var: map.merge(var.$var, (
-//   prefix: s,
-//   delimiter: '-'
-// ));
-
-// empty adjust
-// @debug adjust(var(--s-layout-spacing)); // var(--s-layout-spacing)
-
 // adjust number with default + operator
 // @debug adjust(var(--s-layout-spacing), 27); // calc(var(--s-layout-spacing) + 27)
 // @debug adjust(var(--s-layout-spacing), 1); // calc(var(--s-layout-spacing) + 1)
 
 // adjust with different operator
 // @debug adjust(var(--s-layout-spacing), '/' 1); // calc(var(--s-layout-spacing) / 1)
-// @debug adjust(calc(var(--s-layout-spacing) + 2), '*' 2); // calc((var(--s-layout-spacing) + 2) * 2)
 // @debug adjust(var(--s-layout-spacing), '+' 0); // var(--s-layout-spacing)
+
+// adjustment with `var()`
+// @debug adjust(var(--s-layout-spacing), var(--s-layout-spacing));
+// @debug adjust(var(--s-layout-spacing), '+' var(--s-layout-spacing)); // calc(var(--s-layout-spacing) + var(--s-layout-spacing))
+
+// negative
+// @debug adjust(var(--s-layout-spacing), null, true); // calc(var(--s-layout-spacing) * -1)
+// @debug adjust(var(--s-layout-spacing), "/" 15, true, rem); // calc(var(--s-layout-spacing) * 1rem / 15 * -1)
+
+// unit by name
+// @debug adjust(var(--s-layout-spacing), "/" 15, null, rem);
+// @debug adjust(var(--s-layout-spacing), "-" 15, null, rem);
+
+// unit by `true`
+// @debug adjust(var(--s-layout-spacing), "-" 15, true);
+
+// Error: Missing argument $adjustment
+// @debug adjust(var(--s-layout-spacing)); // var(--s-layout-spacing)

@@ -1,0 +1,87 @@
+// Sass.
+@use "sass:list";
+
+// Modules.
+@use "../../var";
+@use '../../test';
+
+// Tests.
+$execute: true;
+$spec: (
+  $execute, 
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+  $execute,
+);
+
+@include test.it(
+  "var.css()",
+  (
+    equal,
+    'var.css(layout spacing)',
+    var.css(layout spacing),
+    var(--layoutspacing),
+    list.nth($spec, 1),
+  ),
+  (
+    equal,
+    'var.css(layout spacing, "-", "s")',
+    var.css(layout spacing, "-", "s"),
+    var(--s-layout-spacing),
+    list.nth($spec, 2),
+  ),
+  (
+    equal, 
+    'var.css(layout spacing 1, "-", "s")',
+    var.css(layout spacing 1, "-", "s"),
+    var(--s-layout-spacing-1),
+    list.nth($spec, 3),
+  ),
+  (
+    equal,
+    'var.css(layout spacing, "-", "s", $fallback: 250px)',
+    var.css(layout spacing, "-", "s", $fallback: 250px),
+    var(--s-layout-spacing, 250px),
+    list.nth($spec, 4),
+  ),
+  (
+    equal,
+    'var.css(layout spacing, "-", "s", null, (layout: lay, spacing: spa), 250px)',
+    var.css(layout spacing, "-", "s", null, (layout: lay, spacing: spa), 250px),
+    var(--s-lay-spa, 250px),
+    list.nth($spec, 5),
+  ),
+  (
+    equal,
+    'var.css(- b o r d e r, "-", "s", null, (delimiter: ''), 250px)',
+    var.css(- b o r d e r, "-", "s", null, (delimiter: ''), 250px),
+    var(--s-border, 250px),
+    list.nth($spec, 6),
+  ),
+  (
+    equal,
+    'var.css(- b o r d e r "-" , "-", "s", null, (delimiter: '', prefix: spectre, suffix: width), 250px)',
+    var.css(- b o r d e r "-" , "-", "s", null, (delimiter: '', prefix: spectre, suffix: width), 250px),
+    var(--spectre-border-width, 250px),
+    list.nth($spec, 7),
+  ),
+  (
+    equal,
+    'var.css(layout spacing, "-", "prefix", "suffix", (), 250px)',
+    var.css(layout spacing, "-", "prefix", "suffix", (), 250px),
+    var(--prefix-layout-spacing-suffix, 250px),
+    list.nth($spec, 8),
+  ),
+  (
+    equal,
+    'var.css(layout spacing, "-", "p", "s", (p: prefix, s: suffix, delimiter: "_"), 250px)',
+    var.css(layout spacing, "-", "p", "s", (p: prefix, s: suffix, delimiter: "_"), 250px),
+    var(--prefix_layout_spacing_suffix, 250px),
+    list.nth($spec, 9),
+  )
+);

@@ -1,8 +1,8 @@
 // Sass.
-@use 'sass:list';
-@use 'sass:meta';
+@use "sass:list";
+@use "sass:meta";
 
-// Status: DONE
+// Completed
 // The `meta.call-arglist()` function calls `$function` on `$arglist` with a separator comma where elements are arguments or space where the whole
 // list is an argument.
 // @param `$function` Function of function type to call `$arglist` as comma-separated arguments or argument.
@@ -15,3 +15,10 @@
     meta.call($function, $arglist)
   );
 }
+
+// Examples.
+// @debug call-arglist(meta.get-function(selector-nest), (a, b, c)); // (a b c,)
+
+// error
+// @debug call-arglist(meta.get-function(selector-nest), null); // error
+// @debug call-arglist(2, (a, b, c)); // error

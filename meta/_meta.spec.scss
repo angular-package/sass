@@ -1,0 +1,89 @@
+// Sass.
+@use "sass:list";
+@use "sass:map";
+@use "sass:selector";
+
+// Modules.
+@use "../meta";
+@use "../test";
+
+// Tests.
+$execute: true;
+$spec: (
+  call-arglist: $execute,
+  of-type: $execute,
+);
+
+// SECTION: meta.call-arglist()
+@include test.it(
+  "meta.call-arglist()",
+  (
+    equal,
+    'meta.call-arglist(meta.get-function(selector-nest), (a, b, c))',
+    meta.call-arglist(meta.get-function(selector-nest), (a, b, c)),
+    selector-nest(a, b, c),
+    map.get($spec, call-arglist)
+  ),
+
+  (
+    equal,
+    'meta.call-arglist(meta.get-function(map-get), ((a: 1, b: 2, c: 3), b))',
+    meta.call-arglist(meta.get-function(map-get), ((a: 1, b: 2, c: 3), b)),
+    map-get((a: 1, b: 2, c: 3), b),
+    map.get($spec, call-arglist)
+  ),
+
+  (
+    equal,
+    'meta.call-arglist(meta.get-function(nth), ((a, b, c), 2))',
+    meta.call-arglist(meta.get-function(nth), ((a, b, c), 2)),
+    nth((a, b, c), 2),
+    map.get($spec, call-arglist)
+  ),
+
+);
+
+// SECTION: meta.of-type()
+@include test.it(
+  "meta.of-type()",
+
+  (
+    equal,
+    'meta.of-type(string, a, b, c, d)',
+    meta.of-type(string, a, b, c, d),
+    true,
+    map.get($spec, of-type)
+  ),
+  (
+    equal,
+    'meta.of-type(string, a, 2, 3, 5)',
+    meta.of-type(string, a, 2, 3, 5),
+    false,
+    map.get($spec, of-type)
+  ),
+
+  // multiple types
+  (
+    equal,
+    'meta.of-type(number string, a, 2, 3, 5)',
+    meta.of-type(number string, a, 2, 3, 5),
+    true,
+    map.get($spec, of-type)
+  ),
+  (
+    equal,
+    'meta.of-type(number string, a, 2, 3, 5, null)',
+    meta.of-type(number string, a, 2, 3, 5, null),
+    false,
+    map.get($spec, of-type)
+  ),
+
+  // null
+  (
+    equal,
+    'meta.of-type(number string null, a, 2, 3, 5, null)',
+    meta.of-type(number string null, a, 2, 3, 5, null),
+    true,
+    map.get($spec, of-type)
+  ),
+);

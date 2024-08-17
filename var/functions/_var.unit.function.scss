@@ -1,40 +1,32 @@
 // Sass.
 @use "sass:meta";
-
-// Variables.
-@use "../var.variables";
+@use "sass:string";
 
 // Functions.
 @use "var.is.function" as var-is;
 
 // Completed
 // The `var.unit()` function returns calculation `calc()` function with `$var` as CSS variable in `var()` function multiplied by `$unit` of `string`
-// type e.g. "rem", or `bool` as `$default-unit` of last parameter or var module variable.
+// type e.g. "rem".
 // @param `$var` Required CSS variable in `var()` function to multiply by `$unit`.
-// @param `$unit` Required `string` (rem, px), `bool` value or CSS variable in `var()` function to multiply by CSS variable `$var` in `var()` function.
-// If `bool` then unit is retrieved from `$default-unit` of last parameter or var module variable.
-// @param `$default-unit` The default unit for `$var` used if `$unit` is a `bool` type set to `true`.
+// @param `$unit` Required unit to multiply by `$var` CSS variable in `var()` function.
 // @returns The returned value is calculation `calc()` function with `$var` as CSS variable in `var()` function multiplied by `$unit` of `string`
-// type e.g. "rem", or `bool` type as `$default-unit` from parameter, if `null` then `$default-unit` of var module variable.
-@function unit($var, $unit, $default-unit: null) {
+// type e.g. "rem".
+@function unit($var, $unit) {
   @if not var-is.is($var) {
-    @error "$var: #{$var} is not CSS variable `var()`";
+    @error string.unquote("$var #{$var} is not CSS variable in var() function");
   }
-  @if not $unit {
-    @error "$unit: #{$unit} is not a `string` or `bool` type";
-  }
-  @if meta.type-of($unit) == bool and $unit {
-    $unit: if($default-unit, $default-unit, var.$default-unit);
-  }
-  @if $unit and not var-is.is($unit) {
+  @if meta.type-of($unit) == null {
+    @error string.unquote("$unit is #{meta.type-of($unit)} must be set");
+  } @else if not (var-is.is($unit) or meta.type-of($unit) == calculation) {
     $unit: 1 + $unit;
   }
-  @return calc(#{$var} * $unit);
+  @return calc($var * $unit);
 }
 
 // Alias name for `unit()`.
-@function add-unit($var, $unit, $default-unit: null) {
-  @return unit($var, $unit, $default-unit);
+@function add-unit($var, $unit) {
+  @return unit($var, $unit);
 }
 
 // Examples.
@@ -47,12 +39,10 @@
 // @debug unit(var(--s-layout-spacing), var(--s-unit-px)); // calc(var(--s-layout-spacing) * var(--s-unit-px))
 // @debug unit(var(--s-layout-spacing), rem); // calc(var(--s-layout-spacing) * var(--s-unit-rem)) // TODO: Check.
 
-// unit true
-// @debug unit(var(--s-layout-spacing), true, rem); // calc(var(--s-layout-spacing) * 1rem)
-// @debug unit(var(--s-layout-spacing), true, var(--s-rem)); // calc(var(--s-layout-spacing) * var(--s-rem))
-// var.$default-unit: var(--s-rem); @debug unit(var(--s-layout-spacing), true); // calc(var(--s-layout-spacing) * var(--s-rem))
-// var.$default-unit: rem; @debug unit(var(--s-layout-spacing), true); // calc(var(--s-layout-spacing) * 1rem)
+// unit calc()
+// @debug unit(var(--s-layout-spacing), calc(1px + 2px)); // calc(var(--s-layout-spacing) * 4px)
+// @debug unit(var(--s-layout-spacing), calc(var(--s-unit) + 2px)); // calc(var(--s-layout-spacing) * (var(--s-unit) + 2px))
 
 // @error
-// @debug unit(layout spacing); // layout spacing
-// @debug unit(var(--s-layout-spacing), true, null); // var(--s-layout-spacing)
+// @debug unit(layout spacing); // Error: Missing argument $unit.
+// @debug unit(var(--s-layout-spacing), null); // Error: $unit is null must be set

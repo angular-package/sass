@@ -1,0 +1,64 @@
+// Sass.
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+
+// Completed
+// The `map.merge-allowed-type()` function returns `$map1` merged with `$map2` with keys of allowed types.
+// @param `$map1` The map to merge with `$map2`.
+// @param `$map2` A map to merge with `$map1`.
+// @param `$allowed-type` A required key of allowed value type to merge.
+// @arbitrary `$allowed-types...` Additional keys of allowed types.
+// @returns The returned value is `$map1` merged with `$map2` with required key of allowed type `$allowed-type` and additional keys of
+// allowed types `$allowed-types`.
+@function allowed-type($map1, $map2, $allowed-type, $allowed-types...) {
+  @if not(meta.type-of($map1) == map) {
+    @error "$map1: #{$map1} is not map";
+  }
+  @if not(meta.type-of($map2) == map) {
+    @error "$map2: #{$map2} is not map";
+  }
+  @each $key, $value in $map2 {
+    @each $allowed-type in list.join(($allowed-type,), $allowed-types) {
+      @if meta.type-of($value) ==
+        $allowed-type or
+        (
+          $allowed-type ==
+            null and
+            meta.type-of($value) ==
+            meta.type-of($allowed-type)
+        )
+      {
+        $map1: map.set($map1, $key, $value);
+      }
+    }
+  }
+  @return $map1;
+}
+
+// Alias name function.
+@function allowed-key-type($map1, $map2, $allowed-type, $allowed-types...) {
+  @return allowed-type($map1, $map2, $allowed-type, $allowed-types...);
+}
+
+// Examples.
+// @debug allowed-type((
+//   "extra small": xs,
+//   (extra large, extra-large): xl,
+//   border: b,
+//   color: c,
+//   delimiter: "-",
+//   outline: o,
+//   prefix: spectre,
+//   separator: "-",
+//   suffix: end,
+// ),
+// (
+//   bracketed: true,
+//   delimiter: "---",
+//   method: append,
+//   separator: slash,
+//   empty: null,
+// ), bool, null);
+
+// ("extra small": xs, (extra large, extra-large): xl, border: b, color: c, delimiter: "-", outline: o, prefix: spectre, separator: "-", suffix: end, bracketed: true, empty: null)

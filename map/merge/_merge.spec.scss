@@ -1,0 +1,144 @@
+// Modules.
+@use "../merge";
+@use "../../test";
+
+// Tests.
+// Data.
+$map1: (
+  id: 1,
+  firstname: Seebor,
+  surname: Seebor,
+  age: 43,
+  ai: true,
+  points: (a, b, c),
+  group: (
+    a: a,
+    b: b,
+    c: c
+  ),
+);
+
+$map2: (
+  id: 2,
+  firstname: test firstname,
+  surname: test surname,
+  age: test age,
+  ai: on,
+  points: (1, 2, 3),
+  group: (
+    x: [],
+    y: (),
+    z: __
+  ),
+);
+
+// SECTION: merge.allowed-name()
+@include test.it(
+  "merge.allowed-name()",
+  (
+    equal,
+    "merge.allowed-name($map1, $map2, firstname, age)",
+    merge.allowed-name($map1, $map2, firstname, age),
+    (
+      id: 1,
+      firstname: test firstname,
+      surname: Seebor,
+      age: test age,
+      ai: true,
+      points: (a, b, c),
+      group: (
+        a: a,
+        b: b,
+        c: c
+      ),
+    ),
+  )
+);
+
+// SECTION: merge.allowed-type()
+// @debug merge.allowed-type($map2, $map1, list, map);
+
+@include test.it(
+  "merge.allowed-type()",
+  (
+    equal,
+    "merge.allowed-type($map2, $map1, bool, number)",
+    merge.allowed-type($map2, $map1, bool, number),
+    (
+      id: 1,
+      firstname: test firstname,
+      surname: test surname,
+      age: 43,
+      ai: true,
+      points: (1, 2, 3),
+      group: (
+        x: [],
+        y: (),
+        z: __
+      ),
+    )
+  ),
+
+  (
+    equal,
+    "merge.allowed-type($map2, $map1, list, map)",
+    merge.allowed-type($map2, $map1, list, map),
+    (
+      id: 2,
+      firstname: test firstname,
+      surname: test surname,
+      age: test age,
+      ai: on,
+      points: (a, b, c),
+      group: (
+        a: a,
+        b: b,
+        c: c
+      ),
+    )
+  )
+);
+
+// SECTION: merge.allowed-value()
+@include test.it(
+  "merge.allowed-value()",
+  (
+    equal,
+    "merge.allowed-value($map1, $map2, test age, on)",
+    merge.allowed-value($map1, $map2, test age, on),
+    (
+      id: 1,
+      firstname: Seebor,
+      surname: Seebor,
+      age: test age,
+      ai: on,
+      points: (a, b, c),
+      group: (
+        a: a,
+        b: b,
+        c: c
+      )
+    )
+  ),
+
+  (
+    equal,
+    "merge.allowed-value($map1, $map2, test age, on)",
+    merge.allowed-value($map1, $map2, (1, 2, 3), (x: [], y: (), z: __)),
+    (
+      id: 1,
+      firstname: Seebor,
+      surname: Seebor,
+      age: 43,
+      ai: true,
+      points: (1, 2, 3),
+      group: (
+        x: [],
+        y: (),
+        z: __
+      )
+    )
+  ),
+
+);
+

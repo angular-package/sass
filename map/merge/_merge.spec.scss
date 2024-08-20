@@ -142,3 +142,25 @@ $map2: (
 
 );
 
+// SECTION: merge.allowed()
+@include test.it(
+  "merge.allowed()",
+  (
+    equal,
+    "merge.allowed($map1, $map2, firstname, age)",
+    merge.allowed($map1, $map2, (firstname: list, surname: list string), (age: number)),
+    (
+      id: 1,
+      firstname: test firstname,
+      surname: test surname,
+      age: 43,
+      ai: true,
+      points: (a, b, c),
+      group: (
+        a: a,
+        b: b,
+        c: c
+      ),
+    ),
+  )
+);

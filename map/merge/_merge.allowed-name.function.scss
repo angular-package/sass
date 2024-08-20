@@ -18,11 +18,10 @@
   @if not(meta.type-of($map2) == map) {
     @error "$map2: #{$map2} is not map";
   }
+  $allowed-names: list.join(($allowed-name,), $allowed-names);
   @each $key, $value in $map2 {
-    @each $allowed-name in list.join(($allowed-name,), $allowed-names) {
-      @if $key == $allowed-name {
-        $map1: map.set($map1, $key, $value);
-      }
+    @if list.index($allowed-names, $key) {
+      $map1: map.set($map1, $key, $value);
     }
   }
   @return $map1;

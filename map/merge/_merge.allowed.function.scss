@@ -1,0 +1,62 @@
+// Sass.
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+
+// Completed
+// The `map.merge-allowed()` function returns `$map1` merged with `$map2` with allowed keys.
+// @param `$map1` The map to merge with `$map2`.
+// @param `$map2` A map to merge with `$map1`.
+// @param `$key-allowed` A required allowed key(s) of `map` type where `(key:type/value)` or `type/value`.
+// @arbitrary `$allowed-keys...` Additional allowed keys of `map` type where `(key:type/value)` or `type/value`.
+// @returns The returned value is `$map1` merged with `$map2` with required allowed key and additional allowed keys `$key-allowed`.
+@function allowed($map1, $map2, $key-allowed, $allowed-keys...) {
+  @if not (meta.type-of($map1) == map) {
+    @error "$map1: #{$map1} is not map";
+  }
+  @if not (meta.type-of($map2) == map) {
+    @error "$map2: #{$map2} is not map";
+  }
+  $allowed-keys: list.join(($key-allowed,), $allowed-keys);
+  @each $key, $value in $map2 {
+    @each $key-allowed in $allowed-keys {
+      @if list.index(map.get($key-allowed, $key), meta.type-of($value))
+        or list.index(map.get($key-allowed, $key), $value) {
+          $map1: map.set($map1, $key, $value);
+      }
+    }
+  }
+  @return $map1;
+}
+
+// Examples.
+// @debug allowed((
+//     'extra small': xs,
+//     (extra large, extra-large): xl,
+//     border: b,
+//     color: c,
+//     delimiter: '-',
+//     outline: o,
+//     prefix: spectre,
+//     separator: '-',
+//     suffix: end,
+//   ),
+//   (
+//     bracketed: true,
+//     delimiter: '---',
+//     method: append,
+//     separator: slash,
+//     null: false
+//   ),
+//   (
+//     bracketed: (auto, bool,),
+//     method: (append, join),
+//     separator: (auto, comma, space, slash)
+//   ),
+//   (
+//     delimiter: (string, number),
+//   ),
+//   (
+//     null: bool,
+//   )
+// );

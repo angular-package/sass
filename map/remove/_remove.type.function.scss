@@ -1,18 +1,16 @@
 // Sass.
-@use 'sass:list';
-@use 'sass:map';
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
 
-// Modules
-@use '../../meta';
-
-// Status: DONE
+// Completed
 // The`map.remove-type()` function removes the properties from `$map` where values are required `$type`, and optional `$types`.
 // @param `$map` A map from which the values of type from required `$type`, and optional `$types` are removed.
-// @param `$type` Required type of value to remove from `$map`.
+// @param `$type` A required type of value to remove from `$map`.
 // @arbitrary `$types...` Optional types of values in `$map` to remove .
 // @returns The returned value is a copy of `$map` without the values associated with required `$type`, and optional `$types`.
 @function type($map, $type, $types...) {
-  @each $type in list.join(($type,), $types, comma) {
+  @each $type in list.join(($type,), $types) {
     @if list.index(number string color list map calculation bool null function, $type) {
       @each $key, $value in $map {
         $map: ((

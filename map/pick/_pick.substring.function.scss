@@ -1,11 +1,11 @@
 // Sass.
-@use 'sass:list';
-@use 'sass:map';
-@use 'sass:meta';
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+@use "sass:string";
 
 // Functions.
-@use '../../string/string.index.function' as string-index;
-@use '../map.pick.function' as map-pick;
+@use "../map.pick.function" as map-pick;
 
 // Status: DONE
 // The `pick.substring()` function returns a copy of `$map` with keys of required `$substring` and additional `$substrings`.
@@ -24,7 +24,7 @@
     $result: ();
     @each $substring in list.join(($substring,), $substrings, comma) {
       @each $key in $keys {
-        @if string-index.index($key, $substring) {
+        @if string.index($key, $substring) {
           $result: map.deep-merge(
             $result,
             map-pick.pick($map, $key)

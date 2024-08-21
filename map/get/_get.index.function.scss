@@ -1,10 +1,11 @@
 // Sass.
-@use 'sass:list';
+@use "sass:list";
 
-// Modules.
-@use '../../list/remove/remove.nth.function' as list-remove-nth;
+// Functions.
+@use "../../list/remove/remove.nth.function" as list-remove-nth;
 
-// Status: DONE
+// Completed
+// NOTE: Use `and` `or` instead of `if` returns `$value` instead of `null`.
 // The `map.get-index()` function uses `list.index()` function to find `$key` and optional `$nested-keys` in `$map`.
 // @param `$map` A map to get value.
 // @param `$key` Required key to search by using `list.index()` function in `$map`.
@@ -13,13 +14,16 @@
 @function index($map, $key, $nested-keys...) {
   @each $key-list, $value in $map {
     @if list.index($key-list, $key) {
-      @return list.length($nested-keys) > 0 and
+      // NOTE: Use `and` `or`.
+      @return if(
+        list.length($nested-keys) > 0,
         index(
           $value,
           list.nth($nested-keys, 1),
           list-remove-nth.nth($nested-keys, 1)...
-        )
-        or $value;
+        ),
+        $value
+      );
     }
   }
   @return null;
@@ -33,8 +37,20 @@
 //         lightness alpha: hsla(15deg, 30%, 35%, 1)
 //       )
 //     )
-//   )
+//   ),
+
+//   test basic1: (
+//     basic1 two: (
+//       hue saturation1: (
+//         lightness1 alpha: null
+//       )
+//     )
+//   ),
 // );
 
 // @debug index($example, test, two, hue, alpha); // hsl(15deg, 30%, 35%)
 // @debug index($example, basic, basic, saturation, lightness); // hsl(15deg, 30%, 35%)
+// @debug index($example, basic, basic, saturation, lightness1); // null
+
+// `null` as value
+// @debug index($example, basic1, basic1, saturation1, lightness1); // null

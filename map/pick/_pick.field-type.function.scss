@@ -1,34 +1,44 @@
 // Sass.
-@use 'sass:list';
-@use 'sass:map';
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
 
 // Functions.
-@use '../../list/list.append.function' as list-append;
-@use 'pick.type.function' as *;
-@use 'pick.value-type.function' as *;
+@use "pick.key-type.function" as pick-key-type;
+@use "pick.value-type.function" as pick-value-type;
 
 // Modules.
-@use '../../string';
+@use "../../string";
 
-// Status: DONE
-// The `pick.field-type()` function picks the properties with values and/or keys of the specified type.
+// Completed
+// The `pick.field-type()` function picks properties with values and/or keys of specified type.
 // @param `$map` A map from which properties with values and/or keys of a certain type are picked.
-// @param `$field-type` Required key as pattern `field:type` where field can be `value` or `key` and type
+// @param `$field-type` A required key as map (value, key: type), or pattern `field:type` where field can be `value` or `key` and type
 // bool, calculation, color, function, list, map, null, number or string, to pick properties with the value and/or key of the specified type.
-// @arbitrary `$field-types...` Additional keys as pattern to pick from `$map`.
-// @returns The return value is a copy of `$map` with values and/or keys associated with types.
-@function field-type($map, $field-type, $field-types...) {
+// @arbitrary `$field-type-entries...` Additional keys as pattern to pick from `$map`.
+// @returns The returned value is a copy of `$map` with values and/or keys associated with types.
+@function field-type($map, $field-type, $field-type-entries...) {
   $result: ();
-  @each $pattern in list-append.append((), $field-type, comma, $field-types...) {
-    @if type-of($pattern) == string {
-      @if list.index(string.index($pattern, 'value:', 'key:'), 1) {
-        @each $field, $type in string.to-map($pattern) {
-          $result: map.deep-merge($result, if($field == key, type($map, $type...), value-type($map, $type...)));
-        }
+  @each $field-type in list.join(($field-type,), $field-type-entries) {
+    @if list.index(map string, meta.type-of($field-type))  {
+      @if list.index(string.index($field-type, "value", "key"), 1) {
+        $field-type: string.to-map($field-type);
+      }
+      @each $field, $type in $field-type {
+        $result: map.deep-merge(
+          $result,
+          if(
+            $field == key,
+            pick-key-type.key-type($map, $type...),
+            pick-value-type.value-type($map, $type...)
+          )
+        );
       }
     }
   }
-  @return $result;
+  @return list.length($result) > 0
+    and $result
+    or null;
 }
 
 // Examples.
@@ -110,4 +120,6 @@
 // @debug field-type(map.get($-theme, basic), 'value:string,list');
 // @debug field-type(map.get($-theme, basic), 'key:string,list');
 
-// @debug field-type(map.get($-theme, basic), 'key,value:list,string'); // TODO
+// key + value
+// @debug field-type(map.get($-theme, basic), 'key,value:number,string'); // 
+// @debug field-type(map.get($-theme, basic), (key: string), (key: number), (value: null)); // ("default.palette": (), "gray.palette": ("gray": "gray" color, "gray" dark: "gray" dark, "gray" light: "gray" light), "bg.palette": (bg: bg color, bg dark: bg dark, bg light: bg light), key1: primary, firstname: string, 15: number, null: null)

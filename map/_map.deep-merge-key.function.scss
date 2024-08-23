@@ -1,22 +1,18 @@
 // Sass.
 @use 'sass:map';
 
-// Status: DONE
-// The `map.deep-merge-key()` function merges `$map` with retrieved values from required `$key` and optional `$nested-keys`  of `$map`.
-// @param `$map` A map to merge with retrieved value from key or nested key of this map.
-// @param `$key` Required key to merge with `$map`.
-// @arbitrary `$nested-keys...` Optional nested keys to get the value to merge with `$map`.
-// @returns The returned value is a map merged with the values retrieved from required `$key` and optional `$nested-keys`.
-@function deep-merge-key($map, $key, $nested-keys...) {
-  $keys: list.join(($key,), $nested-keys, comma);
-  @return map.deep-remove(
-    map.deep-merge($map, map.get($map, $keys...) or ()),
-    $keys...
-  );
+// Completed
+// The `map.deep-merge-key()` function merges root level `$map` with retrieved value from required key or optional nested key.
+// @param `$map` A `map` to merge with retrieved value from key(`$key`) or nested key(`$nested-key`).
+// @param `$key` A required key to merge with `$map`.
+// @arbitrary `$nested-key...` Optional nested key to merge its value with `$map`.
+// @returns The returned value is a `$map` merged with the value retrieved from required key(`$key`) or optional nested key(`$nested-key`).
+@function deep-merge-key($map, $key, $nested-key...) {
+  @return map.deep-merge($map, map.get($map, $key, $nested-key...) or ());
 }
 
 // Examples.
-// $example: (
+// $-example: (
 //   "name": first name,
 //   "age": 25,
 //   "Helvetica": (
@@ -34,8 +30,9 @@
 // );
 
 // key of string
-// @debug deep-merge-key((a: 1, b: 2, key: (c: 3, d: 5)), key); // (a: 1, b: 2, c: 3, d: 5)
+// @debug deep-merge-key((a: 1, b: 2, key: (c: 3, d: 5)), key); // (a: 1, b: 2, key: (c: 3, d: 5), c: 3, d: 5)
+// @debug deep-merge-key(("weights": ( "lightest": 100, "light": 300, "weights": ("medium": 500, "bold": 700))), weights); // ("weights": ("lightest": 100, "light": 300, "weights": ("medium": 500, "bold": 700), "medium": 500, "bold": 700), "lightest": 100, "light": 300)
 
 // nested key
-// @debug deep-merge-key($example, "Helvetica", "size"); // ("name": first name, "age": 25, "Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700)), "regular": small, "medium": big, "high": extra big)
-// @debug deep-merge-key($example, "Helvetica", "weights"); // ("name": first name, "age": 25, "Helvetica": ("size": ("regular": small, "medium": big, "high": extra big)), "regular": 400, "medium": 500, "bold": 700)
+// @debug deep-merge-key($-example, "Helvetica", "size"); // ("name": first name, "age": 25, "Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700), "size": ("regular": small, "medium": big, "high": extra big)), "regular": small, "medium": big, "high": extra big)
+// @debug deep-merge-key($-example, "Helvetica", "weights"); // ("name": first name, "age": 25, "Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700), "size": ("regular": small, "medium": big, "high": extra big)), "regular": 400, "medium": 500, "bold": 700)

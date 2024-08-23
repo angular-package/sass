@@ -1,0 +1,38 @@
+// Sass.
+@use 'sass:map';
+
+// Completed
+// The `map.deep-merge-key()` function merges root level `$map` with retrieved value from required key or optional nested key.
+// @param `$map` A `map` to merge with retrieved value from key(`$key`) or nested key(`$nested-key`).
+// @param `$key` A required key to merge with `$map`.
+// @arbitrary `$nested-key...` Optional nested key to merge its value with `$map`.
+// @returns The returned value is a `$map` merged with the value retrieved from required key(`$key`) or optional nested key(`$nested-key`).
+@function merge-key($map, $key, $nested-key...) {
+  @return map.deep-merge($map, map.get($map, $key, $nested-key...) or ());
+}
+
+// Examples.
+// $-example: (
+//   "name": first name,
+//   "age": 25,
+//   "Helvetica": (
+//     "weights": (
+//       "regular": 400,
+//       "medium": 500,
+//       "bold": 700
+//     ),
+//     "size": (
+//       "regular": small,
+//       "medium": big,
+//       "high": extra big
+//     )
+//   )
+// );
+
+// key of string
+// @debug merge-key((a: 1, b: 2, key: (c: 3, d: 5)), key); // (a: 1, b: 2, key: (c: 3, d: 5), c: 3, d: 5)
+// @debug merge-key(("weights": ( "lightest": 100, "light": 300, "weights": ("medium": 500, "bold": 700))), weights); // ("weights": ("lightest": 100, "light": 300, "weights": ("medium": 500, "bold": 700), "medium": 500, "bold": 700), "lightest": 100, "light": 300)
+
+// nested key
+// @debug merge-key($-example, "Helvetica", "size"); // ("name": first name, "age": 25, "Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700), "size": ("regular": small, "medium": big, "high": extra big)), "regular": small, "medium": big, "high": extra big)
+// @debug merge-key($-example, "Helvetica", "weights"); // ("name": first name, "age": 25, "Helvetica": ("weights": ("regular": 400, "medium": 500, "bold": 700), "size": ("regular": small, "medium": big, "high": extra big)), "regular": 400, "medium": 500, "bold": 700)

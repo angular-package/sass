@@ -1,0 +1,28 @@
+// Sass.
+@use "sass:list";
+
+// In Progress
+// The `math.sum()` function sums required `$value1` with `$value2` and optional with `$values`.
+// @param `$value1` The first value to add to `$value2` and to additional `$values`.
+// @param `$value2` The second value to add to `$value1` and to additional `$values`.
+// @arbitrary `$values...` Additional values to add to sum of required `$value1` and `$value2`.
+// @returns The returned value is sum of `$value1`, `$value2` and additional `$values`.
+@function sum($value1, $value2, $values...) {
+  $values: list.join(($value2,), $values);
+  @if list.length($values) > 0 {
+    $result: $value1;
+    @each $value in $values {
+      @if $value {
+        $result: calc($result + $value);
+      }
+    }
+    @return $result;
+  }
+  @return null;
+}
+
+// Examples.
+// value, value, value, fallback, operator // REVIEW: fallback and operator
+// @debug sum(15%, -5%, 3%, 0%); // 13%
+// @debug sum(15%, null, 3%, 0%); // 18%
+// @debug sum(15%, -5%, null, 0%); // 10%

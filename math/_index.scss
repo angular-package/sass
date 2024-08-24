@@ -1,6 +1,7 @@
-@forward 'range' as range-*;
-@forward 'math.calculate.function';
-@forward 'math.range.function';
-@forward 'math.sort.function';
-@forward 'math.strip-unit.function';
-@forward 'sass:math';
+@forward "math.calculate.function";
+@forward "math.range.function";
+@forward "math.sort.function";
+@forward "math.strip-unit.function";
+@forward "math.sum.function";
+@forward "range" as range-*;
+@forward "sass:math";

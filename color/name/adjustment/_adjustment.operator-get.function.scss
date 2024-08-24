@@ -1,26 +1,32 @@
 // Sass.
-@use 'sass:list';
+@use "sass:list";
+@use "sass:meta";
 
 // Functions.
-@use '../../../list/get/get.string.function' as list-get-string;
-@use '../../../list/list.append.function' as list-append;
-@use '../../../list/list.first.function' as list-first;
+@use "../../../list/get/get.string.function" as list-get-string;
 
-// Status: DONE
+// In Progress
 // The `adjustment.operator-get()` function.
 // @param `$adjustment`
 // @arbitrary `$adjustments...`
 // @returns
 @function operator-get($adjustment, $adjustments...) {
-  $adjustments: list-append.append((), $adjustment, comma, $adjustments...);
+  $adjustments: list.join(($adjustment,), $adjustments);
   @for $i from 1 through list.length($adjustments) {
-    @if list-get-string.string(list.nth($adjustments, $i)) {
-      $adjustments: list.set-nth($adjustments, $i, list-get-string.string(list.nth($adjustments, $i)));
+    @if meta.type-of(list.nth($adjustments, $i)) == list {
+      $operator: list-get-string.string(list.nth($adjustments, $i));
+      @if $operator {
+        $adjustments: list.set-nth($adjustments, $i, $operator);
+      }
     }
   }
-  @return if(list.length($adjustments) == 1, list-first.first($adjustments), list-get-string.string($adjustments));
+  @return if(
+    list.length($adjustments) == 1,
+    list.nth($adjustments, 1),
+    $adjustments
+  );
 }
 
 // Examples.
-// @debug operator-get(('-' 15%)); // -
-// @debug operator-get(('-' 15%), ('*' 15%),  ('/' 0.5)); // -
+// @debug operator-get(("-" 15%)); // -
+// @debug operator-get(("-" 15%), ("*" 15%),  ("/" 0.5)); // "-", "*", "/"

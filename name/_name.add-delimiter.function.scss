@@ -1,0 +1,39 @@
+// Sass.
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+
+// Functions.
+@use "../values/values.combine.function" as values-combine;
+
+// Completed
+// The `name.add-delimiter()`
+// @param `$name`
+// @param `$delimiter
+// @param `$config`
+// @returns 
+@function add-delimiter($name, $delimiter: null, $config: null) {
+  $delimiter: if(list.length($delimiter) == 0, null, $delimiter);
+
+  // Create config for name structure.
+  $config: map.merge(
+    $config or (),(
+      delimiter: map.get($config or (), delimiter) or $delimiter or delimiter,
+    )
+  );
+
+  // Add delimiter to `$name`.
+  $name: values-combine.combine((
+      method: append,
+      delimiter: map.get($config, delimiter),
+    ),
+    $name...
+  );
+
+  // Join list elements to the string.
+  @return $name;
+}
+
+// Examples.
+// @debug add-delimiter(primary dark);
+// @debug add-delimiter(primary dark, "-");

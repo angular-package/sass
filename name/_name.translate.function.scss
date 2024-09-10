@@ -1,0 +1,65 @@
+// Sass.
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+
+// Functions.
+@use "../map/map.values.function" as map-values;
+
+// Completed
+// The `name.translate()`
+// @param `$name` 
+// @param `$dictionary`
+// @param `$config` 
+// @returns
+@function translate($name, $dictionary: null, $config: null) {
+  // FEATURE: Handle dictionary.
+  // Add `$delimiter`, `$prefix` and `$suffix` to `$dictionary`.
+  $dictionary: ();
+
+  // Get `map` type dictionary from `$name`.
+  $extracted-dictionary: ();
+  @each $element in $name {
+    @if meta.type-of($element) == map {
+      $extracted-dictionary: map.merge(
+        $extracted-dictionary,
+        map.get($element, dictionary) or $element
+      );
+    }
+  }
+
+  // Remove `map` dictionaries from `$name`.
+  @if list.length($extracted-dictionary) > 0 {
+    $-name: ();
+    @each $element in $name {
+      @if not (meta.type-of($element) == map) {
+        $-name: list.append($-name, $element);
+      }
+    }
+    $name: $-name;
+    $dictionary: map.deep-merge($dictionary, $extracted-dictionary);
+  }
+
+  // Translate with `$dictionary`.
+  @if $dictionary and list.length($dictionary) > 0 {
+    $name: map-values.values(
+      $dictionary,
+      map-values.values($dictionary, $name...)...
+    );
+  }
+
+  // Remove `null`.
+  $-name: ();
+  @each $element in $name {
+    @if not ($element == null) {
+      $-name: list.append($-name, $element);
+    }
+  }
+  $name: $-name;
+
+  // Return translated name.
+  @return $name;
+}
+
+// Examples.
+// @debug translate(primary dark, $dictionary: (dark: d));

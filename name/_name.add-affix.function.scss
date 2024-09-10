@@ -1,0 +1,33 @@
+// Sass.
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+
+// Completed
+// The `name.add-affix()`
+// @param `$name`
+// @param `$prefix`
+// @param `$suffix`
+// @param `$config`
+// @returns
+@function add-affix($name, $prefix: null, $suffix: null, $config: null) {
+  // Create config for name structure.
+  $config: map.merge(
+    $config or (), (
+      prefix: map.get($config or (), prefix) or $prefix or prefix,
+      suffix: map.get($config or (), suffix) or $suffix or suffix,
+    )
+  );
+
+  // Add affix to `$name`.
+  $name: list.join(
+    list.join(map.get($config, prefix), $name),
+    map.get($config, suffix)
+  );
+
+  // Join list elements to the string.
+  @return $name;
+}
+
+// Examples.
+// @debug add-affix(primary test); 

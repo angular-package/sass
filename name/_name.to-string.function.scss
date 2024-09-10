@@ -1,0 +1,17 @@
+// Sass.
+@use "sass:map";
+
+// Functions.
+@use "../string/string.join.function" as string-join;
+
+// Completed
+// The `name.to-string()` function.
+// @param `$name` The name as `list`.
+// @param `$delimiter` Delimiter between `$name` elements.
+// @returns The returned value is .
+@function to-string($name, $delimiter: "") {
+  @return string-join.join($delimiter, $name...);
+}
+
+// Examples.
+// @debug to-string(primary dark); // primarydark

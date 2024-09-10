@@ -1,0 +1,15 @@
+// Modules.
+@use "../name";
+@use "../test";
+
+// string
+@debug name.create(primary); // prefix delimiter primary delimiter suffix
+@debug name.create(primary, "-"); // prefix "-" primary "-" suffix
+@debug name.to-string(name.create(primary, "-")) ; // prefix-primary-suffix
+
+// array
+@debug name.create(primary dark); // prefix primary dark suffix
+@debug name.create(primary dark, "-"); // prefix "-" primary "-" dark "-" suffix
+@debug name.create(primary dark, "-", $string: false) ; // prefix "-" primary "-" dark "-" suffix
+
+

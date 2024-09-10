@@ -27,8 +27,8 @@
   $config: null,
   $string: null,
 ) {
-  $name: affix.add-affix($name, $prefix, $suffix, $config);
   $name: $delimiter and delimiter.add-delimiter($name, $delimiter, $config) or $name;
+  $name: affix.add-affix($name, $prefix, $suffix, $config);
   $name: $dictionary and translate.translate($name, $dictionary, $config) or $name;
   @return if($string, string.to-string($name), $name);
 }

@@ -1,32 +1,21 @@
 // Sass.
 @use "sass:list";
-@use "sass:map";
 @use "sass:meta";
 
 // Functions.
-@use "../map/map.values.function" as map-values;
+@use "../translator/v1.0.0/dictionary/dictionary.extract.function" as dictionary-extract;
+@use "../translator/v1.0.0/dictionary/dictionary.translate.function" as dictionary-translate;
 
 // Completed
-// The `name.translate()`
-// @param `$name` 
-// @param `$dictionary`
-// @param `$config` 
-// @returns
-@function translate($name, $dictionary: null, $config: null) {
-  // FEATURE: Handle dictionary.
-  // Add `$delimiter`, `$prefix` and `$suffix` to `$dictionary`.
-  $dictionary: ();
-
+// The `name.translate()` function translates each list element with `$dictionary` and extracted from `$name` dictionaries.
+// @param `$name` The name of `string` or `list` type to translate.
+// @param `$dictionary` Dictionary of `map` type to translate name.
+// @returns The returned value is translated name of `string` or `list` type by using `$dictionary` and extracted from `$name` dictionaries.
+@function translate($name, $dictionary: null) {
   // Get `map` type dictionary from `$name`.
-  $extracted-dictionary: ();
-  @each $element in $name {
-    @if meta.type-of($element) == map {
-      $extracted-dictionary: map.merge(
-        $extracted-dictionary,
-        map.get($element, dictionary) or $element
-      );
-    }
-  }
+  $extracted-dictionary: meta.type-of($name) == list
+    and dictionary-extract.extract($name)
+    or null;
 
   // Remove `map` dictionaries from `$name`.
   @if list.length($extracted-dictionary) > 0 {
@@ -37,29 +26,20 @@
       }
     }
     $name: $-name;
-    $dictionary: map.deep-merge($dictionary, $extracted-dictionary);
   }
 
   // Translate with `$dictionary`.
-  @if $dictionary and list.length($dictionary) > 0 {
-    $name: map-values.values(
-      $dictionary,
-      map-values.values($dictionary, $name...)...
+  @if $dictionary or $extracted-dictionary {
+    $name: dictionary-translate.translate(
+      $name,
+      $dictionary or (),
+      $extracted-dictionary or ()
     );
   }
-
-  // Remove `null`.
-  $-name: ();
-  @each $element in $name {
-    @if not ($element == null) {
-      $-name: list.append($-name, $element);
-    }
-  }
-  $name: $-name;
 
   // Return translated name.
   @return $name;
 }
 
 // Examples.
-// @debug translate(primary dark, $dictionary: (dark: d));
+// @debug translate(primary (dark: c) dark 'and' 'or' light (light: a), (dark: d)); // primary c "and" "or" a

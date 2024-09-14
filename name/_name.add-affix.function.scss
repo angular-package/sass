@@ -1,33 +1,31 @@
 // Sass.
 @use "sass:list";
-@use "sass:map";
 @use "sass:meta";
 
 // Completed
-// The `name.add-affix()`
-// @param `$name`
-// @param `$prefix`
-// @param `$suffix`
-// @param `$config`
-// @returns
-@function add-affix($name, $prefix: null, $suffix: null, $config: null) {
-  // Create config for name structure.
-  $config: map.merge(
-    $config or (), (
-      prefix: map.get($config or (), prefix) or $prefix or prefix,
-      suffix: map.get($config or (), suffix) or $suffix or suffix,
-    )
-  );
-
-  // Add affix to `$name`.
-  $name: list.join(
-    list.join(map.get($config, prefix), $name),
-    map.get($config, suffix)
-  );
-
-  // Join list elements to the string.
+// The `name.add-affix()` function adds prefix at the begging of `$name` and suffix at the end of `$name`.
+// @param `$name` The `$name` of `string` or `list` type.
+// @param `$prefix` Prefix to set in `$name`.
+// @param `$suffix` Suffix to set in `$name`.
+// @returns The returned value is `$name` with `$prefix` at the beginning and `$suffix` at the end of `$name`.
+@function add-affix($name, $prefix, $suffix) {
+  @if meta.type-of($name) == list {
+    $name: $prefix and list.join($prefix, $name) or $name;
+    $name: $suffix and list.join($name, $suffix) or $name;
+  } @else {
+    $name: $prefix and "#{$prefix}#{$name}" or $name;
+    $name: $suffix and "#{$name}#{$suffix}" or $name;
+  }
   @return $name;
 }
 
 // Examples.
-// @debug add-affix(primary test); 
+// list
+// @debug add-affix(primary test, prefix, null);  // prefix primary test
+// @debug add-affix(primary test, null, suffix);  // primary test suffix
+// @debug add-affix(primary test, prefix, suffix);  // prefix primary test suffix
+
+// string
+// @debug add-affix("primary test", prefix, null);  // prefixprimary test
+// @debug add-affix("primary test", null, suffix);  // primary testsuffix
+// @debug add-affix("primary test", prefix, suffix);  // prefixprimary testsuffix

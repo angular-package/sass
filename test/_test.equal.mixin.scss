@@ -1,3 +1,6 @@
+// Modules.
+@use "sass:meta";
+
 // Completed
 // The `test.equal()` mixin checks whether `$actual` is equal to `$expected`.
 // @param `$description` Test description.
@@ -19,7 +22,7 @@
     $result: $actual == $expected;
 
     // Spec.
-    $spec: "#{$result and Passed or Failed}. #{$description} expected #{$actual} got #{$expected}";
+    $spec: "#{$result and Passed or Failed}. #{$description} expected #{meta.inspect($expected)} got #{meta.inspect($actual)}";
 
     // Throw an error.
     @if $error and not $result {

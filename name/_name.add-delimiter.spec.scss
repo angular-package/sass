@@ -5,7 +5,7 @@
 @use "../name";
 @use "../test";
 
-// SECTION: name.add-affix()
+// SECTION: name.add-delimiter()
 
 @include test.it(
   "name.add-delimiter()",

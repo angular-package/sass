@@ -1,0 +1,33 @@
+// Sass.
+@use "sass:list";
+@use "sass:map";
+
+// Functions.
+@use "../../../list/list.extract-map.function" as list-extract-map;
+
+// Completed
+// The `dictionary.extract()` extracts `map` occurred in `$occurrence` times.
+// @param `$name` The name of `list` type to extract dictionary of `map` type.
+// @returns The returned value is dictionary of `map` type merged.
+@function extract($name, $occurrence: all, $merge: true) {
+  $extracted-dictionary: ();
+  $extracted: list-extract-map.extract-map($name, $occurrence);
+  @if $merge {
+    @each $dictionary in map.get($extracted, map) {
+      $extracted-dictionary: map.merge(
+        $extracted-dictionary,
+        map.get($dictionary, dictionary) or $dictionary
+      );
+    }
+  } @else {
+    $extracted-dictionary: list.length(map.get($extracted, map)) == 1
+      and list.nth(map.get($extracted, map), 1)
+      or map.get($extracted, map);
+  }
+  @return $extracted-dictionary;
+}
+
+// Examples.
+// @debug extract(primary (b: 2) dark (a: 1)); // (b: 2, a: 1)
+// @debug extract(primary (b: 2) dark, $merge: false); // (b: 2)
+// @debug extract(primary (b: 2) dark (a: 1), $merge: false); // (b: 2), (a: 1)

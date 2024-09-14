@@ -1,0 +1,21 @@
+// Sass.
+@use "sass:list";
+
+// Functions.
+@use "../../../map/map.values.function" as map-values;
+
+// Completed
+// The `dictionary.translate()` translates `$name` with required `$dictionary` and additional `$dictionaries...`.
+// @param `$name` The `$name` to translate with dictionaries.
+// @param `$dictionary` Required dictionary of `map` type to translate `$name`.
+// @arbitrary `$dictionaries...` Additional dictionaries to translate `$name`.
+// @returns The returned value is translated `$name` with required `$dictionary` and additional `$dictionaries...`.
+@function translate($name, $dictionary, $dictionaries...) {
+  @each $dictionary in list.join(($dictionary,), $dictionaries) {
+    $name: map-values.values($dictionary, $name...);
+  }
+  @return list.length($name) == 1 and list.nth($name, 1) or $name;
+}
+
+// Examples.
+// @debug translate(primary dark (test a), (dark: d, test a: b), (d: a));

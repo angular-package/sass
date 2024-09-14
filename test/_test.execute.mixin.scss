@@ -6,75 +6,164 @@
 @use "sass:string";
 
 // Mixins.
-@use "test.to-equal.mixin" as to-equal;
+@use "test.equal.mixin" as equal;
 
 // In Progress
-// The `test.execute()` mixin.
-// @param `$tests`
+// The `test.execute()` mixin .
+// @param `$matcher`
+// @param `$description`
+// @param `$actual`
+// @param `$expected`
 // @param `$execute`
 // @param `$error`
-@mixin execute($tests, $execute: true, $error: true) {
-  @if $execute {
-    @each $spec, $tests in $tests {
-      $description: $spec;
-      $i: 1;
-      $passed: 0;
-      $failed: 0;
-      $summary: null;
-
-      // Describe tests.
-      @if meta.type-of($spec) == map {
-        $description: map.get($spec, description);
-      }
-
-      @debug $description;
-
-      // Iterate tests.
-      @each $test in $tests {
-        $actual: null;
-        $expected: null;
-        $description: "";
-
-        @if meta.type-of($test) == map {
-          $actual: map.get($test, actual);
-          $description: map.get($test, description);
-          $expected: map.get($test, expected);
-        }
-
-        @include to-equal.to-equal(
-          $description,
-          $actual,
-          $expected,
-          $execute,
-          false
-        ) using(
-          $id,
-          $-passed,
-          $-failed,
-          $max,
-          $spec,
-          $-summary,
-          $done,
-          $description,
-          $result
-        ) {
-          $description: if($description, $description + ' expected', Expected);
-
-          @debug "#{$i}. #{$result and Passed or Failed}. #{$description} #{$actual} got #{$expected}";
-
-          $passed: $result and $passed + 1 or $passed;
-          $failed: not $result and $failed + 1 or $failed;
-
-          $summary: Tests list.length($tests) Passed $passed Failed $failed;
-        }
-        $i: $i + 1;
-      }
-
-      @debug $summary;
-      @debug "---";
-      @debug "";
-    }  
+// @param `$display`
+@mixin execute(
+  $matcher,
+  $description,
+  $actual,
+  $expected,
+  $execute: true,
+  $error: true,
+  $display: true,
+) {
+  @if $matcher == equal {
+    @include equal.equal(
+      $description,
+      $actual,
+      $expected,
+      $execute,
+      $error,
+      false
+    ) using(
+      $result,
+      $description,
+      $spec,
+      $actual,
+      $expected,
+    ) {
+      @content(
+        $result,
+        $description,
+        $spec,
+        $actual,
+        $expected,
+        $display,
+      );
+    }
   }
 }
 
 
+// @mixin execute($tests...) {
+//   @each $value in $tests {
+
+//     @debug $value;
+
+//     // $description
+//     // $actual,
+//     // $expected,
+//     // $execute: true,
+//     // $error: true,
+//     // $display: true,
+//   }
+// }
+
+// @mixin execute(
+//   $tests,
+//   $execute: true,
+//   $error: true,
+//   $display: true,
+// ) {
+//   @if $execute {
+//     @each $spec, $tests in $tests {
+//       $failed: 0;
+//       $id: 1;
+//       $passed: 0;
+//       $summary: "";
+//       $spec: meta.type-of($spec) == map and $spec or (description: $spec);
+
+//       // FEATURE: Filter.
+//       @if list.index(failed passed, map.get($spec, filter)) {
+//         $-tests: ();
+//         $j: 1;
+//         @each $test in $tests {
+//           // Add only executable.
+//           @if map.get($spec, filter) == passed {
+//             @if not map.has-key($test, execute) or map.get($test, execute) {
+//               $-tests: list.append($-tests, $test, comma);
+//             }  
+//           }
+
+//           $j: $j + 1;
+//         }
+//         $tests: $-tests;
+//       }
+
+//       // Execute test specification.
+//       @if not map.has-key($spec, execute) or map.get($spec, execute) {
+//         // FEATURE: Filter executable.
+//         $-tests: ();
+//         $j: 1;
+//         @each $test in $tests {
+//           // Add only executable.
+//           @if not map.has-key($test, execute) or map.get($test, execute) {
+//             $-tests: list.append($-tests, $test, comma);
+//           }
+//           $j: $j + 1;
+//         }
+//         $tests: $-tests;
+
+//         // Describe tests.
+//         @if $display {
+//           @debug map.get($spec, description);
+//         }
+
+//         // Each test.
+//         @each $test in $tests {
+//           @include to-equal.to-equal(
+//             map.get($test, description),
+//             map.get($test, actual),
+//             map.get($test, expected),
+//             not map.has-key($test, execute) or map.get($test, execute),
+//             $error and (not map.has-key($test, error) or map.get($test, error)),
+//             false
+//           ) using($result, $description, $spec, $actual, $expected) {
+//             @if $display {
+//               @debug "#{$id}. #{$result and Passed or Failed}. #{if($description, $description, Expected) $actual} got #{$expected}";
+//             }
+
+//             // @if map.get($display, test) {
+//             //   @if (map.get($display, test, passed) and $result)
+//             //   or (map.get($display, test, failed) and not $result)
+//             //   or (map.get($display, test, failed) and map.get($display, test, passed))
+//             //   or (map.get($display, test) == true) {
+//             //     @debug "#{$id}. #{$result and Passed or Failed}. #{if($description, $description, Expected) $actual} got #{$expected}";
+//             //   }
+//             // }
+
+//             $failed: not $result and $failed + 1 or $failed;
+//             $passed: $result and $passed + 1 or $passed;
+//             $summary: Tests list.length($tests) Passed $passed Failed $failed;
+
+//             // @content($);
+//           }
+//           $id: $id + 1;
+//         }
+
+//         // Summary.
+//         @if $display {
+//           @debug $summary;
+//           @debug "";
+//         }
+
+//         // @if map.get($display, summary) {
+//         //   @debug $summary;
+//         //   @debug "";
+//         // } @else {
+//         //   @debug list.join($summary, Description string.unquote(map.get($spec, description)));
+//         // }
+
+//       }
+//     }
+//   }
+// }

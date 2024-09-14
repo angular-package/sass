@@ -1,19 +1,22 @@
 // Sass.
 @use 'sass:list';
 
+// Functions.
+@use "../../map/remove/remove.type.function" as remove-type;
+@use '../../map/deep/deep.merge-key.function' as deep-merge-key;
+
 // Modules.
-@use '../../map';
 @use 'dictionary';
 
-// Status: DONE
-// The `translator.dictionary()` function returns global dictionary(flattened map), optionally merged with dictionaries retrieved from `$keys`.
-// @param `$keys...` Keys to merge the dictionaries under these keys with a dictionary.
+// Completed
+// The `translator.dictionary()` function returns global dictionary(flattened map), optionally merged with dictionary retrieved from `$nested-key...`.
+// @param `$nested-key...` Nested key to merge the dictionary under this key with a dictionary.
 // @returns The return value is a flattened map dictionary consisting of (word:translation).
-@function dictionary($keys...) {
-  @return map.remove-type(
+@function dictionary($nested-key...) {
+  @return remove-type.type(
     if(
-      list.length($keys) > 0,
-      map.deep-merge-key(dictionary.get(), $keys...),
+      list.length($nested-key) > 0,
+      deep-merge-key.merge-key(dictionary.get(), $nested-key...),
       dictionary.get()
     ),
     map
@@ -35,10 +38,10 @@
 
 // Examples.
 // Gets the global dictionary.
-// @debug dictionary(); // (word: translation)
+// @debug dictionary(); // ()
 
 // Merge the global dictionary.
-// $-test: dictionary.merge(null, $-dictionary-example);
+// $-test: dictionary.merge($-dictionary-example);
 
 // Set the global dictionary.
 // $-test: dictionary.set(global, this is global translation);
@@ -47,8 +50,9 @@
 // @debug dictionary(general); // (word: słowo, prefix: spectre, border: b, color: c, separator: "-", suffix: end, outline: o, global: this is global translation, (wrapper, wrap): owijka, (technology, technologia): tech)
 
 // Gets nested (class, calendars) dictionary.
-// @debug dictionary((class, calendars)); // (word: translation, prefix: spectre, border: b, color: c, separator: "-", suffix: end, outline: o, global: this is global translation, calendar: cal)
+// @debug dictionary(class, calendars); // (word: translation, prefix: spectre, border: b, color: c, separator: "-", suffix: end, outline: o, global: this is global translation, calendar: cal)
 
+// TODO:
 // Gets the general and nested (class, calendars) dictionary.
 // @debug dictionary(general, (class, calendars)); // (word: słowo, prefix: spectre, border: b, color: c, separator: "-", suffix: end, outline: o, global: this is global translation, (wrapper, wrap): owijka, (technology, technologia): tech, calendar: cal)
 

@@ -1,10 +1,10 @@
 // Sass.
-@use 'sass:meta';
+@use "sass:meta";
 
 // Modules.
-@use '../object';
+@use "../object";
 
-// Status: DONE
+// Completed
 // The `object.call()` function calls `$function` with `$args`.
 // @param `$name` A function
 // @param `$function`

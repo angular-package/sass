@@ -1,9 +1,9 @@
 // Variables.
-@use 'object.var' as object;
+@use "object.var" as object;
 
-// Status: DONE
+// Completed
 // The `object.use()` function select object on which object functions, by default operates.
-// @param `$name` Name of the object, if it's `null` indicates to not use any object.
+// @param `$name` Name of the object, if it"s `null` indicates to not use any object.
 // @returns The returned value is `$name` if object was created, otherwise `null`.
 @function use($name) {
   object.$name: $name;

@@ -1,22 +1,21 @@
 // Sass.
-@use 'sass:map';
+@use "sass:map";
 
 // Variables.
-@use 'object.var' as object;
+@use "object.var" as object;
 
 // Functions.
-@use 'object.get-key.function' as *;
+@use "object.get-key.function" as object-get-key;
 
-// Status: TODO: key
+// Completed
 // The `object.has-key()` function checks whether object in use has key.
-// @param `$key` Required key to check object in use has.
-// @arbitrary `$keys...` Additional keys to check nested key.
+// @param `$key` A required key to check object in use has.
+// @arbitrary `$nested-key...` Additional nested key to check.
 // @returns The returned value is a `bool` indicating object in use has key.
-@function has-key($key, $keys...) {
-  @if type-of($key) == map {
-    @each $name, $key in $key {
-      @return map.has-key(object.$object, get-key($name, $key)...);
-    }
-  }
-  @return map.has-key(object.$object, get-key($key: $key)...);
+@function has-key($key, $nested-key...) {
+  @return map.has-key(
+    object.$object,
+    object-get-key.get-key($key, $nested-key...)
+    ...
+  );
 }

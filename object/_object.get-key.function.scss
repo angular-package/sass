@@ -1,22 +1,34 @@
 // Sass.
-@use 'sass:list';
+@use "sass:list";
+@use "sass:meta";
 
-// Object.
-@use 'object.var' as object;
+// Variables.
+@use "object.var" as object;
 
 // Functions.
-@use '../list/list.insert-nth.function' as *;
-@use 'object.last-name.function' as *;
+@use "../list/list.insert-nth.function" as list-insert-nth;
+@use "object.last-name.function" as object-last-name;
 
-// Status: DONE
+// Completed
 // The `object.get-key()` function gets key object of `$name` and `$key`.
-// @param `$name` Object name, by default selected by `object.use()` or last object.
 // @param `$key` A key to retrieve from object of `$name`.
-// @returns The returned value is an object key of `$name` and `$key`.
-@function get-key($name: object.$name or last-name(), $key: null) {
+// @arbitrary `$nested-key...` Additional nested key to add to returned key.
+// @returns The returned value is an `object` key of `$name` and `$key`.
+@function get-key(
+  $key: null,
+  $nested-key...
+) {
+  $name: object.$name or object-last-name.last-name();
+  @if $key {
+    $key: list.join(if(meta.type-of($key) == map, ($key, ), $key), $nested-key);
+  }
   @return if(
     $key,
-    insert-nth(if(list.separator($key) == comma, $key, ($key,)), 1, $name),
+    list-insert-nth.insert-nth(
+      if(list.separator($key) == comma, $key, ($key,)),
+      1,
+      $name
+    ),
     $name
   );
 }

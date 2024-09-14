@@ -1,11 +1,11 @@
 // Sass.
-@use 'sass:list';
-@use 'sass:map';
+@use "sass:list";
+@use "sass:map";
 
-// Object.
-@use 'object.var' as object;
+// Variables.
+@use "object.var" as object;
 
-// Status: DONE
+// Completed
 // The `object.last-id()` returns last created object number.
 // @returns The returned value is number of last created object.
 @function last-id() {

@@ -1,13 +1,13 @@
 // Functions.
-@use 'object.copy.function' as *;
-@use 'object.remove.function' as *;
+@use "object.copy.function" as object-copy;
+@use "object.remove.function" as object-remove;
 
-// Status: DONE
+// Completed
 // The `object.move()` function move value from `$from` to `$to`.
 // @param `$from` A key which from value is moved to key `$to`.
 // @param `$to` A key under which `$value` is pasted.
-// @returns The returned value is object with moved value from key `$from` to `$to`(if it's the same object).
+// @returns The returned value is object with moved value from key `$from` to `$to`(if it"s the same object).
 @function move($from, $to) {
-  $debug: copy($from, $to);
-  @return remove($from);
+  $debug: object-copy.copy($from, $to);
+  @return object-remove.remove($from);
 }

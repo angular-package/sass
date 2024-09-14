@@ -1,36 +1,24 @@
 // Sass.
-@use 'sass:list';
-@use 'sass:meta';
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
 
-// Variable.
-@use 'object.var' as object;
-
-// Modules.
-@use '../map';
+// Variables.
+@use "object.var" as object;
 
 // Functions.
-@use 'object.get.function' as *;
-@use 'object.last-name.function' as *;
+@use "object.get-key.function" as object-get-key;
+@use "object.get.function" as object-get;
 
-// Status: DONE
-// The `object.merge()` function merges `$objects` into object in use, optionally under `$key`.
-// @param `$key` A key under which `$objects` are merged.
-// @arbitrary `$objects...` Objects to merge into object in use.
-// @returns The returned value is object in use with merged `$objects`.
-@function merge($key: null, $objects...) {
-  $name: object.$name or last-name();
-  $retrieved-object: ();
-  @each $object in $objects {
-    $retrieved-object: map.deep-merge(
-      $retrieved-object,
-      if(meta.type-of($object) == list, map.pick(list.nth($object, 1), list.nth($object, 2)...), $object)
-    );
-  }
-
-  object.$object: if(
-    $key,
-    map.merge(object.$object, $name, $key, $retrieved-object),
-    map.deep-merge(object.$object, ($name: $retrieved-object))
+// Completed
+// The `object.merge()` function merges `map` into object in use, optionally under `$key`.
+// @param `$key` A key under which `map` is merged.
+// @arbitrary ` $nested-key-map...` Nested key with last `map` type parameter to merge.
+// @returns The returned value is object in use with merged `map`.
+@function merge($nested-key-map...) {
+  object.$object: map.merge(
+    object.$object,
+    object-get-key.get-key($nested-key-map...)...
   );
-  @return get();
+  @return object-get.get();
 }

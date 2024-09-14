@@ -1,39 +1,27 @@
 // Sass.
-@use 'sass:list';
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
 
-// Object.
-@use 'object.var' as object;
+// Variables.
+@use "object.var" as object;
 
 // Functions.
-@use 'object.get-key.function' as *;
-@use 'object.get.function' as *;
+@use "object.get-key.function" as object-get-key;
+@use "object.get.function" as object-get;
 
-// Modules.
-@use '../map';
-
-// Status: DONE
+// Completed
 // The `object.set()` function sets `$value` under `$key` in object in use.
 // @param `$key` A key under which `$value` is set.
-// @param `$value` A value to set under `$key`.
-// @arbitrary `$allowed...` Allowed `$value` types to set.
+// @arbitrary `$nested-key-value...` 
 // @returns The returned value is object in use.
-@function set($key, $value, $allowed: ()) {
-  @if type-of($key) == map {
-    @each $name, $key in $key {
-      object.$object: map.set(
-        object.$object,
-        get-key($name, $key),
-        $value,
-        $allowed...
-      );
-    }
-  } @else {
-    object.$object: map.set(
-      object.$object,
-      get-key($key: $key),
-      $value,
-      $allowed...
-    );
-  }
-  @return get();
+@function set($key, $nested-key-value...) {
+  object.$object: map.set(
+    object.$object,
+    list.join(
+      object-get-key.get-key($key),
+      $nested-key-value
+    )...
+  );
+  @return object-get.get();
 }

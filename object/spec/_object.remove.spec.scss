@@ -1,0 +1,16 @@
+// Modules.
+@use "../../object";
+@use "../../test";
+
+// SECTION: object.merge()
+
+@include test.it(
+  "object.remove()",
+  (
+    equal,
+    'object.remove(timeline, in progress)',
+    object.remove(timeline, in progress),
+    (),
+  ),
+);
+

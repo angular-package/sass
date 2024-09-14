@@ -1,0 +1,16 @@
+// Modules.
+@use "../../object";
+@use "../../test";
+
+// SECTION: object.copy()
+
+@include test.it(
+  "object.copy()",
+  (
+    equal,
+    'object.copy(string, number)',
+    object.copy(string, number),
+    (string: a, number: a),
+  ),
+);
+

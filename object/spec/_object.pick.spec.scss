@@ -1,0 +1,15 @@
+// Modules.
+@use "../../object";
+@use "../../test";
+
+// SECTION: object.pick()
+
+@include test.it(
+  "object.pick()",
+  (
+    equal,
+    'object.pick(timeline)',
+    object.pick(timeline),
+    (timeline: (id: 3, action: todo)),
+  ),
+);

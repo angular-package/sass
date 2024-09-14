@@ -1,0 +1,15 @@
+// Modules.
+@use "../../object";
+@use "../../test";
+
+// SECTION: object.last-id()
+
+@include test.it(
+  "object.last-name()",
+  (
+    equal,
+    'object.last-name()',
+    object.last-name(),
+    tasks,
+  ),
+);

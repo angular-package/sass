@@ -1,0 +1,30 @@
+// Modules.
+@use "../../object";
+@use "../../test";
+
+// SECTION: object.create()
+
+@include test.it(
+  "object.create()",
+  (
+    equal,
+    'object.create((words: (), languages: ()), dictionary)',
+    object.create((words: (), languages: ()), dictionary),
+    (words: (), languages: ()),
+  ),
+
+  (
+    equal,
+    'object.create((todo: (), in progress: ()), tasks)',
+    object.create((todo: (id: 1, action: display), in progress: (id: 2, action: work)), tasks),
+    (todo: (id: 1, action: display), in progress: (id: 2, action: work)),
+  ),
+
+  (
+    equal,
+    'object.create((string: a, number: 5), object)',
+    object.create(((string: a, number: 5)), object),
+    (string: a, number: 5),
+  ),
+
+);

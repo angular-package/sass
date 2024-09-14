@@ -1,0 +1,21 @@
+// Modules.
+@use "../../object";
+@use "../../test";
+
+// SECTION: object.keys()
+
+@include test.it(
+  "object.keys()",
+  (
+    equal,
+    'object.keys()',
+    object.keys(),
+    (todo, in progress),
+  ),
+  (
+    equal,
+    'object.keys(todo)',
+    object.keys(todo),
+    (id, action),
+  ),
+);

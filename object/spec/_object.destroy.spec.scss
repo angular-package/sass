@@ -1,0 +1,15 @@
+// Modules.
+@use "../../object";
+@use "../../test";
+
+// SECTION: object.destroy()
+
+@include test.it(
+  "object.destroy()",
+  (
+    equal,
+    'object.destroy(object)',
+    object.destroy(object),
+    (todo: (id: 1, action: display), in progress: (id: 2, action: work)),
+  ),
+);

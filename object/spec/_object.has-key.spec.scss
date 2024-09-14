@@ -1,0 +1,27 @@
+// Modules.
+@use "../../object";
+@use "../../test";
+
+// SECTION: object.has-key()
+
+@include test.it(
+  "object.has-key()",
+  (
+    equal,
+    'object.has-key(todo)',
+    object.has-key(todo),
+    true,
+  ),
+  (
+    equal,
+    'object.has-key(todo, id)',
+    object.has-key(todo, id),
+    true,
+  ),
+  (
+    equal,
+    'object.has-key(todo, ids)',
+    object.has-key(todo, ids),
+    false
+  ),
+);

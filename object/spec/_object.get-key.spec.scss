@@ -1,0 +1,15 @@
+// Modules.
+@use "../../object";
+@use "../../test";
+
+// SECTION: object.get-key()
+
+@include test.it(
+  "object.get-key()",
+  (
+    equal,
+    'object.get-key(todo)',
+    object.get-key(todo),
+    (tasks, todo),
+  ),
+);

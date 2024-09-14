@@ -1,0 +1,15 @@
+// Modules.
+@use "../../object";
+@use "../../test";
+
+// SECTION: object.merge()
+
+@include test.it(
+  "object.move()",
+  (
+    equal,
+    'object.move(todo, in progress)',
+    object.move(todo, in progress),
+    (in progress: (id: 1, action: display), timeline: (id: 3, action: todo)),
+  ),
+);

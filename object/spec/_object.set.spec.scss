@@ -1,0 +1,15 @@
+// Modules.
+@use "../../object";
+@use "../../test";
+
+// SECTION: object.merge()
+
+@include test.it(
+  "name.set()",
+  (
+    equal,
+    'object.set(timeline: (id: 3, action: todo))',
+    object.set(timeline, (id: 3, action: todo)),
+    (timeline: (id: 3, action: todo)),
+  ),
+);

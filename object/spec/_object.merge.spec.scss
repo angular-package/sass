@@ -1,0 +1,16 @@
+// Modules.
+@use "../../object";
+@use "../../test";
+
+// SECTION: object.merge()
+
+@include test.it(
+  "object.merge()",
+  (
+    equal,
+    'object.merge((timeline: (id: 3, action: todo)))',
+    object.merge((timeline: (id: 3, action: todo))),
+    (todo: (id: 1, action: display), in progress: (id: 2, action: work), timeline: (id: 3, action: todo)),
+  ),
+);
+

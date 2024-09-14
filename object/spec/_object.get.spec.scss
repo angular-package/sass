@@ -1,0 +1,27 @@
+// Modules.
+@use "../../object";
+@use "../../test";
+
+// SECTION: object.get()
+
+@include test.it(
+  "object.get()",
+  (
+    equal,
+    'object.get()',
+    object.get(),
+    (todo: (id: 1, action: display), in progress: (id: 2, action: work)),
+  ),
+  (
+    equal,
+    'object.get(todo)',
+    object.get(todo),
+    (id: 1, action: display),
+  ),
+  (
+    equal,
+    'object.get(todo, id)',
+    object.get(todo, id),
+    1,
+  ),
+);

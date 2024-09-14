@@ -1,0 +1,71 @@
+// Sass.
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Mixins.
+@use "test.equal.mixin" as equal;
+@use "test.execute.mixin" as execute;
+
+// In Progress
+// The `test.it()` mixin.
+// @param `$description`
+// @arbitrary `$tests...`
+@mixin it($description, $tests...) {
+  $done: false;
+  $failed: 0;
+  $id: 1;
+  $passed: 0;
+  $options: (
+    execute: true,
+    error: true,
+    display: true
+  );
+  $results: ();
+  @debug $description;
+  @each $test in $tests {
+    @if list.length($test) > 3 {
+      $remove: (execute, error, display);
+      @if list.length($test) > 4 {
+        $remove: list.append($remove, error);
+        @if list.length($test) > 5 {
+          $remove: list.append($remove, display);
+        }
+      }
+      $options: map.remove($options, $remove...);
+    }
+    @include execute.execute(
+      $test...,
+      $options...
+    ) using(
+      $result,
+      $description,
+      $spec,
+      $actual,
+      $expected,
+      $display,
+    ) {
+      @if $display {
+        @debug "#{$id}. #{$spec}";
+      }
+      $failed: not $result and $failed + 1 or $failed;
+      $passed: $result and $passed + 1 or $passed;
+      $results: list.append($results, $result, comma);
+      @content(
+        $id,
+        $result
+      );
+    };
+    $id: $id + 1;
+  }
+  @content(
+    list.length($tests),
+    $results,
+    $passed,
+    $failed,
+  );
+  @debug Tests #{list.length($tests)} + '' Passed #{$passed} + '' Failed #{$failed} + '';
+  @debug "";
+}

@@ -1,0 +1,5 @@
+// Tests.
+@use "name.add-affix.spec" as add-affix;
+@use "name.add-delimiter.spec" as add-delimiter;
+@use "name.create.spec" as create;
+@use "name.translate.spec" as translate;

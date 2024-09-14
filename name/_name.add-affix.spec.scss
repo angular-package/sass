@@ -1,0 +1,50 @@
+// Modules.
+@use "../name";
+@use "../test";
+
+// SECTION: name.add-affix()
+
+@include test.it(
+  "name.add-affix()",
+  (
+    equal,
+    'name.add-affix(primary test, prefix, null)',
+    name.add-affix(primary test, prefix, null),
+    prefix primary test,
+  ),
+
+  (
+    equal,
+    'name.add-affix(primary test, null, suffix)',
+    name.add-affix(primary test, null, suffix),
+    primary test suffix,
+  ),
+
+  (
+    equal,
+    'name.add-affix(primary test, prefix, suffix)',
+    name.add-affix(primary test, prefix, suffix),
+    prefix primary test suffix,
+  ),
+
+  (
+    equal,
+    'name.add-affix("primary test", prefix, null)',
+    name.add-affix("primary test", prefix, null),
+    "prefixprimary test",
+  ),
+
+  (
+    equal,
+    'name.add-affix("primary test", null, suffix)',
+    name.add-affix("primary test", null, suffix),
+    "primary testsuffix",
+  ),
+
+  (
+    equal,
+    'name.add-affix("primary test", prefix, suffix)',
+    name.add-affix("primary test", prefix, suffix),
+    "prefixprimary testsuffix",
+  ),
+);

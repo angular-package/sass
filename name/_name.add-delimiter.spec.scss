@@ -1,0 +1,26 @@
+// Sass.
+@use "sass:string";
+
+// Modules.
+@use "../name";
+@use "../test";
+
+// SECTION: name.add-affix()
+
+@include test.it(
+  "name.add-delimiter()",
+  (
+    equal,
+    'name.add-delimiter(primary dark, string.unquote(""))',
+    name.add-delimiter(primary dark, string.unquote("")),
+    join(primary, "" dark, space),
+  ),
+
+  (
+    equal,
+    'name.add-delimiter(primary dark, string.unquote("-"))',
+    name.add-delimiter(primary dark, string.unquote("-")),
+    join(primary "-", dark, space),
+  ),
+
+);

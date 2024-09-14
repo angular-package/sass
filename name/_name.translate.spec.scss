@@ -1,0 +1,30 @@
+// Modules.
+@use "../name";
+@use "../test";
+
+// SECTION: name.translate()
+
+@include test.it(
+  "name.translate()",
+  (
+    equal,
+    'name.translate(develop, (develop: d))',
+    name.translate(develop, (develop: d)),
+    d,
+  ),
+
+  (
+    equal,
+    'name.translate(develop light, (develop: d, light: l))',
+    name.translate(develop light, (develop: d, light: l)),
+    d l,
+  ),
+
+  (
+    equal,
+    'name.translate(primary (dark: c) dark 'and' 'or' light (light: a), (dark: d))',
+    name.translate(primary (dark: c) dark 'and' 'or' light (light: a), (dark: d)),
+    primary d "and" "or" a,
+  ),
+
+);

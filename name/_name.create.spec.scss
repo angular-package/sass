@@ -1,0 +1,26 @@
+// Modules.
+@use "../name";
+@use "../test";
+
+// SECTION: name.add-affix()
+
+// @debug add-delimiter(primary dark, string.unquote(""));
+// @debug add-delimiter(primary dark, string.unquote("-"));
+
+@include test.it(
+  "name.add-delimiter()",
+  (
+    equal,
+    'name.add-affix(primary test, prefix, null)',
+    name.add-affix(primary test, prefix, null),
+    prefix primary test,
+  ),
+
+  (
+    equal,
+    'name.add-affix(primary test, prefix, null)',
+    name.add-affix(primary test, prefix, null),
+    prefix primary test,
+  ),
+
+);

@@ -18,7 +18,7 @@
     or null;
 
   // Remove `map` dictionaries from `$name`.
-  @if list.length($extracted-dictionary) > 0 {
+  @if $extracted-dictionary and list.length($extracted-dictionary) > 0 {
     $-name: ();
     @each $element in $name {
       @if not (meta.type-of($element) == map) {
@@ -42,4 +42,6 @@
 }
 
 // Examples.
-// @debug translate(primary (dark: c) dark 'and' 'or' light (light: a), (dark: d)); // primary c "and" "or" a
+// @debug translate(develop, (develop: d)); // d
+// @debug translate(develop agile, (develop: d, agile: a)); // d a
+// @debug translate(primary (dark: c) dark 'and' 'or' light (light: a), (dark: d)); // primary d "and" "or" a

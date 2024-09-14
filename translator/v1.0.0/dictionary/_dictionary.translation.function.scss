@@ -1,19 +1,16 @@
 // Sass.
 @use 'sass:list';
+@use "sass:map";
 @use 'sass:meta';
 
-// Modules.
-@use '../../../map';
-@use '../../../values';
-
-// Status: DONE
+// Completed
 // The `dictionary.translation()` function returns a translation of `$search` from a global dictionary, `$dictionary`, and `$dictionaries`.
 // @param `$search` A word(string) or phrase(list space separated) to search for translation.
 // @param `$dictionary` Additional dictionary to look for `$search` translation.
 // @arbitrary `$dictionaries...` Dictionaries to look for `$search` translation.
-// @returns The return value is a translation of the `$search`.
-@function translation($search, $dictionary: (), $dictionaries...) {
-  @each $dictionary in values.combine($dictionary, $dictionaries...) {
+// @returns The returned value is a translation of the `$search`.
+@function translation($search, $dictionary: null, $dictionaries...) {
+  @each $dictionary in list.join(($dictionary or (),), $dictionaries) {
     @each $phrase, $translation in if(
       meta.type-of($dictionary) == list,
       map.get(list.nth($dictionary, 1), list.nth($dictionary, 2)),

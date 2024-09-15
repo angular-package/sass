@@ -5,7 +5,6 @@
 @use 'sass:string';
 
 // Functions.
-@use '../list/remove/remove.value.function' as list-remove-value;
 @use 'string.index.function' as string-index;
 @use 'string.unquote.function' as string-unquote;
 
@@ -43,9 +42,17 @@
     // Find indexes of `$separator` in `$string`.
     $separators: string-index.index($string, $separator...);
 
-    @if list.length(list-remove-value.value($separators, null)) > 0 {
-      $index: math.min(list-remove-value.value($separators, null)...);
-      $separator-index: list.index($separators, $index);
+    $-separators: ();
+    @each $separator in $separators {
+      @if $separator {
+        $-separators: list.append($-separators, $separator);
+      }
+    }
+    $separators: $-separators;
+
+    @if list.length($separators) > 0 {
+      $index: math.min($separators...);
+      $separator-index: list.index($separators, $index);  
     }
 
     @if $separator-index {

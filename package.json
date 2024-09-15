@@ -1,35 +1,36 @@
 {
   "name": "@angular-package/sass",
-  "description": "Extension for sass modules and new modules.",
   "version": "0.19.0-beta",
+  "author": "@angular-package <contact@angular-package.dev>",
+  "homepage": "https://angular-package.github.io/sass",
+  "description": "Extension for sass modules and new modules.",
   "main": "./index.scss",
-  "funding": [
-    {
-      "type": "individual",
-      "url": "https://business.revolut.com/revolutme/angularpackage"
-    },
-    {
-      "type": "individual",
-      "url": "https://docs.angular-package.dev/donate/cryptocurrency"
-    },
-    {
-      "type": "patreon",
-      "url": "https://www.patreon.com/angularpackage"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/sponsors/angular-package"
-    }
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/angular-package/sass"
-  },
+  "license": "MIT",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "license": "MIT",
+  "devDependencies": {
+    "stylelint": "^15.10.3",
+    "stylelint-config-prettier-scss": "^1.0.0",
+    "stylelint-config-standard-scss": "^11.0.0",
+    "stylelint-order": "^6.0.3"
+  },
+  "peerDependencies": {
+    "@angular-package/sass-string": "^1.0.1-beta",
+    "sass": "^1.78.0",
+    "sass-convert": "^0.5.2"
+  },
+  "scripts": {
+    "sass": "sass --load-path=node_modules"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/angular-package/sass"
+  },
+  "bugs": {
+    "url": "https://github.com/angular-package/sass/issues"
+  },
   "keywords": [
     "@angular-package",
     "class",
@@ -62,16 +63,22 @@
     "values",
     "var"
   ],
-  "bugs": {
-    "url": "https://github.com/angular-package/sass/issues"
-  },
-  "devDependencies": {
-    "stylelint": "^15.10.3",
-    "stylelint-config-prettier-scss": "^1.0.0",
-    "stylelint-config-standard-scss": "^11.0.0",
-    "stylelint-order": "^6.0.3"
-  },
-  "peerDependencies": {
-    "sass": "^1.66.1"
-  }
+  "funding": [
+    {
+      "type": "individual",
+      "url": "https://checkout.revolut.com/pay/048b10a3-0e10-42c8-a917-e3e9cb4c8e29"
+    },
+    {
+      "type": "individual",
+      "url": "https://docs.angular-package.dev/donate/cryptocurrency"
+    },
+    {
+      "type": "patreon",
+      "url": "https://www.patreon.com/angularpackage"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/angular-package"
+    }
+  ]
 }
